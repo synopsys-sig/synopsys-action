@@ -2,11 +2,8 @@ name: 'Synopsys Unified'
 description: 'Scan using synopsys tools'
 author: 'Synopsys Inc'
 inputs:
-  data1:
-    description: 'Your Data1'
-    required: true
-  data2:
-    description: 'Your Data1'
+  altair-url:
+    description: 'Altair URL'
     required: true
 runs:
   using: 'node12'
