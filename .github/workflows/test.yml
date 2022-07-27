@@ -28,7 +28,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Building
-          mvn install
+          mvn clean install
           
       - name: Use synopsys unified-action
         # Use the action defined in this repository
