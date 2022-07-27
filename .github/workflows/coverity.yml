@@ -1,0 +1,44 @@
+name: Coverity
+
+on:
+  # Run Coverity on pushes to main branches, and pull requests that are going
+  # to be merged to main branches.
+
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+  # Allow ad-hoc, manual invocations of the Coverity workflow.
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    # For Coverity with a full local analysis, not using the Kubernetes-based
+    # Coverity Scan Service, it is recommended to run using a self-hosted
+    # runner. This is primarily due to the large footprint of the standard
+    # Coverity installation.
+    #
+    # An example of configuring a Docker-based github-runner can be found here:
+    # https://github.com/synopsys-sig-community/synopsys-github-templates/tree/main/docker/coverity-auto-capture-runner
+
+    runs-on: [self-hosted]
+
+    steps:
+      # First check out the code. Note this is a shallow checkout, for the
+      # version of code being built.
+
+      - uses: actions/checkout@v2
+
+      - uses: synopsys-sig-community/synopsys-github-templates/coverity@main
+        with:
+          coverity-url: ${{ secrets.COVERITY_URL }}
+          coverity-user: ${{ secrets.COVERITY_USER }}
+          coverity-passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity-project-name: ${{ github.event.repository.name }}
+          coverity-checker-options: --webapp-security
+          security-gate-view-name: OWASP Web Top 10
+          create-stream-and-project: true
+          diagnostic-mode: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
