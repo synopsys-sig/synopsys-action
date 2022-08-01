@@ -1,14 +1,14 @@
-import { info } from "@actions/core";
+import {info} from '@actions/core'
 
 export class AltairAPIService {
-    altairURL: string
+  altairURL: string
 
-    constructor(altairURL: string) {
-        this.altairURL = altairURL;
-    }
+  constructor(altairURL: string) {
+    this.altairURL = altairURL
+  }
 
-    callAltairFlow(){
-        info("Calling Altair flow");
-        return true;
-    }
+  callAltairFlow(): boolean {
+    info('Calling Altair flow')
+    return true
+  }
 }

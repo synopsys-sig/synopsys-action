@@ -5,6 +5,9 @@ inputs:
   altair-url:
     description: 'Altair URL'
     required: true
+  synopsys-bridge-path:
+    description: 'Synopsys bridge path'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
