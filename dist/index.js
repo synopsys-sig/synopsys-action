@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/usr/var';
-exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = 'C:/actions-runner';
+exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = 'C:\\actions-runner';
 
 
 /***/ }),
@@ -129,6 +129,7 @@ class SynopsysBridge {
             if (!inputs_1.SYNOPSYS_BRIDGE_PATH) {
                 (0, core_1.info)('Synopsys Bridge path not found in configuration');
                 (0, core_1.info)('Looking for synopsys bridge in default path');
+                console.log(`This platform is ${process.platform}`);
                 const osName = process.platform;
                 if (osName === 'darwin') {
                     // const exOp = await getExecOutput('echo ' + SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC);
@@ -141,14 +142,17 @@ class SynopsysBridge {
                 else if (osName === 'win32') {
                     synopsysBridgePath = application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS;
                 }
-                (0, core_1.info)('Path is - ${synopsysBridgePath}');
+                (0, core_1.info)(`Path is - ${synopsysBridgePath}`);
                 // const currentPathValue = process.env.PATH;
                 // process.env['PATH'] = currentPathValue + ':' + synopsysBridgePath
                 // info('path value - ' + process.env.PATH)
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('/bridge'), ['.exe']);
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('/bridge'), []);
+                if (osName === 'win32') {
+                    this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('\\bin'), ['.exe']);
+                }
                 (0, core_1.info)(this.bridgeExecutablePath);
                 if (this.bridgeExecutablePath) {
-                    (0, core_1.debug)('Bridge executable found at ${synopsysBridgePath}');
+                    (0, core_1.info)(`Bridge executable found at ${synopsysBridgePath}`);
                     return true;
                 }
                 else {
