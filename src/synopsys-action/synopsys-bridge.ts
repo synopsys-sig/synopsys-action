@@ -38,7 +38,7 @@ export class SynopsysBridge {
       this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/bridge'), [])
 
       if (osName === 'win32') {
-        this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\bin'), ['.exe'])
+        this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\bridge'), ['.exe'])
       }
       info(this.bridgeExecutablePath)
 

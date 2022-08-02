@@ -148,7 +148,7 @@ class SynopsysBridge {
                 // info('path value - ' + process.env.PATH)
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('/bridge'), []);
                 if (osName === 'win32') {
-                    this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('\\bin'), ['.exe']);
+                    this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('\\bridge'), ['.exe']);
                 }
                 (0, core_1.info)(this.bridgeExecutablePath);
                 if (this.bridgeExecutablePath) {
