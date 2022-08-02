@@ -9,7 +9,7 @@
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
-exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/usr/var';
+exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/usr/synopsys-bridge';
 
 
 /***/ }),
@@ -38,7 +38,6 @@ function run() {
         (0, core_1.info)('Basic Action running');
         const altairURL = inputs_1.ALTAIR_URL;
         (0, core_1.debug)('Provided Altair URL is - ' + altairURL);
-        // const synopsysBridgePath = '';
         const sb = new synopsys_bridge_1.SynopsysBridge();
         yield sb.executeBridgeCommand('--help');
         if (altairURL) {
@@ -111,7 +110,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SynopsysBridge = void 0;
-// import * as fs from 'fs'
 const exec_1 = __nccwpck_require__(231);
 const inputs_1 = __nccwpck_require__(510);
 const core_1 = __nccwpck_require__(181);
@@ -130,25 +128,18 @@ class SynopsysBridge {
                 (0, core_1.info)('Looking for synopsys bridge in default path');
                 const osName = process.platform;
                 if (osName === 'darwin') {
-                    // const exOp = await getExecOutput('echo ' + SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC);
-                    // info(exOp.stdout + ' ' + exOp.stderr)
                     synopsysBridgePath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC); //exOp.stdout;
                 }
                 else if (osName === 'linux') {
                     synopsysBridgePath = application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX;
                 }
-                (0, core_1.info)('Path is - ${synopsysBridgePath}');
-                // const currentPathValue = process.env.PATH;
-                // process.env['PATH'] = currentPathValue + ':' + synopsysBridgePath
-                // info('path value - ' + process.env.PATH)
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('/bridge'), []);
-                (0, core_1.info)(this.bridgeExecutablePath);
                 if (this.bridgeExecutablePath) {
-                    (0, core_1.debug)('Bridge executable found at ${synopsysBridgePath}');
+                    (0, core_1.debug)('Bridge executable found at '.concat(synopsysBridgePath));
                     return true;
                 }
                 else {
-                    (0, core_1.info)('Bridge executable could not be found at ${synopsysBridgePath}');
+                    (0, core_1.info)('Bridge executable could not be found at '.concat(synopsysBridgePath));
                 }
             }
             return false;
