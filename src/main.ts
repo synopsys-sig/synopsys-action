@@ -15,16 +15,6 @@ async function run() {
   const sb = new SynopsysBridge()
   await sb.executeBridgeCommand('--help')
 
-  // info('Start downloading and extracting zipped file')
-  // const url = 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/bridge/0.1.700/bridge-0.1.700-win64.zip'
-  // const filePath = MAC_SYNOPSYS_BRIDGE_PATH
-  // const fileResponse = await getRemoteFile(filePath, url)
-  // // const fileResp = await DownloadUtility.getRemoteFile(file, url);
-  // debug('Downloaded file with file path - ' + fileResponse.filePath)
-  // const resp = await extractZipped(fileResponse.fileName, filePath)
-  //
-  // info('Extracted and download file is complete - ' + resp)
-
   if (altairURL) {
     let altairObj = new AltairAPIService(altairURL)
     altairObj.callAltairFlow()
