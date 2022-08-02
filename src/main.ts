@@ -1,8 +1,6 @@
 import {debug, info, warning} from '@actions/core'
 import {AltairAPIService} from './synopsys-action/altair-api'
 import {ALTAIR_URL, SYNOPSYS_BRIDGE_PATH} from './synopsys-action/inputs'
-import {extractZipped, getRemoteFile} from './synopsys-action/download-utility'
-// import {MAC_SYNOPSYS_BRIDGE_PATH} from './application-constants'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 
 async function run() {

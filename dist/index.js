@@ -32,7 +32,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(181);
 const altair_api_1 = __nccwpck_require__(5);
 const inputs_1 = __nccwpck_require__(510);
-// import {MAC_SYNOPSYS_BRIDGE_PATH} from './application-constants'
 const synopsys_bridge_1 = __nccwpck_require__(85);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -42,15 +41,6 @@ function run() {
         // const synopsysBridgePath = '';
         const sb = new synopsys_bridge_1.SynopsysBridge();
         yield sb.executeBridgeCommand('--help');
-        // info('Start downloading and extracting zipped file')
-        // const url = 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/bridge/0.1.700/bridge-0.1.700-win64.zip'
-        // const filePath = MAC_SYNOPSYS_BRIDGE_PATH
-        // const fileResponse = await getRemoteFile(filePath, url)
-        // // const fileResp = await DownloadUtility.getRemoteFile(file, url);
-        // debug('Downloaded file with file path - ' + fileResponse.filePath)
-        // const resp = await extractZipped(fileResponse.fileName, filePath)
-        //
-        // info('Extracted and download file is complete - ' + resp)
         if (altairURL) {
             let altairObj = new altair_api_1.AltairAPIService(altairURL);
             altairObj.callAltairFlow();
