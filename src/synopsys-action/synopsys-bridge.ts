@@ -14,35 +14,31 @@ export class SynopsysBridge {
 
   private async checkIfSynopsysBridgeExists(): Promise<boolean> {
     let synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
-    if (!SYNOPSYS_BRIDGE_PATH) {
+    const osName = process.platform
+    if (!synopsysBridgePath) {
       info('Synopsys Bridge path not found in configuration')
       info('Looking for synopsys bridge in default path')
-      console.log(`This platform is ${process.platform}`);
 
-      const osName = process.platform
       if (osName === 'darwin') {
-        synopsysBridgePath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC) //exOp.stdout;
+        synopsysBridgePath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
       } else if (osName === 'linux') {
         synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX
       } else if (osName === 'win32') {
         synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS
       }
+    }
 
-      info(`Path is - ${synopsysBridgePath}`)
-
+    if (osName === 'win32') {
+      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\bridge'), ['.exe'])
+    } else {
       this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/bridge'), [])
+    }
 
-      if (osName === 'win32') {
-        this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\bridge'), ['.exe'])
-      }
-      info(this.bridgeExecutablePath)
-
-      if (this.bridgeExecutablePath) {
-        info(`Bridge executable found at ${synopsysBridgePath}`)
-        return true
-      } else {
-        info('Bridge executable could not be found at '.concat(synopsysBridgePath))
-      }
+    if (this.bridgeExecutablePath) {
+      debug('Bridge executable found at '.concat(synopsysBridgePath))
+      return true
+    } else {
+      info('Bridge executable could not be found at '.concat(synopsysBridgePath))
     }
 
     return false
