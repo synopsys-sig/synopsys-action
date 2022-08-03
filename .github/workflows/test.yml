@@ -15,28 +15,95 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
+        
+ build_job:
     # The type of runner that the job will run on
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo Building
+          npm install 
+          npm run all
           
       - name: Use synopsys unified-action
         # Use the action defined in this repository
         uses: ./
         with:
           altair-url: "http://altair-url.com"
+ 
+ Black_duck_job:
+    # The type of runner that the job will run on - Black Duck can also run on Windows and macOS
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      # Set up JDK 11 in runtime environment, necessary for running the Detect tool (invoked by the
+      # detect plugin)
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Black Duck (Rapid scan)
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: synopsys-sig/detect-action@main
+        # For pull requests, limit the feedback to policy violations newly introduced by code changes
+        # within the PR. This option will compare the results found in the PR scan to the results found
+        # in the last central full/intelligent scan, and only report the new violations. This is helpful
+        # to keep developers focused in their day to day on their code changes and not overwhelm them with
+        # findings they may not be responsible for.
+        env:
+          DETECT_BLACKDUCK_RAPID_COMPARE_MODE: BOM_COMPARE_STRICT
+        # You can use this option to configure a CA cert if using a self-hosted runner and self-signed
+        # certificates on your Hub server. This option should point to a file on the local filesystem
+        # with the CA chain cert
+        #env:
+        #  NODE_EXTRA_CA_CERTS: ${{ secrets.LOCAL_CA_CERT_PATH }}
+        with:
+            scan-mode: RAPID
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            detect-version: 7.12.0
+            blackduck-url: ${{ secrets.BLACKDUCK_URL }}
+            blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+
+      - name: Black Duck (Full scan)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: synopsys-sig/detect-action@main
+        # You can use this option to configure a CA cert if using a self-hosted runner and self-signed
+        # certificates on your Hub server. This option should point to a file on the local filesystem
+        # with the CA chain cert
+        #env:
+        #  NODE_EXTRA_CA_CERTS: ${{ secrets.LOCAL_CA_CERT_PATH }}
+        with:
+          scan-mode: INTELLIGENT
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          detect-version: 7.12.0
+          blackduck-url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          
+ Coverity_job:
+    runs-on: [self-hosted]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: synopsys-sig-community/synopsys-github-templates/coverity@main
+        with:
+          coverity-url: ${{ secrets.COVERITY_URL }}
+          coverity-user: ${{ secrets.COVERITY_USER }}
+          coverity-passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity-project-name: ${{ github.event.repository.name }}
+          coverity-checker-options: --webapp-security
+          security-gate-view-name: OWASP Web Top 10
+          create-stream-and-project: true
+          diagnostic-mode: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
