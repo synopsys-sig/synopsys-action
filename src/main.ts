@@ -1,6 +1,6 @@
 import {debug, info, warning} from '@actions/core'
 import {AltairAPIService} from './synopsys-action/altair-api'
-import {ALTAIR_URL, SYNOPSYS_BRIDGE_PATH} from './synopsys-action/inputs'
+import {ALTAIR_URL} from './synopsys-action/inputs'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 
 async function run() {
@@ -9,7 +9,6 @@ async function run() {
   const altairURL = ALTAIR_URL
   debug('Provided Altair URL is - ' + altairURL)
 
-  // const synopsysBridgePath = '';
   const sb = new SynopsysBridge()
   await sb.executeBridgeCommand('--help')
 

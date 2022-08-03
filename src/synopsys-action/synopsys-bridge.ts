@@ -1,4 +1,3 @@
-// import * as fs from 'fs'
 import {exec} from '@actions/exec'
 import {SYNOPSYS_BRIDGE_PATH} from './inputs'
 import {debug, info} from '@actions/core'
@@ -22,19 +21,15 @@ export class SynopsysBridge {
 
       const osName = process.platform
       if (osName === 'darwin') {
-        // const exOp = await getExecOutput('echo ' + SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC);
-        // info(exOp.stdout + ' ' + exOp.stderr)
         synopsysBridgePath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC) //exOp.stdout;
       } else if (osName === 'linux') {
         synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX
       } else if (osName === 'win32') {
         synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS
       }
+
       info(`Path is - ${synopsysBridgePath}`)
 
-      // const currentPathValue = process.env.PATH;
-      // process.env['PATH'] = currentPathValue + ':' + synopsysBridgePath
-      // info('path value - ' + process.env.PATH)
       this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/bridge'), [])
 
       if (osName === 'win32') {
@@ -46,7 +41,7 @@ export class SynopsysBridge {
         info(`Bridge executable found at ${synopsysBridgePath}`)
         return true
       } else {
-        info('Bridge executable could not be found at ${synopsysBridgePath}')
+        info('Bridge executable could not be found at '.concat(synopsysBridgePath))
       }
     }
 
