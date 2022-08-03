@@ -41,7 +41,6 @@ export class SynopsysBridge {
     if (await this.checkIfSynopsysBridgeExists()) {
       const osName: string = process.platform
       if (osName === 'darwin' || osName === 'linux') {
-        info('In bridge execution if....')
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand))
       }
     } else {

@@ -150,7 +150,6 @@ class SynopsysBridge {
             if (yield this.checkIfSynopsysBridgeExists()) {
                 const osName = process.platform;
                 if (osName === 'darwin' || osName === 'linux') {
-                    (0, core_1.info)('In bridge execution if....');
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand));
                 }
             }
