@@ -13,7 +13,7 @@ beforeEach(() => {
   })
 })
 
-test('Test executeBridgeCommand for mac', () => {
+test('Test executeBridgeCommand for MAC', () => {
   const sb = new SynopsysBridge()
 
   ioUtils.tryGetExecutablePath = jest.fn()
@@ -23,7 +23,7 @@ test('Test executeBridgeCommand for mac', () => {
   ex.exec.mockReturnValueOnce(0)
 
   Object.defineProperty(process, 'platform', {
-    value: 'darwin'
+    value: 'win32'
   })
 
   const response = sb.executeBridgeCommand('command')
@@ -31,7 +31,25 @@ test('Test executeBridgeCommand for mac', () => {
   expect(response).resolves.toEqual(0)
 })
 
-test('Test executeBridgeCommand for linux', () => {
+test('Test executeBridgeCommand for Linux', () => {
+  const sb = new SynopsysBridge()
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('/somepath')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
+
+  Object.defineProperty(process, 'platform', {
+    value: 'linux'
+  })
+
+  const response = sb.executeBridgeCommand('command')
+
+  expect(response).resolves.toEqual(0)
+})
+
+test('Test executeBridgeCommand for Windows', () => {
   const sb = new SynopsysBridge()
 
   ioUtils.tryGetExecutablePath = jest.fn()
