@@ -14,7 +14,7 @@ export class SynopsysBridge {
 
   private async checkIfSynopsysBridgeExists(): Promise<boolean> {
     let synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
-    if (!SYNOPSYS_BRIDGE_PATH) {
+    if (!synopsysBridgePath) {
       info('Synopsys Bridge path not found in configuration')
       info('Looking for synopsys bridge in default path')
       console.log(`This platform is ${process.platform}`);
@@ -27,10 +27,11 @@ export class SynopsysBridge {
       } else if (osName === 'win32') {
         synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS
       }
+    }
 
       info(`Path is - ${synopsysBridgePath}`)
 
-      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/bridge'), [])
+    this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/bridge'), [])
 
       if (osName === 'win32') {
         this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\bridge'), ['.exe'])
@@ -38,12 +39,11 @@ export class SynopsysBridge {
       info(this.bridgeExecutablePath)
 
       if (this.bridgeExecutablePath) {
-        info(`Bridge executable found at ${synopsysBridgePath}`)
+        debug('Bridge executable found at '.concat(synopsysBridgePath))
         return true
       } else {
         info('Bridge executable could not be found at '.concat(synopsysBridgePath))
       }
-    }
 
     return false
   }
