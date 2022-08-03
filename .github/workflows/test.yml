@@ -86,7 +86,7 @@ jobs:
           blackduck-api-token: ${{ secrets.BLACKDUCK_API_TOKEN }}
           
  Coverity_job:
-    runs-on: [self-hosted]
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: synopsys-sig-community/synopsys-github-templates/coverity@main
