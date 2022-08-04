@@ -49,7 +49,7 @@ jobs:
           distribution: 'adopt'
           
       - name: print url 
-        run: echo ---> ${{ secrets.BLACKDUCK_API_TOKEN }} ----> 
+        run: echo ---> ${{secrets.BLACKDUCK_API_TOKEN}} ----> 
         
       - name: Black Duck (Rapid scan)
         if: ${{ github.event_name == 'pull_request' }}
