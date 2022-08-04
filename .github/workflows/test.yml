@@ -47,7 +47,10 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-
+          
+      - name: print url 
+        run: echo ---> ${{ secrets.BLACKDUCK_URL}} ----> 
+        
       - name: Black Duck (Rapid scan)
         if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/detect-action@main
@@ -78,6 +81,7 @@ jobs:
         # with the CA chain cert
         #env:
         #  NODE_EXTRA_CA_CERTS: ${{ secrets.LOCAL_CA_CERT_PATH }}
+          
         with:
           scan-mode: INTELLIGENT
           github-token: ${{ secrets.GITHUB_TOKEN }}
