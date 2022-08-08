@@ -7,7 +7,7 @@ async function run() {
   info('Basic Action running')
 
   const altairURL = ALTAIR_URL
-  debug('Provided Altair URL is - ' + altairURL)
+  debug('Provided Altair URL is - '.concat(altairURL))
 
   const sb = new SynopsysBridge()
   await sb.executeBridgeCommand('--help')
