@@ -18,13 +18,12 @@ export class SynopsysBridge {
     if (!synopsysBridgePath) {
       info('Synopsys Bridge path not found in configuration')
       info('Looking for synopsys bridge in default path')
-
       if (osName === 'darwin') {
         synopsysBridgePath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
       } else if (osName === 'linux') {
         synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX
       } else if (osName === 'win32') {
-        synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS
+        synopsysBridgePath = path.join(process.env['USERPROFILE'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS)
       }
     }
 
