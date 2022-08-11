@@ -30,7 +30,7 @@ async function run() {
   }
 
   const sb = new SynopsysBridge()
-  await sb.executeBridgeCommand(formattedCommand)
+  await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
 
   cleanupTempDir(tempDir)
 }

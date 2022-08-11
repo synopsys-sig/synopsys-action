@@ -59,7 +59,7 @@ function run() {
             return Promise.reject(new Error('Not Supported Flow'));
         }
         const sb = new synopsys_bridge_1.SynopsysBridge();
-        yield sb.executeBridgeCommand(formattedCommand);
+        yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         (0, utility_1.cleanupTempDir)(tempDir);
     });
 }
@@ -149,13 +149,15 @@ class SynopsysBridge {
             return false;
         });
     }
-    executeBridgeCommand(bridgeCommand) {
+    executeBridgeCommand(bridgeCommand, workindDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
             if (yield this.checkIfSynopsysBridgeExists()) {
                 const osName = process.platform;
                 if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
-                    (0, core_1.info)('In bridge execution if....');
-                    return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand));
+                    const exectOp = {
+                        cwd: workindDirectory
+                    };
+                    return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
             }
             else {
