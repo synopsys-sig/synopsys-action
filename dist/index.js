@@ -9,7 +9,7 @@
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
-exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = 'C:\\actions-runner';
+exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/usr/synopsys-bridge';
 exports.APPLICATION_NAME = 'synopsys-action';
 
@@ -36,17 +36,23 @@ const tools_parameter_schema_1 = __nccwpck_require__(643);
 const utility_1 = __nccwpck_require__(121);
 const synopsys_bridge_1 = __nccwpck_require__(85);
 const inputs_1 = __nccwpck_require__(510);
+const config_variables_1 = __nccwpck_require__(438);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
+        (0, core_1.info)('Github action workspace is - '.concat((0, config_variables_1.getWorkSpaceDirectory)()));
         const tempDir = (0, utility_1.createTempDir)();
         let formattedCommand = '';
         if (inputs_1.POLARIS_SERVER_URL) {
+            (0, core_1.info)('Polaris Server url is - '.concat(inputs_1.POLARIS_SERVER_URL));
+            console.log('Polaris Server url is - '.concat(inputs_1.POLARIS_SERVER_URL));
+            console.log('Polaris Server secret is - '.concat(inputs_1.POLARIS_ACCESS_TOKEN));
             const polarisCommandFormatter = new tools_parameter_schema_1.SynopsysToolsParameter(tempDir);
             const polarisAssessmentTypes = inputs_1.POLARIS_ASSESSMENT_TYPES.split(',')
                 .filter(at => at != '')
                 .map(at => at.trim());
             formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs_1.POLARIS_ACCESS_TOKEN, inputs_1.POLARIS_APPLICATION_NAME, inputs_1.POLARIS_PROJECT_NAME, inputs_1.POLARIS_SERVER_URL, polarisAssessmentTypes);
+            (0, core_1.info)('Formatted command is - '.concat(formattedCommand));
         }
         else {
             (0, core_1.warning)('Not supported flow');
@@ -124,7 +130,7 @@ class SynopsysBridge {
                     synopsysBridgePath = application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX;
                 }
                 else if (osName === 'win32') {
-                    synopsysBridgePath = application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS;
+                    synopsysBridgePath = path_1.default.join(process.env['USERPROFILE'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS);
                 }
             }
             if (osName === 'win32') {
@@ -234,6 +240,7 @@ class SynopsysToolsParameter {
             }
         };
         const inputJson = JSON.stringify(polData);
+        (0, core_1.info)('Formatted json file is - '.concat(inputJson));
         (0, core_1.info)(inputJson);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
@@ -308,6 +315,85 @@ function cleanupTempDir(tempDir) {
 }
 exports.cleanupTempDir = cleanupTempDir;
 
+
+/***/ }),
+
+/***/ 438:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getRetentionDays = exports.getWorkSpaceDirectory = exports.getWorkFlowRunId = exports.getRuntimeUrl = exports.getRuntimeToken = exports.getDownloadFileConcurrency = exports.getInitialRetryIntervalInMilliseconds = exports.getRetryMultiplier = exports.getRetryLimit = exports.getUploadChunkSize = exports.getUploadFileConcurrency = void 0;
+// The number of concurrent uploads that happens at the same time
+function getUploadFileConcurrency() {
+    return 2;
+}
+exports.getUploadFileConcurrency = getUploadFileConcurrency;
+// When uploading large files that can't be uploaded with a single http call, this controls
+// the chunk size that is used during upload
+function getUploadChunkSize() {
+    return 8 * 1024 * 1024; // 8 MB Chunks
+}
+exports.getUploadChunkSize = getUploadChunkSize;
+// The maximum number of retries that can be attempted before an upload or download fails
+function getRetryLimit() {
+    return 5;
+}
+exports.getRetryLimit = getRetryLimit;
+// With exponential backoff, the larger the retry count, the larger the wait time before another attempt
+// The retry multiplier controls by how much the backOff time increases depending on the number of retries
+function getRetryMultiplier() {
+    return 1.5;
+}
+exports.getRetryMultiplier = getRetryMultiplier;
+// The initial wait time if an upload or download fails and a retry is being attempted for the first time
+function getInitialRetryIntervalInMilliseconds() {
+    return 3000;
+}
+exports.getInitialRetryIntervalInMilliseconds = getInitialRetryIntervalInMilliseconds;
+// The number of concurrent downloads that happens at the same time
+function getDownloadFileConcurrency() {
+    return 2;
+}
+exports.getDownloadFileConcurrency = getDownloadFileConcurrency;
+function getRuntimeToken() {
+    const token = process.env['ACTIONS_RUNTIME_TOKEN'];
+    if (!token) {
+        throw new Error('Unable to get ACTIONS_RUNTIME_TOKEN env variable');
+    }
+    return token;
+}
+exports.getRuntimeToken = getRuntimeToken;
+function getRuntimeUrl() {
+    const runtimeUrl = process.env['ACTIONS_RUNTIME_URL'];
+    if (!runtimeUrl) {
+        throw new Error('Unable to get ACTIONS_RUNTIME_URL env variable');
+    }
+    return runtimeUrl;
+}
+exports.getRuntimeUrl = getRuntimeUrl;
+function getWorkFlowRunId() {
+    const workFlowRunId = process.env['GITHUB_RUN_ID'];
+    if (!workFlowRunId) {
+        throw new Error('Unable to get GITHUB_RUN_ID env variable');
+    }
+    return workFlowRunId;
+}
+exports.getWorkFlowRunId = getWorkFlowRunId;
+function getWorkSpaceDirectory() {
+    const workspaceDirectory = process.env['GITHUB_WORKSPACE'];
+    if (!workspaceDirectory) {
+        throw new Error('Unable to get GITHUB_WORKSPACE env variable');
+    }
+    return workspaceDirectory;
+}
+exports.getWorkSpaceDirectory = getWorkSpaceDirectory;
+function getRetentionDays() {
+    return process.env['GITHUB_RETENTION_DAYS'];
+}
+exports.getRetentionDays = getRetentionDays;
+//# sourceMappingURL=config-variables.js.map
 
 /***/ }),
 
