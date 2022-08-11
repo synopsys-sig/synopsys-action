@@ -43,4 +43,4 @@ jobs:
           polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris-application-name: "testapp1"
           polaris-project-name: "testproj1"
-          polaris-assessment-types: "SASTS"
+          polaris-assessment-types: "SAST"
