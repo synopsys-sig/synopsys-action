@@ -45,13 +45,15 @@ function run() {
         let formattedCommand = '';
         if (inputs_1.POLARIS_SERVER_URL) {
             (0, core_1.info)('Polaris Server url is - '.concat(inputs_1.POLARIS_SERVER_URL));
-            console.log('Polaris Server url is - '.concat(inputs_1.POLARIS_SERVER_URL));
+            const polarisSU = inputs_1.POLARIS_SERVER_URL;
+            console.log('Polaris Server url is - '.concat(polarisSU));
             console.log('Polaris Server secret is - '.concat(inputs_1.POLARIS_ACCESS_TOKEN));
             const polarisCommandFormatter = new tools_parameter_schema_1.SynopsysToolsParameter(tempDir);
             const polarisAssessmentTypes = inputs_1.POLARIS_ASSESSMENT_TYPES.split(',')
                 .filter(at => at != '')
                 .map(at => at.trim());
             formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs_1.POLARIS_ACCESS_TOKEN, inputs_1.POLARIS_APPLICATION_NAME, inputs_1.POLARIS_PROJECT_NAME, inputs_1.POLARIS_SERVER_URL, polarisAssessmentTypes);
+            // formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris('vtn80r3r0532p91vc7ir4feckj8f2saogql4uq5malsrp6qt33dr1tmoglf5o6kv5j4kbbjh72di4', 'testapp1', 'testproj1', '***', ['SAST'])
             (0, core_1.info)('Formatted command is - '.concat(formattedCommand));
         }
         else {
@@ -60,6 +62,7 @@ function run() {
         }
         const sb = new synopsys_bridge_1.SynopsysBridge();
         yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+        // await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project/synopsys-unified')
         (0, utility_1.cleanupTempDir)(tempDir);
     });
 }
