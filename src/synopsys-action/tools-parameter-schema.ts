@@ -16,7 +16,7 @@ export interface Polaris {
 }
 
 export interface PolarisData {
-  accessToken: string
+  accesstoken: string
   serverUrl: string
   application: {name: string}
   project: {name: string}
@@ -53,7 +53,7 @@ export class SynopsysToolsParameter {
     const polData: InputData<Polaris> = {
       data: {
         polaris: {
-          accessToken: accessTok,
+          accesstoken: accessTok,
           serverUrl: serverURL,
           application: {name: applicationName},
           project: {name: projectName},

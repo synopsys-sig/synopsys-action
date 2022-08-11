@@ -236,7 +236,7 @@ class SynopsysToolsParameter {
         const polData = {
             data: {
                 polaris: {
-                    accessToken: accessTok,
+                    accesstoken: accessTok,
                     serverUrl: serverURL,
                     application: { name: applicationName },
                     project: { name: projectName },
