@@ -1,24 +1,31 @@
 import {debug, info, warning} from '@actions/core'
 import {AltairAPIService} from './synopsys-action/altair-api'
-import {ALTAIR_URL} from './synopsys-action/inputs'
+import {SynopsysToolsParameter} from './synopsys-action/tools-parameter-schema'
+import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
+import {POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from './synopsys-action/inputs'
 
 async function run() {
-  info('Basic Action running')
+  info('Synopsys Action started...')
 
-  const altairURL = ALTAIR_URL
-  debug('Provided Altair URL is - '.concat(altairURL))
+  const tempDir = createTempDir()
+  let formattedCommand = ''
 
-  const sb = new SynopsysBridge()
-  await sb.executeBridgeCommand('--help')
-
-  if (altairURL) {
-    let altairObj = new AltairAPIService(altairURL)
-    altairObj.callAltairFlow()
+  if (POLARIS_SERVER_URL) {
+    const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
+    const polarisAssessmentTypes: Array<string> = POLARIS_ASSESSMENT_TYPES.split(',')
+      .filter(at => at != '')
+      .map(at => at.trim())
+    formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, polarisAssessmentTypes)
   } else {
     warning('Not supported flow')
     return Promise.reject(new Error('Not Supported Flow'))
   }
+
+  const sb = new SynopsysBridge()
+  await sb.executeBridgeCommand(formattedCommand)
+
+  cleanupTempDir(tempDir)
 }
 
 run()
