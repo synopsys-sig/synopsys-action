@@ -39,8 +39,8 @@ jobs:
         # Use the action defined in this repository
         uses: ./
         with:
-          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
-          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris-server-url: "https://pim.altair.synopsys.com"#${{ secrets.POLARIS_SEVER_URL }}
+          polaris-access-token: "vtn80r3r0532p91vc7ir4feckj8f2saogql4uq5malsrp6qt33dr1tmoglf5o6kv5j4kbbjh72di4"#${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris-application-name: "testapp1"
           polaris-project-name: "testproj1"
           polaris-assessment-types: "SAST"
