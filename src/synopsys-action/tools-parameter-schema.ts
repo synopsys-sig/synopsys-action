@@ -68,8 +68,10 @@ export class SynopsysToolsParameter {
 
     info(inputJson)
 
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
+    let stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
+
+    stateFilePath = '/Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json'
 
     const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath) //'--stage polaris --state '.concat(stateFilePath)
 

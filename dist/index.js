@@ -247,8 +247,9 @@ class SynopsysToolsParameter {
         const inputJson = JSON.stringify(polData);
         (0, core_1.info)('Formatted json file is - '.concat(inputJson));
         (0, core_1.info)(inputJson);
-        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
+        let stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
+        stateFilePath = '/Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json';
         const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath); //'--stage polaris --state '.concat(stateFilePath)
         return command;
     }
