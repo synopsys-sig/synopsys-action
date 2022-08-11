@@ -64,6 +64,8 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(polData)
 
+    info('Formatted json file is - '.concat(inputJson))
+
     info(inputJson)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
