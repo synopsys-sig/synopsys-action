@@ -12,7 +12,6 @@ inputs:
     description: 'Polaris Project Name'
     required: false
   polaris-assessment-types:
-    type: array
     description: 'Polaris Assess Types SAST/SCA'
     required: false
   polaris-server-url:
