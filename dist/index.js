@@ -61,8 +61,8 @@ function run() {
             return Promise.reject(new Error('Not Supported Flow'));
         }
         const sb = new synopsys_bridge_1.SynopsysBridge();
-        yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
-        // await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project/synopsys-unified')
+        // await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+        yield sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/');
         (0, utility_1.cleanupTempDir)(tempDir);
     });
 }

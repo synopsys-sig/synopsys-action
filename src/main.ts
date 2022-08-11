@@ -33,9 +33,9 @@ async function run() {
   }
 
   const sb = new SynopsysBridge()
-  await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+  // await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
 
-  // await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project/synopsys-unified')
+  await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/')
 
   cleanupTempDir(tempDir)
 }
