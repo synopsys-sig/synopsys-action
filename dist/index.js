@@ -37,6 +37,7 @@ const utility_1 = __nccwpck_require__(121);
 const synopsys_bridge_1 = __nccwpck_require__(85);
 const inputs_1 = __nccwpck_require__(510);
 const config_variables_1 = __nccwpck_require__(438);
+const exec_1 = __nccwpck_require__(231);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -63,6 +64,7 @@ function run() {
         const sb = new synopsys_bridge_1.SynopsysBridge();
         // await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
         // await exec('ls ${{ github.workspace }}')
+        yield (0, exec_1.exec)('cat /Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json');
         yield sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/');
         (0, utility_1.cleanupTempDir)(tempDir);
     });
@@ -251,7 +253,7 @@ class SynopsysToolsParameter {
         let stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         stateFilePath = '/Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json';
-        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath); //'--stage polaris --state '.concat(stateFilePath)
+        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose'); //'--stage polaris --state '.concat(stateFilePath)
         return command;
     }
 }

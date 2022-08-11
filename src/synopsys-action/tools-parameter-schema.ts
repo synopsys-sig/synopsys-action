@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import {info} from '@actions/core'
+import {exec} from "@actions/exec";
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -73,7 +74,7 @@ export class SynopsysToolsParameter {
 
     stateFilePath = '/Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json'
 
-    const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath) //'--stage polaris --state '.concat(stateFilePath)
+    const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose') //'--stage polaris --state '.concat(stateFilePath)
 
     return command
   }

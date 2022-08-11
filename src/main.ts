@@ -38,6 +38,8 @@ async function run() {
 
   // await exec('ls ${{ github.workspace }}')
 
+  await exec('cat /Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json')
+
   await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/')
 
   cleanupTempDir(tempDir)
