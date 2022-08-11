@@ -37,6 +37,7 @@ const utility_1 = __nccwpck_require__(121);
 const synopsys_bridge_1 = __nccwpck_require__(85);
 const inputs_1 = __nccwpck_require__(510);
 const config_variables_1 = __nccwpck_require__(438);
+const exec_1 = __nccwpck_require__(231);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -62,6 +63,7 @@ function run() {
         }
         const sb = new synopsys_bridge_1.SynopsysBridge();
         // await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+        yield (0, exec_1.exec)('ls ${{ github.workspace }}');
         yield sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/');
         (0, utility_1.cleanupTempDir)(tempDir);
     });
@@ -152,13 +154,13 @@ class SynopsysBridge {
             return false;
         });
     }
-    executeBridgeCommand(bridgeCommand, workindDirectory) {
+    executeBridgeCommand(bridgeCommand, workingDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
             if (yield this.checkIfSynopsysBridgeExists()) {
                 const osName = process.platform;
                 if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
                     const exectOp = {
-                        cwd: workindDirectory
+                        cwd: workingDirectory
                     };
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }

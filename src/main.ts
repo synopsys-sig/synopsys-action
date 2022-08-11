@@ -5,6 +5,7 @@ import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from './synopsys-action/inputs'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
+import {exec} from "@actions/exec";
 
 async function run() {
   info('Synopsys Action started...')
@@ -34,6 +35,8 @@ async function run() {
 
   const sb = new SynopsysBridge()
   // await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+
+  await exec('ls ${{ github.workspace }}')
 
   await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/')
 
