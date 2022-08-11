@@ -36,7 +36,7 @@ async function run() {
   const sb = new SynopsysBridge()
   // await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
 
-  await exec('ls ${{ github.workspace }}')
+  // await exec('ls ${{ github.workspace }}')
 
   await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/')
 
