@@ -5,7 +5,7 @@ import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from './synopsys-action/inputs'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
-import {exec} from "@actions/exec";
+import {exec} from '@actions/exec'
 
 async function run() {
   info('Synopsys Action started...')
@@ -26,7 +26,7 @@ async function run() {
       .map(at => at.trim())
     formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, polarisAssessmentTypes)
 
-  // formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris('vtn80r3r0532p91vc7ir4feckj8f2saogql4uq5malsrp6qt33dr1tmoglf5o6kv5j4kbbjh72di4', 'testapp1', 'testproj1', '***', ['SAST'])
+    // formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris('vtn80r3r0532p91vc7ir4feckj8f2saogql4uq5malsrp6qt33dr1tmoglf5o6kv5j4kbbjh72di4', 'testapp1', 'testproj1', '***', ['SAST'])
     info('Formatted command is - '.concat(formattedCommand))
   } else {
     warning('Not supported flow')
@@ -34,11 +34,11 @@ async function run() {
   }
 
   const sb = new SynopsysBridge()
-  // await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+  await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
 
   // await exec('ls ${{ github.workspace }}')
 
-  await exec('cat /Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json')
+  // await exec('cat /Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json')
 
   await sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/')
 
