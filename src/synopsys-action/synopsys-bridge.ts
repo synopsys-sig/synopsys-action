@@ -50,7 +50,11 @@ export class SynopsysBridge {
         const exectOp: ExecOptions = {
           cwd: workingDirectory
         }
-        return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
+        try {
+          return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
+        } catch (error) {
+          throw new Error('Error while executing bridge command - ${error}')
+        }
       }
     } else {
       throw new Error('Bridge could not be found')

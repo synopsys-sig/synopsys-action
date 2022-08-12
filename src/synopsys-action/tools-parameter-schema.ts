@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
-import {info} from '@actions/core'
-// import {exec} from '@actions/exec'
+import {debug} from '@actions/core'
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -65,14 +64,11 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(polData)
 
-    info('Formatted json file is - '.concat(inputJson))
-
-    info(inputJson)
-
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
-    // stateFilePath = '/Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json'
+    debug('Generated state json file at - '.concat(stateFilePath))
+    debug('Generated state json file content is - '.concat(inputJson))
 
     const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose') //'--stage polaris --state '.concat(stateFilePath)
 

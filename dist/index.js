@@ -40,32 +40,30 @@ const config_variables_1 = __nccwpck_require__(438);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
-        (0, core_1.info)('Github action workspace is - '.concat((0, config_variables_1.getWorkSpaceDirectory)()));
         const tempDir = (0, utility_1.createTempDir)();
         let formattedCommand = '';
         if (inputs_1.POLARIS_SERVER_URL) {
-            (0, core_1.info)('Polaris Server url is - '.concat(inputs_1.POLARIS_SERVER_URL));
-            const polarisSU = inputs_1.POLARIS_SERVER_URL;
-            console.log('Polaris Server url is - '.concat(polarisSU));
-            console.log('Polaris Server secret is - '.concat(inputs_1.POLARIS_ACCESS_TOKEN));
             const polarisCommandFormatter = new tools_parameter_schema_1.SynopsysToolsParameter(tempDir);
             const polarisAssessmentTypes = inputs_1.POLARIS_ASSESSMENT_TYPES.split(',')
                 .filter(at => at != '')
                 .map(at => at.trim());
             formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs_1.POLARIS_ACCESS_TOKEN, inputs_1.POLARIS_APPLICATION_NAME, inputs_1.POLARIS_PROJECT_NAME, inputs_1.POLARIS_SERVER_URL, polarisAssessmentTypes);
-            // formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris('vtn80r3r0532p91vc7ir4feckj8f2saogql4uq5malsrp6qt33dr1tmoglf5o6kv5j4kbbjh72di4', 'testapp1', 'testproj1', '***', ['SAST'])
-            (0, core_1.info)('Formatted command is - '.concat(formattedCommand));
+            (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
         }
         else {
             (0, core_1.warning)('Not supported flow');
             return Promise.reject(new Error('Not Supported Flow'));
         }
-        const sb = new synopsys_bridge_1.SynopsysBridge();
-        yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
-        // await exec('ls ${{ github.workspace }}')
-        // await exec('cat /Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json')
-        yield sb.executeBridgeCommand(formattedCommand, '/Users/kishori/Project_utility/actions-runner/synopsys-action/synopsys-action/synopsys-action/');
-        (0, utility_1.cleanupTempDir)(tempDir);
+        try {
+            const sb = new synopsys_bridge_1.SynopsysBridge();
+            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+        }
+        catch (error) {
+            return Promise.reject('Error while executing bridge command - '.concat(error));
+        }
+        finally {
+            (0, utility_1.cleanupTempDir)(tempDir);
+        }
     });
 }
 run();
@@ -162,7 +160,12 @@ class SynopsysBridge {
                     const exectOp = {
                         cwd: workingDirectory
                     };
-                    return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
+                    try {
+                        return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
+                    }
+                    catch (error) {
+                        throw new Error('Error while executing bridge command - ${error}');
+                    }
                 }
             }
             else {
@@ -213,7 +216,6 @@ exports.SynopsysToolsParameter = exports.PolarisAssessmentType = void 0;
 const fs = __importStar(__nccwpck_require__(147));
 const path_1 = __importDefault(__nccwpck_require__(17));
 const core_1 = __nccwpck_require__(181);
-// import {exec} from '@actions/exec'
 var PolarisAssessmentType;
 (function (PolarisAssessmentType) {
     PolarisAssessmentType["SCA"] = "SCA";
@@ -248,11 +250,10 @@ class SynopsysToolsParameter {
             }
         };
         const inputJson = JSON.stringify(polData);
-        (0, core_1.info)('Formatted json file is - '.concat(inputJson));
-        (0, core_1.info)(inputJson);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
-        // stateFilePath = '/Users/kishori/Project_utility/polaris-ci-0.1.49-macosx/input.json'
+        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
         const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose'); //'--stage polaris --state '.concat(stateFilePath)
         return command;
     }
