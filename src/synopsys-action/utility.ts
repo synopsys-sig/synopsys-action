@@ -18,7 +18,7 @@ export function createTempDir(): string {
 }
 
 export function cleanupTempDir(tempDir: string): void {
-  if (tempDir) {
+  if (tempDir && fs.existsSync(tempDir)) {
     fs.rmSync(tempDir, {recursive: true})
   }
 }

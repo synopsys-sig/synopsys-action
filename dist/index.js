@@ -319,7 +319,7 @@ function createTempDir() {
 }
 exports.createTempDir = createTempDir;
 function cleanupTempDir(tempDir) {
-    if (tempDir) {
+    if (tempDir && fs.existsSync(tempDir)) {
         fs.rmSync(tempDir, { recursive: true });
     }
 }
