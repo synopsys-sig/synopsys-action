@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 972:
+/***/ 643:
 /***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
@@ -32,7 +32,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(181);
-const tools_parameter_schema_1 = __nccwpck_require__(643);
+const tools_parameter_1 = __nccwpck_require__(505);
 const utility_1 = __nccwpck_require__(121);
 const synopsys_bridge_1 = __nccwpck_require__(85);
 const inputs_1 = __nccwpck_require__(510);
@@ -43,7 +43,7 @@ function run() {
         const tempDir = (0, utility_1.createTempDir)();
         let formattedCommand = '';
         if (inputs_1.POLARIS_SERVER_URL) {
-            const polarisCommandFormatter = new tools_parameter_schema_1.SynopsysToolsParameter(tempDir);
+            const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
             const polarisAssessmentTypes = inputs_1.POLARIS_ASSESSMENT_TYPES.split(',')
                 .filter(at => at != '')
                 .map(at => at.trim());
@@ -112,7 +112,7 @@ exports.SynopsysBridge = void 0;
 const exec_1 = __nccwpck_require__(231);
 const inputs_1 = __nccwpck_require__(510);
 const core_1 = __nccwpck_require__(181);
-const application_constants_1 = __nccwpck_require__(972);
+const application_constants_1 = __nccwpck_require__(643);
 const io_util_1 = __nccwpck_require__(508);
 const path_1 = __importDefault(__nccwpck_require__(17));
 class SynopsysBridge {
@@ -180,7 +180,7 @@ exports.SynopsysBridge = SynopsysBridge;
 
 /***/ }),
 
-/***/ 643:
+/***/ 505:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -304,7 +304,7 @@ exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(147));
 const os = __importStar(__nccwpck_require__(37));
 const path_1 = __importDefault(__nccwpck_require__(17));
-const application_constants_1 = __nccwpck_require__(972);
+const application_constants_1 = __nccwpck_require__(643);
 function cleanUrl(url) {
     if (url && url.endsWith('/')) {
         return url.slice(0, url.length - 1);

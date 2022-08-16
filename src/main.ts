@@ -1,6 +1,6 @@
 import {debug, info, warning} from '@actions/core'
 import {AltairAPIService} from './synopsys-action/altair-api'
-import {SynopsysToolsParameter} from './synopsys-action/tools-parameter-schema'
+import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from './synopsys-action/inputs'
