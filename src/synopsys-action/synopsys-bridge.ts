@@ -1,4 +1,4 @@
-import {exec} from '@actions/exec'
+import {exec, ExecOptions} from '@actions/exec'
 import {SYNOPSYS_BRIDGE_PATH} from './inputs'
 import {debug, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
@@ -43,12 +43,18 @@ export class SynopsysBridge {
     return false
   }
 
-  async executeBridgeCommand(bridgeCommand: string): Promise<number> {
+  async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     if (await this.checkIfSynopsysBridgeExists()) {
       const osName: string = process.platform
       if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
-        info('In bridge execution if....')
-        return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand))
+        const exectOp: ExecOptions = {
+          cwd: workingDirectory
+        }
+        try {
+          return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
+        } catch (error) {
+          throw new Error('Error while executing bridge command - ${error}')
+        }
       }
     } else {
       throw new Error('Bridge could not be found')
