@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "SIGINT-174" ]
   pull_request:
     branches: [ "main" ]
 
@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, kishor]
+    runs-on: [self-hosted, mac-lokesh]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -44,3 +44,18 @@ jobs:
           polaris-application-name: "testapp1"
           polaris-project-name: "testproj1"
           polaris-assessment-types: "SAST"
+          coverity-url: ${{ secrets.COVERITY_URL }}
+          coverity-user: ${{ secrets.COVERITY_USER }}
+          coverity-pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+
+      - name: Use synopsys unified-action - coverity
+        # Use the action defined in this repository
+        uses: ./
+        with:
+          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris-application-name: "testapp1"
+          polaris-project-name: "testproj1"
+          polaris-assessment-types: "SAST"
+          coverity-url: ${{ secrets.COVERITY_URL }}
+          coverity-user: ${{ secrets.COVERITY_USER }}
+          coverity-pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
