@@ -44,9 +44,6 @@ jobs:
           polaris-application-name: "testapp1"
           polaris-project-name: "testproj1"
           polaris-assessment-types: "SAST"
-          coverity-url: ${{ secrets.COVERITY_URL }}
-          coverity-user: ${{ secrets.COVERITY_USER }}
-          coverity-pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
 
       - name: Use synopsys unified-action - coverity
         # Use the action defined in this repository
