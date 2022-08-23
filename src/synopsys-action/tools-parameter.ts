@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
 import {debug} from '@actions/core'
-import {v4 as uuidv4} from 'uuid'
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -28,9 +27,9 @@ export interface Coverity {
   coverity: CoverityData
 }
 
-export interface CoverityData extends PolarisData {
-  test: {sast: {streamId: string}}
-  downloads: {coverity: {path: string}}
+export interface CoverityData {
+  user: {name: string; password: string}
+  url: string
 }
 
 export class SynopsysToolsParameter {
@@ -40,7 +39,7 @@ export class SynopsysToolsParameter {
   private static POLARIS_STAGE = 'polaris'
   private static STATE_FILE_NAME = 'input.json'
   // Coverity parameters
-  private static COVERITY_STAGE = 'coverity'
+  private static COVERITY_STAGE = 'connect'
   private static SPACE = ' '
 
   constructor(tempDir: string) {
@@ -87,22 +86,16 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForCoverity(accessToken: string, applicationName: string, projectName: string, serverURL: string): string {
-    if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0) {
+  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string): string {
+    if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0) {
       throw new Error('One or more required parameters for Coverity is missing')
     }
 
-    const assessmentTypeEnums: PolarisAssessmentType[] = []
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
-          test: {sast: {streamId: uuidv4()}},
-          accesstoken: accessToken,
-          serverUrl: serverURL,
-          application: {name: applicationName},
-          project: {name: projectName},
-          assessment: {types: assessmentTypeEnums},
-          downloads: {coverity: {path: serverURL}}
+          user: {name: userName, password: passWord},
+          url: coverityUrl
         }
       }
     }
