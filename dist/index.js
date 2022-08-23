@@ -267,10 +267,10 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForCoverity(accessToken, applicationName, projectName, serverURL) {
         if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0) {
-            throw new Error('One or more required parameters for Altair is missing');
+            throw new Error('One or more required parameters for Coverity is missing');
         }
         const assessmentTypeEnums = [];
-        const polData = {
+        const covData = {
             data: {
                 coverity: {
                     test: { sast: { streamId: (0, uuid_1.v4)() } },
@@ -278,11 +278,12 @@ class SynopsysToolsParameter {
                     serverUrl: serverURL,
                     application: { name: applicationName },
                     project: { name: projectName },
-                    assessment: { types: assessmentTypeEnums }
+                    assessment: { types: assessmentTypeEnums },
+                    downloads: { coverity: { path: serverURL } }
                 }
             }
         };
-        const inputJson = JSON.stringify(polData);
+        const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));

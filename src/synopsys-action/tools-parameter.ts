@@ -30,6 +30,7 @@ export interface Coverity {
 
 export interface CoverityData extends PolarisData {
   test: {sast: {streamId: string}}
+  downloads: {coverity: {path: string}}
 }
 
 export class SynopsysToolsParameter {
@@ -88,11 +89,11 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForCoverity(accessToken: string, applicationName: string, projectName: string, serverURL: string): string {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0) {
-      throw new Error('One or more required parameters for Altair is missing')
+      throw new Error('One or more required parameters for Coverity is missing')
     }
 
     const assessmentTypeEnums: PolarisAssessmentType[] = []
-    const polData: InputData<Coverity> = {
+    const covData: InputData<Coverity> = {
       data: {
         coverity: {
           test: {sast: {streamId: uuidv4()}},
@@ -100,12 +101,13 @@ export class SynopsysToolsParameter {
           serverUrl: serverURL,
           application: {name: applicationName},
           project: {name: projectName},
-          assessment: {types: assessmentTypeEnums}
+          assessment: {types: assessmentTypeEnums},
+          downloads: {coverity: {path: serverURL}}
         }
       }
     }
 
-    const inputJson = JSON.stringify(polData)
+    const inputJson = JSON.stringify(covData)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
