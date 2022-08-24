@@ -24,12 +24,18 @@ export interface PolarisData {
 }
 
 export interface Coverity {
-  coverity: CoverityData
+  coverity: CoverityConnect
+}
+
+export interface CoverityConnect {
+  connect: CoverityData
 }
 
 export interface CoverityData {
   user: {name: string; password: string}
   url: string
+  project: {name: string}
+  policy: {view: string}
 }
 
 export class SynopsysToolsParameter {
@@ -40,6 +46,7 @@ export class SynopsysToolsParameter {
   private static STATE_FILE_NAME = 'input.json'
   // Coverity parameters
   private static COVERITY_STAGE = 'connect'
+  private static COVERITY_STATE_FILE_NAME = 'input.json'
   private static SPACE = ' '
 
   constructor(tempDir: string) {
@@ -86,16 +93,20 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string): string {
-    if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0) {
+  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string, projectName: string): string {
+    if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0) {
       throw new Error('One or more required parameters for Coverity is missing')
     }
 
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
-          user: {name: userName, password: passWord},
-          url: coverityUrl
+          connect: {
+            user: {name: userName, password: passWord},
+            url: coverityUrl,
+            project: {name: projectName},
+            policy: {view: 'SAST'}
+          }
         }
       }
     }

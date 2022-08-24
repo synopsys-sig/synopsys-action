@@ -3,7 +3,17 @@ import {AltairAPIService} from './synopsys-action/altair-api'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
-import {POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, COVERITY_URL, COVERITY_USER, COVERITY_PASSPHRASE} from './synopsys-action/inputs'
+import {
+  POLARIS_ACCESS_TOKEN,
+  POLARIS_APPLICATION_NAME,
+  POLARIS_ASSESSMENT_TYPES,
+  POLARIS_PROJECT_NAME,
+  POLARIS_SERVER_URL,
+  COVERITY_URL,
+  COVERITY_USER,
+  COVERITY_PASSPHRASE,
+  COVERITY_PROJECT_NAME
+} from './synopsys-action/inputs'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {exec} from '@actions/exec'
 
@@ -23,7 +33,7 @@ async function run() {
     debug('Formatted command is - '.concat(formattedCommand))
   } else if (COVERITY_URL) {
     const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
-    formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_URL)
+    formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_URL, COVERITY_PROJECT_NAME)
   } else {
     warning('Not supported flow')
     return Promise.reject(new Error('Not Supported Flow'))

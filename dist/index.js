@@ -52,7 +52,7 @@ function run() {
         }
         else if (inputs_1.COVERITY_URL) {
             const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs_1.COVERITY_USER, inputs_1.COVERITY_PASSPHRASE, inputs_1.COVERITY_URL);
+            formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs_1.COVERITY_USER, inputs_1.COVERITY_PASSPHRASE, inputs_1.COVERITY_URL, inputs_1.COVERITY_PROJECT_NAME);
         }
         else {
             (0, core_1.warning)('Not supported flow');
@@ -81,7 +81,7 @@ run();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.SYNOPSYS_BRIDGE_PATH = void 0;
+exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(127);
 exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys-bridge-path');
 // Polaris related inputs
@@ -93,6 +93,7 @@ exports.POLARIS_SERVER_URL = (0, core_1.getInput)('polaris-server-url');
 exports.COVERITY_URL = (0, core_1.getInput)('coverity-url');
 exports.COVERITY_USER = (0, core_1.getInput)('coverity-user');
 exports.COVERITY_PASSPHRASE = (0, core_1.getInput)('coverity-pasphrase');
+exports.COVERITY_PROJECT_NAME = (0, core_1.getInput)('coverity-project-name');
 
 
 /***/ }),
@@ -264,15 +265,19 @@ class SynopsysToolsParameter {
         const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose'); //'--stage polaris --state '.concat(stateFilePath)
         return command;
     }
-    getFormattedCommandForCoverity(userName, passWord, coverityUrl) {
-        if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0) {
+    getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName) {
+        if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0) {
             throw new Error('One or more required parameters for Coverity is missing');
         }
         const covData = {
             data: {
                 coverity: {
-                    user: { name: userName, password: passWord },
-                    url: coverityUrl
+                    connect: {
+                        user: { name: userName, password: passWord },
+                        url: coverityUrl,
+                        project: { name: projectName },
+                        policy: { view: 'SAST' }
+                    }
                 }
             }
         };
@@ -292,6 +297,7 @@ SynopsysToolsParameter.POLARIS_STAGE = 'polaris';
 SynopsysToolsParameter.STATE_FILE_NAME = 'input.json';
 // Coverity parameters
 SynopsysToolsParameter.COVERITY_STAGE = 'connect';
+SynopsysToolsParameter.COVERITY_STATE_FILE_NAME = 'input.json';
 SynopsysToolsParameter.SPACE = ' ';
 
 
