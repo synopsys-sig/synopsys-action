@@ -52,4 +52,4 @@ jobs:
           coverity-url: ${{ secrets.COVERITY_URL }}
           coverity-user: ${{ secrets.COVERITY_USER }}
           coverity-pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          coverity-project-name: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity-project-name: ${{ secrets.COVERITY_PROJECT_NAME }}
