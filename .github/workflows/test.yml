@@ -47,7 +47,7 @@ jobs:
         run: |
           curl -o bridge.zip -L $BRIDGE_URL
           unzip bridge.zip
-          bridge --stage polaris
+          ./bridge --stage polaris
 #        uses: ./
 #        with:
 #          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
