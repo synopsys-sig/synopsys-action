@@ -35,7 +35,7 @@ jobs:
           echo Add other actions to build,
           echo test, and deploy your project.
           
-      - name: Use synopsys unified-action
+      - name: Use synopsys unified-action with Configuration-As-A-Code
         # Use the action defined in this repository
         env:
           BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
@@ -44,11 +44,29 @@ jobs:
           BRIDGE_polaris_project_name: testproj1
           BRIDGE_polaris_assessment_types: "[\"SAST\"]"
           POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
-          BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+          MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+          LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
+          WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
         run: |
-          curl -o bridge.zip -L $BRIDGE_URL
-          unzip bridge.zip
-          ./bridge --stage polaris
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install unzip
+            curl -o bridge.zip -L $LINUX_BRIDGE_URL
+            unzip bridge.zip
+            ./bridge --stage polaris
+          elif [ "$RUNNER_OS" == "Windows" ]; then
+            Invoke-WebRequest -Uri $WINDOWS_BRIDGE_URL -OutFile bridge.zip
+            Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/bridge.zip", "$PWD")
+            bridge.exe --stage polaris
+          elif [ "$RUNNER_OS" == "macOS" ]; then
+            brew install unzip
+            curl -o bridge.zip -L $MAC_BRIDGE_URL
+            unzip bridge.zip
+            ./bridge --stage polaris
+          else
+            echo "$RUNNER_OS not supported"
+            exit 1
+          fi
+        shell: bash
 #        uses: ./
 #        with:
 #          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
