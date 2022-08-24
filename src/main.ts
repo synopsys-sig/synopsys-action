@@ -33,7 +33,7 @@ async function run() {
     debug('Formatted command is - '.concat(formattedCommand))
   } else if (COVERITY_URL) {
     const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
-    formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_URL, COVERITY_PROJECT_NAME)
+    formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_URL, 'synopsys-action')
   } else {
     warning('Not supported flow')
     return Promise.reject(new Error('Not Supported Flow'))
