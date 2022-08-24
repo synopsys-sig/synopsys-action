@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "SIGINT-185-Configure_GitHub_Workflow_to_use_bridge_via_configuration_for_Altair" ]
   pull_request:
     branches: [ "main" ]
 
@@ -37,10 +37,21 @@ jobs:
           
       - name: Use synopsys unified-action
         # Use the action defined in this repository
-        uses: ./
-        with:
-          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
-          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris-application-name: "testapp1"
-          polaris-project-name: "testproj1"
-          polaris-assessment-types: "SAST"
+        env:
+          BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+          BRIDGE_polaris_application_name: testapp1
+          BRIDGE_polaris_project_name: testproj1
+          BRIDGE_polaris_assessment_types: "[\"SAST\"]"
+          BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+        run: |
+          curl -o bridge.zip -L $BRIDGE_URL
+          7z x bridge.zip
+          bridge --stage polaris
+#        uses: ./
+#        with:
+#          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
+#          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+#          polaris-application-name: "testapp1"
+#          polaris-project-name: "testproj1"
+#          polaris-assessment-types: "SAST"
