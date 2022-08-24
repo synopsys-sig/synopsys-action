@@ -46,7 +46,7 @@ jobs:
           BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
         run: |
           curl -o bridge.zip -L $BRIDGE_URL
-          7z x bridge.zip
+          unzip bridge.zip
           bridge --stage polaris
 #        uses: ./
 #        with:
