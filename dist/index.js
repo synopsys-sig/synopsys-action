@@ -52,7 +52,7 @@ function run() {
         }
         else if (inputs_1.COVERITY_URL) {
             const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs_1.COVERITY_USER, inputs_1.COVERITY_PASSPHRASE, inputs_1.COVERITY_URL, 'synopsys-action');
+            formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs_1.COVERITY_USER, inputs_1.COVERITY_PASSPHRASE, inputs_1.COVERITY_URL, inputs_1.COVERITY_PROJECT_NAME);
         }
         else {
             (0, core_1.warning)('Not supported flow');
@@ -266,9 +266,9 @@ class SynopsysToolsParameter {
         return command;
     }
     getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName) {
-        /*if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0) {
-          throw new Error('One or more required parameters for Coverity is missing')
-        }*/
+        if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0) {
+            throw new Error('One or more required parameters for Coverity is missing');
+        }
         const covData = {
             data: {
                 coverity: {
@@ -297,7 +297,6 @@ SynopsysToolsParameter.POLARIS_STAGE = 'polaris';
 SynopsysToolsParameter.STATE_FILE_NAME = 'input.json';
 // Coverity parameters
 SynopsysToolsParameter.COVERITY_STAGE = 'connect';
-SynopsysToolsParameter.COVERITY_STATE_FILE_NAME = 'input.json';
 SynopsysToolsParameter.SPACE = ' ';
 
 
