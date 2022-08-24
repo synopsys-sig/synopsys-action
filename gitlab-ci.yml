@@ -1,0 +1,56 @@
+include:
+  - local: '.gitlab-ci-template.yml'
+  - project: clops/gitlab-ci-pop-analysis
+    ref: master
+    file: pop_analysis.yaml
+
+# List of job stages in their order of execution
+stages:
+  - build
+  - coverage_report
+  - versioning
+  - Check_dist
+  - changelog
+  - analysis
+  - notification
+
+variables:
+  BUILD_TOOL: npm
+  GIT_DEPTH: 10
+
+##### MERGE REQUEST PIPELINE #####
+
+build_job:
+  extends:
+    - .build_unit_tests
+  stage: build
+
+code_coverage_job:
+  stage: coverage_report
+  extends:
+    -  .code_coverage
+
+check_dist_job:
+  extends:
+    - .check_dist
+  stage: Check_dist
+
+##### MASTER COMMIT PIPELINE #####
+versioning_job:
+  extends:
+    - .version
+    - .only
+  stage: versioning
+
+pop_polaris:
+  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
+
+pop_blackduck:
+  stage: analysis
+  extends: .pop_blackduck_analysis
+
+changelog_job:
+  extends:
+    - .changelog
+    - .only
+  stage: changelog
