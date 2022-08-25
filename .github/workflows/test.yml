@@ -68,7 +68,7 @@ jobs:
           Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
           tar -xf bridge.zip
           dir
-          bridge --stage polaris
+          .\bridge.exe --stage polaris
         shell: powershell
 
       - name: Synopsys-action for MAC
