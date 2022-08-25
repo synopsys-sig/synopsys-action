@@ -20,6 +20,17 @@ jobs:
     # The type of runner that the job will run on
     runs-on: [self-hosted, kiran]
 
+    env:
+      BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+      BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+      BRIDGE_polaris_application_name: testapp1
+      BRIDGE_polaris_project_name: testproj1
+      BRIDGE_polaris_assessment_types: "[\"SAST\"]"
+      POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
+      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
+
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -39,17 +50,17 @@ jobs:
 #        if: ${{ runner.os == 'Windows' }}
 #        uses: microsoft/setup-msbuild@v1.0.2
 
-      - name: Set environments for synopsys-action Configuration-As-A-Code
-        env:
-          BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-          BRIDGE_polaris_application_name: testapp1
-          BRIDGE_polaris_project_name: testproj1
-          BRIDGE_polaris_assessment_types: "[\"SAST\"]"
-          POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
-          MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
-          LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
-          WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
+#      - name: Set environments for synopsys-action Configuration-As-A-Code
+#        env:
+#          BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+#          BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+#          BRIDGE_polaris_application_name: testapp1
+#          BRIDGE_polaris_project_name: testproj1
+#          BRIDGE_polaris_assessment_types: "[\"SAST\"]"
+#          POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
+#          MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+#          LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
+#          WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
 
       - name: Synopsys-action for Windows
         if: ${{ runner.os == 'Windows' }}
