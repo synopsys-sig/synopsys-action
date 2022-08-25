@@ -66,8 +66,8 @@ jobs:
         # Use the action defined in this repository
         uses: ./
         with:
-          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
-          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris-application-name: "testapp1"
-          polaris-project-name: "testproj1"
-          polaris-assessment-types: "SAST"
+          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_application_name: "testapp1"
+          polaris_project_name: "testproj1"
+          polaris_assessment_types: "SAST"
