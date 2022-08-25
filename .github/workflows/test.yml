@@ -36,7 +36,7 @@ jobs:
           echo test, and deploy your project.
 
       - name: Add msbuild to PATH
-        if: ${{ RUNNER_OS == 'Windows' }}
+        if: ${{ runner.os == 'Windows' }}
         uses: microsoft/setup-msbuild@v1.0.2
           
       - name: Use synopsys unified-action with Configuration-As-A-Code
