@@ -66,7 +66,8 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         run: |
           Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-          Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/bridge.zip", "$PWD")
+          tar -xf bridge.zip
+#          Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/bridge.zip", "$PWD")
           bridge.exe --stage polaris
         shell: powershell
 
