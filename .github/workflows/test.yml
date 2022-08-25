@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "SIGINT-185-Configure_GitHub_Workflow_to_use_bridge_via_configuration_for_Altair" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -18,13 +18,13 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, kishori]
+    runs-on: [self-hosted, kishor]
 
     env:
       BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
       BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-      BRIDGE_polaris_application_name: testapp1
-      BRIDGE_polaris_project_name: testproj1
+      BRIDGE_polaris_application_name: polaris_application_name
+      BRIDGE_polaris_project_name: polaris_project_name
       BRIDGE_polaris_assessment_types: "[\"SAST\"]"
       POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
@@ -35,32 +35,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-
-#      - name: Add msbuild to PATH
-#        if: ${{ runner.os == 'Windows' }}
-#        uses: microsoft/setup-msbuild@v1.0.2
-
-#      - name: Set environments for synopsys-action Configuration-As-A-Code
-#        env:
-#          BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-#          BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-#          BRIDGE_polaris_application_name: testapp1
-#          BRIDGE_polaris_project_name: testproj1
-#          BRIDGE_polaris_assessment_types: "[\"SAST\"]"
-#          POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
-#          MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
-#          LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
-#          WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
 
       - name: Synopsys-action for Windows
         if: ${{ runner.os == 'Windows' }}
@@ -88,42 +62,12 @@ jobs:
           ./bridge --stage polaris
         shell: bash
 
-#      - name: Use synopsys unified-action with Configuration-As-A-Code
-#        # Use the action defined in this repository
-#        env:
-#          BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-#          BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-#          BRIDGE_polaris_application_name: testapp1
-#          BRIDGE_polaris_project_name: testproj1
-#          BRIDGE_polaris_assessment_types: "[\"SAST\"]"
-#          POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
-#          MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
-#          LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
-#          WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
-#        run: |
-#          if [ "$RUNNER_OS" == "Linux" ]; then
-#            sudo apt-get install unzip
-#            curl -o bridge.zip -L $LINUX_BRIDGE_URL
-#            unzip bridge.zip
-#            ./bridge --stage polaris
-#          elif [ "$RUNNER_OS" == "Windows" ]; then
-#            Invoke-WebRequest -Uri $WINDOWS_BRIDGE_URL -OutFile bridge.zip
-#            'Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/bridge.zip", "$PWD")'
-#            bridge.exe --stage polaris
-#          elif [ "$RUNNER_OS" == "macOS" ]; then
-#            brew install unzip
-#            curl -o bridge.zip -L $MAC_BRIDGE_URL
-#            unzip bridge.zip
-#            ./bridge --stage polaris
-#          else
-#            echo "$RUNNER_OS not supported"
-#            exit 1
-#          fi
-#        shell: bash
-#        uses: ./
-#        with:
-#          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
-#          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-#          polaris-application-name: "testapp1"
-#          polaris-project-name: "testproj1"
-#          polaris-assessment-types: "SAST"
+      - name: Use synopsys unified-action
+        # Use the action defined in this repository
+        uses: ./
+        with:
+          polaris-server-url: ${{ secrets.POLARIS_SEVER_URL }}
+          polaris-access-token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris-application-name: "testapp1"
+          polaris-project-name: "testproj1"
+          polaris-assessment-types: "SAST"
