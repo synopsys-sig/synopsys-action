@@ -23,8 +23,8 @@ jobs:
     env:
       BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
       BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-      BRIDGE_polaris_application_name: polaris_application_name
-      BRIDGE_polaris_project_name: polaris_project_name
+      BRIDGE_polaris_application_name: testapp1
+      BRIDGE_polaris_project_name: testproj1
       BRIDGE_polaris_assessment_types: "[\"SAST\"]"
       POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
