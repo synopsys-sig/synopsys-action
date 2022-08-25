@@ -34,6 +34,10 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+
+      - name: Add msbuild to PATH
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: microsoft/setup-msbuild@v1.0.2
           
       - name: Use synopsys unified-action with Configuration-As-A-Code
         # Use the action defined in this repository
@@ -55,7 +59,7 @@ jobs:
             ./bridge --stage polaris
           elif [ "$RUNNER_OS" == "Windows" ]; then
             Invoke-WebRequest -Uri $WINDOWS_BRIDGE_URL -OutFile bridge.zip
-            'Add-Type -AssemblyName System.IO.Compression.FileSystem ; \[System.IO.Compression.ZipFile\]::ExtractToDirectory("$PWD/bridge.zip", "$PWD")'
+            'Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("$PWD/bridge.zip", "$PWD")'
             bridge.exe --stage polaris
           elif [ "$RUNNER_OS" == "macOS" ]; then
             brew install unzip
