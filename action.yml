@@ -2,22 +2,22 @@ name: 'Synopsys Unified'
 description: 'Scan using synopsys tools'
 author: 'Synopsys Inc'
 inputs:
-  polaris-access-token:
+  polaris_accessToken:
     description: 'Polaris Access Token'
     required: false
-  polaris-application-name:
+  polaris_application_name:
     description: 'Polaris Application Name'
     required: false
-  polaris-project-name:
+  polaris_project_name:
     description: 'Polaris Project Name'
     required: false
-  polaris-assessment-types:
+  polaris_assessment_types:
     description: 'Polaris Assess Types SAST/SCA'
     required: false
-  polaris-server-url:
+  polaris_serverUrl:
     description: 'Polaris Server URL'
     required: false
-  synopsys-bridge-path:
+  synopsys_bridge_path:
     description: 'Synopsys bridge path'
     required: false
 runs:
