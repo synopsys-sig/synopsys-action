@@ -45,7 +45,7 @@ test('Test wrong assessment type error in getFormattedCommandForPolaris', () => 
 test('Test getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', "sample")
+  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', 'sample')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')

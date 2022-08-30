@@ -83,13 +83,14 @@ run();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(127);
-exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys-bridge-path');
+exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys_bridge_path');
 // Polaris related inputs
 exports.POLARIS_ACCESS_TOKEN = (0, core_1.getInput)('polaris-access-token');
 exports.POLARIS_APPLICATION_NAME = (0, core_1.getInput)('polaris-application-name');
 exports.POLARIS_PROJECT_NAME = (0, core_1.getInput)('polaris-project-name');
 exports.POLARIS_ASSESSMENT_TYPES = (0, core_1.getInput)('polaris-assessment-types');
 exports.POLARIS_SERVER_URL = (0, core_1.getInput)('polaris-server-url');
+// Coverity related inputs
 exports.COVERITY_URL = (0, core_1.getInput)('coverity-url');
 exports.COVERITY_USER = (0, core_1.getInput)('coverity-user');
 exports.COVERITY_PASSPHRASE = (0, core_1.getInput)('coverity-pasphrase');
@@ -262,7 +263,7 @@ class SynopsysToolsParameter {
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
-        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose'); //'--stage polaris --state '.concat(stateFilePath)
+        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath);
         return command;
     }
     getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName) {
