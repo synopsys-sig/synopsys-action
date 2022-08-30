@@ -91,10 +91,10 @@ exports.POLARIS_PROJECT_NAME = (0, core_1.getInput)('polaris_project_name');
 exports.POLARIS_ASSESSMENT_TYPES = (0, core_1.getInput)('polaris_assessment_types');
 exports.POLARIS_SERVER_URL = (0, core_1.getInput)('polaris_serverUrl');
 // Coverity related inputs
-exports.COVERITY_URL = (0, core_1.getInput)('coverity-url');
-exports.COVERITY_USER = (0, core_1.getInput)('coverity-user');
-exports.COVERITY_PASSPHRASE = (0, core_1.getInput)('coverity-pasphrase');
-exports.COVERITY_PROJECT_NAME = (0, core_1.getInput)('coverity-project-name');
+exports.COVERITY_URL = (0, core_1.getInput)('coverity_url');
+exports.COVERITY_USER = (0, core_1.getInput)('coverity_user');
+exports.COVERITY_PASSPHRASE = (0, core_1.getInput)('coverity_pasphrase');
+exports.COVERITY_PROJECT_NAME = (0, core_1.getInput)('coverity_project_name');
 
 
 /***/ }),

@@ -10,7 +10,7 @@ export const POLARIS_ASSESSMENT_TYPES = getInput('polaris_assessment_types')
 export const POLARIS_SERVER_URL = getInput('polaris_serverUrl')
 
 // Coverity related inputs
-export const COVERITY_URL = getInput('coverity-url')
-export const COVERITY_USER = getInput('coverity-user')
-export const COVERITY_PASSPHRASE = getInput('coverity-pasphrase')
-export const COVERITY_PROJECT_NAME = getInput('coverity-project-name')
+export const COVERITY_URL = getInput('coverity_url')
+export const COVERITY_USER = getInput('coverity_user')
+export const COVERITY_PASSPHRASE = getInput('coverity_pasphrase')
+export const COVERITY_PROJECT_NAME = getInput('coverity_project_name')
