@@ -225,6 +225,7 @@ exports.SynopsysToolsParameter = exports.PolarisAssessmentType = void 0;
 const fs = __importStar(__nccwpck_require__(147));
 const path_1 = __importDefault(__nccwpck_require__(17));
 const core_1 = __nccwpck_require__(127);
+const validators_1 = __nccwpck_require__(302);
 var PolarisAssessmentType;
 (function (PolarisAssessmentType) {
     PolarisAssessmentType["SCA"] = "SCA";
@@ -235,9 +236,7 @@ class SynopsysToolsParameter {
         this.tempDir = tempDir;
     }
     getFormattedCommandForPolaris(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
-        if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
-            throw new Error('One or more required parameters for Altair is missing');
-        }
+        (0, validators_1.validatePolarisParams)(accessToken, applicationName, projectName, serverURL, assessmentTypes);
         const assessmentTypeEnums = [];
         for (const assessmentType of assessmentTypes) {
             if (!Object.values(PolarisAssessmentType).includes(assessmentType)) {
@@ -267,9 +266,7 @@ class SynopsysToolsParameter {
         return command;
     }
     getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName) {
-        if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0) {
-            throw new Error('One or more required parameters for Coverity is missing');
-        }
+        (0, validators_1.validateCoverityParams)(userName, passWord, coverityUrl, projectName);
         const covData = {
             data: {
                 coverity: {
@@ -359,6 +356,29 @@ function cleanupTempDir(tempDir) {
     }
 }
 exports.cleanupTempDir = cleanupTempDir;
+
+
+/***/ }),
+
+/***/ 302:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.validateCoverityParams = exports.validatePolarisParams = void 0;
+function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
+    if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
+        throw new Error('One or more required parameters for Altair is missing');
+    }
+}
+exports.validatePolarisParams = validatePolarisParams;
+function validateCoverityParams(userName, passWord, coverityUrl, projectName) {
+    if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0) {
+        throw new Error('One or more required parameters for Coverity is missing');
+    }
+}
+exports.validateCoverityParams = validateCoverityParams;
 
 
 /***/ }),

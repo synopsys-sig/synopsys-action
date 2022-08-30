@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import {debug} from '@actions/core'
+import {validatePolarisParams, validateCoverityParams} from './validators'
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -53,9 +54,7 @@ export class SynopsysToolsParameter {
   }
 
   getFormattedCommandForPolaris(accessToken: string, applicationName: string, projectName: string, serverURL: string, assessmentTypes: string[]): string {
-    if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
-      throw new Error('One or more required parameters for Altair is missing')
-    }
+    validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes)
 
     const assessmentTypeEnums: PolarisAssessmentType[] = []
 
@@ -93,10 +92,7 @@ export class SynopsysToolsParameter {
   }
 
   getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string, projectName: string): string {
-    if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0) {
-      throw new Error('One or more required parameters for Coverity is missing')
-    }
-
+    validateCoverityParams(userName, passWord, coverityUrl, projectName)
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
