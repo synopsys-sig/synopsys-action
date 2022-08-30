@@ -85,11 +85,11 @@ exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_U
 const core_1 = __nccwpck_require__(127);
 exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys_bridge_path');
 // Polaris related inputs
-exports.POLARIS_ACCESS_TOKEN = (0, core_1.getInput)('polaris-access-token');
-exports.POLARIS_APPLICATION_NAME = (0, core_1.getInput)('polaris-application-name');
-exports.POLARIS_PROJECT_NAME = (0, core_1.getInput)('polaris-project-name');
-exports.POLARIS_ASSESSMENT_TYPES = (0, core_1.getInput)('polaris-assessment-types');
-exports.POLARIS_SERVER_URL = (0, core_1.getInput)('polaris-server-url');
+exports.POLARIS_ACCESS_TOKEN = (0, core_1.getInput)('polaris_accessToken');
+exports.POLARIS_APPLICATION_NAME = (0, core_1.getInput)('polaris_application_name');
+exports.POLARIS_PROJECT_NAME = (0, core_1.getInput)('polaris_project_name');
+exports.POLARIS_ASSESSMENT_TYPES = (0, core_1.getInput)('polaris_assessment_types');
+exports.POLARIS_SERVER_URL = (0, core_1.getInput)('polaris_serverUrl');
 // Coverity related inputs
 exports.COVERITY_URL = (0, core_1.getInput)('coverity-url');
 exports.COVERITY_USER = (0, core_1.getInput)('coverity-user');
