@@ -21,9 +21,5 @@ export async function createTempDir(): Promise<string> {
 export async function cleanupTempDir(tempDir: string): Promise<void> {
   if (tempDir && fs.existsSync(tempDir)) {
     await rmRF(tempDir)
-    /*.then(voidData => {
-      debug('Cleaned temporary created directory')
-    })*/
-    // fs.rmSync(tempDir, {recursive: true})
   }
 }

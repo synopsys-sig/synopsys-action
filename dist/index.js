@@ -471,10 +471,6 @@ function cleanupTempDir(tempDir) {
     return __awaiter(this, void 0, void 0, function* () {
         if (tempDir && fs.existsSync(tempDir)) {
             yield (0, io_1.rmRF)(tempDir);
-            /*.then(voidData => {
-              debug('Cleaned temporary created directory')
-            })*/
-            // fs.rmSync(tempDir, {recursive: true})
         }
     });
 }

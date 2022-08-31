@@ -1,10 +1,10 @@
-import {SynopsysToolsParameter} from '../../src/synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from '../../src/synopsys-action/utility'
+import {SynopsysToolsParameter} from '../../src/synopsys-action/tools-parameter'
 
-let tempPath = ''
+let tempPath = '/temp'
 
 beforeAll(() => {
-  tempPath = createTempDir()
+  createTempDir().then(path => (tempPath = path))
 })
 
 afterAll(() => {
