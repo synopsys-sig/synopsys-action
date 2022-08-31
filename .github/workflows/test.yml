@@ -71,4 +71,4 @@ jobs:
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
           polaris_assessment_types: "SAST"
-          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
