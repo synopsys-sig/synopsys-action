@@ -20,6 +20,9 @@ inputs:
   synopsys_bridge_path:
     description: 'Synopsys bridge path'
     required: false
+  bridge_download_url:
+    description: 'URL to download bridge from'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

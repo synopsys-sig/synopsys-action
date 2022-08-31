@@ -2,16 +2,35 @@ import {debug, info, warning} from '@actions/core'
 import {AltairAPIService} from './synopsys-action/altair-api'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
-import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
-import {POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from './synopsys-action/inputs'
+import {getBridgeDefaultPath, SynopsysBridge, validateBridgeURL} from './synopsys-action/synopsys-bridge'
+import {BRIDGE_DOWNLOAD_URL, POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, SYNOPSYS_BRIDGE_PATH} from './synopsys-action/inputs'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {exec} from '@actions/exec'
+import {downloadTool} from '@actions/tool-cache'
+import {DownloadFileResponse, extractZipped, getRemoteFile} from './synopsys-action/download-utility'
+import path from 'path'
+import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from './application-constants'
 
 async function run() {
   info('Synopsys Action started...')
 
-  const tempDir = createTempDir()
+  const tempDir = await createTempDir()
   let formattedCommand = ''
+
+  // Automatically configure bridge if Bridge download url is provided
+  if (BRIDGE_DOWNLOAD_URL) {
+    if (!validateBridgeURL(BRIDGE_DOWNLOAD_URL)) {
+      return Promise.reject('Provided Bridge url is either not valid for the platform')
+    }
+
+    // Download file in temporary directory
+    info('Downloading and configuring Synopsys Bridge')
+    const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, BRIDGE_DOWNLOAD_URL)
+    const extractZippedFilePath: string = SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
+
+    await extractZipped(downloadResponse.filePath, extractZippedFilePath)
+    info('Download and configuration of Synopsys Bridge completed')
+  }
 
   if (POLARIS_SERVER_URL) {
     const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
@@ -32,7 +51,7 @@ async function run() {
   } catch (error: any) {
     return Promise.reject('Error while executing bridge command - '.concat(error))
   } finally {
-    cleanupTempDir(tempDir)
+    await cleanupTempDir(tempDir)
   }
 }
 
