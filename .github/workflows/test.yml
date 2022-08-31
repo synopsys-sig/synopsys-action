@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "SIGINT-217-Make_bridge_downloadable_and_configurable_along_with_adapter_extensions" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -71,4 +71,4 @@ jobs:
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
           polaris_assessment_types: "SAST"
-          bridge_download_url: ${{ env.WINDOWS_BRIDGE_URL }}
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
