@@ -41,3 +41,23 @@ test('Test wrong assessment type error in getFormattedCommandForPolaris', () => 
     expect(error.message).toContain('Provided Assessment type not found')
   }
 })
+
+test('Test getFormattedCommandForCoverity', () => {
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', 'sample')
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
+test('Test missing data error in getFormattedCommandForCoverity', () => {
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  try {
+    stp.getFormattedCommandForCoverity('', 'pwd', 'http://server_url.com', 'sample')
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('required parameters for Coverity is missing')
+  }
+})
