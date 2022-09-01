@@ -1,6 +1,5 @@
 import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
 import mock = jest.mock
-// import path from "path";
 
 const ioUtils = require('@actions/io/lib/io-util')
 mock('@actions/io/lib/io-util')

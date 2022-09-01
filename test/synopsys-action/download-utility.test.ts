@@ -1,6 +1,7 @@
 import mock = jest.mock
 import {extractZipped, getRemoteFile} from '../../src/synopsys-action/download-utility'
 import {cleanupTempDir, createTempDir} from '../../src/synopsys-action/utility'
+import {tmpdir} from "os";
 
 const path = require('path')
 mock('path')
@@ -8,21 +9,21 @@ mock('path')
 const toolCache = require('@actions/tool-cache')
 mock('@actions/tool-cache')
 
+const fs = require('fs')
+mock('fs')
+
 let tempPath = '/temp'
 
 beforeEach(() => {
-  // jest.resetModules()
-  createTempDir().then(path => (tempPath = path))
+  tempPath = tmpdir()
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
   })
 })
 
-afterAll(() => {
-  cleanupTempDir(tempPath)
-})
-
 test('Test getRemoteFile', () => {
+
+
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')
 
