@@ -104,7 +104,7 @@
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
   before_script:
     - npm ci
-    - npm build package
+    - npm run build
     - npm run package
   script:
     - |-
