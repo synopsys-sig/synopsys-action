@@ -70,7 +70,7 @@ jobs:
       - name: Synopsys-action for Windows
         if: ${{ runner.os == 'Windows' }}
         run: |
-          Invoke-WebRequest -Uri ${{ env.COVERITY_WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
           tar -xf bridge.zip
           .\bridge.exe --stage connect
         shell: powershell
@@ -79,7 +79,7 @@ jobs:
         if: ${{  runner.os == 'macOS'  }}
         run: |
           brew install unzip
-          curl -o bridge.zip -L $COVERITY_MAC_BRIDGE_URL
+          curl -o bridge.zip -L $MAC_BRIDGE_URL
           unzip bridge.zip
           ./bridge --stage connect
         shell: bash
@@ -88,7 +88,7 @@ jobs:
         if: ${{  runner.os == 'Linux'  }}
         run: |
           sudo apt-get install unzip
-          curl -o bridge.zip -L $COVERITY_LINUX_BRIDGE_URL
+          curl -o bridge.zip -L $LINUX_BRIDGE_URL
           unzip bridge.zip
           ./bridge --stage connect
         shell: bash
