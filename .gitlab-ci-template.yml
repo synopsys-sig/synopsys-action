@@ -100,16 +100,16 @@
   script:
     - semantic-release
 
-.check_dist:
-  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
-  before_script:
-    - npm ci
-    - npm run build
-    - npm run package
-  script:
-    - |-
-      if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
-        echo "Detected uncommitted changes after build.  See status below:"
-        git diff
-        exit 1
-      fi
+#.check_dist:
+#  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
+#  before_script:
+#    - npm ci
+#    - npm run build
+#    - npm run package
+#  script:
+#    - |-
+#      if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
+#        echo "Detected uncommitted changes after build.  See status below:"
+#        git diff
+#        exit 1
+#      fi
