@@ -51,7 +51,6 @@
     "@actions/tool-cache": "^2.0.1",
     "@types/unzipper": "^0.10.5",
     "path": "^0.12.7",
-    "source-map-support": "^0.5.21",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2"
   },
