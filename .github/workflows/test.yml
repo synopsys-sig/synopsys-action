@@ -31,7 +31,7 @@ jobs:
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-win64.zip"
 
-      BRIDGE_coverity_url: ${{ secrets.COVERITY_URL }}
+      BRIDGE_coverity_connectUrl: ${{ secrets.COVERITY_URL }}
       BRIDGE_coverity_user: ${{ secrets.COVERITY_USER }}
       BRIDGE_coverity_pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
       BRIDGE_coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
