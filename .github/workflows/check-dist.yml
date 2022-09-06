@@ -8,7 +8,7 @@ name: Check dist/
 on:
   push:
     branches:
-      - ci-setup
+      - main
     paths-ignore:
       - '**.md'
   pull_request:
