@@ -413,6 +413,9 @@ class SynopsysToolsParameter {
                         project: { name: projectName },
                         policy: { view: 'SAST' }
                     }
+                },
+                install: {
+                    directory: this.tempDir
                 }
             }
         };

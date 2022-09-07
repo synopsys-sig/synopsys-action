@@ -26,6 +26,11 @@ export interface PolarisData {
 
 export interface Coverity {
   coverity: CoverityConnect
+  install: CoverityDirectory
+}
+
+export interface CoverityDirectory {
+  directory: string
 }
 
 export interface CoverityConnect {
@@ -102,6 +107,9 @@ export class SynopsysToolsParameter {
             project: {name: projectName},
             policy: {view: 'SAST'}
           }
+        },
+        install: {
+          directory: this.tempDir
         }
       }
     }

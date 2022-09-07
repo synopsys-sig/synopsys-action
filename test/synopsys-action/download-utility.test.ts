@@ -1,7 +1,7 @@
 import mock = jest.mock
 import {extractZipped, getRemoteFile} from '../../src/synopsys-action/download-utility'
 import {cleanupTempDir, createTempDir} from '../../src/synopsys-action/utility'
-import {tmpdir} from "os";
+import {tmpdir} from 'os'
 
 const path = require('path')
 mock('path')
@@ -22,8 +22,6 @@ beforeEach(() => {
 })
 
 test('Test getRemoteFile', () => {
-
-
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')
 
