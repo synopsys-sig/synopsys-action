@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, tithi1, Windows]
+    runs-on: [self-hosted, Linux]
 
     env:
       BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
@@ -31,10 +31,10 @@ jobs:
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-win64.zip"
 
-      BRIDGE_coverity_connectUrl: ${{ secrets.COVERITY_URL }}
-      BRIDGE_coverity_user: ${{ secrets.COVERITY_USER }}
-      BRIDGE_coverity_pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-      BRIDGE_coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
+      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
+      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
+      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
+      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -67,31 +67,31 @@ jobs:
 #          ./bridge --stage polaris
 #        shell: bash
 #
-#      - name: Synopsys-action for Windows
-#        if: ${{ runner.os == 'Windows' }}
-#        run: |
-#          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-#          tar -xf bridge.zip
-#          .\bridge.exe --stage connect
-#        shell: powershell
-#
-#      - name: Synopsys-action for MAC
-#        if: ${{  runner.os == 'macOS'  }}
-#        run: |
-#          brew install unzip
-#          curl -o bridge.zip -L $MAC_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage connect
-#        shell: bash
-#
-#      - name: Synopsys-action for Linux
-#        if: ${{  runner.os == 'Linux'  }}
-#        run: |
-#          sudo apt-get install unzip
-#          curl -o bridge.zip -L $LINUX_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage connect
-#        shell: bash
+      - name: Synopsys-action for Windows
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+          tar -xf bridge.zip
+          .\bridge.exe --stage connect
+        shell: powershell
+
+      - name: Synopsys-action for MAC
+        if: ${{  runner.os == 'macOS'  }}
+        run: |
+          brew install unzip
+          curl -o bridge.zip -L $MAC_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage connect
+        shell: bash
+
+      - name: Synopsys-action for Linux
+        if: ${{  runner.os == 'Linux'  }}
+        run: |
+          sudo apt-get install unzip
+          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage connect
+        shell: bash
 
       - name: Use synopsys unified-action
         # Use the action defined in this repository
