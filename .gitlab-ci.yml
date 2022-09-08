@@ -49,8 +49,8 @@ pop_blackduck:
   stage: analysis
   extends: .pop_blackduck_analysis
 
-changelog_job:
-  extends:
-    - .changelog
-    - .only
-  stage: changelog
+#changelog_job:
+#  extends:
+#    - .changelog
+#    - .only
+#  stage: changelog
