@@ -8,7 +8,7 @@ include:
 stages:
   - build
   - coverage_report
-  - versioning
+#  - versioning
   - Check_dist
   - changelog
   - analysis
@@ -36,11 +36,11 @@ check_dist_job:
   stage: Check_dist
 
 ##### MASTER COMMIT PIPELINE #####
-versioning_job:
-  extends:
-    - .version
-    - .only
-  stage: versioning
+#versioning_job:
+#  extends:
+#    - .version
+#    - .only
+#  stage: versioning
 
 pop_polaris:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
@@ -49,8 +49,8 @@ pop_blackduck:
   stage: analysis
   extends: .pop_blackduck_analysis
 
-changelog_job:
-  extends:
-    - .changelog
-    - .only
-  stage: changelog
+#changelog_job:
+#  extends:
+#    - .changelog
+#    - .only
+#  stage: changelog
