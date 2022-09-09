@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "SIGINT-183" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -21,73 +21,46 @@ jobs:
     runs-on: [self-hosted, Linux]
 
     env:
-      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-macosx.zip"
-      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-win64.zip"
-
-      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
-      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
-      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
-      BRIDGE_COVERITY_CONNECT_STREAM_NAME: "central_scm_ms_stream"
-      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
-      BRIDGE_COVERITY_INSTALL_DIRECTORY: "/synopsys-bridge/cov"
+      BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+      BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+      BRIDGE_polaris_application_name: testapp1
+      BRIDGE_polaris_project_name: testproj1
+      BRIDGE_polaris_assessment_types: "[\"SAST\"]"
+      POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
+      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-#      - name: Synopsys-action for Windows
-#        if: ${{ runner.os == 'Windows' }}
-#        run: |
-#          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-#          tar -xf bridge.zip
-#          .\bridge.exe --stage polaris
-#        shell: powershell
-#
-#      - name: Synopsys-action for MAC
-#        if: ${{  runner.os == 'macOS'  }}
-#        run: |
-#          brew install unzip
-#          curl -o bridge.zip -L $MAC_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage polaris
-#        shell: bash
-#
-#      - name: Synopsys-action for Linux
-#        if: ${{  runner.os == 'Linux'  }}
-#        run: |
-#          sudo apt-get install unzip
-#          curl -o bridge.zip -L $LINUX_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage polaris
-#        shell: bash
-#
-      - name: Synopsys-action for Windows
-        if: ${{ runner.os == 'Windows' }}
-        run: |
-          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-          tar -xf bridge.zip
-          .\bridge.exe --stage connect
-        shell: powershell
-
-      - name: Synopsys-action for MAC
-        if: ${{  runner.os == 'macOS'  }}
-        run: |
-          brew install unzip
-          curl -o bridge.zip -L $MAC_BRIDGE_URL
-          unzip bridge.zip
-          ./bridge --stage connect
-        shell: bash
-
-      - name: Synopsys-action for Linux
-        if: ${{  runner.os == 'Linux'  }}
-        run: |
-          apt install unzip
-          curl -o bridge.zip -L $LINUX_BRIDGE_URL
-          unzip bridge.zip
-          ./bridge --stage connect
-        shell: bash
+      #      - name: Synopsys-action for Windows
+      #        if: ${{ runner.os == 'Windows' }}
+      #        run: |
+      #          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+      #          tar -xf bridge.zip
+      #          .\bridge.exe --stage polaris
+      #        shell: powershell
+      #
+      #      - name: Synopsys-action for MAC
+      #        if: ${{  runner.os == 'macOS'  }}
+      #        run: |
+      #          brew install unzip
+      #          curl -o bridge.zip -L $MAC_BRIDGE_URL
+      #          unzip bridge.zip
+      #          ./bridge --stage polaris
+      #        shell: bash
+      #
+      #      - name: Synopsys-action for Linux
+      #        if: ${{  runner.os == 'Linux'  }}
+      #        run: |
+      #          sudo apt-get install unzip
+      #          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+      #          unzip bridge.zip
+      #          ./bridge --stage polaris
+      #        shell: bash
 
       - name: Use synopsys unified-action
         # Use the action defined in this repository
