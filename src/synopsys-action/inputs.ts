@@ -17,3 +17,9 @@ export const COVERITY_URL = getInput('coverity_url')
 export const COVERITY_USER = getInput('coverity_user')
 export const COVERITY_PASSPHRASE = getInput('coverity_pasphrase')
 export const COVERITY_PROJECT_NAME = getInput('coverity_project_name')
+
+// Blackduck related inputs
+export const BLACKDUCK_URL = getInput('blackduck_url')
+export const BLACKDUCK_API_TOKEN = getInput('blackduck_apiToken')
+export const BLACKDUCK_INSTALL_DIRECTORY = getInput('blackduck_install_directory')
+export const BLACKDUCK_SCAN_FULL = getInput('blackduck_scan_full')
