@@ -70,8 +70,8 @@ jobs:
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
-          polaris_assessment_types: '["SAST"]'
-#          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          polaris_assessment_types: "SCA"
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 
 #      - name: Use synopsys unified-action - coverity-connect
 #        # Use the action defined in this repository
