@@ -25,6 +25,9 @@ async function run() {
     info('Downloading and configuring Synopsys Bridge')
     const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, BRIDGE_DOWNLOAD_URL)
     const extractZippedFilePath: string = SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
+    
+    // Clear the existing bridge, if available
+    await rmRF(extractZippedFilePath)
 
     // Clear the existing bridge, if available
     await rmRF(extractZippedFilePath)
