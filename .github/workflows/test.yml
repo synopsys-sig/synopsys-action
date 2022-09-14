@@ -27,7 +27,7 @@ jobs:
 #      BRIDGE_polaris_project_name: testproj1
 #      BRIDGE_polaris_assessment_types: "[\"SAST\"]"
 #      POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
-      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.20/ci-package-0.1.20-macosx.zip"
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.76/polaris-ci-0.1.76-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
 
@@ -71,7 +71,7 @@ jobs:
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
           polaris_assessment_types: "SCA"
-#          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
 
 #      - name: Use synopsys unified-action - coverity-connect
 #        # Use the action defined in this repository
