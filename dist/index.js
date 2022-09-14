@@ -46,6 +46,7 @@ function run() {
         // Automatically configure bridge if Bridge download url is provided
         if (inputs_1.BRIDGE_DOWNLOAD_URL) {
             if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs_1.BRIDGE_DOWNLOAD_URL)) {
+                (0, core_1.setFailed)('Provided Bridge url is either not valid for the platform');
                 return Promise.reject('Provided Bridge url is either not valid for the platform');
             }
             // Download file in temporary directory
@@ -57,9 +58,10 @@ function run() {
         }
         if (inputs_1.POLARIS_SERVER_URL) {
             const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            const polarisAssessmentTypes = inputs_1.POLARIS_ASSESSMENT_TYPES.split(',')
-                .filter(at => at != '')
-                .map(at => at.trim());
+            const polarisAssessmentTypes = JSON.parse(inputs_1.POLARIS_ASSESSMENT_TYPES);
+            /*POLARIS_ASSESSMENT_TYPES.split(',')
+              .filter(at => at != '')
+              .map(at => at.trim())*/
             formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs_1.POLARIS_ACCESS_TOKEN, inputs_1.POLARIS_APPLICATION_NAME, inputs_1.POLARIS_PROJECT_NAME, inputs_1.POLARIS_SERVER_URL, polarisAssessmentTypes);
             (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
         }
@@ -68,6 +70,7 @@ function run() {
             formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs_1.COVERITY_USER, inputs_1.COVERITY_PASSPHRASE, inputs_1.COVERITY_URL, inputs_1.COVERITY_PROJECT_NAME);
         }
         else {
+            (0, core_1.setFailed)('Not supported flow');
             (0, core_1.warning)('Not supported flow');
             return Promise.reject(new Error('Not Supported Flow'));
         }
@@ -76,6 +79,7 @@ function run() {
             yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
         catch (error) {
+            (0, core_1.setFailed)('Error while executing bridge command');
             return Promise.reject('Error while executing bridge command - '.concat(error));
         }
         finally {

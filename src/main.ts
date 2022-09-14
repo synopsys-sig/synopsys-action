@@ -1,4 +1,4 @@
-import {debug, info, warning} from '@actions/core'
+import {debug, info, setFailed, warning} from '@actions/core'
 import {AltairAPIService} from './synopsys-action/altair-api'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
@@ -21,6 +21,7 @@ async function run() {
   // Automatically configure bridge if Bridge download url is provided
   if (BRIDGE_DOWNLOAD_URL) {
     if (!validateBridgeURL(BRIDGE_DOWNLOAD_URL)) {
+      setFailed('Provided Bridge url is either not valid for the platform')
       return Promise.reject('Provided Bridge url is either not valid for the platform')
     }
 
@@ -35,9 +36,10 @@ async function run() {
 
   if (POLARIS_SERVER_URL) {
     const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
-    const polarisAssessmentTypes: Array<string> = POLARIS_ASSESSMENT_TYPES.split(',')
+    const polarisAssessmentTypes: Array<string> = JSON.parse(POLARIS_ASSESSMENT_TYPES)
+    /*POLARIS_ASSESSMENT_TYPES.split(',')
       .filter(at => at != '')
-      .map(at => at.trim())
+      .map(at => at.trim())*/
     formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, polarisAssessmentTypes)
 
     debug('Formatted command is - '.concat(formattedCommand))
@@ -45,6 +47,7 @@ async function run() {
     const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
     formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_URL, COVERITY_PROJECT_NAME)
   } else {
+    setFailed('Not supported flow')
     warning('Not supported flow')
     return Promise.reject(new Error('Not Supported Flow'))
   }
@@ -53,6 +56,7 @@ async function run() {
     const sb = new SynopsysBridge()
     await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error: any) {
+    setFailed('Error while executing bridge command')
     return Promise.reject('Error while executing bridge command - '.concat(error))
   } finally {
     await cleanupTempDir(tempDir)
