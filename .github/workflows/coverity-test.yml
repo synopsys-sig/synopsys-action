@@ -22,8 +22,8 @@ jobs:
 
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-macosx.zip"
-      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.16/coverity_connect-0.1.16-win64.zip"
+      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.20/ci-package-0.1.20-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.20/ci-package-0.1.20-win64.zip"
 
       BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
       BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
