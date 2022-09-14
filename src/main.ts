@@ -1,16 +1,12 @@
 import {debug, info, setFailed, warning} from '@actions/core'
-import {AltairAPIService} from './synopsys-action/altair-api'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {getBridgeDefaultPath, SynopsysBridge, validateBridgeURL} from './synopsys-action/synopsys-bridge'
 import {BRIDGE_DOWNLOAD_URL, POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, SYNOPSYS_BRIDGE_PATH, COVERITY_URL, COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_PROJECT_NAME} from './synopsys-action/inputs'
 
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
-import {exec} from '@actions/exec'
-import {downloadTool} from '@actions/tool-cache'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './synopsys-action/download-utility'
-import path from 'path'
-import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from './application-constants'
+import {rmRF} from '@actions/io'
 
 async function run() {
   info('Synopsys Action started...')
@@ -30,6 +26,9 @@ async function run() {
     const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, BRIDGE_DOWNLOAD_URL)
     const extractZippedFilePath: string = SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
 
+    // Clear the existing bridge, if available
+    await rmRF(extractZippedFilePath)
+
     await extractZipped(downloadResponse.filePath, extractZippedFilePath)
     info('Download and configuration of Synopsys Bridge completed')
   }
@@ -37,9 +36,6 @@ async function run() {
   if (POLARIS_SERVER_URL) {
     const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
     const polarisAssessmentTypes: Array<string> = JSON.parse(POLARIS_ASSESSMENT_TYPES)
-    /*POLARIS_ASSESSMENT_TYPES.split(',')
-      .filter(at => at != '')
-      .map(at => at.trim())*/
     formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, polarisAssessmentTypes)
 
     debug('Formatted command is - '.concat(formattedCommand))

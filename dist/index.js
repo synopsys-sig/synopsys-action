@@ -38,6 +38,7 @@ const synopsys_bridge_1 = __nccwpck_require__(659);
 const inputs_1 = __nccwpck_require__(481);
 const config_variables_1 = __nccwpck_require__(222);
 const download_utility_1 = __nccwpck_require__(55);
+const io_1 = __nccwpck_require__(436);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -53,15 +54,14 @@ function run() {
             (0, core_1.info)('Downloading and configuring Synopsys Bridge');
             const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs_1.BRIDGE_DOWNLOAD_URL);
             const extractZippedFilePath = inputs_1.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
+            // Clear the existing bridge, if available
+            yield (0, io_1.rmRF)(extractZippedFilePath);
             yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
             (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
         }
         if (inputs_1.POLARIS_SERVER_URL) {
             const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
             const polarisAssessmentTypes = JSON.parse(inputs_1.POLARIS_ASSESSMENT_TYPES);
-            /*POLARIS_ASSESSMENT_TYPES.split(',')
-              .filter(at => at != '')
-              .map(at => at.trim())*/
             formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs_1.POLARIS_ACCESS_TOKEN, inputs_1.POLARIS_APPLICATION_NAME, inputs_1.POLARIS_PROJECT_NAME, inputs_1.POLARIS_SERVER_URL, polarisAssessmentTypes);
             (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
         }
