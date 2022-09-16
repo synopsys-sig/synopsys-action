@@ -39,21 +39,13 @@ export interface CoverityData {
   policy: {view: string}
 }
 
-// export interface BlackduckAPIToken {
-//
-// }
-//
-// export interface BlackduckAPI {
-//   api:
-// }
-
 export interface Blackduck {
   blackduck: BlackduckData
 }
 
 export interface BlackduckData {
   url: string
-  api: {token: string}
+  token: string
   install?: {directory: string}
   scan?: {full: boolean}
 }
@@ -146,7 +138,7 @@ export class SynopsysToolsParameter {
       data: {
         blackduck: {
           url: blackduckUrl,
-          api: {token: apiToken}
+          token: apiToken
         }
       }
     }
