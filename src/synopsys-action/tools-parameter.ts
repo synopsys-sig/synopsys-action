@@ -133,7 +133,7 @@ export class SynopsysToolsParameter {
   }
 
   getFormattedCommandForBlackduck(blackduckUrl: string, apiToken: string, installDirectory: string, scanFull: string): string {
-    validateBalckduckParams(blackduckUrl, apiToken)
+    validateBalckduckParams(blackduckUrl, apiToken, installDirectory)
     const blackduckData: InputData<Blackduck> = {
       data: {
         blackduck: {

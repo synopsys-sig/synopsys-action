@@ -438,7 +438,7 @@ class SynopsysToolsParameter {
         return command;
     }
     getFormattedCommandForBlackduck(blackduckUrl, apiToken, installDirectory, scanFull) {
-        (0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken);
+        (0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken, installDirectory);
         const blackduckData = {
             data: {
                 blackduck: {
@@ -576,8 +576,8 @@ function validateCoverityParams(userName, passWord, coverityUrl, projectName) {
     }
 }
 exports.validateCoverityParams = validateCoverityParams;
-function validateBalckduckParams(url, apiToken) {
-    if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0) {
+function validateBalckduckParams(url, apiToken, installDirectory) {
+    if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0 || installDirectory == null || installDirectory.length === 0) {
         throw new Error('One or more required parameters for Coverity is missing');
     }
 }
