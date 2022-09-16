@@ -443,7 +443,7 @@ class SynopsysToolsParameter {
             data: {
                 blackduck: {
                     url: blackduckUrl,
-                    api: { token: apiToken }
+                    token: apiToken
                 }
             }
         };
