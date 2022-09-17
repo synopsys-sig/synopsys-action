@@ -478,7 +478,7 @@ SynopsysToolsParameter.STATE_FILE_NAME = 'input.json';
 SynopsysToolsParameter.COVERITY_STAGE = 'connect';
 SynopsysToolsParameter.SPACE = ' ';
 // Balckduck parameters
-SynopsysToolsParameter.BLACKDUCK_STAGE = 'detect';
+SynopsysToolsParameter.BLACKDUCK_STAGE = 'blackduck';
 
 
 /***/ }),
