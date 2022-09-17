@@ -53,10 +53,12 @@ async function run() {
 
   try {
     const sb = new SynopsysBridge()
-    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory()).catch(reason => {
+      throw reason
+    })
   } catch (error: any) {
-    setFailed('Error while executing bridge command')
-    return Promise.reject('Error while executing bridge command - '.concat(error))
+    setFailed(error)
+    return
   } finally {
     await cleanupTempDir(tempDir)
   }
