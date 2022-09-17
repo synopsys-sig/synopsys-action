@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "SIGINT-175-configure_communication_between_bridge_with_GitHub_action_for_BackDuck" ]
   pull_request:
     branches: [ "main" ]
 
@@ -18,10 +18,10 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, Linux]
+    runs-on: [self-hosted, macOS, kishor]
 
     env:
-      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
+      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.24/blackduck_hub-0.1.24-macosx.zip"
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
 
@@ -37,4 +37,5 @@ jobs:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_scan_full: false
-#          blackduck_install_directory: /dir
+          blackduck_install_directory: /Users/kishori/synopsys-bridge
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
