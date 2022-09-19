@@ -23,7 +23,7 @@ jobs:
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.24/blackduck_hub-0.1.24-macosx.zip"
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
+#       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
