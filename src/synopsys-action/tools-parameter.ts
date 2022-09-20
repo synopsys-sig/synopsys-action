@@ -26,11 +26,6 @@ export interface PolarisData {
 
 export interface Coverity {
   coverity: CoverityConnect
-  install: CoverityDirectory
-}
-
-export interface CoverityDirectory {
-  directory: string
 }
 
 export interface CoverityConnect {
@@ -40,8 +35,6 @@ export interface CoverityConnect {
 export interface CoverityData {
   user: {name: string; password: string}
   url: string
-  project: {name: string}
-  policy: {view: string}
 }
 
 export class SynopsysToolsParameter {
@@ -96,20 +89,15 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string, projectName: string): string {
-    validateCoverityParams(userName, passWord, coverityUrl, projectName)
+  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string): string {
+    validateCoverityParams(userName, passWord, coverityUrl)
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
           connect: {
             user: {name: userName, password: passWord},
-            url: coverityUrl,
-            project: {name: projectName},
-            policy: {view: 'SAST'}
+            url: coverityUrl
           }
-        },
-        install: {
-          directory: this.tempDir
         }
       }
     }
