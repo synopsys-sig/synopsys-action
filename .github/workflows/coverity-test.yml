@@ -25,9 +25,9 @@ jobs:
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.22/ci-package-0.1.22-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.22/ci-package-0.1.22-win64.zip"
 
-#      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
-#      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
-#      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
+      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
+      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
+      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
 #      BRIDGE_COVERITY_CONNECT_STREAM_NAME: ${{ secrets.COVERITY_STREAM_NAME }}
 #      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
 
@@ -52,19 +52,19 @@ jobs:
 #          ./bridge --stage connect
 #        shell: bash
 #
-#      - name: Synopsys-action for Linux
-#        if: ${{  runner.os == 'Linux'  }}
-#        run: |
-#          apt install unzip
-#          curl -o bridge.zip -L $LINUX_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage connect
-#        shell: bash
-
-      - name: Use synopsys unified-action - coverity-connect-via-input.json
-        # Use the action defined in this repository
-        uses: ./
-        with:
-          coverity_url: ${{ secrets.COVERITY_URL }}
-          coverity_user: ${{ secrets.COVERITY_USER }}
-          coverity_pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+      - name: Synopsys-action for Linux
+        if: ${{  runner.os == 'Linux'  }}
+        run: |
+          apt install unzip
+          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage connect --verbose --debug
+        shell: bash
+#
+#      - name: Use synopsys unified-action - coverity-connect-via-input.json
+#        # Use the action defined in this repository
+#        uses: ./
+#        with:
+#          coverity_url: ${{ secrets.COVERITY_URL }}
+#          coverity_user: ${{ secrets.COVERITY_USER }}
+#          coverity_pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}

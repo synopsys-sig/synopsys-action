@@ -2,6 +2,15 @@ name: 'Synopsys Unified'
 description: 'Scan using synopsys tools'
 author: 'Synopsys Inc'
 inputs:
+  coverity_url:
+    description: 'Coverity url'
+    required: true
+  coverity_user:
+    description: 'Coverity user name'
+    required: true
+  coverity_pasphrase:
+    description: 'Coverity password'
+    required: true
   polaris_accessToken:
     description: 'Polaris Access Token'
     required: false
