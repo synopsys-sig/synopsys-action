@@ -80,11 +80,13 @@ function run() {
         }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
-            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)()).catch(reason => {
+                throw reason;
+            });
         }
         catch (error) {
-            (0, core_1.setFailed)('Error while executing bridge command');
-            return Promise.reject('Error while executing bridge command - '.concat(error));
+            (0, core_1.setFailed)(error);
+            return;
         }
         finally {
             yield (0, utility_1.cleanupTempDir)(tempDir);
@@ -294,7 +296,7 @@ class SynopsysBridge {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
-                        throw new Error('Error while executing bridge command - ${error}');
+                        throw error;
                     }
                 }
             }
