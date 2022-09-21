@@ -35,7 +35,7 @@ jobs:
         uses: ./
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.POLARIS_ACCESS_TOKEN_NEW }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           blackduck_scan_full: false
           blackduck_install_directory: /Users/kishori/synopsys-bridge
           bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
