@@ -35,44 +35,44 @@ jobs:
       - uses: actions/checkout@v3
 
 
-#       - name: Synopsys-action for Windows
-#         if: ${{ runner.os == 'Windows' }}
-#         run: |
-#           Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-#           tar -xf bridge.zip
-#           .\bridge.exe --stage blackduck
-#         shell: powershell
+      - name: Synopsys-action for Windows
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+          tar -xf bridge.zip
+          .\bridge.exe --stage blackduck
+        shell: powershell
 
-#       - name: Synopsys-action for MAC
-#         if: ${{  runner.os == 'macOS'  }}
-#         run: |
-#           var="$(which unzip)"
-#           if [[ $var =~ "not found" ]]; then
-#             brew install unzip
-#           fi  
-#           curl -o bridge.zip -L $MAC_BRIDGE_URL
-#           unzip bridge.zip
-#           ./bridge --stage blackduck
-#         shell: bash
+      - name: Synopsys-action for MAC
+        if: ${{  runner.os == 'macOS'  }}
+        run: |
+          var="$(which unzip)"
+          if [[ $var =~ "not found" ]]; then
+            brew install unzip
+          fi  
+          curl -o bridge.zip -L $MAC_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage blackduck
+        shell: bash
 
-#       - name: Synopsys-action for Linux
-#         if: ${{  runner.os == 'Linux'  }}
-#         run: |
-#           var="$(which unzip)"
-#           if [[ $var =~ "not found" ]]; then
-#             sudo apt-get install unzip
-#           fi 
-#           curl -o bridge.zip -L $LINUX_BRIDGE_URL
-#           unzip bridge.zip
-#           ./bridge --stage blackduck
-#         shell: bash
+      - name: Synopsys-action for Linux
+        if: ${{  runner.os == 'Linux'  }}
+        run: |
+          var="$(which unzip)"
+          if [[ $var =~ "not found" ]]; then
+            sudo apt-get install unzip
+          fi 
+          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage blackduck
+        shell: bash
 
-      - name: Use synopsys unified-action - blackduck-detect
-       # Use the action defined in this repository
-        uses: ./
-        with:
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          blackduck_scan_full: false
-          blackduck_install_directory: /Users/kishori/synopsys-bridge
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+#       - name: Use synopsys unified-action - blackduck-detect
+#        # Use the action defined in this repository
+#         uses: ./
+#         with:
+#           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+#           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+#           blackduck_scan_full: false
+#           blackduck_install_directory: /Users/kishori/synopsys-bridge
+#           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
