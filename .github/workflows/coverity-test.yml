@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, lokesh]
+    runs-on: [self-hosted, lokesh, ]
 
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.22/ci-package-0.1.22-macosx.zip"
@@ -29,7 +29,7 @@ jobs:
       BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
       BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
 #      BRIDGE_COVERITY_CONNECT_STREAM_NAME: ${{ secrets.COVERITY_STREAM_NAME }}
-#      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
+      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -43,14 +43,14 @@ jobs:
 #          .\bridge.exe --stage connect
 #        shell: powershell
 #
-#      - name: Synopsys-action for MAC
-#        if: ${{  runner.os == 'macOS'  }}
-#        run: |
-#          brew install unzip
-#          curl -o bridge.zip -L $MAC_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage connect
-#        shell: bash
+      - name: Synopsys-action for MAC
+        if: ${{  runner.os == 'macOS'  }}
+        run: |
+          brew install unzip
+          curl -o bridge.zip -L $MAC_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage connect --verbose --debug
+        shell: bash
 #
       - name: Synopsys-action for Linux
         if: ${{  runner.os == 'Linux'  }}
