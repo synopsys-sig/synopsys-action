@@ -35,31 +35,31 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Synopsys-action for Windows
-        if: ${{ runner.os == 'Windows' }}
-        run: |
-          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-          tar -xf bridge.zip
-          .\bridge.exe --stage connect
-        shell: powershell
-
-      - name: Synopsys-action for MAC
-        if: ${{  runner.os == 'macOS'  }}
-        run: |
-          brew install unzip
-          curl -o bridge.zip -L $MAC_BRIDGE_URL
-          unzip bridge.zip
-          ./bridge --stage connect
-        shell: bash
-
-      - name: Synopsys-action for Linux
-        if: ${{  runner.os == 'Linux'  }}
-        run: |
-          apt install unzip
-          curl -o bridge.zip -L $LINUX_BRIDGE_URL
-          unzip bridge.zip
-          ./bridge --stage connect
-        shell: bash
+#      - name: Synopsys-action for Windows
+#        if: ${{ runner.os == 'Windows' }}
+#        run: |
+#          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+#          tar -xf bridge.zip
+#          .\bridge.exe --stage connect
+#        shell: powershell
+#
+#      - name: Synopsys-action for MAC
+#        if: ${{  runner.os == 'macOS'  }}
+#        run: |
+#          brew install unzip
+#          curl -o bridge.zip -L $MAC_BRIDGE_URL
+#          unzip bridge.zip
+#          ./bridge --stage connect
+#        shell: bash
+#
+#      - name: Synopsys-action for Linux
+#        if: ${{  runner.os == 'Linux'  }}
+#        run: |
+#          apt install unzip
+#          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+#          unzip bridge.zip
+#          ./bridge --stage connect
+#        shell: bash
 
       - name: Use synopsys unified-action - coverity-connect-via-input.json
         # Use the action defined in this repository
