@@ -25,11 +25,11 @@ jobs:
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.22/ci-package-0.1.22-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.22/ci-package-0.1.22-win64.zip"
 
-      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
-      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
-      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
+#      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
+#      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
+#      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
 #      BRIDGE_COVERITY_CONNECT_STREAM_NAME: ${{ secrets.COVERITY_STREAM_NAME }}
-      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
+#      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
