@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, kiran]
+    runs-on: [self-hosted]
 
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.22/ci-package-0.1.22-macosx.zip"
@@ -30,10 +30,11 @@ jobs:
       BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
       BRIDGE_COVERITY_CONNECT_STREAM_NAME: ${{ secrets.COVERITY_STREAM_NAME }}
       BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
-      BRIDGE_COVERITY_INSTALL_DIRECTORY: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
       BRIDGE_COVERITY_POLICY_VIEW: ${{ secrets.COVERITY_POLICY_VIEW }}
       BRIDGE_COVERITY_REPOSITORY_NAME: ${{ secrets.COVERITY_REPOSITORY_NAME }}
       BRIDGE_COVERITY_BRANCH_NAME: ${{ secrets.COVERITY_BRANCH_NAME }}
+      # Mandatory for windows hosted environment
+      BRIDGE_COVERITY_INSTALL_DIRECTORY: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -74,7 +75,8 @@ jobs:
           coverity_pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
-          coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
           coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          # Mandatory for windows hosted environment
+          coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
