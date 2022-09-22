@@ -76,4 +76,4 @@ jobs:
            blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
            blackduck_scan_full: false
            blackduck_install_directory: /Users/kishori/synopsys-bridge
-           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+           bridge_download_url: ${{ env.WINDOWS_BRIDGE_URL }}
