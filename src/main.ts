@@ -42,6 +42,9 @@ async function run() {
   } else if (inputs.COVERITY_URL) {
     const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
     formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME)
+  } else if (inputs.BLACKDUCK_URL) {
+    const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
+    formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL)
   } else {
     setFailed('Not supported flow')
     warning('Not supported flow')
@@ -50,10 +53,12 @@ async function run() {
 
   try {
     const sb = new SynopsysBridge()
-    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory()).catch(reason => {
+      throw reason
+    })
   } catch (error: any) {
-    setFailed('Error while executing bridge command')
-    return Promise.reject('Error while executing bridge command - '.concat(error))
+    setFailed(error)
+    return
   } finally {
     await cleanupTempDir(tempDir)
   }

@@ -9,3 +9,9 @@ export function validateCoverityParams(userName: string, passWord: string, cover
     throw new Error('One or more required parameters for Coverity is missing')
   }
 }
+
+export function validateBalckduckParams(url: string, apiToken: string, installDirectory: string): void {
+  if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0 || installDirectory == null || installDirectory.length === 0) {
+    throw new Error('One or more required parameters for Coverity is missing')
+  }
+}

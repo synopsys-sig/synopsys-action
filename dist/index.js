@@ -92,6 +92,10 @@ function run() {
             const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
             formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME);
         }
+        else if (inputs.BLACKDUCK_URL) {
+            const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
+            formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL);
+        }
         else {
             (0, core_1.setFailed)('Not supported flow');
             (0, core_1.warning)('Not supported flow');
@@ -99,11 +103,13 @@ function run() {
         }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
-            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)()).catch(reason => {
+                throw reason;
+            });
         }
         catch (error) {
-            (0, core_1.setFailed)('Error while executing bridge command');
-            return Promise.reject('Error while executing bridge command - '.concat(error));
+            (0, core_1.setFailed)(error);
+            return;
         }
         finally {
             yield (0, utility_1.cleanupTempDir)(tempDir);
@@ -215,7 +221,7 @@ exports.extractZipped = extractZipped;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
+exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(186);
 exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys_bridge_path');
 //Bridge download url
@@ -236,6 +242,11 @@ exports.COVERITY_INSTALL_DIRECTORY = (0, core_1.getInput)('coverity_install_dire
 exports.COVERITY_POLICY_VIEW = (0, core_1.getInput)('coverity_policy_view');
 exports.COVERITY_REPOSITORY_NAME = (0, core_1.getInput)('coverity_repository_name');
 exports.COVERITY_BRANCH_NAME = (0, core_1.getInput)('coverity_branch_name');
+// Blackduck related inputs
+exports.BLACKDUCK_URL = (0, core_1.getInput)('blackduck_url');
+exports.BLACKDUCK_API_TOKEN = (0, core_1.getInput)('blackduck_apiToken');
+exports.BLACKDUCK_INSTALL_DIRECTORY = (0, core_1.getInput)('blackduck_install_directory');
+exports.BLACKDUCK_SCAN_FULL = (0, core_1.getInput)('blackduck_scan_full');
 
 
 /***/ }),
@@ -313,7 +324,7 @@ class SynopsysBridge {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
-                        throw new Error('Error while executing bridge command - ${error}');
+                        throw error;
                     }
                 }
             }
@@ -469,6 +480,37 @@ class SynopsysToolsParameter {
         const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose'); //'--stage polaris --state '.concat(stateFilePath)
         return command;
     }
+    getFormattedCommandForBlackduck(blackduckUrl, apiToken, installDirectory, scanFull) {
+        (0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken, installDirectory);
+        const blackduckData = {
+            data: {
+                blackduck: {
+                    url: blackduckUrl,
+                    token: apiToken
+                }
+            }
+        };
+        if (installDirectory) {
+            blackduckData.data.blackduck.install = { directory: installDirectory };
+        }
+        if (scanFull) {
+            let scanFullValue = false;
+            if (scanFull.toLowerCase() === 'true' || scanFull.toLowerCase() === 'false') {
+                scanFullValue = scanFull.toLowerCase() === 'true';
+            }
+            else {
+                throw new Error('boolean value is required for blackduck_scan_full');
+            }
+            blackduckData.data.blackduck.scan = { full: scanFullValue };
+        }
+        const inputJson = JSON.stringify(blackduckData);
+        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
+        fs.writeFileSync(stateFilePath, inputJson);
+        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
+        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+        return command;
+    }
 }
 exports.SynopsysToolsParameter = SynopsysToolsParameter;
 SynopsysToolsParameter.STAGE_OPTION = '--stage';
@@ -478,6 +520,8 @@ SynopsysToolsParameter.STATE_FILE_NAME = 'input.json';
 // Coverity parameters
 SynopsysToolsParameter.COVERITY_STAGE = 'connect';
 SynopsysToolsParameter.SPACE = ' ';
+// Balckduck parameters
+SynopsysToolsParameter.BLACKDUCK_STAGE = 'blackduck';
 
 
 /***/ }),
@@ -562,7 +606,7 @@ exports.cleanupTempDir = cleanupTempDir;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateCoverityParams = exports.validatePolarisParams = void 0;
+exports.validateBalckduckParams = exports.validateCoverityParams = exports.validatePolarisParams = void 0;
 function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
         throw new Error('One or more required parameters for Altair is missing');
@@ -575,6 +619,12 @@ function validateCoverityParams(userName, passWord, coverityUrl, projectName, st
     }
 }
 exports.validateCoverityParams = validateCoverityParams;
+function validateBalckduckParams(url, apiToken, installDirectory) {
+    if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0 || installDirectory == null || installDirectory.length === 0) {
+        throw new Error('One or more required parameters for Coverity is missing');
+    }
+}
+exports.validateBalckduckParams = validateBalckduckParams;
 
 
 /***/ }),

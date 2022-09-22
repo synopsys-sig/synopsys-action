@@ -45,7 +45,7 @@ test('Test wrong assessment type error in getFormattedCommandForPolaris', () => 
 test('Test getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', "/", "10005", "test", "main")
+  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', '/', '10005', 'test', 'main')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
@@ -55,7 +55,27 @@ test('Test missing data error in getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForCoverity('', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', "/", "10005", "test", "main")
+    stp.getFormattedCommandForCoverity('', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', '/', '10005', 'test', 'main')
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('required parameters for Coverity is missing')
+  }
+})
+
+test('Test getFormattedCommandForBlackduck', () => {
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForBlackduck('http://blackduck.com', 'token', 'http://server_url.com', 'true')
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage detect')
+})
+
+test('Test missing data error in getFormattedCommandForBlackduck', () => {
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  try {
+    stp.getFormattedCommandForBlackduck('', 'token', 'http://server_url.com', 'true')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('required parameters for Coverity is missing')

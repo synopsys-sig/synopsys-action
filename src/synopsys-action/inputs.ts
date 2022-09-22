@@ -22,3 +22,9 @@ export const COVERITY_INSTALL_DIRECTORY = getInput('coverity_install_directory')
 export const COVERITY_POLICY_VIEW = getInput('coverity_policy_view')
 export const COVERITY_REPOSITORY_NAME = getInput('coverity_repository_name')
 export const COVERITY_BRANCH_NAME = getInput('coverity_branch_name')
+
+// Blackduck related inputs
+export const BLACKDUCK_URL = getInput('blackduck_url')
+export const BLACKDUCK_API_TOKEN = getInput('blackduck_apiToken')
+export const BLACKDUCK_INSTALL_DIRECTORY = getInput('blackduck_install_directory')
+export const BLACKDUCK_SCAN_FULL = getInput('blackduck_scan_full')
