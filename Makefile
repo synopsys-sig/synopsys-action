@@ -10,14 +10,14 @@ prerequisites:
 	npm config set '//registry.synopsys.npme.io/:_authToken' ${NPM_TOKEN}
 	npm i -g lerna
 	npm ci --prefer-offline --no-audit
-	npx lerna bootstrap --force-local -- --prefer-offline --no-audit
+	npm run build
 
 build: prerequisites
 	echo "Provide the Build command like mvn install / go build / npm "
 
 dependencies: prerequisites
 	echo "Provide the Dependency command or env variables"
-	cd packages/web-app && npx ember build
+	npm run package
 
 image_scan:
 	echo "Provide the commands for BD Docker Image Scan"
