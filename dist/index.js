@@ -21,6 +21,29 @@ exports.APPLICATION_NAME = 'synopsys-action';
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -35,7 +58,7 @@ const core_1 = __nccwpck_require__(186);
 const tools_parameter_1 = __nccwpck_require__(80);
 const utility_1 = __nccwpck_require__(643);
 const synopsys_bridge_1 = __nccwpck_require__(659);
-const inputs_1 = __nccwpck_require__(481);
+const inputs = __importStar(__nccwpck_require__(481));
 const config_variables_1 = __nccwpck_require__(222);
 const download_utility_1 = __nccwpck_require__(55);
 const io_1 = __nccwpck_require__(436);
@@ -45,29 +68,29 @@ function run() {
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
         // Automatically configure bridge if Bridge download url is provided
-        if (inputs_1.BRIDGE_DOWNLOAD_URL) {
-            if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs_1.BRIDGE_DOWNLOAD_URL)) {
+        if (inputs.BRIDGE_DOWNLOAD_URL) {
+            if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
                 (0, core_1.setFailed)('Provided Bridge url is either not valid for the platform');
                 return Promise.reject('Provided Bridge url is either not valid for the platform');
             }
             // Download file in temporary directory
             (0, core_1.info)('Downloading and configuring Synopsys Bridge');
-            const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs_1.BRIDGE_DOWNLOAD_URL);
-            const extractZippedFilePath = inputs_1.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
+            const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
+            const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
             // Clear the existing bridge, if available
             yield (0, io_1.rmRF)(extractZippedFilePath);
             yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
             (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
         }
-        if (inputs_1.POLARIS_SERVER_URL) {
+        if (inputs.POLARIS_SERVER_URL) {
             const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            const polarisAssessmentTypes = JSON.parse(inputs_1.POLARIS_ASSESSMENT_TYPES);
-            formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs_1.POLARIS_ACCESS_TOKEN, inputs_1.POLARIS_APPLICATION_NAME, inputs_1.POLARIS_PROJECT_NAME, inputs_1.POLARIS_SERVER_URL, polarisAssessmentTypes);
+            const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
+            formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes);
             (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
         }
-        else if (inputs_1.COVERITY_URL) {
+        else if (inputs.COVERITY_URL) {
             const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs_1.COVERITY_USER, inputs_1.COVERITY_PASSPHRASE, inputs_1.COVERITY_URL);
+            formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME);
         }
         else {
             (0, core_1.setFailed)('Not supported flow');
@@ -192,7 +215,7 @@ exports.extractZipped = extractZipped;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
+exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(186);
 exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys_bridge_path');
 //Bridge download url
@@ -207,6 +230,12 @@ exports.POLARIS_SERVER_URL = (0, core_1.getInput)('polaris_serverUrl');
 exports.COVERITY_URL = (0, core_1.getInput)('coverity_url');
 exports.COVERITY_USER = (0, core_1.getInput)('coverity_user');
 exports.COVERITY_PASSPHRASE = (0, core_1.getInput)('coverity_pasphrase');
+exports.COVERITY_PROJECT_NAME = (0, core_1.getInput)('coverity_project_name');
+exports.COVERITY_STREAM_NAME = (0, core_1.getInput)('coverity_stream_name');
+exports.COVERITY_INSTALL_DIRECTORY = (0, core_1.getInput)('coverity_install_directory');
+exports.COVERITY_POLICY_VIEW = (0, core_1.getInput)('coverity_policy_view');
+exports.COVERITY_REPOSITORY_NAME = (0, core_1.getInput)('coverity_repository_name');
+exports.COVERITY_BRANCH_NAME = (0, core_1.getInput)('coverity_branch_name');
 
 
 /***/ }),
@@ -405,18 +434,33 @@ class SynopsysToolsParameter {
         const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath);
         return command;
     }
-    getFormattedCommandForCoverity(userName, passWord, coverityUrl) {
-        (0, validators_1.validateCoverityParams)(userName, passWord, coverityUrl);
+    getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName, streamName, installDir, policyView, repositoryName, branchName) {
+        (0, validators_1.validateCoverityParams)(userName, passWord, coverityUrl, projectName, streamName);
         const covData = {
             data: {
                 coverity: {
                     connect: {
                         user: { name: userName, password: passWord },
                         url: coverityUrl
-                    }
-                }
+                    },
+                    project: { name: projectName },
+                    stream: { name: streamName }
+                },
+                project: {}
             }
         };
+        if (installDir) {
+            covData.data.coverity.install = { directory: installDir };
+        }
+        if (policyView) {
+            covData.data.coverity.connect.policy = { view: policyView };
+        }
+        if (repositoryName) {
+            covData.data.project.repository = { name: repositoryName };
+        }
+        if (repositoryName) {
+            covData.data.project.branch = { name: branchName };
+        }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
@@ -525,8 +569,8 @@ function validatePolarisParams(accessToken, applicationName, projectName, server
     }
 }
 exports.validatePolarisParams = validatePolarisParams;
-function validateCoverityParams(userName, passWord, coverityUrl) {
-    if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0) {
+function validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName) {
+    if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0 || streamName == null || streamName.length === 0) {
         throw new Error('One or more required parameters for Coverity is missing');
     }
 }

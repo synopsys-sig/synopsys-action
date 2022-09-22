@@ -26,15 +26,25 @@ export interface PolarisData {
 
 export interface Coverity {
   coverity: CoverityConnect
+  project: ProjectData
+}
+
+export interface ProjectData {
+  repository?: {name: string}
+  branch?: {name: string}
 }
 
 export interface CoverityConnect {
   connect: CoverityData
+  project: {name: string}
+  stream: {name: string}
+  install?: {directory: string}
 }
 
 export interface CoverityData {
   user: {name: string; password: string}
   url: string
+  policy?: {view: string}
 }
 
 export class SynopsysToolsParameter {
@@ -89,17 +99,36 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string): string {
-    validateCoverityParams(userName, passWord, coverityUrl)
+  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string, projectName: string, streamName: string, installDir: string, policyView: string, repositoryName: string, branchName: string): string {
+    validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName)
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
           connect: {
             user: {name: userName, password: passWord},
             url: coverityUrl
-          }
-        }
+          },
+          project: {name: projectName},
+          stream: {name: streamName}
+        },
+        project: {}
       }
+    }
+
+    if (installDir) {
+      covData.data.coverity.install = {directory: installDir}
+    }
+
+    if (policyView) {
+      covData.data.coverity.connect.policy = {view: policyView}
+    }
+
+    if (repositoryName) {
+      covData.data.project.repository = {name: repositoryName}
+    }
+
+    if (repositoryName) {
+      covData.data.project.branch = {name: branchName}
     }
 
     const inputJson = JSON.stringify(covData)
