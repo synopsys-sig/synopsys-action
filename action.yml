@@ -11,6 +11,24 @@ inputs:
   coverity_pasphrase:
     description: 'Coverity password'
     required: true
+  coverity_project_name:
+    description: 'Coverity Project Name'
+    required: true
+  coverity_stream_name:
+    description: 'Coverity Stream Name'
+    required: true
+  coverity_install_directory:
+    description: 'Coverity Install Directory'
+    required: false
+  coverity_policy_view:
+    description: 'Coverity Policy View'
+    required: false
+  coverity_repository_name:
+    description: 'Repository Name'
+    required: false
+  coverity_branch_name:
+    description: 'Branch name'
+    required: false
   polaris_accessToken:
     description: 'Polaris Access Token'
     required: false
