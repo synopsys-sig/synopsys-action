@@ -54,7 +54,7 @@ export class SynopsysBridge {
         try {
           return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
         } catch (error) {
-          throw new Error('Error while executing bridge command - ${error}')
+          throw error
         }
       }
     } else {

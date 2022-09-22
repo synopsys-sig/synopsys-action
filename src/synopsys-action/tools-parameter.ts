@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import {debug} from '@actions/core'
-import {validatePolarisParams, validateCoverityParams} from './validators'
+import {validatePolarisParams, validateCoverityParams, validateBalckduckParams} from './validators'
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -39,6 +39,17 @@ export interface CoverityData {
   policy: {view: string}
 }
 
+export interface Blackduck {
+  blackduck: BlackduckData
+}
+
+export interface BlackduckData {
+  url: string
+  token: string
+  install?: {directory: string}
+  scan?: {full: boolean}
+}
+
 export class SynopsysToolsParameter {
   tempDir: string
   private static STAGE_OPTION = '--stage'
@@ -48,6 +59,8 @@ export class SynopsysToolsParameter {
   // Coverity parameters
   private static COVERITY_STAGE = 'connect'
   private static SPACE = ' '
+  // Balckduck parameters
+  private static BLACKDUCK_STAGE = 'blackduck'
 
   constructor(tempDir: string) {
     this.tempDir = tempDir
@@ -115,6 +128,44 @@ export class SynopsysToolsParameter {
     debug('Generated state json file content is - '.concat(inputJson))
 
     const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose') //'--stage polaris --state '.concat(stateFilePath)
+
+    return command
+  }
+
+  getFormattedCommandForBlackduck(blackduckUrl: string, apiToken: string, installDirectory: string, scanFull: string): string {
+    validateBalckduckParams(blackduckUrl, apiToken, installDirectory)
+    const blackduckData: InputData<Blackduck> = {
+      data: {
+        blackduck: {
+          url: blackduckUrl,
+          token: apiToken
+        }
+      }
+    }
+
+    if (installDirectory) {
+      blackduckData.data.blackduck.install = {directory: installDirectory}
+    }
+
+    if (scanFull) {
+      let scanFullValue = false
+      if (scanFull.toLowerCase() === 'true' || scanFull.toLowerCase() === 'false') {
+        scanFullValue = scanFull.toLowerCase() === 'true'
+      } else {
+        throw new Error('boolean value is required for blackduck_scan_full')
+      }
+      blackduckData.data.blackduck.scan = {full: scanFullValue}
+    }
+
+    const inputJson = JSON.stringify(blackduckData)
+
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
+    fs.writeFileSync(stateFilePath, inputJson)
+
+    debug('Generated state json file at - '.concat(stateFilePath))
+    debug('Generated state json file content is - '.concat(inputJson))
+
+    const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
 
     return command
   }

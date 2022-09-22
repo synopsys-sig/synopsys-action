@@ -23,6 +23,18 @@ inputs:
   bridge_download_url:
     description: 'URL to download bridge from'
     required: false
+  blackduck_url:
+    description: 'URL for blackduck hub'
+    required: false
+  blackduck_apiToken:
+    description: 'API token to access blackduck'
+    required: false
+  blackduck_install_directory:
+    description: 'Directory to find or install detect'
+    required: false
+  blackduck_scan_full:
+    description: 'Scan Mode. (true for intelligent scan & false for rapid scan)'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

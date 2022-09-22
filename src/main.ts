@@ -2,7 +2,7 @@ import {debug, info, setFailed, warning} from '@actions/core'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {getBridgeDefaultPath, SynopsysBridge, validateBridgeURL} from './synopsys-action/synopsys-bridge'
-import {BRIDGE_DOWNLOAD_URL, POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, SYNOPSYS_BRIDGE_PATH, COVERITY_URL, COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_PROJECT_NAME} from './synopsys-action/inputs'
+import {BRIDGE_DOWNLOAD_URL, POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, SYNOPSYS_BRIDGE_PATH, COVERITY_URL, COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_PROJECT_NAME, BLACKDUCK_URL, BLACKDUCK_API_TOKEN, BLACKDUCK_INSTALL_DIRECTORY, BLACKDUCK_SCAN_FULL} from './synopsys-action/inputs'
 
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './synopsys-action/download-utility'
@@ -42,6 +42,9 @@ async function run() {
   } else if (COVERITY_URL) {
     const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
     formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_URL, COVERITY_PROJECT_NAME)
+  } else if (BLACKDUCK_URL) {
+    const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
+    formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(BLACKDUCK_URL, BLACKDUCK_API_TOKEN, BLACKDUCK_INSTALL_DIRECTORY, BLACKDUCK_SCAN_FULL)
   } else {
     setFailed('Not supported flow')
     warning('Not supported flow')
@@ -50,10 +53,12 @@ async function run() {
 
   try {
     const sb = new SynopsysBridge()
-    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory()).catch(reason => {
+      throw reason
+    })
   } catch (error: any) {
-    setFailed('Error while executing bridge command')
-    return Promise.reject('Error while executing bridge command - '.concat(error))
+    setFailed(error)
+    return
   } finally {
     await cleanupTempDir(tempDir)
   }
