@@ -68,9 +68,9 @@ jobs:
 #          ./bridge --stage blackduck
 #        shell: bash
 
-       - name: Use synopsys unified-action - blackduck-detect
-        # Use the action defined in this repository
-         uses: ./
+      - name: Use synopsys unified-action - blackduck-detect
+      # Use the action defined in this repository
+       uses: ./
          with:
            blackduck_url: ${{ secrets.BLACKDUCK_URL }}
            blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
