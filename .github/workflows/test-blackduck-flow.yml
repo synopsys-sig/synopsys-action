@@ -19,7 +19,7 @@ jobs:
   build:
     # The type of runner that the job will run on
 #     runs-on: [self-hosted, macOS, kishor]
-    runs-on: [self-hosted, Windows, tithi]
+    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
     env:
