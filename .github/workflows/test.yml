@@ -68,8 +68,8 @@ jobs:
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "testapp1"
-          polaris_project_name: "testproj1"
+          polaris_application_name: "App1"
+          polaris_project_name: "Proj1"
           polaris_assessment_types: '["SAST"]'
           bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
 
