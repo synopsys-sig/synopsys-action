@@ -78,15 +78,15 @@
         git-semver get version > version.txt
         git-semver ci tag-commit
       else
-        echo "Using override version ${VERSION_OVERRIDE}"
-        if git rev-parse "$VERSION_OVERRIDE" >/dev/null 2>&1; then
-          echo "Version already exists, overwriting version is not supported."
-          exit 1
-        else
+       # echo "Using override version ${VERSION_OVERRIDE}"
+       # if git rev-parse "$VERSION_OVERRIDE" >/dev/null 2>&1; then
+         # echo "Version already exists, overwriting version is not supported."
+         # exit 1
+       # else
           echo $VERSION_OVERRIDE > version.txt
-          git-semver ci tag-commit $VERSION_OVERRIDE
-        fi
-      fi
+         # git-semver ci tag-commit $VERSION_OVERRIDE
+       # fi
+      #fi
     - VERSION=`cat version.txt`
     - echo "Version ${VERSION}"
 #    - npm version VERSION
