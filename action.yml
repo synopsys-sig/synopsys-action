@@ -8,7 +8,7 @@ inputs:
   coverity_user:
     description: 'Coverity user name'
     required: true
-  coverity_pasphrase:
+  coverity_passphrase:
     description: 'Coverity password'
     required: true
   coverity_project_name:
