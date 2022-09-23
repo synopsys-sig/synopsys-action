@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import path from 'path'
 import {debug} from '@actions/core'
 import {validatePolarisParams, validateCoverityParams, validateBalckduckParams} from './validators'
+import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -128,8 +129,11 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (installDir) {
-      covData.data.coverity.install = {directory: installDir}
+    const osName = process.platform
+    if (osName === 'win32') {
+      if (installDir) {
+        covData.data.coverity.install = {directory: installDir}
+      }
     }
 
     if (policyView) {

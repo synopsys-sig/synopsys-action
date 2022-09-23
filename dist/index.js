@@ -460,8 +460,11 @@ class SynopsysToolsParameter {
                 project: {}
             }
         };
-        if (installDir) {
-            covData.data.coverity.install = { directory: installDir };
+        const osName = process.platform;
+        if (osName === 'win32') {
+            if (installDir) {
+                covData.data.coverity.install = { directory: installDir };
+            }
         }
         if (policyView) {
             covData.data.coverity.connect.policy = { view: policyView };
