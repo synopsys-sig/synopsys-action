@@ -23,9 +23,9 @@ jobs:
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
     env:
-#      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-#      BRIDGE_blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-#      BRIDGE_blackduck_install_directory: "/Users/kishori/synopsys-bridge"
+      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+      BRIDGE_blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+      BRIDGE_blackduck_install_directory: "/Users/kishori/synopsys-bridge"
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.24/blackduck_hub-0.1.24-macosx.zip"
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.26/blackduck_hub-0.1.26-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.26/blackduck_hub-0.1.26-win64.zip"
