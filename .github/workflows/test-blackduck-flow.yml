@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI-Blackduck
 
 # Controls when the workflow will run
 on:
@@ -18,11 +18,11 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-     runs-on: [self-hosted, macOS, kishor]
+   runs-on: [self-hosted, macOS, kishor]
 #    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
-    env:
+   env:
 #      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_URL }}
 #      BRIDGE_blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
 #      BRIDGE_blackduck_install_directory: "/Users/kishori/synopsys-bridge"
@@ -31,7 +31,7 @@ jobs:
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.32/ci-package-0.1.32-win64.zip"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
+   steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
@@ -69,11 +69,11 @@ jobs:
 #        shell: bash
 
       - name: Use synopsys unified-action - blackduck-detect
-         # Use the action defined in this repository
+       # Use the action defined in this repository
         uses: ./
         with:
-            blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-            blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-            blackduck_scan_full: false
-            blackduck_install_directory: /Users/kishori/synopsys-bridge
-            bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+          blackduck_scan_full: false
+          blackduck_install_directory: /Users/kishori/synopsys-bridge
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
