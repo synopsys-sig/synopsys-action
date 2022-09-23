@@ -21,15 +21,15 @@ jobs:
     runs-on: [self-hosted, macOS, kishor]
 
     env:
-      BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-      BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-      BRIDGE_polaris_application_name: testapp1
-      BRIDGE_polaris_project_name: testproj1
-      BRIDGE_polaris_assessment_types: "[\"SAST\"]"
-      POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
-      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-macosx.zip"
-      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.60/polaris-ci-0.1.60-win64.zip"
+#      BRIDGE_polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+#      BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+#      BRIDGE_polaris_application_name: testapp1
+#      BRIDGE_polaris_project_name: testproj1
+#      BRIDGE_polaris_assessment_types: "[\"SAST\"]"
+#      POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
+      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.81/polaris-ci-0.1.81-macosx.zip"
+      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.81/polaris-ci-0.1.81-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.81/polaris-ci-0.1.81-win64.zip"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -68,10 +68,10 @@ jobs:
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "testapp1"
-          polaris_project_name: "testproj1"
+          polaris_application_name: "App1"
+          polaris_project_name: "Proj1"
           polaris_assessment_types: '["SAST"]'
-#          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
 
 #      - name: Use synopsys unified-action - coverity-connect
 #        # Use the action defined in this repository
