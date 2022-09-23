@@ -4,19 +4,19 @@ author: 'Synopsys Inc'
 inputs:
   coverity_url:
     description: 'Coverity url'
-    required: true
+    required: false
   coverity_user:
     description: 'Coverity user name'
-    required: true
+    required: false
   coverity_passphrase:
     description: 'Coverity password'
-    required: true
+    required: false
   coverity_project_name:
     description: 'Coverity Project Name'
-    required: true
+    required: false
   coverity_stream_name:
     description: 'Coverity Stream Name'
-    required: true
+    required: false
   coverity_install_directory:
     description: 'Coverity Install Directory'
     required: false
