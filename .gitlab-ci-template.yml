@@ -74,11 +74,11 @@
         fi
       fi
 
-      if [[ ! -v VERSION_OVERRIDE ]]; then
+     # if [[ ! -v VERSION_OVERRIDE ]]; then
         git-semver get version > version.txt
-        git-semver ci tag-commit
-      else
-       # echo "Using override version ${VERSION_OVERRIDE}"
+       # git-semver ci tag-commit
+     # else
+        echo "Using override version ${VERSION_OVERRIDE}"
        # if git rev-parse "$VERSION_OVERRIDE" >/dev/null 2>&1; then
          # echo "Version already exists, overwriting version is not supported."
          # exit 1
