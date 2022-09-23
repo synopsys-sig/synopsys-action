@@ -33,6 +33,7 @@ jobs:
       BRIDGE_COVERITY_POLICY_VIEW: ${{ secrets.COVERITY_POLICY_VIEW }}
       BRIDGE_COVERITY_REPOSITORY_NAME: ${{ secrets.COVERITY_REPOSITORY_NAME }}
       BRIDGE_COVERITY_BRANCH_NAME: ${{ secrets.COVERITY_BRANCH_NAME }}
+      # Mandatory for windows hosted environment
       BRIDGE_COVERITY_INSTALL_DIRECTORY: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
