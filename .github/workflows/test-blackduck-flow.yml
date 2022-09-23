@@ -26,9 +26,9 @@ jobs:
 #      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_URL }}
 #      BRIDGE_blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
 #      BRIDGE_blackduck_install_directory: "/Users/kishori/synopsys-bridge"
-      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.24/blackduck_hub-0.1.24-macosx.zip"
-      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.26/blackduck_hub-0.1.26-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.26/blackduck_hub-0.1.26-win64.zip"
+      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.32/ci-package-0.1.32-macosx.zip"
+      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.32/ci-package-0.1.32-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.32/ci-package-0.1.32-win64.zip"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -76,4 +76,4 @@ jobs:
             blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
             blackduck_scan_full: false
             blackduck_install_directory: /Users/kishori/synopsys-bridge
-            bridge_download_url: ${{ env.WINDOWS_BRIDGE_URL }}
+            bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
