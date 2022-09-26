@@ -2,7 +2,7 @@ import {debug, info, setFailed, warning} from '@actions/core'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {getBridgeDefaultPath, SynopsysBridge, validateBridgeURL} from './synopsys-action/synopsys-bridge'
-import {BRIDGE_DOWNLOAD_URL, POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, SYNOPSYS_BRIDGE_PATH, COVERITY_URL, COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_PROJECT_NAME, BLACKDUCK_URL, BLACKDUCK_API_TOKEN, BLACKDUCK_INSTALL_DIRECTORY, BLACKDUCK_SCAN_FULL} from './synopsys-action/inputs'
+import * as inputs from './synopsys-action/inputs'
 
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './synopsys-action/download-utility'
@@ -15,16 +15,16 @@ async function run() {
   let formattedCommand = ''
 
   // Automatically configure bridge if Bridge download url is provided
-  if (BRIDGE_DOWNLOAD_URL) {
-    if (!validateBridgeURL(BRIDGE_DOWNLOAD_URL)) {
+  if (inputs.BRIDGE_DOWNLOAD_URL) {
+    if (!validateBridgeURL(inputs.BRIDGE_DOWNLOAD_URL)) {
       setFailed('Provided Bridge url is either not valid for the platform')
       return Promise.reject('Provided Bridge url is either not valid for the platform')
     }
 
     // Download file in temporary directory
     info('Downloading and configuring Synopsys Bridge')
-    const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, BRIDGE_DOWNLOAD_URL)
-    const extractZippedFilePath: string = SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
+    const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, inputs.BRIDGE_DOWNLOAD_URL)
+    const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
 
     // Clear the existing bridge, if available
     await rmRF(extractZippedFilePath)
@@ -33,18 +33,18 @@ async function run() {
     info('Download and configuration of Synopsys Bridge completed')
   }
 
-  if (POLARIS_SERVER_URL) {
+  if (inputs.POLARIS_SERVER_URL) {
     const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
-    const polarisAssessmentTypes: Array<string> = JSON.parse(POLARIS_ASSESSMENT_TYPES)
-    formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(POLARIS_ACCESS_TOKEN, POLARIS_APPLICATION_NAME, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, polarisAssessmentTypes)
+    const polarisAssessmentTypes: Array<string> = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
+    formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes)
 
     debug('Formatted command is - '.concat(formattedCommand))
-  } else if (COVERITY_URL) {
+  } else if (inputs.COVERITY_URL) {
     const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
-    formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(COVERITY_USER, COVERITY_PASSPHRASE, COVERITY_URL, COVERITY_PROJECT_NAME)
-  } else if (BLACKDUCK_URL) {
+    formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME)
+  } else if (inputs.BLACKDUCK_URL) {
     const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
-    formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(BLACKDUCK_URL, BLACKDUCK_API_TOKEN, BLACKDUCK_INSTALL_DIRECTORY, BLACKDUCK_SCAN_FULL)
+    formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL)
   } else {
     setFailed('Not supported flow')
     warning('Not supported flow')

@@ -36,31 +36,31 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-#      - name: Synopsys-action for Windows
-#        if: ${{ runner.os == 'Windows' }}
-#        run: |
-#          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-#          tar -xf bridge.zip
-#          .\bridge.exe --stage polaris
-#        shell: powershell
-#
-#      - name: Synopsys-action for MAC
-#        if: ${{  runner.os == 'macOS'  }}
-#        run: |
-#          brew install unzip
-#          curl -o bridge.zip -L $MAC_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage polaris
-#        shell: bash
-#
-#      - name: Synopsys-action for Linux
-#        if: ${{  runner.os == 'Linux'  }}
-#        run: |
-#          sudo apt-get install unzip
-#          curl -o bridge.zip -L $LINUX_BRIDGE_URL
-#          unzip bridge.zip
-#          ./bridge --stage polaris
-#        shell: bash
+      #      - name: Synopsys-action for Windows
+      #        if: ${{ runner.os == 'Windows' }}
+      #        run: |
+      #          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+      #          tar -xf bridge.zip
+      #          .\bridge.exe --stage polaris
+      #        shell: powershell
+      #
+      #      - name: Synopsys-action for MAC
+      #        if: ${{  runner.os == 'macOS'  }}
+      #        run: |
+      #          brew install unzip
+      #          curl -o bridge.zip -L $MAC_BRIDGE_URL
+      #          unzip bridge.zip
+      #          ./bridge --stage polaris
+      #        shell: bash
+      #
+      #      - name: Synopsys-action for Linux
+      #        if: ${{  runner.os == 'Linux'  }}
+      #        run: |
+      #          sudo apt-get install unzip
+      #          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+      #          unzip bridge.zip
+      #          ./bridge --stage polaris
+      #        shell: bash
 
       - name: Use synopsys unified-action
         # Use the action defined in this repository
@@ -79,5 +79,5 @@ jobs:
 #        with:
 #          coverity_url: ${{ secrets.COVERITY_URL }}
 #          coverity_user: ${{ secrets.COVERITY_USER }}
-#          coverity_pasphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+#          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
 #          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}

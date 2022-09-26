@@ -2,6 +2,33 @@ name: 'Synopsys Unified'
 description: 'Scan using synopsys tools'
 author: 'Synopsys Inc'
 inputs:
+  coverity_url:
+    description: 'Coverity url'
+    required: false
+  coverity_user:
+    description: 'Coverity user name'
+    required: false
+  coverity_passphrase:
+    description: 'Coverity password'
+    required: false
+  coverity_project_name:
+    description: 'Coverity Project Name'
+    required: false
+  coverity_stream_name:
+    description: 'Coverity Stream Name'
+    required: false
+  coverity_install_directory:
+    description: 'Coverity Install Directory'
+    required: false
+  coverity_policy_view:
+    description: 'Coverity Policy View'
+    required: false
+  coverity_repository_name:
+    description: 'Repository Name'
+    required: false
+  coverity_branch_name:
+    description: 'Branch name'
+    required: false
   polaris_accessToken:
     description: 'Polaris Access Token'
     required: false
