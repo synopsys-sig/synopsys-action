@@ -9,10 +9,10 @@ include:
 
 # List of job stages in their order of execution
 stages:
-  - sbom
   - build
   - coverage_report
   - versioning
+  - sbom
 #  - Check_dist
 #  - changelog
   - analysis
