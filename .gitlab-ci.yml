@@ -16,7 +16,7 @@ stages:
 #  - Check_dist
 #  - changelog
   - analysis
-  - notificatio
+  - notification
 
 
 variables:
