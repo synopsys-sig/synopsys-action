@@ -460,9 +460,11 @@ class SynopsysToolsParameter {
                 project: {}
             }
         };
-        const osName = process.platform;
-        if (osName === 'win32') {
-            (0, validators_1.validateCoverityInstallDirectoryParam)(installDir);
+        if (installDir) {
+            const osName = process.platform;
+            if (osName === 'win32') {
+                (0, validators_1.validateCoverityInstallDirectoryParam)(installDir);
+            }
             covData.data.coverity.install = { directory: installDir };
         }
         if (policyView) {

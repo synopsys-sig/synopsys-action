@@ -62,7 +62,7 @@ test('Test missing data error in getFormattedCommandForCoverity', () => {
   }
 })
 
-test('Test missing data error in getFormattedCommandForCoverityInstallDirectory', () => {
+test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
