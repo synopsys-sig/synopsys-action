@@ -22,6 +22,9 @@ stages:
 variables:
   BUILD_TOOL: npm
   GIT_DEPTH: 10
+  PRODUCT: synopsys-action-ci-cd
+  GENERATE_CONFIGURATION_FILE: 1
+  GENERATION_OPTIONS: --entry 'Bridge%20Adapters:synopsys-action-ci-cd' --output-zipfile /workspace/sbom.zip
 
 ##### MERGE REQUEST PIPELINE #####
 
