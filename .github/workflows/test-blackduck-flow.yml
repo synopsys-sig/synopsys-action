@@ -31,7 +31,7 @@ jobs:
       WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/blackduck-hub/0.1.22/blackduck_hub-0.1.22-win64.zip"
 
     # Steps represent a sequence of tasks that will be executed as part of the job
-   steps:
+    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
