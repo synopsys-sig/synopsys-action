@@ -1,0 +1,87 @@
+.machine_designation_boiler_plate:
+  script:
+    - |
+      if [ -z "${OS_MACHINE_TYPE}" ] || [ "${OS_MACHINE_TYPE}" == 'UNKNOWN' ]; then
+        requested_os="${1:-linux}"
+        requested_os="$( printf "%s\n" "${requested_os}" | tr '[[:upper:]]' '[[:lower:]]' )"
+        osdetail="$( printf "%s\n"  "$( uname -s )" | tr '[[:upper:]]' '[[:lower:]]' )"
+
+        OS_MACHINE_TYPE='UNKNOWN'
+
+        case "${osdetail}" in
+          linux*    )  OS_MACHINE_TYPE='linux';;
+          darwin*   )  OS_MACHINE_TYPE='darwin';;
+          cygwin*   )  OS_MACHINE_TYPE='cygwin';;
+          mingw*    )  OS_MACHINE_TYPE='mingw';;
+          *windows* )  OS_MACHINE_TYPE='windows';;
+        esac
+
+        export OS_MACHINE_TYPE
+
+        if [ "x${requested_os}" != 'x*' ]; then
+          [ "${OS_MACHINE_TYPE}" == 'UNKNOWN' ] && return 1
+        fi
+
+        case "${OS_MACHINE_TYPE}" in 
+          'linux'|'darwin'           ) OS_MACHINE_BITSIZE="$( uname -m )"
+                                       if [[ "${OS_MACHINE_BITSIZE}" =~ *arm* ]]; then
+                                         OS_MACHINE_BITSIZE="$( printf "%s\n" "${OS_MACHINE_BITSIZE}" | sed -e 's#arm\(.*\)#\1#g' )"   ### ARM architecture
+                                         OS_ARCHITECTURE='arm'
+                                       else
+                                         OS_MACHINE_BITSIZE="$( printf "%s\n" "${OS_MACHINE_BITSIZE}" | sed -e 's#x86_\(.*\)#\1#g' )"  ### Intel architecture
+                                       fi
+                                       [ -z "${OS_MACHINE_BITSIZE}" ] && OS_MACHINE_BITSIZE=32
+                                       ;;
+          'windows'|'cygwin'|'mingw' ) OS_MACHINE_BITSIZE="$( wmic os get osarchitecture | sed -e 's#OSArchitecture##' | tr -d '\r\n' | tr -d ' ' )"
+                                       OS_MACHINE_BITSIZE="$( printf "%s\n" "${OS_MACHINE_BITSIZE}" | sed -e 's#\(.*\)-bit#\1#g' )"
+                                       [ -z "${OS_MACHINE_BITSIZE}" ] && OS_MACHINE_BITSIZE=32
+                                       ;;
+        esac
+
+        export OS_MACHINE_BITSIZE
+
+        export OS_MACHINE_SYS='UNKNOWN'
+        export OS_MACHINE_SYSVERSION='-1'
+
+        if [ "${OS_MACHINE_TYPE}" == 'linux' ]; then
+          if [ -f '/etc/os-release' ]; then
+            OS_MACHINE_SYS="$( awk -F= '/^NAME/{print $2}' /etc/os-release )"
+            OS_MACHINE_SYSVERSION="$( awk -F= '/^VERSION_ID/{print $2}' /etc/os-release )"
+          else
+            if [ -f /etc/lsb-release -o -d /etc/lsb-release.d ]; then
+              OS_MACHINE_SYS=$( lsb_release -i | cut -d: -f2 | sed s/'^\t'// )
+              OS_MACHINE_SYSVERSION="$( lsb_release -sirc )"
+            else
+              OS_MACHINE_SYS=$( ls -d /etc/[A-Za-z]*[_-][rv]e[lr]* | grep -v "lsb" | cut -d'/' -f3 | cut -d'-' -f1 | cut -d'_' -f1 )
+            fi
+          fi
+
+          [ -z "${OS_MACHINE_SYS}" ] && return 1
+        else
+          case "${OS_MACHINE_TYPE}" in 
+            'darwin'                    ) OS_MACHINE_SYS='macosx'
+                                          [ "${OS_ARCHITECTURE}" == 'arm' ] && OS_MACHINE_SYS='macos-arm'
+                                          OS_MACHINE_SYSVERSION="$( sw_vers | grep 'ProductVersion' | cut -f 2 -d ':' | tr -dc '[:print:]' )"
+                                          ;;
+            'windows'|'cygwin'|'mingw'  ) OS_MACHINE_SYS='windows'
+                                          OS_MACHINE_SYSVERSION="$( systeminfo | sed -n 's/^OS Name:[[:blank:]]//p' | cut -f 3 -d ' ' )"
+                                          ;;
+          esac
+        fi
+
+        OS_MACHINE_SYS="$( printf "%s\n" "$( printf "%s\n" "${OS_MACHINE_SYS}" | sed -e 's/"//g' )" | tr '[[:upper:]]' '[[:lower:]]' )"
+        OS_MACHINE_SYS="$( printf "%s\n" "${OS_MACHINE_SYS}" | sed -e 's# *linux##' )"
+        OS_MACHINE_SYSVERSION="$( printf "%s\n" "${OS_MACHINE_SYSVERSION}" | tr -d '"' )"
+
+        SYNOPSYS_PLATFORM="${OS_MACHINE_TYPE}"
+        case "${SYNOPSYS_PLATFORM}" in 
+          'linux'                     ) [ "${OS_MACHINE_BITSIZE}" == 64 ] && SYNOPSYS_PLATFORM="${OS_MACHINE_TYPE}${OS_MACHINE_BITSIZE}"
+                                        ;;
+          'windows'|'cygwin'|'mingw'  ) SYNOPSYS_PLATFORM="win${OS_MACHINE_BITSIZE}"
+                                        ;;
+          'darwin'                    ) SYNOPSYS_PLATFORM="${OS_MACHINE_SYS}"
+                                        ;;
+        esac
+
+        export SYNOPSYS_PLATFORM
+      fi
