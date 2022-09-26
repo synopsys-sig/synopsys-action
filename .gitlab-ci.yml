@@ -24,7 +24,7 @@ variables:
   GIT_DEPTH: 10
   PRODUCT: synopsys-action-ci-cd
   GENERATE_CONFIGURATION_FILE: 1
-  GENERATION_OPTIONS: --entry Bridge Adapters:synopsys-action-ci-cd --provide-zip --output-zipfile /workspace/sbom.zip
+  GENERATION_OPTIONS: --entry 'Bridge Adapters:synopsys-action-ci-cd' --provide-zip --output-zipfile /workspace/sbom.zip
 
 ##### MERGE REQUEST PIPELINE #####
 
