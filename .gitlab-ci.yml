@@ -9,7 +9,7 @@ stages:
   - build
   - coverage_report
   - versioning
-  - Check_dist
+#  - Check_dist
 #  - changelog
   - analysis
   - notification
@@ -30,10 +30,10 @@ code_coverage_job:
   extends:
     -  .code_coverage
 
-check_dist_job:
-  extends:
-    - .check_dist
-  stage: Check_dist
+#check_dist_job:
+#  extends:
+#    - .check_dist
+#  stage: Check_dist
 
 ##### MASTER COMMIT PIPELINE #####
 versioning_job:

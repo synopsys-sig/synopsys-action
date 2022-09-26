@@ -68,7 +68,7 @@ test('Test getFormattedCommandForBlackduck', () => {
   const resp = stp.getFormattedCommandForBlackduck('http://blackduck.com', 'token', 'http://server_url.com', 'true')
 
   expect(resp).not.toBeNull()
-  expect(resp).toContain('--stage detect')
+  expect(resp).toContain('--stage blackduck')
 })
 
 test('Test missing data error in getFormattedCommandForBlackduck', () => {
