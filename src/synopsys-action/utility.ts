@@ -23,3 +23,7 @@ export async function cleanupTempDir(tempDir: string): Promise<void> {
     await rmRF(tempDir)
   }
 }
+
+export function checkIfGithubHostedAndLinux(): boolean {
+  return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && process.platform === 'linux'
+}

@@ -65,6 +65,9 @@ inputs:
   blackduck_scan_failure_severities:
     description: 'If provided, Blackduck will break the build if any issues produced match one of the given severities'
     required: false
+  configure_from_repo:
+    description: "Enable to configure the bridge from repository directly"
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'
