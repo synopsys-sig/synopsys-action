@@ -130,10 +130,14 @@ export class SynopsysToolsParameter {
     }
 
     const osName = process.platform
-    if (osName === 'win32') {
-      if (installDir) {
-        covData.data.coverity.install = {directory: installDir}
+    if (installDir) {
+      if (osName === 'win32') {
+        const regexp = new RegExp('^[a-zA-Z]:\\\\(((?![<>:"/\\\\|?*]).)+((?<![ .])\\\\)?)*$')
+        if (!regexp.test(installDir)) {
+          throw new Error('Coverity Install Directory does meet the requirements for windows machine')
+        }
       }
+      covData.data.coverity.install = {directory: installDir}
     }
 
     if (policyView) {
