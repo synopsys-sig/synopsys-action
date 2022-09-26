@@ -45,7 +45,7 @@ test('Test wrong assessment type error in getFormattedCommandForPolaris', () => 
 test('Test getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', 'sample')
+  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', '/', '10005', 'test', 'main')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
@@ -55,10 +55,21 @@ test('Test missing data error in getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForCoverity('', 'pwd', 'http://server_url.com', 'sample')
+    stp.getFormattedCommandForCoverity('', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', '/', '10005', 'test', 'main')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('required parameters for Coverity is missing')
+  }
+})
+
+test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  try {
+    stp.getFormattedCommandForCoverity('usr', 'pwd', 'http://server_url.com', 'synopsys-action', 'stream name', '/', '10005', 'test', 'main')
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Invalid Install Directory')
   }
 })
 
