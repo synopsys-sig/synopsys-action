@@ -62,6 +62,17 @@ test('Test missing data error in getFormattedCommandForCoverity', () => {
   }
 })
 
+test('Test missing data error in getFormattedCommandForCoverityInstallDirectory', () => {
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  try {
+    stp.getFormattedCommandForCoverity('usr', 'pwd', 'http://server_url.com', 'synopsys-action', 'stream name', '/', '10005', 'test', 'main')
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Invalid Install Directory')
+  }
+})
+
 test('Test getFormattedCommandForBlackduck', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 

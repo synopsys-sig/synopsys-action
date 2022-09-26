@@ -1,8 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import {debug} from '@actions/core'
-import {validatePolarisParams, validateCoverityParams, validateBalckduckParams} from './validators'
-import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
+import {validatePolarisParams, validateCoverityParams, validateBalckduckParams, validateCoverityInstallDirectoryParam} from './validators'
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -130,13 +129,8 @@ export class SynopsysToolsParameter {
     }
 
     const osName = process.platform
-    if (installDir) {
-      if (osName === 'win32') {
-        const regexp = new RegExp('^[a-zA-Z]:\\\\(((?![<>:"/\\\\|?*]).)+((?<![ .])\\\\)?)*$')
-        if (!regexp.test(installDir)) {
-          throw new Error('Coverity Install Directory does meet the requirements for windows machine')
-        }
-      }
+    if (osName === 'win32') {
+      validateCoverityInstallDirectoryParam(installDir)
       covData.data.coverity.install = {directory: installDir}
     }
 

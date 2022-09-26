@@ -461,13 +461,8 @@ class SynopsysToolsParameter {
             }
         };
         const osName = process.platform;
-        if (installDir) {
-            if (osName === 'win32') {
-                const regexp = new RegExp('^[a-zA-Z]:\\\\(((?![<>:"/\\\\|?*]).)+((?<![ .])\\\\)?)*$');
-                if (!regexp.test(installDir)) {
-                    throw new Error('Coverity Install Directory does meet the requirements for windows machine');
-                }
-            }
+        if (osName === 'win32') {
+            (0, validators_1.validateCoverityInstallDirectoryParam)(installDir);
             covData.data.coverity.install = { directory: installDir };
         }
         if (policyView) {
@@ -608,12 +603,36 @@ exports.cleanupTempDir = cleanupTempDir;
 /***/ }),
 
 /***/ 401:
-/***/ ((__unused_webpack_module, exports) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBalckduckParams = exports.validateCoverityParams = exports.validatePolarisParams = void 0;
+exports.validateBalckduckParams = exports.validateCoverityInstallDirectoryParam = exports.validateCoverityParams = exports.validatePolarisParams = void 0;
+const fs = __importStar(__nccwpck_require__(747));
 function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
         throw new Error('One or more required parameters for Altair is missing');
@@ -626,6 +645,15 @@ function validateCoverityParams(userName, passWord, coverityUrl, projectName, st
     }
 }
 exports.validateCoverityParams = validateCoverityParams;
+function validateCoverityInstallDirectoryParam(installDir) {
+    if (installDir == null || installDir.length === 0) {
+        throw new Error('One or more required parameters for Coverity is missing');
+    }
+    if (!fs.existsSync(installDir)) {
+        throw new Error('Invalid Install Directory');
+    }
+}
+exports.validateCoverityInstallDirectoryParam = validateCoverityInstallDirectoryParam;
 function validateBalckduckParams(url, apiToken, installDirectory) {
     if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0 || installDirectory == null || installDirectory.length === 0) {
         throw new Error('One or more required parameters for Coverity is missing');
