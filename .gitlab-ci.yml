@@ -22,9 +22,6 @@ stages:
 variables:
   BUILD_TOOL: npm
   GIT_DEPTH: 10
-  PRODUCT: synopsys-action-ci-cd
-  GENERATE_CONFIGURATION_FILE: 1
-  GENERATION_OPTIONS: --entry 'Bridge%20Adapters:synopsys-action-ci-cd' --provide-zip --output-zipfile Synopsys-CICD-actions.zip
 
 ##### MERGE REQUEST PIPELINE #####
 
@@ -55,6 +52,11 @@ generate_sbom:
   extends:
     - .run_sbom_generation
   stage: sbom
+  variables:
+    SBOM_TOKEN_VAULT_PATH: sbom/github-actions
+    PRODUCT: synopsys-action-ci-cd
+    GENERATE_CONFIGURATION_FILE: 1
+    GENERATION_OPTIONS: --entry 'Bridge%20Adapters:synopsys-action-ci-cd' --provide-zip --output-zipfile Synopsys-CICD-actions.zip
 
 pop_polaris:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
