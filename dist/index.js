@@ -235,7 +235,7 @@ exports.POLARIS_SERVER_URL = (0, core_1.getInput)('polaris_serverUrl');
 // Coverity related inputs
 exports.COVERITY_URL = (0, core_1.getInput)('coverity_url');
 exports.COVERITY_USER = (0, core_1.getInput)('coverity_user');
-exports.COVERITY_PASSPHRASE = (0, core_1.getInput)('coverity_pasphrase');
+exports.COVERITY_PASSPHRASE = (0, core_1.getInput)('coverity_passphrase');
 exports.COVERITY_PROJECT_NAME = (0, core_1.getInput)('coverity_project_name');
 exports.COVERITY_STREAM_NAME = (0, core_1.getInput)('coverity_stream_name');
 exports.COVERITY_INSTALL_DIRECTORY = (0, core_1.getInput)('coverity_install_directory');
@@ -446,7 +446,7 @@ class SynopsysToolsParameter {
         return command;
     }
     getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName, streamName, installDir, policyView, repositoryName, branchName) {
-        //validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName)
+        (0, validators_1.validateCoverityParams)(userName, passWord, coverityUrl, projectName, streamName);
         const covData = {
             data: {
                 coverity: {

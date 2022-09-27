@@ -113,7 +113,7 @@ export class SynopsysToolsParameter {
   }
 
   getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string, projectName: string, streamName: string, installDir: string, policyView: string, repositoryName: string, branchName: string): string {
-    //validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName)
+    validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName)
     const covData: InputData<Coverity> = {
       data: {
         coverity: {

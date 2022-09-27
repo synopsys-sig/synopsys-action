@@ -15,7 +15,7 @@ export const POLARIS_SERVER_URL = getInput('polaris_serverUrl')
 // Coverity related inputs
 export const COVERITY_URL = getInput('coverity_url')
 export const COVERITY_USER = getInput('coverity_user')
-export const COVERITY_PASSPHRASE = getInput('coverity_pasphrase')
+export const COVERITY_PASSPHRASE = getInput('coverity_passphrase')
 export const COVERITY_PROJECT_NAME = getInput('coverity_project_name')
 export const COVERITY_STREAM_NAME = getInput('coverity_stream_name')
 export const COVERITY_INSTALL_DIRECTORY = getInput('coverity_install_directory')
