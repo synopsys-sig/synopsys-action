@@ -25,3 +25,9 @@ export function validateBalckduckParams(url: string, apiToken: string, installDi
     throw new Error('One or more required parameters for Coverity is missing')
   }
 }
+
+export function validateBlackduckFailureSeverities(severities: string[]): void {
+  if (severities == null || severities.length === 0) {
+    throw new Error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
+  }
+}
