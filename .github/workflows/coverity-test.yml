@@ -21,50 +21,50 @@ jobs:
     runs-on: [self-hosted]
 
     env:
-      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-macosx.zip"
-      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-linux64.zip"
-
-      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
-      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
-      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
-      BRIDGE_COVERITY_CONNECT_STREAM_NAME: ${{ secrets.COVERITY_STREAM_NAME }}
-      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
-      BRIDGE_COVERITY_POLICY_VIEW: ${{ secrets.COVERITY_POLICY_VIEW }}
-      BRIDGE_COVERITY_REPOSITORY_NAME: ${{ secrets.COVERITY_REPOSITORY_NAME }}
-      BRIDGE_COVERITY_BRANCH_NAME: ${{ secrets.COVERITY_BRANCH_NAME }}
-      # Mandatory for windows hosted environment
-      BRIDGE_COVERITY_INSTALL_DIRECTORY: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - name: Synopsys-action for Windows
-        if: ${{ runner.os == 'Windows' }}
-        run: |
-          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
-          tar -xf bridge.zip
-          .\bridge.exe --stage connect
-        shell: powershell
-
-      - name: Synopsys-action for MAC
-        if: ${{  runner.os == 'macOS'  }}
-        run: |
-          brew install unzip
-          curl -o bridge.zip -L $MAC_BRIDGE_URL
-          unzip bridge.zip
-          ./bridge --stage connect
-        shell: bash
-
-      - name: Synopsys-action for Linux
-        if: ${{  runner.os == 'Linux'  }}
-        run: |
-          apt install unzip
-          curl -o bridge.zip -L $LINUX_BRIDGE_URL
-          unzip bridge.zip
-          ./bridge --stage connect
-        shell: bash
+#      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-macosx.zip"
+#      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-linux64.zip"
+#      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-linux64.zip"
+#
+#      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
+#      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
+#      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
+#      BRIDGE_COVERITY_CONNECT_STREAM_NAME: ${{ secrets.COVERITY_STREAM_NAME }}
+#      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
+#      BRIDGE_COVERITY_POLICY_VIEW: ${{ secrets.COVERITY_POLICY_VIEW }}
+#      BRIDGE_COVERITY_REPOSITORY_NAME: ${{ secrets.COVERITY_REPOSITORY_NAME }}
+#      BRIDGE_COVERITY_BRANCH_NAME: ${{ secrets.COVERITY_BRANCH_NAME }}
+#      # Mandatory for windows hosted environment
+#      BRIDGE_COVERITY_INSTALL_DIRECTORY: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
+#
+#    # Steps represent a sequence of tasks that will be executed as part of the job
+#    steps:
+#      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#      - uses: actions/checkout@v3
+#      - name: Synopsys-action for Windows
+#        if: ${{ runner.os == 'Windows' }}
+#        run: |
+#          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+#          tar -xf bridge.zip
+#          .\bridge.exe --stage connect
+#        shell: powershell
+#
+#      - name: Synopsys-action for MAC
+#        if: ${{  runner.os == 'macOS'  }}
+#        run: |
+#          brew install unzip
+#          curl -o bridge.zip -L $MAC_BRIDGE_URL
+#          unzip bridge.zip
+#          ./bridge --stage connect
+#        shell: bash
+#
+#      - name: Synopsys-action for Linux
+#        if: ${{  runner.os == 'Linux'  }}
+#        run: |
+#          apt install unzip
+#          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+#          unzip bridge.zip
+#          ./bridge --stage connect
+#        shell: bash
 
       - name: Use synopsys unified-action - coverity-connect-via-input.json
         # Use the action defined in this repository
