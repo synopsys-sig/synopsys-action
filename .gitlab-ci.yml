@@ -53,10 +53,13 @@ generate_sbom:
     - .run_sbom_generation
   stage: sbom
   variables:
-    SBOM_TOKEN_VAULT_PATH: sbom/github-actions
+    SBOM_TOKEN_VAULT_PATH: sbom/synopsys-action-ci-cd
     PRODUCT: synopsys-action-ci-cd
     GENERATE_CONFIGURATION_FILE: 1
     GENERATION_OPTIONS: --entry 'Bridge Adapters:synopsys-action-ci-cd' --provide-zip --output-zipfile Synopsys-CICD-actions.zip
+  only:
+    refs:
+      - SIGINT-246
 
 pop_polaris:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
