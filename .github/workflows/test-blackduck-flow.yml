@@ -18,9 +18,9 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-#   runs-on: [self-hosted, macOS, kishor]
+   runs-on: [self-hosted, macOS, kishor]
 #    runs-on: [self-hosted, Windows, kiran]
-   runs-on: [self-hosted, Linux, kishor-linux]
+#   runs-on: [self-hosted, Linux, kishor-linux]
 
 #   env:
 ##      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_URL }}
