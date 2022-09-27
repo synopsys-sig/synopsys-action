@@ -53,7 +53,7 @@ generate_sbom:
     - .run_sbom_generation
   stage: sbom
   variables:
-    SBOM_TOKEN_VAULT_PATH: sbom/synopsys-action-ci-cd
+    SBOM_TOKEN_VAULT_PATH: sbom/github-actions
     PRODUCT: synopsys-action-ci-cd
     GENERATE_CONFIGURATION_FILE: 1
     GENERATION_OPTIONS: --entry 'Bridge Adapters:synopsys-action-ci-cd' --provide-zip --output-zipfile Synopsys-CICD-actions.zip
