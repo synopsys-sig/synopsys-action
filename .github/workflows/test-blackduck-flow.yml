@@ -22,7 +22,7 @@ jobs:
 #    runs-on: [self-hosted, Windows, kiran]
    runs-on: [self-hosted, Linux, kishor-linux]
 
-   env:
+#   env:
 ##      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_URL }}
 ##      BRIDGE_blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
 ##      BRIDGE_blackduck_install_directory: "/Users/kishori/synopsys-bridge"
