@@ -446,7 +446,7 @@ class SynopsysToolsParameter {
         return command;
     }
     getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName, streamName, installDir, policyView, repositoryName, branchName) {
-        (0, validators_1.validateCoverityParams)(userName, passWord, coverityUrl, projectName, streamName);
+        //validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName)
         const covData = {
             data: {
                 coverity: {
@@ -642,6 +642,7 @@ function validatePolarisParams(accessToken, applicationName, projectName, server
 }
 exports.validatePolarisParams = validatePolarisParams;
 function validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName) {
+    console.log(userName);
     if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0 || streamName == null || streamName.length === 0) {
         throw new Error('One or more required parameters for Coverity is missing');
     }
