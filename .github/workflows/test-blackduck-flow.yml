@@ -74,6 +74,7 @@ jobs:
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          blackduck_scan_full: false
+          blackduck_scan_full: true
           blackduck_install_directory: /Users/kishori/synopsys-bridge
-          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+#          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}

@@ -94,7 +94,14 @@ function run() {
         }
         else if (inputs.BLACKDUCK_URL) {
             const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL);
+            let failureSeverities = [];
+            try {
+                failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
+            }
+            catch (error) {
+                (0, core_1.setFailed)('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+            }
+            formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities);
         }
         else {
             (0, core_1.setFailed)('Not supported flow');
@@ -221,7 +228,7 @@ exports.extractZipped = extractZipped;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(186);
 exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys_bridge_path');
 //Bridge download url
@@ -247,6 +254,7 @@ exports.BLACKDUCK_URL = (0, core_1.getInput)('blackduck_url');
 exports.BLACKDUCK_API_TOKEN = (0, core_1.getInput)('blackduck_apiToken');
 exports.BLACKDUCK_INSTALL_DIRECTORY = (0, core_1.getInput)('blackduck_install_directory');
 exports.BLACKDUCK_SCAN_FULL = (0, core_1.getInput)('blackduck_scan_full');
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = (0, core_1.getInput)('blackduck_scan_failure_severities');
 
 
 /***/ }),
@@ -401,7 +409,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SynopsysToolsParameter = exports.PolarisAssessmentType = void 0;
+exports.SynopsysToolsParameter = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.PolarisAssessmentType = void 0;
 const fs = __importStar(__nccwpck_require__(747));
 const path_1 = __importDefault(__nccwpck_require__(622));
 const core_1 = __nccwpck_require__(186);
@@ -411,6 +419,18 @@ var PolarisAssessmentType;
     PolarisAssessmentType["SCA"] = "SCA";
     PolarisAssessmentType["SAST"] = "SAST";
 })(PolarisAssessmentType = exports.PolarisAssessmentType || (exports.PolarisAssessmentType = {}));
+var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
+(function (BLACKDUCK_SCAN_FAILURE_SEVERITIES) {
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["ALL"] = "ALL";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["NONE"] = "NONE";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["BLOCKER"] = "BLOCKER";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["CRITICAL"] = "CRITICAL";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["MAJOR"] = "MAJOR";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["MINOR"] = "MINOR";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["OK"] = "OK";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["TRIVIAL"] = "TRIVIAL";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
+})(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
@@ -484,7 +504,7 @@ class SynopsysToolsParameter {
         const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose'); //'--stage polaris --state '.concat(stateFilePath)
         return command;
     }
-    getFormattedCommandForBlackduck(blackduckUrl, apiToken, installDirectory, scanFull) {
+    getFormattedCommandForBlackduck(blackduckUrl, apiToken, installDirectory, scanFull, failureSeverities) {
         (0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken, installDirectory);
         const blackduckData = {
             data: {
@@ -506,6 +526,24 @@ class SynopsysToolsParameter {
                 throw new Error('boolean value is required for blackduck_scan_full');
             }
             blackduckData.data.blackduck.scan = { full: scanFullValue };
+        }
+        if (failureSeverities) {
+            (0, validators_1.validateBlackduckFailureSeverities)(failureSeverities);
+            const failureSeverityEnums = [];
+            for (const failureSeverity of failureSeverities) {
+                if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
+                    throw new Error('Provided Severity for blackduck is not valid');
+                }
+                else {
+                    failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);
+                }
+            }
+            if (blackduckData.data.blackduck.scan) {
+                blackduckData.data.blackduck.scan.failure = { severities: failureSeverityEnums };
+            }
+            else {
+                blackduckData.data.blackduck.scan = { failure: { severities: failureSeverityEnums } };
+            }
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
@@ -633,7 +671,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBalckduckParams = exports.validateCoverityInstallDirectoryParam = exports.validateCoverityParams = exports.validatePolarisParams = void 0;
+exports.validateBlackduckFailureSeverities = exports.validateBalckduckParams = exports.validateCoverityInstallDirectoryParam = exports.validateCoverityParams = exports.validatePolarisParams = void 0;
 const fs = __importStar(__nccwpck_require__(747));
 function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
@@ -662,6 +700,12 @@ function validateBalckduckParams(url, apiToken, installDirectory) {
     }
 }
 exports.validateBalckduckParams = validateBalckduckParams;
+function validateBlackduckFailureSeverities(severities) {
+    if (severities == null || severities.length === 0) {
+        throw new Error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+    }
+}
+exports.validateBlackduckFailureSeverities = validateBlackduckFailureSeverities;
 
 
 /***/ }),
