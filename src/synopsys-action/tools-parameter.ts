@@ -198,7 +198,7 @@ export class SynopsysToolsParameter {
       blackduckData.data.blackduck.scan = {full: scanFullValue}
     }
 
-    if (failureSeverities) {
+    if (failureSeverities && failureSeverities.length > 0) {
       validateBlackduckFailureSeverities(failureSeverities)
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
