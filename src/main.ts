@@ -45,10 +45,12 @@ async function run() {
   } else if (inputs.BLACKDUCK_URL) {
     const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
     let failureSeverities: Array<string> = []
-    try {
-      failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
-    } catch (error) {
-      setFailed('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
+    if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
+      try {
+        failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
+      } catch (error) {
+        setFailed('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
+      }
     }
 
     formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities)
