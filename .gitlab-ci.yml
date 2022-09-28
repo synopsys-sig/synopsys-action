@@ -3,16 +3,21 @@ include:
   - project: clops/gitlab-ci-pop-analysis
     ref: master
     file: pop_analysis.yaml
+  - project: releng/common-gitlab-ci
+    ref: master
+    file: sbom-generate.yml
 
 # List of job stages in their order of execution
 stages:
   - build
   - coverage_report
   - versioning
+  - sbom
 #  - Check_dist
 #  - changelog
   - analysis
   - notification
+
 
 variables:
   BUILD_TOOL: npm
@@ -41,6 +46,20 @@ versioning_job:
     - .version
     - .only
   stage: versioning
+
+
+generate_sbom:
+  extends:
+    - .run_sbom_generation
+  stage: sbom
+  variables:
+    SBOM_ART_TOKEN_VAULT_PATH: sbom/github-actions
+    PRODUCT: synopsys-action-ci-cd
+    GENERATE_CONFIGURATION_FILE: 1
+    GENERATION_OPTIONS: "--entry Bridge@@Adapters:synopsys-action-ci-cd --provide-zip --output-zipfile Synopsys-CICD-actions.zip"
+  only:
+    refs:
+      - main
 
 pop_polaris:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14

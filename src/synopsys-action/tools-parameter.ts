@@ -36,14 +36,14 @@ export interface ProjectData {
 
 export interface CoverityConnect {
   connect: CoverityData
-  project: {name: string}
-  stream: {name: string}
   install?: {directory: string}
 }
 
 export interface CoverityData {
   user: {name: string; password: string}
   url: string
+  project: {name: string}
+  stream: {name: string}
   policy?: {view: string}
 }
 
@@ -131,10 +131,10 @@ export class SynopsysToolsParameter {
         coverity: {
           connect: {
             user: {name: userName, password: passWord},
-            url: coverityUrl
-          },
-          project: {name: projectName},
-          stream: {name: streamName}
+            url: coverityUrl,
+            project: {name: projectName},
+            stream: {name: streamName}
+          }
         },
         project: {}
       }
