@@ -59,7 +59,7 @@ generate_sbom:
     GENERATION_OPTIONS: "--entry Bridge@@Adapters:synopsys-action-ci-cd --provide-zip --output-zipfile Synopsys-CICD-actions.zip"
   only:
     refs:
-      - release
+      - main
 
 pop_polaris:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
