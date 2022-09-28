@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, kiran]
 
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-macosx.zip"
