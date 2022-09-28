@@ -474,10 +474,10 @@ class SynopsysToolsParameter {
                 coverity: {
                     connect: {
                         user: { name: userName, password: passWord },
-                        url: coverityUrl
-                    },
-                    project: { name: projectName },
-                    stream: { name: streamName }
+                        url: coverityUrl,
+                        project: { name: projectName },
+                        stream: { name: streamName }
+                    }
                 },
                 project: {}
             }
