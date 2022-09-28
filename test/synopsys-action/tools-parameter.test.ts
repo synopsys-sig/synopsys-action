@@ -76,7 +76,7 @@ test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
 test('Test getFormattedCommandForBlackduck', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForBlackduck('http://blackduck.com', 'token', 'http://server_url.com', 'true')
+  const resp = stp.getFormattedCommandForBlackduck('http://blackduck.com', 'token', 'http://server_url.com', 'true', [])
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
@@ -86,7 +86,7 @@ test('Test missing data error in getFormattedCommandForBlackduck', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForBlackduck('', 'token', 'http://server_url.com', 'true')
+    stp.getFormattedCommandForBlackduck('', 'token', 'http://server_url.com', 'true', [])
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('required parameters for Coverity is missing')
