@@ -54,6 +54,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.run = void 0;
 const core_1 = __nccwpck_require__(186);
 const tools_parameter_1 = __nccwpck_require__(80);
 const utility_1 = __nccwpck_require__(643);
@@ -67,48 +68,52 @@ function run() {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
-        // Automatically configure bridge if Bridge download url is provided
-        if (inputs.BRIDGE_DOWNLOAD_URL) {
-            if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
-                (0, core_1.setFailed)('Provided Bridge url is either not valid for the platform');
-                return Promise.reject('Provided Bridge url is either not valid for the platform');
-            }
-            // Download file in temporary directory
-            (0, core_1.info)('Downloading and configuring Synopsys Bridge');
-            const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
-            const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
-            // Clear the existing bridge, if available
-            yield (0, io_1.rmRF)(extractZippedFilePath);
-            yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
-            (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
-        }
-        if (inputs.POLARIS_SERVER_URL) {
-            const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
-            formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes);
-            (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
-        }
-        else if (inputs.COVERITY_URL) {
-            const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME);
-        }
-        else if (inputs.BLACKDUCK_URL) {
-            const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-            let failureSeverities = [];
-            if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
-                try {
-                    failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
+        try {
+            // Automatically configure bridge if Bridge download url is provided
+            if (inputs.BRIDGE_DOWNLOAD_URL) {
+                if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
+                    return Promise.reject('Provided Bridge url is either not valid for the platform');
                 }
-                catch (error) {
-                    (0, core_1.setFailed)('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
-                }
+                // Download file in temporary directory
+                (0, core_1.info)('Downloading and configuring Synopsys Bridge');
+                const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
+                const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
+                // Clear the existing bridge, if available
+                yield (0, io_1.rmRF)(extractZippedFilePath);
+                yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
+                (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
-            formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities);
+            if (inputs.POLARIS_SERVER_URL) {
+                const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
+                const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
+                formattedCommand = polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes);
+                (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
+            }
+            else if (inputs.COVERITY_URL) {
+                const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
+                formattedCommand = coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME);
+            }
+            else if (inputs.BLACKDUCK_URL) {
+                const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
+                let failureSeverities = [];
+                if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
+                    try {
+                        failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
+                    }
+                    catch (error) {
+                        return Promise.reject('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+                    }
+                }
+                formattedCommand = blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities);
+            }
+            else {
+                (0, core_1.warning)('Not supported flow');
+                return Promise.reject(new Error('Not Supported Flow'));
+            }
         }
-        else {
-            (0, core_1.setFailed)('Not supported flow');
-            (0, core_1.warning)('Not supported flow');
-            return Promise.reject(new Error('Not Supported Flow'));
+        catch (error) {
+            (0, core_1.debug)(error.stackTrace);
+            return Promise.reject(error);
         }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
@@ -117,15 +122,17 @@ function run() {
             });
         }
         catch (error) {
-            (0, core_1.setFailed)(error);
-            return;
+            return Promise.reject(error);
         }
         finally {
             yield (0, utility_1.cleanupTempDir)(tempDir);
         }
     });
 }
-run();
+exports.run = run;
+run().catch(error => {
+    (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
+});
 
 
 /***/ }),
