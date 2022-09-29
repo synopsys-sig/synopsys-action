@@ -21,6 +21,9 @@ mock('../src/synopsys-action/download-utility')
 const io = require('@actions/io')
 mock('@actions/io')
 
+const ioUtil = require('@actions/io/lib/io-util')
+mock('@actions/io/lib/io-util')
+
 const bridge = require('../src/synopsys-action/synopsys-bridge')
 mock('../src/synopsys-action/synopsys-bridge')
 
@@ -44,6 +47,9 @@ test('Run polaris flow - run', async () => {
   core.exec = jest.fn()
   core.exec.mockReturnValueOnce(0)
 
+  ioUtil.tryGetExecutablePath = jest.fn()
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce('/bridge-path/bridge')
+
   const response = await run()
   expect(response).toBe(undefined)
 
@@ -62,6 +68,9 @@ test('Run blackduck flow - run', async () => {
 
   core.exec = jest.fn()
   core.exec.mockReturnValueOnce(0)
+
+  ioUtil.tryGetExecutablePath = jest.fn()
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce(Promise.resolve('/bridge-path/bridge'))
 
   const response = await run()
   expect(response).toBe(undefined)
@@ -86,6 +95,9 @@ test('Run coverity flow - run', async () => {
   core.exec = jest.fn()
   core.exec.mockReturnValueOnce(0)
 
+  ioUtil.tryGetExecutablePath = jest.fn()
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce(Promise.resolve('/bridge-path/bridge'))
+
   const response = await run()
   expect(response).toBe(undefined)
 
@@ -101,15 +113,14 @@ test('Run blackduck flow with download and configure option - run', async () => 
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://download-bridge-win.zip'})
 
-  // Object.defineProperty(process, 'platform', {
-  //     value: 'win32'
-  // })
-
   configVar.getWorkSpaceDirectory = jest.fn()
   configVar.getWorkSpaceDirectory.mockReturnValueOnce('/workspace')
 
   core.exec = jest.fn()
   core.exec.mockReturnValueOnce(0)
+
+  ioUtil.tryGetExecutablePath = jest.fn()
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce(Promise.resolve('/bridge-path/bridge'))
 
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   downloadUtility.getRemoteFile = jest.fn()
@@ -145,6 +156,9 @@ test('Run polaris flow for bridge command failure - run', async () => {
   core.exec.mockImplementation(() => {
     throw new Error('Error in executing command')
   })
+
+  ioUtil.tryGetExecutablePath = jest.fn()
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce(Promise.resolve('/bridge-path/bridge'))
 
   try {
     await run()
