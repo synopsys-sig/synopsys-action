@@ -1,5 +1,6 @@
 import {cleanupTempDir, createTempDir} from '../../src/synopsys-action/utility'
 import {SynopsysToolsParameter} from '../../src/synopsys-action/tools-parameter'
+import mock = jest.mock
 
 let tempPath = '/temp'
 
@@ -10,6 +11,9 @@ beforeAll(() => {
 afterAll(() => {
   cleanupTempDir(tempPath)
 })
+
+const fs = require('fs')
+mock('fs')
 
 test('Test getFormattedCommandForPolaris', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
@@ -66,6 +70,11 @@ test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
+    fs.existsSync = jest.fn()
+    fs.existsSync.mockReturnValueOnce(false)
+    Object.defineProperty(process, 'platform', {
+      value: 'win32'
+    })
     stp.getFormattedCommandForCoverity('usr', 'pwd', 'http://server_url.com', 'synopsys-action', 'stream name', '/', '10005', 'test', 'main')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
