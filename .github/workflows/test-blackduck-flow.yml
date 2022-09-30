@@ -67,6 +67,8 @@ jobs:
 #          unzip bridge.zip
 #          ./bridge --stage blackduck
 #        shell: bash
+#      - name: create required directory
+#        sudo mkdir /Users/kishori/synopsys-bridge
 
       - name: Use synopsys unified-action - blackduck-detect
        # Use the action defined in this repository
