@@ -53,6 +53,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core_1 = __nccwpck_require__(186);
@@ -63,14 +66,35 @@ const inputs = __importStar(__nccwpck_require__(481));
 const config_variables_1 = __nccwpck_require__(222);
 const download_utility_1 = __nccwpck_require__(55);
 const io_1 = __nccwpck_require__(436);
+const path_1 = __importDefault(__nccwpck_require__(622));
+const fs = __importStar(__nccwpck_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
         try {
+            const osName = process.platform;
+            let extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
             // Automatically configure bridge if Bridge download url is provided
-            if (inputs.BRIDGE_DOWNLOAD_URL) {
+            if (inputs.CONFIGURE_FROM_REPO && inputs.CONFIGURE_FROM_REPO.toLowerCase() === 'true') {
+                (0, core_1.info)('Configuring Bridge from synopsys-action repository');
+                let configFilePath = path_1.default.join((0, config_variables_1.getWorkSpaceDirectory)(), 'bridge');
+                let availableFileName = '';
+                if (osName === 'darwin') {
+                    availableFileName = getRequiredFileNameWithPattern(configFilePath, 'mac');
+                }
+                else if (osName === 'win32') {
+                    availableFileName = getRequiredFileNameWithPattern(configFilePath, 'win');
+                }
+                else {
+                    availableFileName = getRequiredFileNameWithPattern(configFilePath, 'linux');
+                }
+                yield (0, io_1.cp)(configFilePath, tempDir, { force: true, copySourceDirectory: false, recursive: true });
+                const configFilePathTemp = path_1.default.join(tempDir, availableFileName);
+                yield (0, download_utility_1.extractZipped)(configFilePathTemp, extractZippedFilePath);
+            }
+            else if (inputs.BRIDGE_DOWNLOAD_URL) {
                 if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
                     return Promise.reject('Provided Bridge url is either not valid for the platform');
                 }
@@ -130,6 +154,13 @@ function run() {
     });
 }
 exports.run = run;
+function getRequiredFileNameWithPattern(directoryPath, fileSubString) {
+    const files = fs.readdirSync(directoryPath);
+    const fileName = files.find(file => {
+        return file.includes(fileSubString);
+    });
+    return String(fileName);
+}
 run().catch(error => {
     (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
 });
@@ -183,6 +214,8 @@ const core_1 = __nccwpck_require__(186);
 const path_1 = __importDefault(__nccwpck_require__(622));
 const tool_cache_1 = __nccwpck_require__(784);
 const fs = __importStar(__nccwpck_require__(747));
+const utility_1 = __nccwpck_require__(643);
+const exec_1 = __nccwpck_require__(514);
 function getRemoteFile(destFilePath, url) {
     return __awaiter(this, void 0, void 0, function* () {
         if (url == null || url.length === 0) {
@@ -217,7 +250,12 @@ function extractZipped(file, destinationPath) {
             return Promise.reject(new Error('No destination directory found'));
         }
         try {
-            yield (0, tool_cache_1.extractZip)(file, destinationPath);
+            if ((0, utility_1.checkIfGithubHostedAndLinux)()) {
+                yield (0, exec_1.exec)('sudo unzip '.concat(file).concat(' -d ').concat(destinationPath));
+            }
+            else {
+                yield (0, tool_cache_1.extractZip)(file, destinationPath);
+            }
             (0, core_1.info)('Extraction complete.');
             return Promise.resolve(true);
         }
@@ -237,7 +275,7 @@ exports.extractZipped = extractZipped;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
+exports.CONFIGURE_FROM_REPO = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(186);
 exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys_bridge_path');
 //Bridge download url
@@ -264,6 +302,7 @@ exports.BLACKDUCK_API_TOKEN = (0, core_1.getInput)('blackduck_apiToken');
 exports.BLACKDUCK_INSTALL_DIRECTORY = (0, core_1.getInput)('blackduck_install_directory');
 exports.BLACKDUCK_SCAN_FULL = (0, core_1.getInput)('blackduck_scan_full');
 exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = (0, core_1.getInput)('blackduck_scan_failure_severities');
+exports.CONFIGURE_FROM_REPO = (0, core_1.getInput)('configure_from_repo');
 
 
 /***/ }),
@@ -293,6 +332,7 @@ const core_1 = __nccwpck_require__(186);
 const application_constants_1 = __nccwpck_require__(293);
 const io_util_1 = __nccwpck_require__(962);
 const path_1 = __importDefault(__nccwpck_require__(622));
+const utility_1 = __nccwpck_require__(643);
 class SynopsysBridge {
     constructor() {
         this.bridgeExecutablePath = '';
@@ -305,13 +345,6 @@ class SynopsysBridge {
                 (0, core_1.info)('Synopsys Bridge path not found in configuration');
                 (0, core_1.info)('Looking for synopsys bridge in default path');
                 synopsysBridgePath = getBridgeDefaultPath();
-                // if (osName === 'darwin') {
-                //   synopsysBridgePath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
-                // } else if (osName === 'linux') {
-                //   synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX
-                // } else if (osName === 'win32') {
-                //   synopsysBridgePath = path.join(process.env['USERPROFILE'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS)
-                // }
             }
             if (osName === 'win32') {
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('\\bridge'), ['.exe']);
@@ -338,6 +371,9 @@ class SynopsysBridge {
                         cwd: workingDirectory
                     };
                     try {
+                        if ((0, utility_1.checkIfGithubHostedAndLinux)()) {
+                            return yield (0, exec_1.exec)('sudo '.concat(this.bridgeExecutablePath.concat(' ', bridgeCommand)), [], exectOp);
+                        }
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
@@ -618,7 +654,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(747));
 const os = __importStar(__nccwpck_require__(87));
 const path_1 = __importDefault(__nccwpck_require__(622));
@@ -647,6 +683,10 @@ function cleanupTempDir(tempDir) {
     });
 }
 exports.cleanupTempDir = cleanupTempDir;
+function checkIfGithubHostedAndLinux() {
+    return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && process.platform === 'linux';
+}
+exports.checkIfGithubHostedAndLinux = checkIfGithubHostedAndLinux;
 
 
 /***/ }),
