@@ -2,6 +2,8 @@ import {info} from '@actions/core'
 import path from 'path'
 import {downloadTool, extractZip} from '@actions/tool-cache'
 import * as fs from 'fs'
+import {checkIfGithubHostedAndLinux} from './utility'
+import {exec} from '@actions/exec'
 
 export interface DownloadFileResponse {
   filePath: string
@@ -43,7 +45,11 @@ export async function extractZipped(file: string, destinationPath: string): Prom
   }
 
   try {
-    await extractZip(file, destinationPath)
+    if (checkIfGithubHostedAndLinux()) {
+      await exec('sudo unzip '.concat(file).concat(' -d ').concat(destinationPath))
+    } else {
+      await extractZip(file, destinationPath)
+    }
     info('Extraction complete.')
     return Promise.resolve(true)
   } catch (error) {

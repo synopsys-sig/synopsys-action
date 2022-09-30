@@ -6,7 +6,9 @@ import * as inputs from './synopsys-action/inputs'
 
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './synopsys-action/download-utility'
-import {rmRF} from '@actions/io'
+import {cp, rmRF} from '@actions/io'
+import path from 'path'
+import * as fs from 'fs'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -15,8 +17,26 @@ export async function run() {
   let formattedCommand = ''
 
   try {
+    const osName = process.platform
+    let extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
+
     // Automatically configure bridge if Bridge download url is provided
-    if (inputs.BRIDGE_DOWNLOAD_URL) {
+    if (inputs.CONFIGURE_FROM_REPO && inputs.CONFIGURE_FROM_REPO.toLowerCase() === 'true') {
+      info('Configuring Bridge from synopsys-action repository')
+      let configFilePath = path.join(getWorkSpaceDirectory(), 'bridge')
+      let availableFileName = ''
+      if (osName === 'darwin') {
+        availableFileName = getRequiredFileNameWithPattern(configFilePath, 'mac')
+      } else if (osName === 'win32') {
+        availableFileName = getRequiredFileNameWithPattern(configFilePath, 'win')
+      } else {
+        availableFileName = getRequiredFileNameWithPattern(configFilePath, 'linux')
+      }
+
+      await cp(configFilePath, tempDir, {force: true, copySourceDirectory: false, recursive: true})
+      const configFilePathTemp = path.join(tempDir, availableFileName)
+      await extractZipped(configFilePathTemp, extractZippedFilePath)
+    } else if (inputs.BRIDGE_DOWNLOAD_URL) {
       if (!validateBridgeURL(inputs.BRIDGE_DOWNLOAD_URL)) {
         return Promise.reject('Provided Bridge url is either not valid for the platform')
       }
@@ -73,6 +93,15 @@ export async function run() {
   } finally {
     await cleanupTempDir(tempDir)
   }
+}
+
+function getRequiredFileNameWithPattern(directoryPath: string, fileSubString: string): string {
+  const files: string[] = fs.readdirSync(directoryPath)
+  const fileName = files.find(file => {
+    return file.includes(fileSubString)
+  })
+
+  return String(fileName)
 }
 
 run().catch(error => {

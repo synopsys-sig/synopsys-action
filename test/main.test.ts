@@ -27,6 +27,9 @@ mock('@actions/io/lib/io-util')
 const bridge = require('../src/synopsys-action/synopsys-bridge')
 mock('../src/synopsys-action/synopsys-bridge')
 
+const fs = require('fs')
+mock('fs')
+
 test('Not supported flow error - run', () => {
   run().catch(error => {
     expect(error).toBeInstanceOf(Error)
@@ -167,4 +170,88 @@ test('Run polaris flow for bridge command failure - run', async () => {
   }
 
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+})
+
+test('Run configure bridge from repo mac - run', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'CONFIGURE_FROM_REPO', {value: 'true'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'darwin'
+  })
+
+  configVar.getWorkSpaceDirectory = jest.fn()
+  configVar.getWorkSpaceDirectory.mockReturnValueOnce('/workspace')
+
+  core.exec = jest.fn()
+  core.exec.mockReturnValueOnce(0)
+
+  ioUtil.tryGetExecutablePath = jest.fn()
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce(Promise.resolve('/bridge-path/bridge'))
+
+  fs.find = jest.fn()
+  fs.find.mockReturnValueOnce('bridge-mac.zip')
+
+  configVar.getWorkSpaceDirectory = jest.fn()
+  configVar.getWorkSpaceDirectory.mockReturnValueOnce('/workspace')
+
+  fs.readdirSync = jest.fn()
+  fs.readdirSync.mockReturnValueOnce(['file1', 'bridge-mac.zip'])
+
+  io.cp = jest.fn()
+  io.cp.mockReturnValueOnce(Promise.resolve())
+
+  downloadUtility.extractZipped = jest.fn()
+  downloadUtility.extractZipped.mockReturnValueOnce(Promise.resolve(true))
+
+  const response = await run()
+  expect(response).toBe(undefined)
+
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+})
+
+test('Run configure bridge from repo linux - run', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'CONFIGURE_FROM_REPO', {value: 'true'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'linux'
+  })
+
+  configVar.getWorkSpaceDirectory = jest.fn()
+  configVar.getWorkSpaceDirectory.mockReturnValueOnce('/workspace')
+
+  core.exec = jest.fn()
+  core.exec.mockReturnValueOnce(0)
+
+  ioUtil.tryGetExecutablePath = jest.fn()
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce(Promise.resolve('/bridge-path/bridge'))
+
+  fs.find = jest.fn()
+  fs.find.mockReturnValueOnce('bridge-mac.zip')
+
+  configVar.getWorkSpaceDirectory = jest.fn()
+  configVar.getWorkSpaceDirectory.mockReturnValueOnce('/workspace')
+
+  fs.readdirSync = jest.fn()
+  fs.readdirSync.mockReturnValueOnce(['file1', 'bridge-mac.zip'])
+
+  io.cp = jest.fn()
+  io.cp.mockReturnValueOnce(Promise.resolve())
+
+  downloadUtility.extractZipped = jest.fn()
+  downloadUtility.extractZipped.mockReturnValueOnce(Promise.resolve(true))
+
+  const response = await run()
+  expect(response).toBe(undefined)
+
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
 })

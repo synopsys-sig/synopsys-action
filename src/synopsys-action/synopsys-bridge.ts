@@ -4,6 +4,7 @@ import {debug, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
+import {checkIfGithubHostedAndLinux} from './utility'
 
 export class SynopsysBridge {
   bridgeExecutablePath: string
@@ -19,13 +20,6 @@ export class SynopsysBridge {
       info('Synopsys Bridge path not found in configuration')
       info('Looking for synopsys bridge in default path')
       synopsysBridgePath = getBridgeDefaultPath()
-      // if (osName === 'darwin') {
-      //   synopsysBridgePath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
-      // } else if (osName === 'linux') {
-      //   synopsysBridgePath = SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX
-      // } else if (osName === 'win32') {
-      //   synopsysBridgePath = path.join(process.env['USERPROFILE'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS)
-      // }
     }
 
     if (osName === 'win32') {
@@ -52,6 +46,10 @@ export class SynopsysBridge {
           cwd: workingDirectory
         }
         try {
+          if (checkIfGithubHostedAndLinux()) {
+            return await exec('sudo '.concat(this.bridgeExecutablePath.concat(' ', bridgeCommand)), [], exectOp)
+          }
+
           return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
         } catch (error) {
           throw error
