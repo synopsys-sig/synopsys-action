@@ -25,5 +25,5 @@ export async function cleanupTempDir(tempDir: string): Promise<void> {
 }
 
 export function checkIfGithubHostedAndLinux(): boolean {
-  return String(process.env['RUNNER_NAME']).includes('Hosted Agent')
+  return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && (process.platform === 'linux' || process.platform === 'darwin')
 }

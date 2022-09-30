@@ -684,7 +684,7 @@ function cleanupTempDir(tempDir) {
 }
 exports.cleanupTempDir = cleanupTempDir;
 function checkIfGithubHostedAndLinux() {
-    return String(process.env['RUNNER_NAME']).includes('Hosted Agent');
+    return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && (process.platform === 'linux' || process.platform === 'darwin');
 }
 exports.checkIfGithubHostedAndLinux = checkIfGithubHostedAndLinux;
 
