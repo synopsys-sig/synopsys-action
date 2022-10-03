@@ -63,6 +63,7 @@ const inputs = __importStar(__nccwpck_require__(481));
 const config_variables_1 = __nccwpck_require__(222);
 const download_utility_1 = __nccwpck_require__(55);
 const io_1 = __nccwpck_require__(436);
+const fs = __importStar(__nccwpck_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -79,7 +80,15 @@ function run() {
                 const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
                 const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
                 // Clear the existing bridge, if available
-                yield (0, io_1.rmRF)(extractZippedFilePath);
+                // await rmRF(extractZippedFilePath)
+                if (fs.existsSync(extractZippedFilePath)) {
+                    const files = fs.readdirSync(extractZippedFilePath); /*.forEach(file => {
+                      await rmRF(file)
+                    })*/
+                    for (const file of files) {
+                        yield (0, io_1.rmRF)(file);
+                    }
+                }
                 yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }

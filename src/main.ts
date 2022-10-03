@@ -7,6 +7,7 @@ import * as inputs from './synopsys-action/inputs'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './synopsys-action/download-utility'
 import {rmRF} from '@actions/io'
+import * as fs from 'fs'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -27,7 +28,15 @@ export async function run() {
       const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
 
       // Clear the existing bridge, if available
-      await rmRF(extractZippedFilePath)
+      // await rmRF(extractZippedFilePath)
+      if (fs.existsSync(extractZippedFilePath)) {
+        const files: string[] = fs.readdirSync(extractZippedFilePath) /*.forEach(file => {
+          await rmRF(file)
+        })*/
+        for (const file of files) {
+          await rmRF(file)
+        }
+      }
 
       await extractZipped(downloadResponse.filePath, extractZippedFilePath)
       info('Download and configuration of Synopsys Bridge completed')
