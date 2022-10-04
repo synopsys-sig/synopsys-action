@@ -70,7 +70,7 @@ export function getBridgeDefaultPath(): string {
   if (osName === 'darwin') {
     bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
   } else if (osName === 'linux') {
-    bridgeDefaultPath = SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX
+    bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX)
   } else if (osName === 'win32') {
     bridgeDefaultPath = path.join(process.env['USERPROFILE'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS)
   }

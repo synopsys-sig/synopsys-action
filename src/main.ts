@@ -28,11 +28,8 @@ export async function run() {
       const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
 
       // Clear the existing bridge, if available
-      // await rmRF(extractZippedFilePath)
       if (fs.existsSync(extractZippedFilePath)) {
-        const files: string[] = fs.readdirSync(extractZippedFilePath) /*.forEach(file => {
-          await rmRF(file)
-        })*/
+        const files: string[] = fs.readdirSync(extractZippedFilePath)
         for (const file of files) {
           await rmRF(file)
         }

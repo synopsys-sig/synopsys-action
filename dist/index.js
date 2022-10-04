@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
-exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/usr/synopsys-bridge';
+exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
 exports.APPLICATION_NAME = 'synopsys-action';
 
 
@@ -80,11 +80,8 @@ function run() {
                 const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
                 const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
                 // Clear the existing bridge, if available
-                // await rmRF(extractZippedFilePath)
                 if (fs.existsSync(extractZippedFilePath)) {
-                    const files = fs.readdirSync(extractZippedFilePath); /*.forEach(file => {
-                      await rmRF(file)
-                    })*/
+                    const files = fs.readdirSync(extractZippedFilePath);
                     for (const file of files) {
                         yield (0, io_1.rmRF)(file);
                     }
@@ -373,7 +370,7 @@ function getBridgeDefaultPath() {
         bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC);
     }
     else if (osName === 'linux') {
-        bridgeDefaultPath = application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX;
+        bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX);
     }
     else if (osName === 'win32') {
         bridgeDefaultPath = path_1.default.join(process.env['USERPROFILE'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS);

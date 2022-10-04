@@ -27,6 +27,9 @@ mock('@actions/io/lib/io-util')
 const bridge = require('../src/synopsys-action/synopsys-bridge')
 mock('../src/synopsys-action/synopsys-bridge')
 
+const fs = require('fs')
+mock('fs')
+
 test('Not supported flow error - run', () => {
   run().catch(error => {
     expect(error).toBeInstanceOf(Error)
@@ -125,6 +128,12 @@ test('Run blackduck flow with download and configure option - run', async () => 
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   downloadUtility.getRemoteFile = jest.fn()
   downloadUtility.getRemoteFile.mockReturnValueOnce(Promise.resolve(downloadFileResp))
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockReturnValueOnce(true)
+
+  fs.readdirSync = jest.fn()
+  fs.readdirSync.mockReturnValueOnce(['bridge-mac.zip'])
 
   io.rmRF = jest.fn()
   io.rmRF.mockReturnValueOnce(Promise.resolve())
