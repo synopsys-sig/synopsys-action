@@ -719,7 +719,7 @@ function validateCoverityInstallDirectoryParam(installDir) {
 exports.validateCoverityInstallDirectoryParam = validateCoverityInstallDirectoryParam;
 function validateBalckduckParams(url, apiToken, installDirectory) {
     if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0 || installDirectory == null || installDirectory.length === 0) {
-        throw new Error('One or more required parameters for Coverity is missing');
+        throw new Error('One or more required parameters for BlackDuck is missing');
     }
 }
 exports.validateBalckduckParams = validateBalckduckParams;
