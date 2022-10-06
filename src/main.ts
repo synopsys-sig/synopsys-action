@@ -74,10 +74,12 @@ export async function run() {
       }
 
       formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities))
-    } else {
+    }
+
+    /* else {
       warning('Not supported flow')
       return Promise.reject(new Error('Not Supported Flow'))
-    }
+    }*/
   } catch (error: any) {
     debug(error.stackTrace)
     return Promise.reject(error)

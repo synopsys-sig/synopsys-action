@@ -122,10 +122,10 @@ function run() {
                 }
                 formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities));
             }
-            else {
-                (0, core_1.warning)('Not supported flow');
-                return Promise.reject(new Error('Not Supported Flow'));
-            }
+            /* else {
+              warning('Not supported flow')
+              return Promise.reject(new Error('Not Supported Flow'))
+            }*/
         }
         catch (error) {
             (0, core_1.debug)(error.stackTrace);
