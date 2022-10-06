@@ -98,6 +98,6 @@ test('Test missing data error in getFormattedCommandForBlackduck', () => {
     stp.getFormattedCommandForBlackduck('', 'token', 'http://server_url.com', 'true', [])
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('required parameters for Coverity is missing')
+    expect(error.message).toContain('required parameters for BlackDuck is missing')
   }
 })

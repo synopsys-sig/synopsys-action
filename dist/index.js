@@ -10,7 +10,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
-exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/usr/synopsys-bridge';
+exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
 exports.APPLICATION_NAME = 'synopsys-action';
 
 
@@ -63,6 +63,7 @@ const inputs = __importStar(__nccwpck_require__(481));
 const config_variables_1 = __nccwpck_require__(222);
 const download_utility_1 = __nccwpck_require__(55);
 const io_1 = __nccwpck_require__(436);
+const fs = __importStar(__nccwpck_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -79,7 +80,12 @@ function run() {
                 const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
                 const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
                 // Clear the existing bridge, if available
-                yield (0, io_1.rmRF)(extractZippedFilePath);
+                if (fs.existsSync(extractZippedFilePath)) {
+                    const files = fs.readdirSync(extractZippedFilePath);
+                    for (const file of files) {
+                        yield (0, io_1.rmRF)(file);
+                    }
+                }
                 yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
@@ -364,7 +370,7 @@ function getBridgeDefaultPath() {
         bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC);
     }
     else if (osName === 'linux') {
-        bridgeDefaultPath = application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX;
+        bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX);
     }
     else if (osName === 'win32') {
         bridgeDefaultPath = path_1.default.join(process.env['USERPROFILE'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS);
@@ -518,7 +524,7 @@ class SynopsysToolsParameter {
         return command;
     }
     getFormattedCommandForBlackduck(blackduckUrl, apiToken, installDirectory, scanFull, failureSeverities) {
-        (0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken, installDirectory);
+        (0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken);
         const blackduckData = {
             data: {
                 blackduck: {
@@ -711,9 +717,9 @@ function validateCoverityInstallDirectoryParam(installDir) {
     }
 }
 exports.validateCoverityInstallDirectoryParam = validateCoverityInstallDirectoryParam;
-function validateBalckduckParams(url, apiToken, installDirectory) {
-    if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0 || installDirectory == null || installDirectory.length === 0) {
-        throw new Error('One or more required parameters for Coverity is missing');
+function validateBalckduckParams(url, apiToken) {
+    if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0) {
+        throw new Error('One or more required parameters for BlackDuck is missing');
     }
 }
 exports.validateBalckduckParams = validateBalckduckParams;

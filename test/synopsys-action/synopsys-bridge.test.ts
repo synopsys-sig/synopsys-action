@@ -40,6 +40,9 @@ test('Test executeBridgeCommand for MAC', () => {
 test('Test executeBridgeCommand for Linux', () => {
   const sb = new SynopsysBridge()
 
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
   ioUtils.tryGetExecutablePath = jest.fn()
   ioUtils.tryGetExecutablePath.mockReturnValueOnce('/somepath')
 
