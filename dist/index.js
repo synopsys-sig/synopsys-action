@@ -73,7 +73,7 @@ function run() {
             // Automatically configure bridge if Bridge download url is provided
             if (inputs.BRIDGE_DOWNLOAD_URL) {
                 if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
-                    return Promise.reject('Provided Bridge url is either not valid for the platform');
+                    return Promise.reject("Provided Bridge url is not valid for the runner's platform");
                 }
                 // Download file in temporary directory
                 (0, core_1.info)('Downloading and configuring Synopsys Bridge');
@@ -361,12 +361,12 @@ class SynopsysBridge {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
-                        return Promise.reject(error);
+                        throw error;
                     }
                 }
             }
             else {
-                return Promise.reject(new Error('Bridge could not be found'));
+                throw new Error('Bridge could not be found');
             }
             return -1;
         });

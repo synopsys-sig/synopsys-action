@@ -19,7 +19,7 @@ export async function run() {
     // Automatically configure bridge if Bridge download url is provided
     if (inputs.BRIDGE_DOWNLOAD_URL) {
       if (!validateBridgeURL(inputs.BRIDGE_DOWNLOAD_URL)) {
-        return Promise.reject('Provided Bridge url is either not valid for the platform')
+        return Promise.reject("Provided Bridge url is not valid for the runner's platform")
       }
 
       // Download file in temporary directory
