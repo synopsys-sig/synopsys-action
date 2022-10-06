@@ -368,12 +368,12 @@ class SynopsysBridge {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
-                        throw error;
+                        return Promise.reject(error);
                     }
                 }
             }
             else {
-                throw new Error('Bridge could not be found');
+                return Promise.reject(new Error('Bridge could not be found'));
             }
             return -1;
         });
