@@ -89,6 +89,16 @@ function run() {
                 yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
+        }
+        catch (error) {
+            if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
+                return Promise.reject('Bridge URL is not valid');
+            }
+            else if (error.message.toLowerCase().includes('empty')) {
+                return Promise.reject('Provided Bridge URL is empty');
+            }
+        }
+        try {
             if (inputs.POLARIS_SERVER_URL) {
                 const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                 const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
@@ -119,7 +129,7 @@ function run() {
         }
         catch (error) {
             (0, core_1.debug)(error.stackTrace);
-            return Promise.reject(error);
+            return Promise.reject(error.message);
         }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
@@ -351,12 +361,12 @@ class SynopsysBridge {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
-                        throw error;
+                        return Promise.reject(error);
                     }
                 }
             }
             else {
-                throw new Error('Bridge could not be found');
+                return Promise.reject(new Error('Bridge could not be found'));
             }
             return -1;
         });
