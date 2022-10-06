@@ -136,7 +136,7 @@ function run() {
             yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
         catch (error) {
-            return Promise.reject(error.message);
+            return Promise.reject(error);
         }
         finally {
             yield (0, utility_1.cleanupTempDir)(tempDir);
