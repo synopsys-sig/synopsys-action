@@ -415,12 +415,12 @@ class SynopsysBridge {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
-                        return Promise.reject(error);
+                        throw error;
                     }
                 }
             }
             else {
-                return Promise.reject(new Error('Bridge could not be found'));
+                throw new Error('Bridge could not be found');
             }
             return -1;
         });
