@@ -204,7 +204,7 @@ const exec_1 = __nccwpck_require__(514);
 function getRemoteFile(destFilePath, url) {
     return __awaiter(this, void 0, void 0, function* () {
         if (url == null || url.length === 0) {
-            return Promise.reject(new Error('URL cannot be empty'));
+            throw new Error('URL cannot be empty');
         }
         try {
             let fileNameFromUrl = '';
@@ -220,7 +220,7 @@ function getRemoteFile(destFilePath, url) {
             return Promise.resolve(downloadFileResp);
         }
         catch (error) {
-            return Promise.reject(error);
+            throw error;
         }
     });
 }
