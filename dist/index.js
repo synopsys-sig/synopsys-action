@@ -147,7 +147,7 @@ function run() {
 }
 exports.run = run;
 run().catch(error => {
-    (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
+    (0, core_1.setFailed)('Workflow failed! '.concat(error));
 });
 
 

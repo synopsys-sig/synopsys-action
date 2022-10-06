@@ -90,5 +90,5 @@ export async function run() {
 }
 
 run().catch(error => {
-  setFailed('Workflow failed! '.concat(error.message))
+  setFailed('Workflow failed! '.concat(error))
 })
