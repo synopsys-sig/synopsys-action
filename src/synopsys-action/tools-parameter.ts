@@ -75,7 +75,9 @@ export class SynopsysToolsParameter {
   private static STAGE_OPTION = '--stage'
   private static STATE_OPTION = '--state'
   private static POLARIS_STAGE = 'polaris'
-  private static STATE_FILE_NAME = 'input.json'
+  private static POLARIS_STATE_FILE_NAME = 'polaris_input.json'
+  private static COVERITY_STATE_FILE_NAME = 'coverity_input.json'
+  private static BD_STATE_FILE_NAME = 'bd_input.json'
   // Coverity parameters
   private static COVERITY_STAGE = 'connect'
   private static SPACE = ' '
@@ -113,7 +115,7 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(polData)
 
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
@@ -162,7 +164,7 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(covData)
 
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
@@ -218,7 +220,7 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(blackduckData)
 
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))

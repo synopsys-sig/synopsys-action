@@ -487,7 +487,7 @@ class SynopsysToolsParameter {
             }
         };
         const inputJson = JSON.stringify(polData);
-        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
+        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
@@ -526,7 +526,7 @@ class SynopsysToolsParameter {
             covData.data.project.branch = { name: branchName };
         }
         const inputJson = JSON.stringify(covData);
-        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
+        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
@@ -575,7 +575,7 @@ class SynopsysToolsParameter {
             }
         }
         const inputJson = JSON.stringify(blackduckData);
-        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME);
+        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
@@ -587,7 +587,9 @@ exports.SynopsysToolsParameter = SynopsysToolsParameter;
 SynopsysToolsParameter.STAGE_OPTION = '--stage';
 SynopsysToolsParameter.STATE_OPTION = '--state';
 SynopsysToolsParameter.POLARIS_STAGE = 'polaris';
-SynopsysToolsParameter.STATE_FILE_NAME = 'input.json';
+SynopsysToolsParameter.POLARIS_STATE_FILE_NAME = 'polaris_input.json';
+SynopsysToolsParameter.COVERITY_STATE_FILE_NAME = 'coverity_input.json';
+SynopsysToolsParameter.BD_STATE_FILE_NAME = 'bd_input.json';
 // Coverity parameters
 SynopsysToolsParameter.COVERITY_STAGE = 'connect';
 SynopsysToolsParameter.SPACE = ' ';
