@@ -13,7 +13,7 @@ export async function run() {
   info('Synopsys Action started...')
 
   const tempDir = await createTempDir()
-  let formattedCommand = ''
+  const formattedCommand = ''
 
   try {
     // Automatically configure bridge if Bridge download url is provided

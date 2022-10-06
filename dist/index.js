@@ -68,7 +68,7 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
-        let formattedCommand = '';
+        const formattedCommand = '';
         try {
             // Automatically configure bridge if Bridge download url is provided
             if (inputs.BRIDGE_DOWNLOAD_URL) {
