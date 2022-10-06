@@ -133,9 +133,7 @@ function run() {
         }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
-            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)()).catch(reason => {
-                throw reason;
-            });
+            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
         catch (error) {
             return Promise.reject(error);

@@ -79,9 +79,7 @@ export async function run() {
 
   try {
     const sb = new SynopsysBridge()
-    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory()).catch(reason => {
-      throw reason
-    })
+    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error: any) {
     return Promise.reject(error)
   } finally {
