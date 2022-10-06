@@ -82,12 +82,15 @@ export async function run() {
     await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error: any) {
     throw error
-    // return Promise.reject(error)
   } finally {
     await cleanupTempDir(tempDir)
   }
 }
 
 run().catch(error => {
-  setFailed('Workflow failed! '.concat(error))
+  if (error.message != undefined) {
+    setFailed('Workflow failed! '.concat(error.message))
+  } else {
+    setFailed('Workflow failed! '.concat(error))
+  }
 })

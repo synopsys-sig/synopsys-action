@@ -137,7 +137,6 @@ function run() {
         }
         catch (error) {
             throw error;
-            // return Promise.reject(error)
         }
         finally {
             yield (0, utility_1.cleanupTempDir)(tempDir);
@@ -146,7 +145,12 @@ function run() {
 }
 exports.run = run;
 run().catch(error => {
-    (0, core_1.setFailed)('Workflow failed! '.concat(error));
+    if (error.message != undefined) {
+        (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
+    }
+    else {
+        (0, core_1.setFailed)('Workflow failed! '.concat(error));
+    }
 });
 
 
