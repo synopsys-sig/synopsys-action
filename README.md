@@ -19,7 +19,7 @@ https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/
 
                 Windows: mkdir path_to_directory
 
-   **STEP 2:** Download the zip file of required version   
+   ** STEP 2: ** Download the zip file of required version   
 
                 Mac:  curl -o bridge.zip -L https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-macosx.zip
 
@@ -163,13 +163,14 @@ jobs:
 
 # Additional Parameters
 
-synopsys_bridge_path - Provide path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]
-bridge_download_url - Provide url to bridge zip file. If provided Synopsys Bridge will automatically download and configured in the provided bridge path or in the default path. [Note - As per current behaviour, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]
+- **synopsys_bridge_path** - Provide path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]
+  
+- **bridge_download_url** - Provide url to bridge zip file. If provided Synopsys Bridge will automatically download and configured in the provided bridge path or in the default path. [Note - As per current behaviour, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]
 
 
 # Future Enhancements
 
-Provide comments on Pull Requests about code quality issues.
-Prevent a merge if security issues are found during the pull request. Create a GitHub status check and report the policy as failed if new security issues are found.
-Create GitHub Issues to track issues found by a full analysis. This action is currently focused on providing feedback on a pull request. No action is taken if run manually or on a push. A future enhancement is to create GitHub issues to track security weaknesses found during a push.
-Allow developers to dismiss issues from the pull request. If an issue is deemed to be a false positive, a future enhancement could allow the developer to indicate this by replying to the comment, which would in turn report the status to the Coverity Connect instance so that future runs will recognize the issue as having been triaged as such.
+- Provide comments on Pull Requests about code quality issues.
+- Prevent a merge if security issues are found during the pull request. Create a GitHub status check and report the policy as failed if new security issues are found.
+- Create GitHub Issues to track issues found by a full analysis. This action is currently focused on providing feedback on a pull request. No action is taken if run manually or on a push. A future enhancement is to create GitHub issues to track security weaknesses found during a push.
+- Allow developers to dismiss issues from the pull request. If an issue is deemed to be a false positive, a future enhancement could allow the developer to indicate this by replying to the comment, which would in turn report the status to the Coverity Connect instance so that future runs will recognize the issue as having been triaged as such.
