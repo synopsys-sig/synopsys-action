@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, lokesh]
+    runs-on: [self-hosted, lokesh-mac]
 
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.61/ci-package-0.1.61-macosx.zip"
@@ -33,7 +33,7 @@ jobs:
         uses: ./
         with:
 
-          synopsys_bridge_path: "/usr/synopsys-bridge"
+          synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
 
           #Coverity
           coverity_url: ${{ secrets.COVERITY_URL }}
