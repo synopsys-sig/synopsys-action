@@ -1,4 +1,4 @@
-import {debug, info, setFailed, warning} from '@actions/core'
+import {debug, info, setFailed, warning, error} from '@actions/core'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {getBridgeDefaultPath, SynopsysBridge, validateBridgeURL} from './synopsys-action/synopsys-bridge'
@@ -35,6 +35,7 @@ export async function run() {
       info('Download and configuration of Synopsys Bridge completed')
     }
   } catch (error: any) {
+    error(error)
     if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
       let os: string = ''
       if (process.env['RUNNER_OS']) {
@@ -43,6 +44,8 @@ export async function run() {
       return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'))
     } else if (error.message.toLowerCase().includes('empty')) {
       return Promise.reject('Provided Bridge URL cannot be empty')
+    } else {
+      return Promise.reject(error)
     }
   }
 

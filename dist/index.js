@@ -88,6 +88,7 @@ function run() {
             }
         }
         catch (error) {
+            error(error);
             if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
                 let os = '';
                 if (process.env['RUNNER_OS']) {
@@ -97,6 +98,9 @@ function run() {
             }
             else if (error.message.toLowerCase().includes('empty')) {
                 return Promise.reject('Provided Bridge URL cannot be empty');
+            }
+            else {
+                return Promise.reject(error);
             }
         }
         try {
