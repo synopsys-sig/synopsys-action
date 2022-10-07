@@ -223,7 +223,7 @@ function getRemoteFile(destFilePath, url) {
             let fileNameFromUrl = '';
             if (fs.lstatSync(destFilePath).isDirectory()) {
                 fileNameFromUrl = url.substring(url.lastIndexOf('/') + 1);
-                destFilePath = path_1.default.join(destFilePath, fileNameFromUrl) || 'bridge.zip';
+                destFilePath = path_1.default.join(destFilePath, fileNameFromUrl || 'bridge.zip');
             }
             const toolPath = yield (0, tool_cache_1.downloadTool)(url, destFilePath);
             const downloadFileResp = {
