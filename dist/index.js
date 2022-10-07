@@ -500,9 +500,6 @@ class SynopsysToolsParameter {
             (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
             command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         }
-        else {
-            (0, core_1.info)('One or more required parameters for Altair is missing, hence skipping Altair');
-        }
         return command;
     }
     getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName, streamName, installDir, policyView, repositoryName, branchName) {
