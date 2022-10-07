@@ -43,19 +43,19 @@ jobs:
           # Mandatory for windows hosted environment
           coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
           #bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
-
-          # Polaris
-          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "App1"
-          polaris_project_name: "Proj1"
-          polaris_assessment_types: '["SAST"]'
-
-          # Blackduck
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          blackduck_scan_full: true
-          blackduck_install_directory: /Users/lokesha
-          blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+#
+#          # Polaris
+#          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+#          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+#          polaris_application_name: "App1"
+#          polaris_project_name: "Proj1"
+#          polaris_assessment_types: '["SAST"]'
+#
+#          # Blackduck
+#          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+#          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+#          blackduck_scan_full: true
+#          blackduck_install_directory: /Users/lokesha
+#          blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
 
           synopsys_bridge_path: "/usr/synopsys-bridge"
