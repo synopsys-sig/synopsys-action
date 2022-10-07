@@ -89,16 +89,6 @@ function run() {
                 yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
-            /*if (inputs.POLARIS_SERVER_URL && inputs.COVERITY_URL && inputs.BLACKDUCK_URL && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
-              const commandFormatter = new SynopsysToolsParameter(tempDir)
-              const polarisAssessmentTypes: Array<string> = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
-              const polarisCommand = commandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes)
-              const coverityCommand = commandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME)
-              let failureSeverities: Array<string> = []
-              failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
-              const blackDuckCommand = commandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities)
-              formattedCommand = polarisCommand.concat(coverityCommand).concat(blackDuckCommand)
-            } else */
             if (inputs.POLARIS_SERVER_URL) {
                 const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                 const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
@@ -122,10 +112,10 @@ function run() {
                 }
                 formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities));
             }
-            /* else {
-              warning('Not supported flow')
-              return Promise.reject(new Error('Not Supported Flow'))
-            }*/
+            if (formattedCommand.length === 0) {
+                (0, core_1.warning)('Not supported flow');
+                return Promise.reject(new Error('Not Supported Flow'));
+            }
         }
         catch (error) {
             (0, core_1.debug)(error.stackTrace);
@@ -465,121 +455,127 @@ class SynopsysToolsParameter {
         this.tempDir = tempDir;
     }
     getFormattedCommandForPolaris(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
-        (0, validators_1.validatePolarisParams)(accessToken, applicationName, projectName, serverURL, assessmentTypes);
-        const assessmentTypeEnums = [];
-        for (const assessmentType of assessmentTypes) {
-            if (!Object.values(PolarisAssessmentType).includes(assessmentType)) {
-                throw new Error('Provided Assessment type not found');
-            }
-            else {
-                assessmentTypeEnums.push(PolarisAssessmentType[assessmentType]);
-            }
-        }
-        const polData = {
-            data: {
-                polaris: {
-                    accesstoken: accessToken,
-                    serverUrl: serverURL,
-                    application: { name: applicationName },
-                    project: { name: projectName },
-                    assessment: { types: assessmentTypeEnums }
+        let command = '';
+        if ((0, validators_1.validatePolarisParams)(accessToken, applicationName, projectName, serverURL, assessmentTypes)) {
+            const assessmentTypeEnums = [];
+            for (const assessmentType of assessmentTypes) {
+                if (!Object.values(PolarisAssessmentType).includes(assessmentType)) {
+                    throw new Error('Provided Assessment type not found');
+                }
+                else {
+                    assessmentTypeEnums.push(PolarisAssessmentType[assessmentType]);
                 }
             }
-        };
-        const inputJson = JSON.stringify(polData);
-        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
-        fs.writeFileSync(stateFilePath, inputJson);
-        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
-        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
-        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+            const polData = {
+                data: {
+                    polaris: {
+                        accesstoken: accessToken,
+                        serverUrl: serverURL,
+                        application: { name: applicationName },
+                        project: { name: projectName },
+                        assessment: { types: assessmentTypeEnums }
+                    }
+                }
+            };
+            const inputJson = JSON.stringify(polData);
+            const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
+            fs.writeFileSync(stateFilePath, inputJson);
+            (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+            (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
+            command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+        }
         return command;
     }
     getFormattedCommandForCoverity(userName, passWord, coverityUrl, projectName, streamName, installDir, policyView, repositoryName, branchName) {
-        (0, validators_1.validateCoverityParams)(userName, passWord, coverityUrl, projectName, streamName);
-        const covData = {
-            data: {
-                coverity: {
-                    connect: {
-                        user: { name: userName, password: passWord },
-                        url: coverityUrl,
-                        project: { name: projectName },
-                        stream: { name: streamName }
-                    }
-                },
-                project: {}
+        let command = '';
+        if ((0, validators_1.validateCoverityParams)(userName, passWord, coverityUrl, projectName, streamName)) {
+            const covData = {
+                data: {
+                    coverity: {
+                        connect: {
+                            user: { name: userName, password: passWord },
+                            url: coverityUrl,
+                            project: { name: projectName },
+                            stream: { name: streamName }
+                        }
+                    },
+                    project: {}
+                }
+            };
+            if (installDir) {
+                const osName = process.platform;
+                if (osName === 'win32') {
+                    (0, validators_1.validateCoverityInstallDirectoryParam)(installDir);
+                }
+                covData.data.coverity.install = { directory: installDir };
             }
-        };
-        if (installDir) {
-            const osName = process.platform;
-            if (osName === 'win32') {
-                (0, validators_1.validateCoverityInstallDirectoryParam)(installDir);
+            if (policyView) {
+                covData.data.coverity.connect.policy = { view: policyView };
             }
-            covData.data.coverity.install = { directory: installDir };
+            if (repositoryName) {
+                covData.data.project.repository = { name: repositoryName };
+            }
+            if (repositoryName) {
+                covData.data.project.branch = { name: branchName };
+            }
+            const inputJson = JSON.stringify(covData);
+            const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
+            fs.writeFileSync(stateFilePath, inputJson);
+            (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+            (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
+            command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         }
-        if (policyView) {
-            covData.data.coverity.connect.policy = { view: policyView };
-        }
-        if (repositoryName) {
-            covData.data.project.repository = { name: repositoryName };
-        }
-        if (repositoryName) {
-            covData.data.project.branch = { name: branchName };
-        }
-        const inputJson = JSON.stringify(covData);
-        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
-        fs.writeFileSync(stateFilePath, inputJson);
-        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
-        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
-        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
     getFormattedCommandForBlackduck(blackduckUrl, apiToken, installDirectory, scanFull, failureSeverities) {
-        (0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken);
-        const blackduckData = {
-            data: {
-                blackduck: {
-                    url: blackduckUrl,
-                    token: apiToken
+        let command = '';
+        if ((0, validators_1.validateBalckduckParams)(blackduckUrl, apiToken)) {
+            const blackduckData = {
+                data: {
+                    blackduck: {
+                        url: blackduckUrl,
+                        token: apiToken
+                    }
                 }
+            };
+            if (installDirectory) {
+                blackduckData.data.blackduck.install = { directory: installDirectory };
             }
-        };
-        if (installDirectory) {
-            blackduckData.data.blackduck.install = { directory: installDirectory };
-        }
-        if (scanFull) {
-            let scanFullValue = false;
-            if (scanFull.toLowerCase() === 'true' || scanFull.toLowerCase() === 'false') {
-                scanFullValue = scanFull.toLowerCase() === 'true';
-            }
-            else {
-                throw new Error('boolean value is required for blackduck_scan_full');
-            }
-            blackduckData.data.blackduck.scan = { full: scanFullValue };
-        }
-        if (failureSeverities && failureSeverities.length > 0) {
-            (0, validators_1.validateBlackduckFailureSeverities)(failureSeverities);
-            const failureSeverityEnums = [];
-            for (const failureSeverity of failureSeverities) {
-                if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
-                    throw new Error('Provided Severity for blackduck is not valid');
+            if (scanFull) {
+                let scanFullValue = false;
+                if (scanFull.toLowerCase() === 'true' || scanFull.toLowerCase() === 'false') {
+                    scanFullValue = scanFull.toLowerCase() === 'true';
                 }
                 else {
-                    failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);
+                    throw new Error('boolean value is required for blackduck_scan_full');
+                }
+                blackduckData.data.blackduck.scan = { full: scanFullValue };
+            }
+            if (failureSeverities && failureSeverities.length > 0) {
+                (0, validators_1.validateBlackduckFailureSeverities)(failureSeverities);
+                const failureSeverityEnums = [];
+                for (const failureSeverity of failureSeverities) {
+                    if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
+                        throw new Error('Provided Severity for blackduck is not valid');
+                    }
+                    else {
+                        failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);
+                    }
+                }
+                if (blackduckData.data.blackduck.scan) {
+                    blackduckData.data.blackduck.scan.failure = { severities: failureSeverityEnums };
+                }
+                else {
+                    blackduckData.data.blackduck.scan = { failure: { severities: failureSeverityEnums } };
                 }
             }
-            if (blackduckData.data.blackduck.scan) {
-                blackduckData.data.blackduck.scan.failure = { severities: failureSeverityEnums };
-            }
-            else {
-                blackduckData.data.blackduck.scan = { failure: { severities: failureSeverityEnums } };
-            }
+            const inputJson = JSON.stringify(blackduckData);
+            const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
+            fs.writeFileSync(stateFilePath, inputJson);
+            (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+            (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
+            command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         }
-        const inputJson = JSON.stringify(blackduckData);
-        const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
-        fs.writeFileSync(stateFilePath, inputJson);
-        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
-        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
-        const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
 }
@@ -708,37 +704,49 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.validateBlackduckFailureSeverities = exports.validateBalckduckParams = exports.validateCoverityInstallDirectoryParam = exports.validateCoverityParams = exports.validatePolarisParams = void 0;
 const fs = __importStar(__nccwpck_require__(747));
+const core_1 = __nccwpck_require__(186);
 function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
-        throw new Error('One or more required parameters for Altair is missing');
+        (0, core_1.error)('One or more required parameters for Altair is missing');
+        return false;
     }
+    return true;
 }
 exports.validatePolarisParams = validatePolarisParams;
 function validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName) {
     if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0 || streamName == null || streamName.length === 0) {
-        throw new Error('One or more required parameters for Coverity is missing');
+        (0, core_1.error)('One or more required parameters for Coverity is missing');
+        return false;
     }
+    return true;
 }
 exports.validateCoverityParams = validateCoverityParams;
 function validateCoverityInstallDirectoryParam(installDir) {
     if (installDir == null || installDir.length === 0) {
-        throw new Error('One or more required parameters for Coverity is missing');
+        (0, core_1.error)('One or more required parameters for Coverity is missing');
+        return false;
     }
     if (!fs.existsSync(installDir)) {
-        throw new Error('Invalid Install Directory');
+        (0, core_1.error)('Invalid Install Directory');
+        return false;
     }
+    return true;
 }
 exports.validateCoverityInstallDirectoryParam = validateCoverityInstallDirectoryParam;
 function validateBalckduckParams(url, apiToken) {
     if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0) {
-        throw new Error('One or more required parameters for BlackDuck is missing');
+        (0, core_1.error)('One or more required parameters for BlackDuck is missing');
+        return false;
     }
+    return true;
 }
 exports.validateBalckduckParams = validateBalckduckParams;
 function validateBlackduckFailureSeverities(severities) {
     if (severities == null || severities.length === 0) {
-        throw new Error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+        (0, core_1.error)('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+        return false;
     }
+    return true;
 }
 exports.validateBlackduckFailureSeverities = validateBlackduckFailureSeverities;
 
