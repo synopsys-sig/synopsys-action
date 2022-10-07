@@ -36,7 +36,7 @@ export async function run() {
     }
   } catch (error: any) {
     await cleanupTempDir(tempDir)
-    info(error)
+    info(error.stackTrace)
     if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
       let os: string = ''
       if (process.env['RUNNER_OS']) {
