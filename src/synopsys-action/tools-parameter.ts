@@ -75,7 +75,9 @@ export class SynopsysToolsParameter {
   private static STAGE_OPTION = '--stage'
   private static STATE_OPTION = '--state'
   private static POLARIS_STAGE = 'polaris'
-  private static STATE_FILE_NAME = 'input.json'
+  private static POLARIS_STATE_FILE_NAME = 'polaris_input.json'
+  private static COVERITY_STATE_FILE_NAME = 'coverity_input.json'
+  private static BD_STATE_FILE_NAME = 'bd_input.json'
   // Coverity parameters
   private static COVERITY_STAGE = 'connect'
   private static SPACE = ' '
@@ -87,145 +89,148 @@ export class SynopsysToolsParameter {
   }
 
   getFormattedCommandForPolaris(accessToken: string, applicationName: string, projectName: string, serverURL: string, assessmentTypes: string[]): string {
-    validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes)
+    let command = ''
+    if (validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes)) {
+      const assessmentTypeEnums: PolarisAssessmentType[] = []
 
-    const assessmentTypeEnums: PolarisAssessmentType[] = []
-
-    for (const assessmentType of assessmentTypes) {
-      if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
-        throw new Error('Provided Assessment type not found')
-      } else {
-        assessmentTypeEnums.push(PolarisAssessmentType[assessmentType as keyof typeof PolarisAssessmentType])
-      }
-    }
-
-    const polData: InputData<Polaris> = {
-      data: {
-        polaris: {
-          accesstoken: accessToken,
-          serverUrl: serverURL,
-          application: {name: applicationName},
-          project: {name: projectName},
-          assessment: {types: assessmentTypeEnums}
+      for (const assessmentType of assessmentTypes) {
+        if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
+          throw new Error('Provided Assessment type not found')
+        } else {
+          assessmentTypeEnums.push(PolarisAssessmentType[assessmentType as keyof typeof PolarisAssessmentType])
         }
       }
+
+      const polData: InputData<Polaris> = {
+        data: {
+          polaris: {
+            accesstoken: accessToken,
+            serverUrl: serverURL,
+            application: {name: applicationName},
+            project: {name: projectName},
+            assessment: {types: assessmentTypeEnums}
+          }
+        }
+      }
+
+      const inputJson = JSON.stringify(polData)
+
+      const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
+      fs.writeFileSync(stateFilePath, inputJson)
+
+      debug('Generated state json file at - '.concat(stateFilePath))
+      debug('Generated state json file content is - '.concat(inputJson))
+
+      command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     }
-
-    const inputJson = JSON.stringify(polData)
-
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
-    fs.writeFileSync(stateFilePath, inputJson)
-
-    debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
-
-    const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath)
 
     return command
   }
 
   getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string, projectName: string, streamName: string, installDir: string, policyView: string, repositoryName: string, branchName: string): string {
-    validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName)
-    const covData: InputData<Coverity> = {
-      data: {
-        coverity: {
-          connect: {
-            user: {name: userName, password: passWord},
-            url: coverityUrl,
-            project: {name: projectName},
-            stream: {name: streamName}
-          }
-        },
-        project: {}
+    let command = ''
+    if (validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName)) {
+      const covData: InputData<Coverity> = {
+        data: {
+          coverity: {
+            connect: {
+              user: {name: userName, password: passWord},
+              url: coverityUrl,
+              project: {name: projectName},
+              stream: {name: streamName}
+            }
+          },
+          project: {}
+        }
       }
-    }
 
-    if (installDir) {
-      const osName = process.platform
-      if (osName === 'win32') {
-        validateCoverityInstallDirectoryParam(installDir)
+      if (installDir) {
+        const osName = process.platform
+        if (osName === 'win32') {
+          validateCoverityInstallDirectoryParam(installDir)
+        }
+        covData.data.coverity.install = {directory: installDir}
       }
-      covData.data.coverity.install = {directory: installDir}
+
+      if (policyView) {
+        covData.data.coverity.connect.policy = {view: policyView}
+      }
+
+      if (repositoryName) {
+        covData.data.project.repository = {name: repositoryName}
+      }
+
+      if (repositoryName) {
+        covData.data.project.branch = {name: branchName}
+      }
+
+      const inputJson = JSON.stringify(covData)
+
+      const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME)
+      fs.writeFileSync(stateFilePath, inputJson)
+
+      debug('Generated state json file at - '.concat(stateFilePath))
+      debug('Generated state json file content is - '.concat(inputJson))
+
+      command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     }
-
-    if (policyView) {
-      covData.data.coverity.connect.policy = {view: policyView}
-    }
-
-    if (repositoryName) {
-      covData.data.project.repository = {name: repositoryName}
-    }
-
-    if (repositoryName) {
-      covData.data.project.branch = {name: branchName}
-    }
-
-    const inputJson = JSON.stringify(covData)
-
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
-    fs.writeFileSync(stateFilePath, inputJson)
-
-    debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
-
-    const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE).concat('--verbose') //'--stage polaris --state '.concat(stateFilePath)
-
     return command
   }
 
   getFormattedCommandForBlackduck(blackduckUrl: string, apiToken: string, installDirectory: string, scanFull: string, failureSeverities: string[]): string {
-    validateBalckduckParams(blackduckUrl, apiToken)
-    const blackduckData: InputData<Blackduck> = {
-      data: {
-        blackduck: {
-          url: blackduckUrl,
-          token: apiToken
+    let command = ''
+    if (validateBalckduckParams(blackduckUrl, apiToken)) {
+      const blackduckData: InputData<Blackduck> = {
+        data: {
+          blackduck: {
+            url: blackduckUrl,
+            token: apiToken
+          }
         }
       }
-    }
 
-    if (installDirectory) {
-      blackduckData.data.blackduck.install = {directory: installDirectory}
-    }
-
-    if (scanFull) {
-      let scanFullValue = false
-      if (scanFull.toLowerCase() === 'true' || scanFull.toLowerCase() === 'false') {
-        scanFullValue = scanFull.toLowerCase() === 'true'
-      } else {
-        throw new Error('boolean value is required for blackduck_scan_full')
+      if (installDirectory) {
+        blackduckData.data.blackduck.install = {directory: installDirectory}
       }
-      blackduckData.data.blackduck.scan = {full: scanFullValue}
-    }
 
-    if (failureSeverities && failureSeverities.length > 0) {
-      validateBlackduckFailureSeverities(failureSeverities)
-      const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
-      for (const failureSeverity of failureSeverities) {
-        if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
-          throw new Error('Provided Severity for blackduck is not valid')
+      if (scanFull) {
+        let scanFullValue = false
+        if (scanFull.toLowerCase() === 'true' || scanFull.toLowerCase() === 'false') {
+          scanFullValue = scanFull.toLowerCase() === 'true'
         } else {
-          failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
+          throw new Error('boolean value is required for blackduck_scan_full')
+        }
+        blackduckData.data.blackduck.scan = {full: scanFullValue}
+      }
+
+      if (failureSeverities && failureSeverities.length > 0) {
+        validateBlackduckFailureSeverities(failureSeverities)
+        const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
+        for (const failureSeverity of failureSeverities) {
+          if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
+            throw new Error('Provided Severity for blackduck is not valid')
+          } else {
+            failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
+          }
+        }
+
+        if (blackduckData.data.blackduck.scan) {
+          blackduckData.data.blackduck.scan.failure = {severities: failureSeverityEnums}
+        } else {
+          blackduckData.data.blackduck.scan = {failure: {severities: failureSeverityEnums}}
         }
       }
 
-      if (blackduckData.data.blackduck.scan) {
-        blackduckData.data.blackduck.scan.failure = {severities: failureSeverityEnums}
-      } else {
-        blackduckData.data.blackduck.scan = {failure: {severities: failureSeverityEnums}}
-      }
+      const inputJson = JSON.stringify(blackduckData)
+
+      const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
+      fs.writeFileSync(stateFilePath, inputJson)
+
+      debug('Generated state json file at - '.concat(stateFilePath))
+      debug('Generated state json file content is - '.concat(inputJson))
+
+      command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     }
-
-    const inputJson = JSON.stringify(blackduckData)
-
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.STATE_FILE_NAME)
-    fs.writeFileSync(stateFilePath, inputJson)
-
-    debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
-
-    const command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
-
     return command
   }
 }
