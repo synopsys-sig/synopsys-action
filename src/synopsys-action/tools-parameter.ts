@@ -90,7 +90,6 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForPolaris(accessToken: string, applicationName: string, projectName: string, serverURL: string, assessmentTypes: string[]): string {
     let command = ''
-    info('calling polaris validations')
     if (validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes)) {
       const assessmentTypeEnums: PolarisAssessmentType[] = []
 
@@ -124,8 +123,7 @@ export class SynopsysToolsParameter {
 
       command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     } else {
-      // eslint-disable-next-line no-console
-      console.log('One or more required parameters for Altair is missing, hence skipping Altair')
+      info('One or more required parameters for Altair is missing, hence skipping Altair')
     }
 
     return command

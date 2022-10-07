@@ -89,6 +89,10 @@ function run() {
                 yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
+            if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
+                (0, core_1.warning)('Not supported flow');
+                return Promise.reject(new Error('Not Supported Flow'));
+            }
             if (inputs.POLARIS_SERVER_URL) {
                 const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                 const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
@@ -113,8 +117,7 @@ function run() {
                 formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities));
             }
             if (formattedCommand.length === 0) {
-                (0, core_1.warning)('Not supported flow');
-                return Promise.reject(new Error('Not Supported Flow'));
+                return Promise.reject(new Error('Mandatory fields are missing for given scans'));
             }
         }
         catch (error) {
@@ -456,7 +459,6 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForPolaris(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
         let command = '';
-        (0, core_1.info)('calling polaris validations');
         if ((0, validators_1.validatePolarisParams)(accessToken, applicationName, projectName, serverURL, assessmentTypes)) {
             const assessmentTypeEnums = [];
             for (const assessmentType of assessmentTypes) {
@@ -486,8 +488,7 @@ class SynopsysToolsParameter {
             command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         }
         else {
-            // eslint-disable-next-line no-console
-            console.log('One or more required parameters for Altair is missing, hence skipping Altair');
+            (0, core_1.info)('One or more required parameters for Altair is missing, hence skipping Altair');
         }
         return command;
     }
@@ -712,6 +713,7 @@ const fs = __importStar(__nccwpck_require__(747));
 const core_1 = __nccwpck_require__(186);
 function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
+        (0, core_1.error)('One or more required parameters for Polaris is missing');
         return false;
     }
     return true;
@@ -719,7 +721,7 @@ function validatePolarisParams(accessToken, applicationName, projectName, server
 exports.validatePolarisParams = validatePolarisParams;
 function validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName) {
     if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0 || streamName == null || streamName.length === 0) {
-        (0, core_1.error)('One or more required parameters for Coverity is missing, hence skipping Coverity');
+        (0, core_1.error)('One or more required parameters for Coverity is missing');
         return false;
     }
     return true;
@@ -727,11 +729,11 @@ function validateCoverityParams(userName, passWord, coverityUrl, projectName, st
 exports.validateCoverityParams = validateCoverityParams;
 function validateCoverityInstallDirectoryParam(installDir) {
     if (installDir == null || installDir.length === 0) {
-        (0, core_1.error)('One or more required parameters for Coverity is missing, hence skipping Coverity');
+        (0, core_1.error)('One or more required parameters for Coverity is missing');
         return false;
     }
     if (!fs.existsSync(installDir)) {
-        (0, core_1.error)('Invalid Install Directory, hence skipping Coverity');
+        (0, core_1.error)('Invalid Install Directory');
         return false;
     }
     return true;
@@ -739,7 +741,7 @@ function validateCoverityInstallDirectoryParam(installDir) {
 exports.validateCoverityInstallDirectoryParam = validateCoverityInstallDirectoryParam;
 function validateBalckduckParams(url, apiToken) {
     if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0) {
-        (0, core_1.error)('One or more required parameters for BlackDuck is missing, hence skipping BlackDuck');
+        (0, core_1.error)('One or more required parameters for BlackDuck is missing');
         return false;
     }
     return true;

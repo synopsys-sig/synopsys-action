@@ -6,7 +6,7 @@ name: CI
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main", "SIGINT-276" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -28,12 +28,26 @@ jobs:
     steps:
       #      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Use synopsys unified-action - coverity-connect-via-input.json
+      - name: Use synopsys unified-action - running all scans
         # Use the action defined in this repository
         uses: ./
         with:
 
           synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
+
+          # Polaris
+          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_application_name: "Dev_Application_1"
+          polaris_project_name: "Dev_Project_1"
+          polaris_assessment_types: '["SAST"]'
+
+          # Blackduck
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+          blackduck_scan_full: true
+          blackduck_install_directory: /Users/lokesha
+          blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
 
           #Coverity
           coverity_url: ${{ secrets.COVERITY_URL }}
@@ -47,19 +61,4 @@ jobs:
           # Mandatory for windows hosted environment
           coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
           #bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
-
-          # Polaris
-          #polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "App1"
-          polaris_project_name: "testproj"
-          polaris_assessment_types: '["SAST"]'
-
-          # Blackduck
-          #blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          blackduck_scan_full: true
-          blackduck_install_directory: /Users/lokesha
-          blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
-
 

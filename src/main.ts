@@ -39,6 +39,11 @@ export async function run() {
       info('Download and configuration of Synopsys Bridge completed')
     }
 
+    if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
+      warning('Not supported flow')
+      return Promise.reject(new Error('Not Supported Flow'))
+    }
+
     if (inputs.POLARIS_SERVER_URL) {
       const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
       const polarisAssessmentTypes: Array<string> = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
@@ -67,8 +72,7 @@ export async function run() {
     }
 
     if (formattedCommand.length === 0) {
-      warning('Not supported flow')
-      return Promise.reject(new Error('Not Supported Flow'))
+      return Promise.reject(new Error('Mandatory fields are missing for given scans'))
     }
   } catch (error: any) {
     debug(error.stackTrace)

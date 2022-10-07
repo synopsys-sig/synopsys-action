@@ -30,7 +30,11 @@ mock('../src/synopsys-action/synopsys-bridge')
 const fs = require('fs')
 mock('fs')
 
-test('Not supported flow error - run', () => {
+test('Not supported flow error - run', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
+
   run().catch(error => {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Not Supported Flow')
