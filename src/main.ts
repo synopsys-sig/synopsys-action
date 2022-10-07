@@ -46,6 +46,7 @@ export async function run() {
     }
   }
 
+  try {
     if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
       warning('Not supported flow')
       return Promise.reject(new Error('Not Supported Flow'))
