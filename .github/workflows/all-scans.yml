@@ -32,7 +32,11 @@ jobs:
         # Use the action defined in this repository
         uses: ./
         with:
-#          coverity_url: ${{ secrets.COVERITY_URL }}
+
+          synopsys_bridge_path: "/usr/synopsys-bridge"
+
+          #Coverity
+          coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
@@ -50,7 +54,6 @@ jobs:
           polaris_application_name: "App1"
           polaris_project_name: "Proj1"
           polaris_assessment_types: '["SAST"]'
-          synopsys_bridge_path: "/usr/synopsys-bridge"
 
           # Blackduck
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
