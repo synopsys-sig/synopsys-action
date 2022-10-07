@@ -116,7 +116,7 @@ function run() {
         }
         catch (error) {
             yield (0, utility_1.cleanupTempDir)(tempDir);
-            (0, core_1.info)(error);
+            (0, core_1.info)(error.stackTrace);
             if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
                 let os = '';
                 if (process.env['RUNNER_OS']) {
