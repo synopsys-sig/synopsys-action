@@ -1,12 +1,13 @@
 # Synopsys Action
 
-Uses Synopsys Action to configure code scan using Synopsys Tools with the help of Synopsys Bridge.
+Synopsys GitHub Action enables configuring pipelines for scanning on Synopsys platforms, leveraging Synopsys Bridge.
 
 Note: This action does not use Synopsys tool (Coverity, Black Duck and Polaris)’s command line interface. It is purely a way to expose Synopsys tool’s output within GitHub.
 
 # Synopsys Bridge Setup
 
-The required bridge version and platform specific bridge can be downloaded here.
+Synopsys Bridge for specific platforms can be downloaded here: 
+https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/
 
   **STEP 1:**  Create a directory, where you want to configure Synopsys Bridge and get into the directory.
 
@@ -34,25 +35,25 @@ The required bridge version and platform specific bridge can be downloaded here.
 
                 Windows: tar -xf bridge.zip
 
-**STEP4:**  Verify bridge executable file is there along with extensions directory having extensions
+**STEP4:**  Verify Bridge executable file is there along with extensions directory having extensions
 
-**Note:** Synopsys bridge can also be download and configure passing "bridge_download_url" parameter with value as url to zip file.
+**Note:** Synopsys Bridge can also be download and configure passing "bridge_download_url" parameter with value as url to zip file.
 
 
 #Using The Action for different Scanning Tools
 
 Coverity, BlackDuck and Polaris has many deployment options, and how you use it will depend on your environment and project source code.
 
-This action can be used for widely used Synopsys Scanning tool – Coverity, BlackDuck and Polaris by simply passing the tool name as a parameter or by passing the tool related parameters.
+This action can be used for widely used Synopsys Scanning Platforms – Coverity, BlackDuck and Polaris by simply passing the tool name as a parameter or by passing the tool related parameters.
 
 This workflow does the following:
 
-Validates Scanning Tool related parameters like project and stream
+Validates Scanning Platform related parameters like project and stream
 Downloads Synopsys Bridge and related adapters
-Runs corresponding Bridge commands transferring the Scanning tool related parameters
+Runs corresponding Bridge commands transfering the Scanning tool related parameters
 Capture and analyze related operations are done internally by the Synopsis Bridge
 
-# Using Synopsys Action for Polaris
+# Synopsys GitHub Action for Polaris
 
 ```yaml
 name: Synopsys Action
@@ -89,7 +90,7 @@ jobs:
           bridge_download_url: "Bridge download url for specific platform"
 ```
 
-# Using Synopsys Action for Coverity
+# Synopsys GitHub Action for Coverity
 
 ```yaml
 
@@ -124,7 +125,7 @@ jobs:
 
 ```
 
-# Using Synopsys Action for Blackduck
+# Synopsys GitHub Action for Blackduck
 
 ```yaml
 
