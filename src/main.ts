@@ -35,7 +35,7 @@ export async function run() {
       info('Download and configuration of Synopsys Bridge completed')
     }
   } catch (error: any) {
-    error(error)
+    info(error)
     if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
       let os: string = ''
       if (process.env['RUNNER_OS']) {
