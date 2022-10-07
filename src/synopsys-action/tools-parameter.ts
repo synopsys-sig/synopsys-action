@@ -123,6 +123,8 @@ export class SynopsysToolsParameter {
       debug('Generated state json file content is - '.concat(inputJson))
 
       command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    } else {
+      info('One or more required parameters for Altair is missing, hence skipping Altair')
     }
 
     return command
