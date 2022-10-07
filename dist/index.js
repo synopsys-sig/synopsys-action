@@ -73,7 +73,11 @@ function run() {
             // Automatically configure bridge if Bridge download url is provided
             if (inputs.BRIDGE_DOWNLOAD_URL) {
                 if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
-                    return Promise.reject("Provided Bridge url is not valid for the runner's platform");
+                    let os = '';
+                    if (process.env['NODE_TLS_REJECT_UNAUTHORIZED']) {
+                        os = process.env['NODE_TLS_REJECT_UNAUTHORIZED'];
+                    }
+                    return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'));
                 }
                 // Download file in temporary directory
                 (0, core_1.info)('Downloading and configuring Synopsys Bridge');
