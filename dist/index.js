@@ -456,6 +456,7 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForPolaris(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
         let command = '';
+        (0, core_1.info)('calling polaris validations');
         if ((0, validators_1.validatePolarisParams)(accessToken, applicationName, projectName, serverURL, assessmentTypes)) {
             const assessmentTypeEnums = [];
             for (const assessmentType of assessmentTypes) {

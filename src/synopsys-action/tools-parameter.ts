@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
-import {debug} from '@actions/core'
+import {debug, info} from '@actions/core'
 import {validatePolarisParams, validateCoverityParams, validateBalckduckParams, validateCoverityInstallDirectoryParam, validateBlackduckFailureSeverities} from './validators'
 
 export enum PolarisAssessmentType {
@@ -90,6 +90,7 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForPolaris(accessToken: string, applicationName: string, projectName: string, serverURL: string, assessmentTypes: string[]): string {
     let command = ''
+    info('calling polaris validations')
     if (validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes)) {
       const assessmentTypeEnums: PolarisAssessmentType[] = []
 
