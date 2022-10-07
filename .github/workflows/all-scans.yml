@@ -36,7 +36,7 @@ jobs:
           synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
 
           #Coverity
-          #coverity_url: ${{ secrets.COVERITY_URL }}
+          coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}

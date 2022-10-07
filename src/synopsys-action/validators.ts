@@ -1,9 +1,8 @@
 import * as fs from 'fs'
-import {setFailed} from '@actions/core'
+import {error} from '@actions/core'
 export function validatePolarisParams(accessToken: string, applicationName: string, projectName: string, serverURL: string, assessmentTypes: string[]): boolean {
   if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
-    // eslint-disable-next-line no-console
-    console.log('One or more required parameters for Altair is missing, hence skipping Altair')
+    error('One or more required parameters for Altair is missing, hence skipping Altair')
     return false
   }
   return true
@@ -11,7 +10,7 @@ export function validatePolarisParams(accessToken: string, applicationName: stri
 
 export function validateCoverityParams(userName: string, passWord: string, coverityUrl: string, projectName: string, streamName: string): boolean {
   if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0 || streamName == null || streamName.length === 0) {
-    console.log('One or more required parameters for Coverity is missing, hence skipping Coverity')
+    error('One or more required parameters for Coverity is missing, hence skipping Coverity')
     return false
   }
   return true
@@ -19,11 +18,11 @@ export function validateCoverityParams(userName: string, passWord: string, cover
 
 export function validateCoverityInstallDirectoryParam(installDir: string): boolean {
   if (installDir == null || installDir.length === 0) {
-    console.log('One or more required parameters for Coverity is missing, hence skipping Coverity')
+    error('One or more required parameters for Coverity is missing, hence skipping Coverity')
     return false
   }
   if (!fs.existsSync(installDir)) {
-    console.log('Invalid Install Directory, hence skipping Coverity')
+    error('Invalid Install Directory, hence skipping Coverity')
     return false
   }
   return true
@@ -31,7 +30,7 @@ export function validateCoverityInstallDirectoryParam(installDir: string): boole
 
 export function validateBalckduckParams(url: string, apiToken: string): boolean {
   if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0) {
-    console.log('One or more required parameters for BlackDuck is missing, hence skipping BlackDuck')
+    error('One or more required parameters for BlackDuck is missing, hence skipping BlackDuck')
     return false
   }
   return true
@@ -39,7 +38,7 @@ export function validateBalckduckParams(url: string, apiToken: string): boolean 
 
 export function validateBlackduckFailureSeverities(severities: string[]): boolean {
   if (severities == null || severities.length === 0) {
-    console.log('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
+    error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
     return false
   }
   return true
