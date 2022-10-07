@@ -707,7 +707,7 @@ const fs = __importStar(__nccwpck_require__(747));
 const core_1 = __nccwpck_require__(186);
 function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
-        (0, core_1.info)('One or more required parameters for Altair is missing, hence skipping Altair');
+        (0, core_1.error)('One or more required parameters for Altair is missing, hence skipping Altair');
         return false;
     }
     return true;
@@ -715,7 +715,7 @@ function validatePolarisParams(accessToken, applicationName, projectName, server
 exports.validatePolarisParams = validatePolarisParams;
 function validateCoverityParams(userName, passWord, coverityUrl, projectName, streamName) {
     if (userName == null || userName.length === 0 || passWord == null || passWord.length === 0 || coverityUrl == null || coverityUrl.length === 0 || projectName == null || projectName.length === 0 || streamName == null || streamName.length === 0) {
-        (0, core_1.info)('One or more required parameters for Coverity is missing, hence skipping Coverity');
+        (0, core_1.error)('One or more required parameters for Coverity is missing, hence skipping Coverity');
         return false;
     }
     return true;
@@ -723,11 +723,11 @@ function validateCoverityParams(userName, passWord, coverityUrl, projectName, st
 exports.validateCoverityParams = validateCoverityParams;
 function validateCoverityInstallDirectoryParam(installDir) {
     if (installDir == null || installDir.length === 0) {
-        (0, core_1.info)('One or more required parameters for Coverity is missing, hence skipping Coverity');
+        (0, core_1.error)('One or more required parameters for Coverity is missing, hence skipping Coverity');
         return false;
     }
     if (!fs.existsSync(installDir)) {
-        (0, core_1.info)('Invalid Install Directory, hence skipping Coverity');
+        (0, core_1.error)('Invalid Install Directory, hence skipping Coverity');
         return false;
     }
     return true;
@@ -735,7 +735,7 @@ function validateCoverityInstallDirectoryParam(installDir) {
 exports.validateCoverityInstallDirectoryParam = validateCoverityInstallDirectoryParam;
 function validateBalckduckParams(url, apiToken) {
     if (url == null || url.length === 0 || apiToken == null || apiToken.length === 0) {
-        (0, core_1.info)('One or more required parameters for BlackDuck is missing, hence skipping BlackDuck');
+        (0, core_1.error)('One or more required parameters for BlackDuck is missing, hence skipping BlackDuck');
         return false;
     }
     return true;
@@ -743,7 +743,7 @@ function validateBalckduckParams(url, apiToken) {
 exports.validateBalckduckParams = validateBalckduckParams;
 function validateBlackduckFailureSeverities(severities) {
     if (severities == null || severities.length === 0) {
-        (0, core_1.info)('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+        (0, core_1.error)('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
         return false;
     }
     return true;
