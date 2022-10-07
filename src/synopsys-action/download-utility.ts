@@ -12,7 +12,7 @@ export interface DownloadFileResponse {
 
 export async function getRemoteFile(destFilePath: string, url: string): Promise<DownloadFileResponse> {
   if (url == null || url.length === 0) {
-    return Promise.reject(new Error('URL cannot be empty'))
+    throw new Error('URL cannot be empty')
   }
 
   try {
@@ -30,7 +30,7 @@ export async function getRemoteFile(destFilePath: string, url: string): Promise<
 
     return Promise.resolve(downloadFileResp)
   } catch (error) {
-    return Promise.reject(error)
+    throw error
   }
 }
 
