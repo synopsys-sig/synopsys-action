@@ -1,8 +1,8 @@
 import * as fs from 'fs'
-import {error} from '@actions/core'
+import {error, info} from '@actions/core'
 export function validatePolarisParams(accessToken: string, applicationName: string, projectName: string, serverURL: string, assessmentTypes: string[]): boolean {
   if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
-    error('One or more required parameters for Altair is missing, hence skipping Altair')
+    info('One or more required parameters for Altair is missing, hence skipping Altair')
     return false
   }
   return true

@@ -707,7 +707,7 @@ const fs = __importStar(__nccwpck_require__(747));
 const core_1 = __nccwpck_require__(186);
 function validatePolarisParams(accessToken, applicationName, projectName, serverURL, assessmentTypes) {
     if (accessToken == null || accessToken.length === 0 || applicationName == null || applicationName.length === 0 || projectName == null || projectName.length === 0 || serverURL == null || serverURL.length === 0 || assessmentTypes.length === 0) {
-        (0, core_1.error)('One or more required parameters for Altair is missing, hence skipping Altair');
+        (0, core_1.info)('One or more required parameters for Altair is missing, hence skipping Altair');
         return false;
     }
     return true;
