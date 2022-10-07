@@ -18,10 +18,6 @@ export async function run() {
   try {
     // Automatically configure bridge if Bridge download url is provided
     if (inputs.BRIDGE_DOWNLOAD_URL) {
-      if (!validateBridgeURL(inputs.BRIDGE_DOWNLOAD_URL)) {
-        return Promise.reject("Provided Bridge url is not valid for the runner's platform")
-      }
-
       // Download file in temporary directory
       info('Downloading and configuring Synopsys Bridge')
       const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, inputs.BRIDGE_DOWNLOAD_URL)
@@ -40,9 +36,13 @@ export async function run() {
     }
   } catch (error: any) {
     if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
-      return Promise.reject('Bridge URL is not valid')
+      let os: string = ''
+      if (process.env['RUNNER_OS']) {
+        os = process.env['RUNNER_OS']
+      }
+      return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'))
     } else if (error.message.toLowerCase().includes('empty')) {
-      return Promise.reject('Provided Bridge URL is empty')
+      return Promise.reject('Provided Bridge URL cannot be empty')
     }
   }
 
