@@ -33,7 +33,7 @@ jobs:
         uses: ./
         with:
 
-          synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
+          synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.61-macosx"
 
           #Coverity
           coverity_url: ${{ secrets.COVERITY_URL }}
@@ -49,11 +49,11 @@ jobs:
           #bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
 
           # Polaris
-#          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-#          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-#          polaris_application_name: "App1"
-#          polaris_project_name: "Proj1"
-#          polaris_assessment_types: '["SAST"]'
+          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_application_name: "App1"
+          polaris_project_name: "Proj1"
+          polaris_assessment_types: '["SAST"]'
 
           # Blackduck
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
