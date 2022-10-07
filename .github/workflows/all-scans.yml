@@ -50,6 +50,7 @@ jobs:
           polaris_application_name: "App1"
           polaris_project_name: "Proj1"
           polaris_assessment_types: '["SAST"]'
+          synopsys_bridge_path: "/usr/synopsys-bridge"
 #
 #          # Blackduck
 #          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
@@ -58,4 +59,4 @@ jobs:
 #          blackduck_install_directory: /Users/lokesha
 #          blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
 #
-#          synopsys_bridge_path: "/usr/synopsys-bridge"
+
