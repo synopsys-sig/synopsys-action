@@ -19,7 +19,7 @@ https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/
 
                 Windows: mkdir path_to_directory
 
-   ** STEP 2: ** Download the zip file of required version   
+   **STEP 2:** Download the zip file of required version   
 
                 Mac:  curl -o bridge.zip -L https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-macosx.zip
 
