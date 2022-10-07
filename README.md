@@ -2,14 +2,15 @@
 
 Synopsys GitHub Action enables configuring pipelines for scanning on Synopsys platforms, leveraging Synopsys Bridge.
 
-Note: This action does not use Synopsys tool (Coverity, Black Duck and Polaris)’s command line interface. It is purely a way to expose Synopsys tool’s output within GitHub.
+Note: This action does not use Synopsys scanning platforms (Coverity, Black Duck and Polaris)’s command line interface. 
+It is purely a way to expose Synopsys scan’s output within GitHub.
 
 # Synopsys Bridge Setup
 
 Synopsys Bridge for specific platforms can be downloaded here: 
 https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/
 
-  **STEP 1:**  Create a directory, where you want to configure Synopsys Bridge and get into the directory.
+  **STEP 1:**  Create a directory to configure Synopsys Bridge and get into the directory.
 
                 Note - Default path for synopsys bridge is: $HOME/synopsys-bridge
 
@@ -19,7 +20,7 @@ https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/
 
                 Windows: mkdir path_to_directory
 
-   ** STEP 2: ** Download the zip file of required version   
+   **STEP 2:** Download the zip file of required version.   
 
                 Mac:  curl -o bridge.zip -L https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-macosx.zip
 
@@ -35,23 +36,23 @@ https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/
 
                 Windows: tar -xf bridge.zip
 
-**STEP4:**  Verify Bridge executable file is there along with extensions directory having extensions
+**STEP4:**  Verify Bridge executable file is there along with extensions directory having extensions.
 
-**Note:** Synopsys Bridge can also be download and configure passing "bridge_download_url" parameter with value as url to zip file.
+**Note:** Synopsys Bridge can also be downloaded and configured passing "bridge_download_url" parameter with value as url to the zip file.
 
 
-#Using The Action for different Scanning Tools
+#Using Synopsys Action for different Scanning Platforms
 
-Coverity, BlackDuck and Polaris has many deployment options, and how you use it will depend on your environment and project source code.
+Coverity, BlackDuck and Polaris has many deployment options, usage will depend on the environment and project source code.
 
-This action can be used for widely used Synopsys Scanning Platforms – Coverity, BlackDuck and Polaris by simply passing the tool name as a parameter or by passing the tool related parameters.
+Synopsys Action can be used for widely used Synopsys Scanning Platforms – Coverity, BlackDuck and Polaris by passing the scanning platform name as a parameter or by passing the scanning platform related parameters.
 
 This workflow does the following:
 
-Validates Scanning Platform related parameters like project and stream
-Downloads Synopsys Bridge and related adapters
-Runs corresponding Bridge commands transfering the Scanning tool related parameters
-Capture and analyze related operations are done internally by the Synopsis Bridge
+- Validates Scanning platform related parameters like project and stream.
+- Downloads Synopsys Bridge and related adapters.
+- Runs corresponding Bridge commands transfering the Scanning platform related parameters.
+- Capture and analyze related operations are done internally by the Synopsys Bridge.
 
 # Synopsys GitHub Action for Polaris
 
