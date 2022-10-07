@@ -72,13 +72,6 @@ function run() {
         try {
             // Automatically configure bridge if Bridge download url is provided
             if (inputs.BRIDGE_DOWNLOAD_URL) {
-                if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
-                    let os = '';
-                    if (process.env['NODE_TLS_REJECT_UNAUTHORIZED']) {
-                        os = process.env['NODE_TLS_REJECT_UNAUTHORIZED'];
-                    }
-                    return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'));
-                }
                 // Download file in temporary directory
                 (0, core_1.info)('Downloading and configuring Synopsys Bridge');
                 const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
@@ -96,10 +89,14 @@ function run() {
         }
         catch (error) {
             if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
-                return Promise.reject('Bridge URL is not valid');
+                let os = '';
+                if (process.env['RUNNER_OS']) {
+                    os = process.env['RUNNER_OS'];
+                }
+                return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'));
             }
             else if (error.message.toLowerCase().includes('empty')) {
-                return Promise.reject('Provided Bridge URL is empty');
+                return Promise.reject('Provided Bridge URL cannot be empty');
             }
         }
         try {
