@@ -19,7 +19,7 @@ export async function getRemoteFile(destFilePath: string, url: string): Promise<
     let fileNameFromUrl = ''
     if (fs.lstatSync(destFilePath).isDirectory()) {
       fileNameFromUrl = url.substring(url.lastIndexOf('/') + 1)
-      destFilePath = path.join(destFilePath, fileNameFromUrl)
+      destFilePath = path.join(destFilePath, fileNameFromUrl || 'bridge.zip')
     }
 
     const toolPath = await downloadTool(url, destFilePath)

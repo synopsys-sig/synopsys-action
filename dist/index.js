@@ -88,6 +88,8 @@ function run() {
             }
         }
         catch (error) {
+            yield (0, utility_1.cleanupTempDir)(tempDir);
+            (0, core_1.info)(error);
             if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
                 let os = '';
                 if (process.env['RUNNER_OS']) {
@@ -97,6 +99,9 @@ function run() {
             }
             else if (error.message.toLowerCase().includes('empty')) {
                 return Promise.reject('Provided Bridge URL cannot be empty');
+            }
+            else {
+                return Promise.reject(error);
             }
         }
         try {
@@ -132,6 +137,7 @@ function run() {
             }
         }
         catch (error) {
+            yield (0, utility_1.cleanupTempDir)(tempDir);
             (0, core_1.debug)(error.stackTrace);
             return Promise.reject(error.message);
         }
@@ -217,7 +223,7 @@ function getRemoteFile(destFilePath, url) {
             let fileNameFromUrl = '';
             if (fs.lstatSync(destFilePath).isDirectory()) {
                 fileNameFromUrl = url.substring(url.lastIndexOf('/') + 1);
-                destFilePath = path_1.default.join(destFilePath, fileNameFromUrl);
+                destFilePath = path_1.default.join(destFilePath, fileNameFromUrl || 'bridge.zip');
             }
             const toolPath = yield (0, tool_cache_1.downloadTool)(url, destFilePath);
             const downloadFileResp = {
