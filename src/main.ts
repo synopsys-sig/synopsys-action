@@ -35,6 +35,7 @@ export async function run() {
       info('Download and configuration of Synopsys Bridge completed')
     }
   } catch (error: any) {
+    await cleanupTempDir(tempDir)
     info(error)
     if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
       let os: string = ''
@@ -86,6 +87,7 @@ export async function run() {
       return Promise.reject(new Error('Mandatory fields are missing for given scans'))
     }
   } catch (error: any) {
+    await cleanupTempDir(tempDir)
     debug(error.stackTrace)
     return Promise.reject(error.message)
   }

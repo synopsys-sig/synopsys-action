@@ -88,6 +88,7 @@ function run() {
             }
         }
         catch (error) {
+            yield (0, utility_1.cleanupTempDir)(tempDir);
             (0, core_1.info)(error);
             if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
                 let os = '';
@@ -136,6 +137,7 @@ function run() {
             }
         }
         catch (error) {
+            yield (0, utility_1.cleanupTempDir)(tempDir);
             (0, core_1.debug)(error.stackTrace);
             return Promise.reject(error.message);
         }
