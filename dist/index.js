@@ -73,7 +73,7 @@ function run() {
             // Automatically configure bridge if Bridge download url is provided
             if (inputs.BRIDGE_DOWNLOAD_URL) {
                 if (!(0, synopsys_bridge_1.validateBridgeURL)(inputs.BRIDGE_DOWNLOAD_URL)) {
-                    return Promise.reject('Provided Bridge url is either not valid for the platform');
+                    return Promise.reject("Provided Bridge url is not valid for the runner's platform");
                 }
                 // Download file in temporary directory
                 (0, core_1.info)('Downloading and configuring Synopsys Bridge');
@@ -89,6 +89,16 @@ function run() {
                 yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
+        }
+        catch (error) {
+            if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
+                return Promise.reject('Bridge URL is not valid');
+            }
+            else if (error.message.toLowerCase().includes('empty')) {
+                return Promise.reject('Provided Bridge URL is empty');
+            }
+        }
+        try {
             if (inputs.POLARIS_SERVER_URL) {
                 const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                 const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
@@ -119,16 +129,14 @@ function run() {
         }
         catch (error) {
             (0, core_1.debug)(error.stackTrace);
-            return Promise.reject(error);
+            return Promise.reject(error.message);
         }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
-            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)()).catch(reason => {
-                throw reason;
-            });
+            yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
         catch (error) {
-            return Promise.reject(error);
+            throw error;
         }
         finally {
             yield (0, utility_1.cleanupTempDir)(tempDir);
@@ -137,7 +145,12 @@ function run() {
 }
 exports.run = run;
 run().catch(error => {
-    (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
+    if (error.message != undefined) {
+        (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
+    }
+    else {
+        (0, core_1.setFailed)('Workflow failed! '.concat(error));
+    }
 });
 
 
@@ -194,7 +207,7 @@ const exec_1 = __nccwpck_require__(514);
 function getRemoteFile(destFilePath, url) {
     return __awaiter(this, void 0, void 0, function* () {
         if (url == null || url.length === 0) {
-            return Promise.reject(new Error('URL cannot be empty'));
+            throw new Error('URL cannot be empty');
         }
         try {
             let fileNameFromUrl = '';
@@ -210,7 +223,7 @@ function getRemoteFile(destFilePath, url) {
             return Promise.resolve(downloadFileResp);
         }
         catch (error) {
-            return Promise.reject(error);
+            throw error;
         }
     });
 }

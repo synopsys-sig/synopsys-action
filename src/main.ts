@@ -19,7 +19,7 @@ export async function run() {
     // Automatically configure bridge if Bridge download url is provided
     if (inputs.BRIDGE_DOWNLOAD_URL) {
       if (!validateBridgeURL(inputs.BRIDGE_DOWNLOAD_URL)) {
-        return Promise.reject('Provided Bridge url is either not valid for the platform')
+        return Promise.reject("Provided Bridge url is not valid for the runner's platform")
       }
 
       // Download file in temporary directory
@@ -38,7 +38,15 @@ export async function run() {
       await extractZipped(downloadResponse.filePath, extractZippedFilePath)
       info('Download and configuration of Synopsys Bridge completed')
     }
+  } catch (error: any) {
+    if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
+      return Promise.reject('Bridge URL is not valid')
+    } else if (error.message.toLowerCase().includes('empty')) {
+      return Promise.reject('Provided Bridge URL is empty')
+    }
+  }
 
+  try {
     if (inputs.POLARIS_SERVER_URL) {
       const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
       const polarisAssessmentTypes: Array<string> = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
@@ -66,21 +74,23 @@ export async function run() {
     }
   } catch (error: any) {
     debug(error.stackTrace)
-    return Promise.reject(error)
+    return Promise.reject(error.message)
   }
 
   try {
     const sb = new SynopsysBridge()
-    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory()).catch(reason => {
-      throw reason
-    })
+    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error: any) {
-    return Promise.reject(error)
+    throw error
   } finally {
     await cleanupTempDir(tempDir)
   }
 }
 
 run().catch(error => {
-  setFailed('Workflow failed! '.concat(error.message))
+  if (error.message != undefined) {
+    setFailed('Workflow failed! '.concat(error.message))
+  } else {
+    setFailed('Workflow failed! '.concat(error))
+  }
 })
