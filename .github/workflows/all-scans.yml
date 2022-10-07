@@ -36,17 +36,17 @@ jobs:
           synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
 
           #Coverity
-          coverity_url: ${{ secrets.COVERITY_URL }}
-          coverity_user: ${{ secrets.COVERITY_USER }}
-          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
-          coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
-          coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
-          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
-          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
-          # Mandatory for windows hosted environment
-          coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
-          #bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+#          coverity_url: ${{ secrets.COVERITY_URL }}
+#          coverity_user: ${{ secrets.COVERITY_USER }}
+#          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+#          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
+#          coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
+#          coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
+#          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
+#          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+#          # Mandatory for windows hosted environment
+#          coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
+#          #bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
 
           # Polaris
           polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
