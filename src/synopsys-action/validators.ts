@@ -79,6 +79,15 @@ export function validateBridgeUrl(url: string): boolean {
   if (!url.match('.*\\.(zip|ZIP)$')) {
     return false
   }
-
-  return true
+  const osName = process.platform
+  const fileNameComponent = url.substring(url.lastIndexOf('/'), url.length)
+  if (osName === 'darwin') {
+    return fileNameComponent.toLowerCase().includes('mac')
+  } else if (osName === 'linux') {
+    return fileNameComponent.toLowerCase().includes('linux')
+  } else if (osName === 'win32') {
+    return fileNameComponent.toLowerCase().includes('win')
+  } else {
+    return false
+  }
 }
