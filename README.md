@@ -1,69 +1,52 @@
 # Synopsys Action
 
-Synopsys GitHub Action enables configuring pipelines for scanning on Synopsys platforms, leveraging Synopsys Bridge.
+The Synopsys GitHub Action allows you to configure your pipeline to run Synopsys security testing and take action on the security results. The GitHub Action leverages the Synopsys Bridge, a foundataional piece of technology that has built-in knowlege of how to run all major Synopsys security testing solutions, plus common workflows for platforms like GitHub.
 
-Note: This action does not use Synopsys scanning platforms (Coverity, Black Duck and Polaris)’s command line interface. 
-It is purely a way to expose Synopsys scan’s output within GitHub.
+**Please Note:** This action requires the appropriate licenses for the Synopsys security testing solutions (E.g. Polaris, Coverity, or Black Duck).
 
 # Synopsys Bridge Setup
 
-Synopsys Bridge for specific platforms can be downloaded here: 
-https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/
+The most common way to set up the Synopsys Bridge is to configure the action to download the small (~50 MB) CLI utility that is then automatically run at the right stage of your pipeline.
 
-  **STEP 1:**  Create a directory to configure Synopsys Bridge and get into the directory.
+This requires setting the `bridge_download_url` parameter which will be included in the examples below. The latest version of the Synopsys Bridge can always be found here:
+- https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/
 
-                Note - Default path for synopsys bridge is: $HOME/synopsys-bridge
+## Manual Synopsys Bridge
 
-                Mac: mkdir path_to_directory
+If you are unable to download the Synopsys Bridge from our internet-hosted repository, or have been directed by support or services to use a custom version of the Synopsys Bridge, you can either specify a custom URL or pre-configure your GitHub runner to include the Synopsys Bridge. In this latter case, you would specify the `synopsys_bridge_path` parameter to speicfy the location of the directory in which the Synopsys Bridge is pre-installed.
 
-                Linux: mkdir path_to_directory
+# Quick Start for the Synopsys Action
 
-                Windows: mkdir path_to_directory
+The Synopsys Action supports all major Synopsys security testing solutions:
+- Polaris, our SaaS based solution that offers SAST, SCA and Managed Services in a single unified platform
+- Coverity, using our thin client and cloud-based deployment model
+- Black Duck Hub, supporting either on-premises or hosted instances
 
-   **STEP 2:** Download the zip file of required version.   
+In this Quick Start we will provide individual examples for each Synopsys security testing solution, but in practice the options can be combined to run multiple solutions from a single GitHub workflow step.
 
-                Mac:  curl -o bridge.zip -L https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-macosx.zip
+These workflows will:
+- Validate Scanning platform related parameters like project and stream
+- Download the Synopsys Bridge and related adapters
+- Run corresponding Synopsys Bridge commands using the specified parameters
+- Synopsys solution functionality is invoked directly by the Synopsys Bridge, and indirectly by the Synopsys Action
 
-                Linux: curl -o bridge.zip -L https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-linux.zip
+## Synopsys GitHub Action - Polaris
 
-                Windows: Invoke-WebRequest -Uri https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-win64.zip -OutFile bridge.zip
+Before you can run a pipeline using the Synopsys Action and Polaris, you must make sure the appropriate
+applications, projects and their entitlements are set in your Polaris environment.
 
-   **STEP 3:** Unzip the bridge.zip
+At this time, Polaris does not support analysis of pull requests. We recommend running the Synopsys Action on
+pushes to main branches.
 
-                Mac: unzip bridge.zip
-
-                Linux: unzip bridge.zip
-
-                Windows: tar -xf bridge.zip
-
-**STEP4:**  Verify Bridge executable file is there along with extensions directory having extensions.
-
-**Note:** Synopsys Bridge can also be downloaded and configured passing "bridge_download_url" parameter with value as url to the zip file.
-
-
-#Using Synopsys Action for different Scanning Platforms
-
-Coverity, BlackDuck and Polaris has many deployment options, usage will depend on the environment and project source code.
-
-Synopsys Action can be used for widely used Synopsys Scanning Platforms – Coverity, BlackDuck and Polaris by passing the scanning platform name as a parameter or by passing the scanning platform related parameters.
-
-This workflow does the following:
-
-- Validates Scanning platform related parameters like project and stream.
-- Downloads Synopsys Bridge and related adapters.
-- Runs corresponding Bridge commands transfering the Scanning platform related parameters.
-- Capture and analyze related operations are done internally by the Synopsys Bridge.
-
-# Synopsys GitHub Action for Polaris
+We recommend configuring sensitive data like access token and even URL, using GitHub secrets.
 
 ```yaml
-name: Synopsys Action
+name: Synopsys Security Testing
 
 on:
   push:
-    branches: [ master, main ]
-
-  pull_request:
+    # At this time, it is recommended to run Polaris only on pushes to main branches
+    # Pull request analysis will be supported by Polaris in the future
     branches: [ master, main ]
 
 jobs:
@@ -82,20 +65,37 @@ jobs:
           polaris_assessment_types: "SAST"
 
           # Optional parameter to specify path to synopsys bridge.
-          # If not provided bridge will be looked into /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          synopsys_bridge_path: "/path_to_bridge_executable"
+          # This can be used if you want to pre-configure your GitHub Runner with the
+          # Synopsys Bridge software
+          # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
+          #synopsys_bridge_path: "/path_to_bridge_executable"
 
-          # Optional
-          # If provided bridge zip will be downloaded and configured
-          # Bridge executable is platform specific
-          bridge_download_url: "Bridge download url for specific platform"
+          # Optional parameter, but usually specified - the location of the Synopsys Bridge software
+          # The Synopsys Bridge software distribution is platform specific - this must match the host OS
+          # of your runner. For example in this case, we are using the latest version for Linux.
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+        env:
+          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-linux.zip"
 ```
 
-# Synopsys GitHub Action for Coverity
+# Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
+
+Please note that the Synopsys Action at this time supports only the Coverity cloud deployment model (Kubernetes-based)
+which uses a small footprint thin client to capture the source code, and then submit an analysis job that runs on the server.
+The removes the need for a large footprint (many GB) software installation in your GitHub Runner.
+
+On pushes, a full Coverity scan will be run and results committed to the Coverity Connect database.
+On pull requests the scan will typically be incremental, and results will not be committed to the Coverity Connect database.
+A future release of the action will provide code review feedback for newly introduced findings to the pull request.
+
+Before you can run a pipeline using the Synopsys Action and Coverity, you must make sure the appropriate
+project and stream are set in your Coverity Connect server environment.
+
+We recommend configuring sensitive data like username and password, and even URL, using GitHub secrets.
 
 ```yaml
 
-name: Synopsys Action
+name: Synopsys Security Testing
 
 on:
   push:
@@ -110,27 +110,60 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        
       - name: Synopsys Action
         uses: synopsys-sig/synopsys-action@<version>
         with:
-        coverity_url: ${{ secrets.COVERITY_URL }}
-        coverity_user: ${{ secrets.COVERITY_USER }}
-        coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-        coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
-        # Below fields are optional
-        coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
-        coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
-        coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
-        coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
-        coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          coverity_url: ${{ secrets.COVERITY_URL }}
+          coverity_user: ${{ secrets.COVERITY_USER }}
+          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          # Many customers prefer to set their Coverity project and stream names to match
+          # the GitHub repository name
+          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
+          coverity_stream_name: ${{ github.event.repository.name }}
+          # Optionally you may specify the ID number of a saved view to apply as a "break the build" policy.
+          # If any defects are found within this view when applied to the project, the build will be failed
+          # with an exit code.
+          #coverity_policy_view: 100001
+          # Below fields are optional
+          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
+          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          
+          # Optional parameter to specify path to synopsys bridge.
+          # This can be used if you want to pre-configure your GitHub Runner with the
+          # Synopsys Bridge software
+          # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
+          #synopsys_bridge_path: "/path_to_bridge_executable"
 
+          # Optional parameter, but usually specified - the location of the Synopsys Bridge software
+          # The Synopsys Bridge software distribution is platform specific - this must match the host OS
+          # of your runner. For example in this case, we are using the latest version for Linux.
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+        env:
+          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-linux.zip"
 ```
 
-# Synopsys GitHub Action for Blackduck
+## Synopsys GitHub Action - Blackduck
+The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
+
+No preparation is typically needed before running the pipeline. In the default Black Duck Hub permission model,
+projects and project versions are created on the fly and as needed.
+
+On pushes, a full "intelligent" Black Duck scan will be run. On pull requestsm a "rapid" ephemeral scan will be run.
+A future release of the action will provide code review feedback for newly introduced findings to the pull request.
+
+We recommend configuring sensitive data like access token and even URL, using GitHub secrets.
+
+**Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
+can be passed through environment variables. This is a standard capability of Detect. For example, if you
+wanted to only report newly found policy violations on rapid scans, you would normally use the command line 
+`--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the 
+`DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
+GitHub workflow.
 
 ```yaml
 
-name: Synopsys Action
+name: Synopsys Security Testing
 
 on:
   push:
@@ -150,19 +183,18 @@ jobs:
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_install_directory: "/install_directory"
 
-          # Optional parameter.
+          # Optional parameter. By default, pushes will initiate a full "intelligent" scan and pull requests
+          # will initiate a rapid scan.
           blackduck_scan_full: false
 
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           blackduck_scan_failure_severities: "['ALL']"
-          
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
 
-# Additional Parameters
+## Additional Parameters
 
 - **synopsys_bridge_path** - Provide path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]
   
