@@ -38,7 +38,7 @@ export async function run() {
   } catch (error: any) {
     await cleanupTempDir(tempDir)
     info(error)
-    if (error.message.toLowerCase().includes('404') || error.message.toLowerCase().includes('Invalid URL')) {
+    if (error.message.includes('404') || error.message.toLowerCase().includes('invalid url')) {
       let os: string = ''
       if (process.env['RUNNER_OS']) {
         os = process.env['RUNNER_OS']
