@@ -74,3 +74,11 @@ export function validateParameters(params: Map<string, string>, toolName: string
   }
   return true
 }
+
+export function validateBridgeUrl(url: string): boolean {
+  if (!url.match('.*\\.(zip|ZIP)$')) {
+    return false
+  }
+
+  return true
+}
