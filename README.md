@@ -41,7 +41,7 @@ https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/
 **Note:** Synopsys Bridge can also be downloaded and configured passing "bridge_download_url" parameter with value as url to the zip file.
 
 
-# Using Synopsys Action for different Scanning Platforms
+#Using Synopsys Action for different Scanning Platforms
 
 Coverity, BlackDuck and Polaris has many deployment options, usage will depend on the environment and project source code.
 
@@ -117,9 +117,9 @@ jobs:
         coverity_user: ${{ secrets.COVERITY_USER }}
         coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
         coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
+        # Below fields are optional
         coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
         coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
-        # Below fields are optional
         coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
         coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
         coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
