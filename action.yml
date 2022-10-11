@@ -2,7 +2,7 @@ name: 'Synopsys Action'
 branding:
   icon: 'shield'
   color: 'purple'
-description: 'Scan using synopsys tools'
+description: 'Find and fix software weaknesses and vulnerabilities within development, before you ship!'
 author: 'Synopsys Inc'
 inputs:
   coverity_url:
