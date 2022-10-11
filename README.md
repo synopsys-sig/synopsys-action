@@ -1,6 +1,6 @@
 # Synopsys Action
 
-![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?                                      color=blue&label=Latest%20Version&sort=semver
+![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?                               color=blue&label=Latest%20Version&sort=semver)
 
 The Synopsys GitHub Action allows you to configure your pipeline to run Synopsys security testing and take action on the security results. The GitHub Action leverages the Synopsys Bridge, a foundataional piece of technology that has built-in knowlege of how to run all major Synopsys security testing solutions, plus common workflows for platforms like GitHub.
 
