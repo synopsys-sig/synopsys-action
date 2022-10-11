@@ -757,12 +757,13 @@ function validateBlackduckFailureSeverities(severities) {
 exports.validateBlackduckFailureSeverities = validateBlackduckFailureSeverities;
 function validateParameters(params, toolName) {
     const invalidParams = [];
-    for (let i = 0; i < params.length; i++) {
-        if (params[i] == null || params[i].length === 0) {
-            invalidParams.push(params[i]);
+    for (const item of params) {
+        if (item == null || item.length === 0) {
+            invalidParams.push(item);
         }
     }
     if (invalidParams.length > 0) {
+        (0, core_1.info)(invalidParams.join());
         (0, core_1.error)(invalidParams.join().concat(' - required parameters for'.concat(toolName).concat('is missing')));
         return false;
     }
