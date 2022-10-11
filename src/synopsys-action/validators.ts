@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import {info, error} from '@actions/core'
+import {error} from '@actions/core'
 
 export function validateCoverityInstallDirectoryParam(installDir: string): boolean {
   if (installDir == null || installDir.length === 0) {
@@ -21,16 +21,15 @@ export function validateBlackduckFailureSeverities(severities: string[]): boolea
   return true
 }
 
-export function validateParameters(params: string[], toolName: string): boolean {
+export function validateParameters(params: Map<string, string>, toolName: string): boolean {
   const invalidParams: string[] = []
-  for (const item of params) {
-    if (item == null || item.length === 0) {
-      invalidParams.push(item)
+  for (const param of params.entries()) {
+    if (param[1] == null || param[1].length === 0) {
+      invalidParams.push(param[0])
     }
   }
   if (invalidParams.length > 0) {
-    info(invalidParams.join())
-    error(invalidParams.join().concat(' - required parameters for'.concat(toolName).concat('is missing')))
+    error(invalidParams.join().concat(' - required parameters for '.concat(toolName).concat(' is missing')))
     return false
   }
   return true
