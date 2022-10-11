@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   update_tag:
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, kk]
     steps:
       - uses: actions/checkout@v3
 
