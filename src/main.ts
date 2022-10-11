@@ -66,7 +66,7 @@ export async function run() {
       paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME)
       paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME)
       paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
-      //paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, polarisAssessmentTypes)
+      paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, polarisAssessmentTypes)
       if (validateParameters(paramsMap, 'Polaris')) {
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes))
         debug('Formatted command is - '.concat(formattedCommand))
@@ -102,6 +102,7 @@ export async function run() {
       paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
       paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY)
       paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL)
+      paramsMap.set(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY, failureSeverities)
       if (validateParameters(paramsMap, 'Blackduck')) {
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities))
       }

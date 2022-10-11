@@ -29,7 +29,7 @@ export function validateParameters(params: Map<string, string>, toolName: string
     }
   }
   if (invalidParams.length > 0) {
-    error(invalidParams.join().concat(' - required parameters for '.concat(toolName).concat(' is missing')))
+    error(`[${invalidParams.join()}]  - required parameters for ${toolName} is missing`)
     return false
   }
   return true

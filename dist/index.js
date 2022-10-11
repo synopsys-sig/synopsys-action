@@ -141,7 +141,7 @@ function run() {
                 paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME);
                 paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
                 paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
-                //paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, polarisAssessmentTypes)
+                paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, polarisAssessmentTypes);
                 if ((0, validators_1.validateParameters)(paramsMap, 'Polaris')) {
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes));
                     (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
@@ -175,6 +175,7 @@ function run() {
                 paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
                 paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY);
                 paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL);
+                paramsMap.set(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY, failureSeverities);
                 if ((0, validators_1.validateParameters)(paramsMap, 'Blackduck')) {
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities));
                 }
@@ -821,7 +822,7 @@ function validateParameters(params, toolName) {
         }
     }
     if (invalidParams.length > 0) {
-        (0, core_1.error)(invalidParams.join().concat(' - required parameters for '.concat(toolName).concat(' is missing')));
+        (0, core_1.error)(`[${invalidParams.join()}]  - required parameters for ${toolName} is missing`);
         return false;
     }
     return true;
