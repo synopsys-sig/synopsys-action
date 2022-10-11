@@ -141,8 +141,8 @@ function run() {
                 paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
                 paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
                 paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
-                const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
                 if ((0, validators_1.validateParameters)(paramsMap, 'Polaris')) {
+                    const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes));
                     (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 }
@@ -678,7 +678,7 @@ SynopsysToolsParameter.BD_STATE_FILE_NAME = 'bd_input.json';
 // Coverity parameters
 SynopsysToolsParameter.COVERITY_STAGE = 'connect';
 SynopsysToolsParameter.SPACE = ' ';
-// Balckduck parameters
+// Blackduck parameters
 SynopsysToolsParameter.BLACKDUCK_STAGE = 'blackduck';
 
 

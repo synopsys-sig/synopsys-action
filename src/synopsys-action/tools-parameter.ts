@@ -81,7 +81,7 @@ export class SynopsysToolsParameter {
   // Coverity parameters
   private static COVERITY_STAGE = 'connect'
   private static SPACE = ' '
-  // Balckduck parameters
+  // Blackduck parameters
   private static BLACKDUCK_STAGE = 'blackduck'
 
   constructor(tempDir: string) {
