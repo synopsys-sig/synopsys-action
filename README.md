@@ -84,7 +84,7 @@ Please note that the Synopsys Action at this time supports only the Coverity clo
 which uses a small footprint thin client to capture the source code, and then submit an analysis job that runs on the server.
 The removes the need for a large footprint (many GB) software installation in your GitHub Runner.
 
-**If you are using a reular (non-Kubernetes) deployment of Coverity** plesae see the [Coverity json-output-v7 Report Action)[https://github.com/marketplace/actions/coverity-json-output-v7-report].
+**If you are using a reular (non-Kubernetes) deployment of Coverity** plesae see the (Coverity json-output-v7 Report Action)[https://github.com/marketplace/actions/coverity-json-output-v7-report].
 
 On pushes, a full Coverity scan will be run and results committed to the Coverity Connect database.
 On pull requests the scan will typically be incremental, and results will not be committed to the Coverity Connect database.
