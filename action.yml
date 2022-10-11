@@ -1,4 +1,7 @@
 name: 'Synopsys Unified'
+branding:
+  icon: 'shield'
+  color: 'purple'
 description: 'Scan using synopsys tools'
 author: 'Synopsys Inc'
 inputs:
