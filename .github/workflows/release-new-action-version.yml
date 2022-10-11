@@ -17,10 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Set Node.js 12.x
+      - name: Set Node.js 18.x
         uses: actions/setup-node@v3
         with:
-          node-version: 12.x
+          node-version: 18.x
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
