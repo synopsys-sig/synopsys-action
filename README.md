@@ -6,17 +6,6 @@ The Synopsys GitHub Action allows you to configure your pipeline to run Synopsys
 
 **Please Note:** This action requires the appropriate licenses for the Synopsys security testing solutions (E.g. Polaris, Coverity, or Black Duck).
 
-# Synopsys Bridge Setup
-
-The most common way to set up the Synopsys Bridge is to configure the action to download the small (~50 MB) CLI utility that is then automatically run at the right stage of your pipeline.
-
-This requires setting the `bridge_download_url` parameter which will be included in the examples below. The latest version of the Synopsys Bridge can always be found here:
-- https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/
-
-## Manual Synopsys Bridge
-
-If you are unable to download the Synopsys Bridge from our internet-hosted repository, or have been directed by support or services to use a custom version of the Synopsys Bridge, you can either specify a custom URL or pre-configure your GitHub runner to include the Synopsys Bridge. In this latter case, you would specify the `synopsys_bridge_path` parameter to speicfy the location of the directory in which the Synopsys Bridge is pre-installed.
-
 # Quick Start for the Synopsys Action
 
 The Synopsys Action supports all major Synopsys security testing solutions:
@@ -204,6 +193,16 @@ jobs:
   
 - **bridge_download_url** - Provide url to bridge zip file. If provided Synopsys Bridge will automatically download and configured in the provided bridge path or in the default path. [Note - As per current behaviour, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]
 
+# Synopsys Bridge Setup
+
+The most common way to set up the Synopsys Bridge is to configure the action to download the small (~50 MB) CLI utility that is then automatically run   at the right stage of your pipeline.
+
+This requires setting the `bridge_download_url` parameter which will be included in the examples below. The latest version of the Synopsys Bridge can    always be found here:
+- https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/
+
+## Manual Synopsys Bridge
+
+If you are unable to download the Synopsys Bridge from our internet-hosted repository, or have been directed by support or services to use a custom      version of the Synopsys Bridge, you can either specify a custom URL or pre-configure your GitHub runner to include the Synopsys Bridge. In this latter   case, you would specify the `synopsys_bridge_path` parameter to speicfy the location of the directory in which the Synopsys Bridge is pre-installed.
 
 # Future Enhancements
 
