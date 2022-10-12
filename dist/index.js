@@ -7,11 +7,15 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
 exports.APPLICATION_NAME = 'synopsys-action';
+// Scan Types
+exports.COVERITY_KEY = 'coverity';
+exports.POLARIS_KEY = 'polaris';
+exports.BLACKDUCK_KEY = 'blackduck';
 // Coverity
 exports.COVERITY_URL_KEY = 'coverity_url';
 exports.COVERITY_USER_KEY = 'coverity_user';
@@ -135,13 +139,7 @@ function run() {
             }
             if (inputs.POLARIS_SERVER_URL) {
                 const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                const paramsMap = new Map();
-                paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
-                paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME);
-                paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
-                paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
-                paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
-                if ((0, validators_1.validateParameters)(paramsMap, 'Polaris')) {
+                if ((0, validators_1.validateInputs)(constants.POLARIS_KEY)) {
                     const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes));
                     (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
@@ -149,13 +147,7 @@ function run() {
             }
             if (inputs.COVERITY_URL) {
                 const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                const paramsMap = new Map();
-                paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
-                paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE);
-                paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
-                paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
-                paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
-                if ((0, validators_1.validateParameters)(paramsMap, 'Coverity')) {
+                if ((0, validators_1.validateInputs)(constants.COVERITY_KEY)) {
                     formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME));
                 }
             }
@@ -170,13 +162,7 @@ function run() {
                         return Promise.reject('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
                     }
                 }
-                const paramsMap = new Map();
-                paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
-                paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
-                paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY);
-                paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL);
-                paramsMap.set(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY, failureSeverities);
-                if ((0, validators_1.validateParameters)(paramsMap, 'Blackduck')) {
+                if ((0, validators_1.validateInputs)(constants.BLACKDUCK_KEY)) {
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities));
                 }
             }
@@ -791,16 +777,18 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateParameters = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
+exports.validateParameters = exports.validateInputs = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
 const fs = __importStar(__nccwpck_require__(747));
 const core_1 = __nccwpck_require__(186);
+const constants = __importStar(__nccwpck_require__(293));
+const inputs = __importStar(__nccwpck_require__(481));
 function validateCoverityInstallDirectoryParam(installDir) {
     if (installDir == null || installDir.length === 0) {
-        (0, core_1.error)('One or more required parameters for Coverity is missing');
+        (0, core_1.error)(`[${constants.COVERITY_INSTALL_DIRECTORY_KEY}] parameter for Coverity is missing`);
         return false;
     }
     if (!fs.existsSync(installDir)) {
-        (0, core_1.error)('Invalid Install Directory');
+        (0, core_1.error)(`[${constants.COVERITY_INSTALL_DIRECTORY_KEY}] parameter for Coverity is invalid`);
         return false;
     }
     return true;
@@ -814,6 +802,40 @@ function validateBlackduckFailureSeverities(severities) {
     return true;
 }
 exports.validateBlackduckFailureSeverities = validateBlackduckFailureSeverities;
+function validateInputs(toolName) {
+    const paramsMap = new Map();
+    switch (toolName) {
+        case constants.POLARIS_KEY: {
+            paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
+            paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME);
+            paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
+            paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
+            paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
+            break;
+        }
+        case constants.COVERITY_KEY: {
+            paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
+            paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE);
+            paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
+            paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
+            paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
+            break;
+        }
+        case constants.BLACKDUCK_KEY: {
+            paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
+            paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
+            paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY);
+            paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL);
+            break;
+        }
+        default: {
+            (0, core_1.error)('No valid scans found');
+            return false;
+        }
+    }
+    return validateParameters(paramsMap, toolName);
+}
+exports.validateInputs = validateInputs;
 function validateParameters(params, toolName) {
     const invalidParams = [];
     for (const param of params.entries()) {
@@ -822,7 +844,7 @@ function validateParameters(params, toolName) {
         }
     }
     if (invalidParams.length > 0) {
-        (0, core_1.error)(`[${invalidParams.join()}]  - required parameters for ${toolName} is missing`);
+        (0, core_1.error)(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`);
         return false;
     }
     return true;

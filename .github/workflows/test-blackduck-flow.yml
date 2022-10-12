@@ -6,7 +6,7 @@ name: CI-Blackduck
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main", "SIGINT-273" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-   runs-on: [self-hosted, macOS, lokesh]
+   runs-on: [self-hosted]
 #    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
@@ -73,9 +73,8 @@ jobs:
         uses: ./
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          #blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           blackduck_scan_full: true
           blackduck_install_directory: /Users/lokesha
           bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
-          #blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
-#          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"

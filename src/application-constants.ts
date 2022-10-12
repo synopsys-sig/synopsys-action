@@ -1,10 +1,15 @@
-import {getInput} from "@actions/core";
+import {getInput} from '@actions/core'
 
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge' //Path will be in home
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge'
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge'
 
 export const APPLICATION_NAME = 'synopsys-action'
+
+// Scan Types
+export const COVERITY_KEY = 'coverity'
+export const POLARIS_KEY = 'polaris'
+export const BLACKDUCK_KEY = 'blackduck'
 
 // Coverity
 export const COVERITY_URL_KEY = 'coverity_url'

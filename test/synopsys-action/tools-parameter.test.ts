@@ -85,7 +85,7 @@ test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
 test('Test getFormattedCommandForBlackduck', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForBlackduck('http://blackduck.com', 'token', 'http://server_url.com', 'true', [])
+  const resp = stp.getFormattedCommandForBlackduck('http://blackduck.com', 'token', 'http://server_url.com', 'true', ['BLOCKER', 'CRITICAL', 'TRIVIAL'])
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
