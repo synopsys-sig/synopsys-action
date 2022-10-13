@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-   runs-on: [self-hosted]
+   runs-on: [self-hosted, macOS, kishor]
 #    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
@@ -75,6 +75,6 @@ jobs:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           blackduck_scan_full: true
-          blackduck_install_directory: /Users/lokesha
-          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          blackduck_install_directory: /Users/kishori/synopsys-bridge
           blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+#          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}

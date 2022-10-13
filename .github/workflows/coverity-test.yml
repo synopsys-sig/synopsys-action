@@ -78,5 +78,6 @@ jobs:
           coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          # Mandatory for windows hosted environment
           coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
           bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
