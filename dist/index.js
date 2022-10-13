@@ -136,13 +136,13 @@ function run() {
                 (0, core_1.warning)('Not supported flow');
                 return Promise.reject(new Error('Not Supported Flow'));
             }
-            if (inputs.POLARIS_SERVER_URL && (0, validators_1.validatePolarisInputs)()) {
+            if ((0, validators_1.validatePolarisInputs)()) {
                 const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                 const polarisAssessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
                 formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes));
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
             }
-            if (inputs.COVERITY_URL && (0, validators_1.validateCoverityInputs)()) {
+            if ((0, validators_1.validateCoverityInputs)()) {
                 const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                 formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME));
             }
@@ -796,32 +796,41 @@ function validateBlackduckFailureSeverities(severities) {
 }
 exports.validateBlackduckFailureSeverities = validateBlackduckFailureSeverities;
 function validatePolarisInputs() {
-    const paramsMap = new Map();
-    paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
-    paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME);
-    paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
-    paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
-    paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
-    return validateParameters(paramsMap, constants.POLARIS_KEY);
+    if (inputs.POLARIS_SERVER_URL) {
+        const paramsMap = new Map();
+        paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
+        paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME);
+        paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
+        paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
+        paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
+        return validateParameters(paramsMap, constants.POLARIS_KEY);
+    }
+    return false;
 }
 exports.validatePolarisInputs = validatePolarisInputs;
 function validateCoverityInputs() {
-    const paramsMap = new Map();
-    paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
-    paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE);
-    paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
-    paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
-    paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
-    return validateParameters(paramsMap, constants.COVERITY_KEY);
+    if (inputs.COVERITY_URL) {
+        const paramsMap = new Map();
+        paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
+        paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE);
+        paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
+        paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
+        paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
+        return validateParameters(paramsMap, constants.COVERITY_KEY);
+    }
+    return false;
 }
 exports.validateCoverityInputs = validateCoverityInputs;
 function validateBlackDuckInputs() {
-    const paramsMap = new Map();
-    paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
-    paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
-    paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY);
-    paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL);
-    return validateParameters(paramsMap, constants.BLACKDUCK_KEY);
+    if (inputs.BLACKDUCK_URL) {
+        const paramsMap = new Map();
+        paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
+        paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
+        paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY);
+        paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL);
+        return validateParameters(paramsMap, constants.BLACKDUCK_KEY);
+    }
+    return false;
 }
 exports.validateBlackDuckInputs = validateBlackDuckInputs;
 function validateParameters(params, toolName) {

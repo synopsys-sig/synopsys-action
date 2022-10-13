@@ -57,14 +57,14 @@ export async function run() {
       return Promise.reject(new Error('Not Supported Flow'))
     }
 
-    if (inputs.POLARIS_SERVER_URL && validatePolarisInputs()) {
+    if (validatePolarisInputs()) {
       const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
       const polarisAssessmentTypes: Array<string> = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
       formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes))
       debug('Formatted command is - '.concat(formattedCommand))
     }
 
-    if (inputs.COVERITY_URL && validateCoverityInputs()) {
+    if (validateCoverityInputs()) {
       const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
       formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME))
     }
