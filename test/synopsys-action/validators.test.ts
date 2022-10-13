@@ -1,4 +1,4 @@
-import {validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam, validateInputs, validateParameters} from '../../src/synopsys-action/validators'
+import {validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam, validateParameters} from '../../src/synopsys-action/validators'
 import * as constants from '../../src/application-constants'
 import * as inputs from '../../src/synopsys-action/inputs'
 

@@ -23,38 +23,33 @@ export function validateBlackduckFailureSeverities(severities: string[]): boolea
   return true
 }
 
-export function validateInputs(toolName: string): boolean {
+export function validatePolarisInputs(): boolean {
   const paramsMap = new Map()
-  switch (toolName) {
-    case constants.POLARIS_KEY: {
-      paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN)
-      paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME)
-      paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME)
-      paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
-      paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES)
-      break
-    }
-    case constants.COVERITY_KEY: {
-      paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER)
-      paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE)
-      paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
-      paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME)
-      paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME)
-      break
-    }
-    case constants.BLACKDUCK_KEY: {
-      paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
-      paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
-      paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY)
-      paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL)
-      break
-    }
-    default: {
-      error('No valid scans found')
-      return false
-    }
-  }
-  return validateParameters(paramsMap, toolName)
+  paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN)
+  paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME)
+  paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME)
+  paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
+  paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES)
+  return validateParameters(paramsMap, constants.POLARIS_KEY)
+}
+
+export function validateCoverityInputs(): boolean {
+  const paramsMap = new Map()
+  paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER)
+  paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE)
+  paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
+  paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME)
+  paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME)
+  return validateParameters(paramsMap, constants.COVERITY_KEY)
+}
+
+export function validateBlackDuckInputs(): boolean {
+  const paramsMap = new Map()
+  paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
+  paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
+  paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY)
+  paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL)
+  return validateParameters(paramsMap, constants.BLACKDUCK_KEY)
 }
 
 export function validateParameters(params: Map<string, string>, toolName: string): boolean {
