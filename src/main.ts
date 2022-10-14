@@ -59,27 +59,18 @@ export async function run() {
 
     if (validatePolarisInputs()) {
       const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
-      const polarisAssessmentTypes: Array<string> = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
-      formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes))
+      formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
       debug('Formatted command is - '.concat(formattedCommand))
     }
 
     if (validateCoverityInputs()) {
       const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
-      formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME))
+      formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
     }
 
     if (validateBlackDuckInputs()) {
       const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
-      let failureSeverities: Array<string> = []
-      if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
-        try {
-          failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
-        } catch (error) {
-          return Promise.reject('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
-        }
-      }
-      formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities))
+      formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
     }
 
     if (formattedCommand.length === 0) {

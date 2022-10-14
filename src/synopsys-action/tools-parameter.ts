@@ -2,6 +2,7 @@ import * as fs from 'fs'
 import path from 'path'
 import {debug} from '@actions/core'
 import {validateCoverityInstallDirectoryParam, validateBlackduckFailureSeverities} from './validators'
+import * as inputs from './inputs'
 
 export enum PolarisAssessmentType {
   SCA = 'SCA',
@@ -88,9 +89,10 @@ export class SynopsysToolsParameter {
     this.tempDir = tempDir
   }
 
-  getFormattedCommandForPolaris(accessToken: string, applicationName: string, projectName: string, serverURL: string, assessmentTypes: string[]): string {
+  getFormattedCommandForPolaris(): string {
     let command = ''
     const assessmentTypeEnums: PolarisAssessmentType[] = []
+    const assessmentTypes: string[] = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
 
     for (const assessmentType of assessmentTypes) {
       if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
@@ -103,10 +105,10 @@ export class SynopsysToolsParameter {
     const polData: InputData<Polaris> = {
       data: {
         polaris: {
-          accesstoken: accessToken,
-          serverUrl: serverURL,
-          application: {name: applicationName},
-          project: {name: projectName},
+          accesstoken: inputs.POLARIS_ACCESS_TOKEN,
+          serverUrl: inputs.POLARIS_SERVER_URL,
+          application: {name: inputs.POLARIS_APPLICATION_NAME},
+          project: {name: inputs.POLARIS_PROJECT_NAME},
           assessment: {types: assessmentTypeEnums}
         }
       }
@@ -124,40 +126,40 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForCoverity(userName: string, passWord: string, coverityUrl: string, projectName: string, streamName: string, installDir: string, policyView: string, repositoryName: string, branchName: string): string {
+  getFormattedCommandForCoverity(): string {
     let command = ''
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
           connect: {
-            user: {name: userName, password: passWord},
-            url: coverityUrl,
-            project: {name: projectName},
-            stream: {name: streamName}
+            user: {name: inputs.COVERITY_USER, password: inputs.COVERITY_PASSPHRASE},
+            url: inputs.COVERITY_URL,
+            project: {name: inputs.COVERITY_PROJECT_NAME},
+            stream: {name: inputs.COVERITY_STREAM_NAME}
           }
         },
         project: {}
       }
     }
 
-    if (installDir) {
+    if (inputs.COVERITY_INSTALL_DIRECTORY) {
       const osName = process.platform
       if (osName === 'win32') {
-        validateCoverityInstallDirectoryParam(installDir)
+        validateCoverityInstallDirectoryParam(inputs.COVERITY_INSTALL_DIRECTORY)
       }
-      covData.data.coverity.install = {directory: installDir}
+      covData.data.coverity.install = {directory: inputs.COVERITY_INSTALL_DIRECTORY}
     }
 
-    if (policyView) {
-      covData.data.coverity.connect.policy = {view: policyView}
+    if (inputs.COVERITY_POLICY_VIEW) {
+      covData.data.coverity.connect.policy = {view: inputs.COVERITY_POLICY_VIEW}
     }
 
-    if (repositoryName) {
-      covData.data.project.repository = {name: repositoryName}
+    if (inputs.COVERITY_REPOSITORY_NAME) {
+      covData.data.project.repository = {name: inputs.COVERITY_REPOSITORY_NAME}
     }
 
-    if (repositoryName) {
-      covData.data.project.branch = {name: branchName}
+    if (inputs.COVERITY_BRANCH_NAME) {
+      covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
     }
 
     const inputJson = JSON.stringify(covData)
@@ -172,25 +174,33 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForBlackduck(blackduckUrl: string, apiToken: string, installDirectory: string, scanFull: string, failureSeverities: string[]): string {
+  getFormattedCommandForBlackduck(): string {
+    let failureSeverities: string[] = []
+    if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
+      try {
+        failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
+      } catch (error) {
+        throw new Error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
+      }
+    }
     let command = ''
     const blackduckData: InputData<Blackduck> = {
       data: {
         blackduck: {
-          url: blackduckUrl,
-          token: apiToken
+          url: inputs.BLACKDUCK_URL,
+          token: inputs.BLACKDUCK_API_TOKEN
         }
       }
     }
 
-    if (installDirectory) {
-      blackduckData.data.blackduck.install = {directory: installDirectory}
+    if (inputs.BLACKDUCK_INSTALL_DIRECTORY) {
+      blackduckData.data.blackduck.install = {directory: inputs.BLACKDUCK_INSTALL_DIRECTORY}
     }
 
-    if (scanFull) {
+    if (inputs.BLACKDUCK_SCAN_FULL) {
       let scanFullValue = false
-      if (scanFull.toLowerCase() === 'true' || scanFull.toLowerCase() === 'false') {
-        scanFullValue = scanFull.toLowerCase() === 'true'
+      if (inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true' || inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'false') {
+        scanFullValue = inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true'
       } else {
         throw new Error('boolean value is required for blackduck_scan_full')
       }
