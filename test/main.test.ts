@@ -4,6 +4,7 @@ import mock = jest.mock
 import {SynopsysBridge} from '../src/synopsys-action/synopsys-bridge'
 import {BRIDGE_DOWNLOAD_URL} from '../src/synopsys-action/inputs'
 import {DownloadFileResponse} from '../src/synopsys-action/download-utility'
+import * as constants from '../src/application-constants'
 
 beforeEach(() => {
   jest.resetModules()
@@ -55,7 +56,7 @@ test('Run polaris flow - run', async () => {
   core.exec.mockReturnValueOnce(0)
 
   ioUtil.tryGetExecutablePath = jest.fn()
-  ioUtil.tryGetExecutablePath.mockReturnValueOnce('/bridge-path/bridge')
+  ioUtil.tryGetExecutablePath.mockReturnValueOnce(Promise.resolve('/bridge-path/bridge'))
 
   const response = await run()
   expect(response).toBe(undefined)

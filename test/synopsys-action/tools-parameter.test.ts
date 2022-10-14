@@ -1,6 +1,7 @@
 import {cleanupTempDir, createTempDir} from '../../src/synopsys-action/utility'
 import {SynopsysToolsParameter} from '../../src/synopsys-action/tools-parameter'
 import mock = jest.mock
+import * as inputs from '../../src/synopsys-action/inputs'
 
 let tempPath = '/temp'
 
@@ -16,19 +17,27 @@ const fs = require('fs')
 mock('fs')
 
 test('Test getFormattedCommandForPolaris', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: '["SCA"]'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForPolaris('access_token', 'application_name', 'project_name', 'http://server_url.com', ['SAST'])
+  const resp = stp.getFormattedCommandForPolaris()
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage polaris')
 })
 
 test('Test missing data error in getFormattedCommandForPolaris', () => {
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: '["SCA"]'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForPolaris('', 'application_name', 'project_name', 'http://server_url.com', ['SAST'])
+    stp.getFormattedCommandForPolaris()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('parameters for Altair is missing')
@@ -39,7 +48,7 @@ test('Test wrong assessment type error in getFormattedCommandForPolaris', () => 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForPolaris('access_token', 'application_name', 'project_name', 'http://server_url.com', ['SAST'])
+    stp.getFormattedCommandForPolaris()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Provided Assessment type not found')
@@ -47,9 +56,18 @@ test('Test wrong assessment type error in getFormattedCommandForPolaris', () => 
 })
 
 test('Test getFormattedCommandForCoverity', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_INSTALL_DIRECTORY', {value: 'COVERITY_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
+  Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity('userNm', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', '/', '10005', 'test', 'main')
+  const resp = stp.getFormattedCommandForCoverity()
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
@@ -59,7 +77,7 @@ test('Test missing data error in getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForCoverity('', 'pwd', 'http://server_url.com', 'synopsys-action', 'strean name', '/', '10005', 'test', 'main')
+    stp.getFormattedCommandForCoverity()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('required parameters for Coverity is missing')
@@ -75,7 +93,7 @@ test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
     Object.defineProperty(process, 'platform', {
       value: 'win32'
     })
-    stp.getFormattedCommandForCoverity('usr', 'pwd', 'http://server_url.com', 'synopsys-action', 'stream name', '/', '10005', 'test', 'main')
+    stp.getFormattedCommandForCoverity()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Invalid Install Directory')
@@ -83,19 +101,27 @@ test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
 })
 
 test('Test getFormattedCommandForBlackduck', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForBlackduck('http://blackduck.com', 'token', 'http://server_url.com', 'true', [])
+  const resp = stp.getFormattedCommandForBlackduck()
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 })
 
 test('Test missing data error in getFormattedCommandForBlackduck', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForBlackduck('', 'token', 'http://server_url.com', 'true', [])
+    stp.getFormattedCommandForBlackduck()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('required parameters for BlackDuck is missing')

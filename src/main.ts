@@ -1,7 +1,8 @@
-import {debug, info, setFailed, warning, error} from '@actions/core'
+import {debug, info, setFailed, warning} from '@actions/core'
 import {SynopsysToolsParameter} from './synopsys-action/tools-parameter'
 import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
-import {getBridgeDefaultPath, SynopsysBridge, validateBridgeURL} from './synopsys-action/synopsys-bridge'
+import {getBridgeDefaultPath, SynopsysBridge} from './synopsys-action/synopsys-bridge'
+import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs} from './synopsys-action/validators'
 import * as inputs from './synopsys-action/inputs'
 
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
@@ -56,31 +57,20 @@ export async function run() {
       return Promise.reject(new Error('Not Supported Flow'))
     }
 
-    if (inputs.POLARIS_SERVER_URL) {
+    if (validatePolarisInputs()) {
       const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
-      const polarisAssessmentTypes: Array<string> = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
-      formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(inputs.POLARIS_ACCESS_TOKEN, inputs.POLARIS_APPLICATION_NAME, inputs.POLARIS_PROJECT_NAME, inputs.POLARIS_SERVER_URL, polarisAssessmentTypes))
-
+      formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
       debug('Formatted command is - '.concat(formattedCommand))
     }
 
-    if (inputs.COVERITY_URL) {
+    if (validateCoverityInputs()) {
       const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
-      formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME))
+      formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
     }
 
-    if (inputs.BLACKDUCK_URL) {
+    if (validateBlackDuckInputs()) {
       const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
-      let failureSeverities: Array<string> = []
-      if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
-        try {
-          failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
-        } catch (error) {
-          return Promise.reject('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
-        }
-      }
-
-      formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck(inputs.BLACKDUCK_URL, inputs.BLACKDUCK_API_TOKEN, inputs.BLACKDUCK_INSTALL_DIRECTORY, inputs.BLACKDUCK_SCAN_FULL, failureSeverities))
+      formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
     }
 
     if (formattedCommand.length === 0) {
