@@ -69,7 +69,7 @@ export async function run() {
       formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(inputs.COVERITY_USER, inputs.COVERITY_PASSPHRASE, inputs.COVERITY_URL, inputs.COVERITY_PROJECT_NAME, inputs.COVERITY_STREAM_NAME, inputs.COVERITY_INSTALL_DIRECTORY, inputs.COVERITY_POLICY_VIEW, inputs.COVERITY_REPOSITORY_NAME, inputs.COVERITY_BRANCH_NAME))
     }
 
-    if (inputs.BLACKDUCK_URL && validateBlackDuckInputs()) {
+    if (validateBlackDuckInputs()) {
       const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
       let failureSeverities: Array<string> = []
       if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
