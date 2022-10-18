@@ -136,7 +136,7 @@ jobs:
           LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-linux.zip"
 ```
 
-## Synopsys GitHub Action - Blackduck (In Beta Until Oct 20, 2022)
+## Synopsys GitHub Action - Black Duck (In Beta Until Oct 20, 2022)
 The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
 
 No preparation is typically needed before running the pipeline. In the default Black Duck Hub permission model,
