@@ -231,10 +231,14 @@ const tool_cache_1 = __nccwpck_require__(784);
 const fs = __importStar(__nccwpck_require__(747));
 const utility_1 = __nccwpck_require__(643);
 const exec_1 = __nccwpck_require__(514);
+const validators_1 = __nccwpck_require__(401);
 function getRemoteFile(destFilePath, url) {
     return __awaiter(this, void 0, void 0, function* () {
         if (url == null || url.length === 0) {
             throw new Error('URL cannot be empty');
+        }
+        if (!(0, validators_1.validateBridgeUrl)(url)) {
+            throw new Error('Invalid URL');
         }
         try {
             let fileNameFromUrl = '';
@@ -771,7 +775,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
+exports.validateBridgeUrl = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
 const fs = __importStar(__nccwpck_require__(747));
 const core_1 = __nccwpck_require__(186);
 const constants = __importStar(__nccwpck_require__(293));
@@ -845,6 +849,13 @@ function validateParameters(params, toolName) {
         (0, core_1.error)(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`);
         return false;
     }
+    return true;
+}
+exports.validateParameters = validateParameters;
+function validateBridgeUrl(url) {
+    if (!url.match('.*\\.(zip|ZIP)$')) {
+        return false;
+    }
     const osName = process.platform;
     const fileNameComponent = url.substring(url.lastIndexOf('/'), url.length);
     if (osName === 'darwin') {
@@ -860,7 +871,7 @@ function validateParameters(params, toolName) {
         return false;
     }
 }
-exports.validateParameters = validateParameters;
+exports.validateBridgeUrl = validateBridgeUrl;
 
 
 /***/ }),
