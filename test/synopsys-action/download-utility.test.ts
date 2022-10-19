@@ -33,6 +33,38 @@ test('Test getRemoteFile', () => {
   })
 })
 
+test('Test getRemoteFile linux', () => {
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
+  Object.defineProperty(process, 'platform', {
+    value: 'linux'
+  })
+
+  toolCache.downloadTool = jest.fn()
+  toolCache.downloadTool.mockReturnValueOnce('/path-to-bridge/bridge')
+
+  getRemoteFile(tempPath, 'http://synopsys.bridge.com/bridge_linux_1.zip').then(data => {
+    expect(data.fileName).toContain('bridge')
+  })
+})
+
+test('Test getRemoteFile windows', () => {
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
+  Object.defineProperty(process, 'platform', {
+    value: 'win32'
+  })
+
+  toolCache.downloadTool = jest.fn()
+  toolCache.downloadTool.mockReturnValueOnce('/path-to-bridge/bridge')
+
+  getRemoteFile(tempPath, 'http://synopsys.bridge.com/bridge_win_1.zip').then(data => {
+    expect(data.fileName).toContain('bridge')
+  })
+})
+
 test('Test getRemoteFile for url to be empty', () => {
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')

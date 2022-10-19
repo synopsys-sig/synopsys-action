@@ -69,5 +69,5 @@ inputs:
     description: 'If provided, Blackduck will break the build if any issues produced match one of the given severities'
     required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'

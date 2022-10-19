@@ -4,6 +4,7 @@ import {downloadTool, extractZip} from '@actions/tool-cache'
 import * as fs from 'fs'
 import {checkIfGithubHostedAndLinux} from './utility'
 import {exec} from '@actions/exec'
+import {validateBridgeUrl} from './validators'
 
 export interface DownloadFileResponse {
   filePath: string
@@ -13,6 +14,10 @@ export interface DownloadFileResponse {
 export async function getRemoteFile(destFilePath: string, url: string): Promise<DownloadFileResponse> {
   if (url == null || url.length === 0) {
     throw new Error('URL cannot be empty')
+  }
+
+  if (!validateBridgeUrl(url)) {
+    throw new Error('Invalid URL')
   }
 
   try {
