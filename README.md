@@ -1,6 +1,7 @@
 # Synopsys Action
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
+The latest version of the Synopsys Bridge is: [Version 0.7.2](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/)
 
 The Synopsys GitHub Action allows you to configure your pipeline to run Synopsys security testing and take action on the security results. The GitHub Action leverages the Synopsys Bridge, a foundataional piece of technology that has built-in knowlege of how to run all major Synopsys security testing solutions, plus common workflows for platforms like GitHub.
 
@@ -66,7 +67,7 @@ jobs:
           # of your runner. For example in this case, we are using the latest version for Linux.
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
         env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-linux.zip"
+          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux.zip"
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -133,7 +134,7 @@ jobs:
           # of your runner. For example in this case, we are using the latest version for Linux.
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
         env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.67/ci-package-0.1.67-linux.zip"
+          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux.zip"
 ```
 
 ## Synopsys GitHub Action - Black Duck
