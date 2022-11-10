@@ -11,6 +11,7 @@ import * as constants from '../application-constants'
 
 export class SynopsysToolsParameter {
   tempDir: string
+  private static VERSION_OPTION = 'version'
   private static STAGE_OPTION = '--stage'
   private static STATE_OPTION = '--state'
   private static POLARIS_STAGE = 'polaris'
@@ -179,6 +180,43 @@ export class SynopsysToolsParameter {
     debug('Generated state json file content is - '.concat(inputJson))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    return command
+  }
+
+  getFormattedCommandForVersionCheck(): string {
+    let command = ''
+    /*const assessmentTypeEnums: PolarisAssessmentType[] = []
+    const assessmentTypes: string[] = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
+
+    for (const assessmentType of assessmentTypes) {
+      if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
+        throw new Error('Provided Assessment type not found')
+      } else {
+        assessmentTypeEnums.push(PolarisAssessmentType[assessmentType as keyof typeof PolarisAssessmentType])
+      }
+    }*/
+
+    /*const polData: InputData<Polaris> = {
+      data: {
+        polaris: {
+          accesstoken: inputs.POLARIS_ACCESS_TOKEN,
+          serverUrl: inputs.POLARIS_SERVER_URL,
+          application: {name: inputs.POLARIS_APPLICATION_NAME},
+          project: {name: inputs.POLARIS_PROJECT_NAME},
+          assessment: {types: assessmentTypeEnums}
+        }
+      }
+    }*/
+
+    // const inputJson = JSON.stringify(polData)
+    //
+    // const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
+    // fs.writeFileSync(stateFilePath, inputJson)
+    //
+    // debug('Generated state json file at - '.concat(stateFilePath))
+    // debug('Generated state json file content is - '.concat(inputJson))
+
+    command = SynopsysToolsParameter.VERSION_OPTION.concat(SynopsysToolsParameter.SPACE)
     return command
   }
 }
