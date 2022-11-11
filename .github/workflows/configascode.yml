@@ -38,7 +38,7 @@ jobs:
       - name: Synopsys-action for Linux
         if: ${{  runner.os == 'Linux'  }}
         run: |
-          sudo apt-get install unzip
+          apt-get install unzip
           curl -o bridge.zip -L $LINUX_BRIDGE_URL
           unzip bridge.zip
           ./bridge --stage polaris
