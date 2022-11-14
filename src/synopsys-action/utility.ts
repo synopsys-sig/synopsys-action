@@ -31,7 +31,7 @@ export function checkIfGithubHostedAndLinux(): boolean {
 export function formatAndGetErrorMessage(errorMessage: string): string {
   const appErrorPart = errorMessage.match(".*'([^']*)'.*")?.at(1)
 
-  if (appErrorPart != null && appErrorPart.includes('sudo')) {
+  if (appErrorPart != null && (appErrorPart.includes('sudo') || appErrorPart.includes('bridge'))) {
     return errorMessage.replace(appErrorPart.toString(), 'Bridge')
   }
 
