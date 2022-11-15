@@ -60,7 +60,7 @@ jobs:
       #          curl -o bridge.zip -L $LINUX_BRIDGE_URL
       #          unzip bridge.zip
       #          ./bridge --stage polaris
-      #        shell: bash
+      ##        shell: bash
 
       - name: Use synopsys unified-action
         # Use the action defined in this repository
