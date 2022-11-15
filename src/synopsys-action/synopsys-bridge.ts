@@ -4,7 +4,14 @@ import {debug, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
-import {checkIfGithubHostedAndLinux} from './utility'
+import {checkIfGithubHostedAndLinux, cleanupTempDir} from './utility'
+import * as inputs from './inputs'
+import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
+import fs from 'fs'
+import {rmRF} from '@actions/io'
+import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs} from './validators'
+import {SynopsysToolsParameter} from './tools-parameter'
+import * as constants from '../application-constants'
 
 export class SynopsysBridge {
   bridgeExecutablePath: string
@@ -61,6 +68,79 @@ export class SynopsysBridge {
 
     return -1
   }
+
+  async downloadBridge(tempDir: string): Promise<void> {
+    try {
+      // Automatically configure bridge if Bridge download url is provided
+      if (inputs.BRIDGE_DOWNLOAD_URL) {
+        // Download file in temporary directory
+        info('Downloading and configuring Synopsys Bridge')
+        const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, inputs.BRIDGE_DOWNLOAD_URL)
+        const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
+
+        // Clear the existing bridge, if available
+        if (fs.existsSync(extractZippedFilePath)) {
+          const files: string[] = fs.readdirSync(extractZippedFilePath)
+          for (const file of files) {
+            await rmRF(file)
+          }
+        }
+
+        await extractZipped(downloadResponse.filePath, extractZippedFilePath)
+        info('Download and configuration of Synopsys Bridge is completed')
+      }
+    } catch (e) {
+      const error = (e as Error).message
+      await cleanupTempDir(tempDir)
+      if (error.includes('404') || error.toLowerCase().includes('invalid url')) {
+        let os = ''
+        if (process.env['RUNNER_OS']) {
+          os = process.env['RUNNER_OS']
+        }
+        return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'))
+      } else if (error.toLowerCase().includes('empty')) {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return Promise.reject('Provided Bridge URL cannot be empty')
+      } else {
+        return Promise.reject(error)
+      }
+    }
+  }
+
+  async prepareCommand(tempDir: string): Promise<string> {
+    try {
+      let formattedCommand = ''
+      if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
+        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
+      }
+
+      if (validatePolarisInputs()) {
+        const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
+        formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
+        debug('Formatted command is - '.concat(formattedCommand))
+      }
+
+      if (validateCoverityInputs()) {
+        const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
+        formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
+      }
+
+      if (validateBlackDuckInputs()) {
+        const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
+        formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
+      }
+
+      if (formattedCommand.length === 0) {
+        return Promise.reject(new Error('Mandatory fields are missing for given scans'))
+      }
+      return formattedCommand
+    } catch (e) {
+      const error = e as Error
+      await cleanupTempDir(tempDir)
+      debug(error.stack === undefined ? '' : error.stack.toString())
+      return Promise.reject(error.message)
+    }
+  }
 }
 
 export function getBridgeDefaultPath(): string {
@@ -88,6 +168,5 @@ export function validateBridgeURL(url: string): boolean {
   } else if (osName === 'win32') {
     return url.toLowerCase().includes('win')
   }
-
   return false
 }
