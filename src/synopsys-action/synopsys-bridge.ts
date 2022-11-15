@@ -77,9 +77,9 @@ export class SynopsysBridge {
           cwd: workingDirectory
         }
         try {
-          if (checkIfGithubHostedAndLinux()) {
+          /*if (checkIfGithubHostedAndLinux()) {
             return await exec('sudo '.concat(this.bridgeExecutablePath.concat(' ', bridgeCommand)), [], exectOp)
-          }
+          }*/
 
           return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
         } catch (error) {
