@@ -37,7 +37,7 @@ jobs:
 
           # Polaris
           polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
-          #polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "Dev_Application_1"
           polaris_project_name: "Dev_Project_1"
           polaris_assessment_types: '["SAST"]'
@@ -60,5 +60,5 @@ jobs:
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
           coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
-          #bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
 
