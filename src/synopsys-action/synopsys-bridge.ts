@@ -81,7 +81,7 @@ export class SynopsysBridge {
             return await exec('sudo '.concat(this.bridgeExecutablePath.concat(' ', bridgeCommand)), [], exectOp)
           }*/
 
-          return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
+          return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand).concat(' --verbose'), [], exectOp)
         } catch (error) {
           throw error
         }
