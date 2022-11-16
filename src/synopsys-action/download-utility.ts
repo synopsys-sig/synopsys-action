@@ -50,11 +50,11 @@ export async function extractZipped(file: string, destinationPath: string): Prom
   }
 
   try {
-    if (checkIfGithubHostedAndLinux()) {
-      await exec('sudo unzip '.concat(file).concat(' -d ').concat(destinationPath))
-    } else {
+    // if (checkIfGithubHostedAndLinux()) {
+    //   await exec('sudo unzip '.concat(file).concat(' -d ').concat(destinationPath))
+    // } else {
       await extractZip(file, destinationPath)
-    }
+    // }
     info('Extraction complete.')
     return Promise.resolve(true)
   } catch (error) {
