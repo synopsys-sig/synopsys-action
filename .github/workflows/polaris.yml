@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, lokesh, Linux]
+    runs-on: [self-hosted, lokesh, macOS]
 
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/polaris-ci/0.1.81/polaris-ci-0.1.81-macosx.zip"
@@ -39,4 +39,4 @@ jobs:
           polaris_project_name: "Dev_Project_1"
           polaris_assessment_types: '["SAST"]'
           #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
-          synopsys_bridge_path: "/root/synopsys-bridge"
+          synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
