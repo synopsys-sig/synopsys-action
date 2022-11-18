@@ -60,5 +60,5 @@ jobs:
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
           coverity_install_directory: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 

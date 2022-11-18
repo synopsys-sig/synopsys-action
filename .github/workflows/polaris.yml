@@ -38,4 +38,5 @@ jobs:
           polaris_application_name: "Dev_Application_1"
           polaris_project_name: "Dev_Project_1"
           polaris_assessment_types: '["SAST"]'
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          synopsys_bridge_path: "/root/synopsys-bridge"
