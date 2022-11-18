@@ -33,7 +33,7 @@ jobs:
         uses: ./
         with:
 
-          #synopsys_bridge_path: "/root/synopsys-bridge"
+          synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
 
           # Polaris
           polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
