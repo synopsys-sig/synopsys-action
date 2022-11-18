@@ -20,13 +20,28 @@ export class SynopsysBridge {
     this.bridgeExecutablePath = ''
   }
 
+  private getBridgeDefaultPath(): string {
+    let bridgeDefaultPath = ''
+    const osName = process.platform
+
+    if (osName === 'darwin') {
+      bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
+    } else if (osName === 'linux') {
+      bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX)
+    } else if (osName === 'win32') {
+      bridgeDefaultPath = path.join(process.env['USERPROFILE'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS)
+    }
+
+    return bridgeDefaultPath
+  }
+
   private async checkIfSynopsysBridgeExists(): Promise<boolean> {
     let synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
     const osName = process.platform
     if (!synopsysBridgePath) {
       info('Synopsys Bridge path not found in configuration')
       info('Looking for synopsys bridge in default path')
-      synopsysBridgePath = getBridgeDefaultPath()
+      synopsysBridgePath = this.getBridgeDefaultPath()
     }
 
     if (osName === 'win32') {
@@ -76,7 +91,7 @@ export class SynopsysBridge {
         // Download file in temporary directory
         info('Downloading and configuring Synopsys Bridge')
         const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, inputs.BRIDGE_DOWNLOAD_URL)
-        const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || getBridgeDefaultPath()
+        const extractZippedFilePath: string | Promise<string> = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
 
         // Clear the existing bridge, if available
         if (fs.existsSync(extractZippedFilePath)) {
@@ -141,32 +156,4 @@ export class SynopsysBridge {
       return Promise.reject(error.message)
     }
   }
-}
-
-export function getBridgeDefaultPath(): string {
-  let bridgeDefaultPath = ''
-  const osName = process.platform
-
-  if (osName === 'darwin') {
-    bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
-  } else if (osName === 'linux') {
-    bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX)
-  } else if (osName === 'win32') {
-    bridgeDefaultPath = path.join(process.env['USERPROFILE'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS)
-  }
-
-  return bridgeDefaultPath
-}
-
-export function validateBridgeURL(url: string): boolean {
-  const osName = process.platform
-
-  if (osName === 'darwin') {
-    return url.toLowerCase().includes('mac')
-  } else if (osName === 'linux') {
-    return url.toLowerCase().includes('linux')
-  } else if (osName === 'win32') {
-    return url.toLowerCase().includes('win')
-  }
-  return false
 }

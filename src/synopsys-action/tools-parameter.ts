@@ -3,73 +3,10 @@ import path from 'path'
 import {debug} from '@actions/core'
 import {validateCoverityInstallDirectoryParam, validateBlackduckFailureSeverities} from './validators'
 import * as inputs from './inputs'
-
-export enum PolarisAssessmentType {
-  SCA = 'SCA',
-  SAST = 'SAST'
-}
-
-export interface InputData<Type> {
-  data: Type
-}
-
-export interface Polaris {
-  polaris: PolarisData
-}
-
-export interface PolarisData {
-  accesstoken: string
-  serverUrl: string
-  application: {name: string}
-  project: {name: string}
-  assessment: {types: PolarisAssessmentType[]}
-}
-
-export interface Coverity {
-  coverity: CoverityConnect
-  project: ProjectData
-}
-
-export interface ProjectData {
-  repository?: {name: string}
-  branch?: {name: string}
-}
-
-export interface CoverityConnect {
-  connect: CoverityData
-  install?: {directory: string}
-}
-
-export interface CoverityData {
-  user: {name: string; password: string}
-  url: string
-  project: {name: string}
-  stream: {name: string}
-  policy?: {view: string}
-}
-
-export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
-  ALL = 'ALL',
-  NONE = 'NONE',
-  BLOCKER = 'BLOCKER',
-  CRITICAL = 'CRITICAL',
-  MAJOR = 'MAJOR',
-  MINOR = 'MINOR',
-  OK = 'OK',
-  TRIVIAL = 'TRIVIAL',
-  UNSPECIFIED = 'UNSPECIFIED'
-}
-
-export interface Blackduck {
-  blackduck: BlackduckData
-}
-
-export interface BlackduckData {
-  url: string
-  token: string
-  install?: {directory: string}
-  scan?: {full?: boolean; failure?: {severities: BLACKDUCK_SCAN_FAILURE_SEVERITIES[]}}
-}
+import {Polaris, PolarisAssessmentType} from './input-data/polaris'
+import {InputData} from './input-data/input-data'
+import {Coverity} from './input-data/coverity'
+import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES} from './input-data/blackduck'
 
 export class SynopsysToolsParameter {
   tempDir: string
