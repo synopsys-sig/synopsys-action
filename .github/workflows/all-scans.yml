@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [self-hosted, lokesh, macOS]
+    runs-on: [ubuntu_latest]
 
     env:
       MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-action/0.1.61/ci-package-0.1.61-macosx.zip"
@@ -33,7 +33,7 @@ jobs:
         uses: ./
         with:
 
-          synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
+          #synopsys_bridge_path: "/root/synopsys-bridge"
 
           # Polaris
           polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
@@ -46,7 +46,7 @@ jobs:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           blackduck_scan_full: true
-          blackduck_install_directory: /Users/lokesha/Downloads
+          blackduck_install_directory: /root
           blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
 
           #Coverity
@@ -59,6 +59,6 @@ jobs:
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
-          coverity_install_directory: /Users/lokesha/Downloads
-          #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          coverity_install_directory: /root
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 
