@@ -46,7 +46,7 @@ jobs:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           blackduck_scan_full: true
-          blackduck_install_directory: /home/runner/synopsys-bridge/
+          blackduck_install_directory: /Users/lokesha/Downloads
           blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
 
           #Coverity
@@ -59,6 +59,6 @@ jobs:
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
-          coverity_install_directory: /home/runner/synopsys-bridge/
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          coverity_install_directory: /Users/lokesha/Downloads
+          #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 
