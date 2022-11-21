@@ -21,9 +21,9 @@ jobs:
     runs-on: [ubuntu-latest]
 
     env:
-      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-macosx.zip"
-      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/coverity-connect/0.1.21/coverity_connect-0.1.21-linux64.zip"
+      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
+      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
 
       BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
       BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
