@@ -43,5 +43,5 @@ jobs:
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
           coverity_install_directory: /home/runner/synopsys-bridge/
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
-          #synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
+          #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
