@@ -34,8 +34,8 @@ jobs:
         uses: ./
         with:
           polaris_serverUrl: "https://cdev.altair.synopsys.com/"
-          polaris_accessToken: "3becogven17790dlvqfrv96r9pgrit4r15a4ln4mv8ale2ntp8kh8db79bl2o9fdd2bhgdvpakblu"
-          polaris_application_name: "Dev_Application_1"
-          polaris_project_name: "Dev_Project_1"
+          polaris_accessToken: "816smiaag16kl3p6e6417e0cr4aoi6s747nkdus8e4g5n5te46bsrkku6hatr7majpninibea6vm0"
+          polaris_application_name: "Application_For_Github_Actions"
+          polaris_project_name: "Project_For_Github_Actions"
           polaris_assessment_types: '["SAST"]'
           synopsys_bridge_path: "/Users/lokesha/Downloads/ci-package-0.1.67-macosx"
