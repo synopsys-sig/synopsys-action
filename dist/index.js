@@ -454,14 +454,13 @@ class SynopsysBridge {
                     if (process.env['RUNNER_OS']) {
                         os = process.env['RUNNER_OS'];
                     }
-                    return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'));
+                    return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')));
                 }
                 else if (error.toLowerCase().includes('empty')) {
-                    // eslint-disable-next-line prefer-promise-reject-errors
-                    return Promise.reject('Provided Bridge URL cannot be empty');
+                    return Promise.reject(new Error('Provided Bridge URL cannot be empty'));
                 }
                 else {
-                    return Promise.reject(error);
+                    return Promise.reject(new Error(error));
                 }
             }
         });
@@ -473,21 +472,24 @@ class SynopsysBridge {
                 if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
                     return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
                 }
+                // validating and preparing command for polaris
                 if ((0, validators_1.validatePolarisInputs)()) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
                     (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 }
+                // validating and preparing command for coverity
                 if ((0, validators_1.validateCoverityInputs)()) {
                     const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
                 }
+                // validating and preparing command for blackduck
                 if ((0, validators_1.validateBlackDuckInputs)()) {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
                 if (formattedCommand.length === 0) {
-                    return Promise.reject(new Error('Mandatory fields are missing for given scans'));
+                    return Promise.reject(new Error('Mandatory fields are missing for given scan[s]'));
                 }
                 return formattedCommand;
             }
@@ -545,14 +547,23 @@ const validators_1 = __nccwpck_require__(401);
 const inputs = __importStar(__nccwpck_require__(481));
 const polaris_1 = __nccwpck_require__(678);
 const blackduck_1 = __nccwpck_require__(619);
+const constants = __importStar(__nccwpck_require__(293));
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
     }
     getFormattedCommandForPolaris() {
         let command = '';
+        let assessmentTypes = [];
         const assessmentTypeEnums = [];
-        const assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
+        if (inputs.POLARIS_ASSESSMENT_TYPES != null && inputs.POLARIS_ASSESSMENT_TYPES.length > 0) {
+            try {
+                assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
+            }
+            catch (error) {
+                throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY));
+            }
+        }
         for (const assessmentType of assessmentTypes) {
             if (!Object.values(polaris_1.PolarisAssessmentType).includes(assessmentType)) {
                 throw new Error('Provided Assessment type not found');
@@ -626,7 +637,7 @@ class SynopsysToolsParameter {
                 failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
             }
             catch (error) {
-                throw new Error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+                throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
             }
         }
         let command = '';
@@ -647,7 +658,7 @@ class SynopsysToolsParameter {
                 scanFullValue = inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true';
             }
             else {
-                throw new Error('boolean value is required for blackduck_scan_full');
+                throw new Error('Missing boolean value for '.concat(constants.BLACKDUCK_SCAN_FULL_KEY));
             }
             blackduckData.data.blackduck.scan = { full: scanFullValue };
         }
@@ -656,7 +667,7 @@ class SynopsysToolsParameter {
             const failureSeverityEnums = [];
             for (const failureSeverity of failureSeverities) {
                 if (!Object.values(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
-                    throw new Error('Provided Severity for blackduck is not valid');
+                    throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
                 }
                 else {
                     failureSeverityEnums.push(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);

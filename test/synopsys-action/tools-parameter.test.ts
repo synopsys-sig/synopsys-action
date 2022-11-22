@@ -44,14 +44,17 @@ test('Test missing data error in getFormattedCommandForPolaris', () => {
   }
 })
 
-test('Test wrong assessment type error in getFormattedCommandForPolaris', () => {
+test('Test invalid data error in getFormattedCommandForPolaris', () => {
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
     stp.getFormattedCommandForPolaris()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Provided Assessment type not found')
+    expect(error.message).toContain('Invalid value for polaris_assessment_types')
   }
 })
 

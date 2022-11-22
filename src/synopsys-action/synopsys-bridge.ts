@@ -112,12 +112,11 @@ export class SynopsysBridge {
         if (process.env['RUNNER_OS']) {
           os = process.env['RUNNER_OS']
         }
-        return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'))
+        return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')))
       } else if (error.toLowerCase().includes('empty')) {
-        // eslint-disable-next-line prefer-promise-reject-errors
-        return Promise.reject('Provided Bridge URL cannot be empty')
+        return Promise.reject(new Error('Provided Bridge URL cannot be empty'))
       } else {
-        return Promise.reject(error)
+        return Promise.reject(new Error(error))
       }
     }
   }
@@ -129,24 +128,27 @@ export class SynopsysBridge {
         return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
       }
 
+      // validating and preparing command for polaris
       if (validatePolarisInputs()) {
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
         debug('Formatted command is - '.concat(formattedCommand))
       }
 
+      // validating and preparing command for coverity
       if (validateCoverityInputs()) {
         const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
       }
 
+      // validating and preparing command for blackduck
       if (validateBlackDuckInputs()) {
         const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
       if (formattedCommand.length === 0) {
-        return Promise.reject(new Error('Mandatory fields are missing for given scans'))
+        return Promise.reject(new Error('Mandatory fields are missing for given scan[s]'))
       }
       return formattedCommand
     } catch (e) {
