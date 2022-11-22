@@ -3,73 +3,11 @@ import path from 'path'
 import {debug} from '@actions/core'
 import {validateCoverityInstallDirectoryParam, validateBlackduckFailureSeverities} from './validators'
 import * as inputs from './inputs'
-
-export enum PolarisAssessmentType {
-  SCA = 'SCA',
-  SAST = 'SAST'
-}
-
-export interface InputData<Type> {
-  data: Type
-}
-
-export interface Polaris {
-  polaris: PolarisData
-}
-
-export interface PolarisData {
-  accesstoken: string
-  serverUrl: string
-  application: {name: string}
-  project: {name: string}
-  assessment: {types: PolarisAssessmentType[]}
-}
-
-export interface Coverity {
-  coverity: CoverityConnect
-  project: ProjectData
-}
-
-export interface ProjectData {
-  repository?: {name: string}
-  branch?: {name: string}
-}
-
-export interface CoverityConnect {
-  connect: CoverityData
-  install?: {directory: string}
-}
-
-export interface CoverityData {
-  user: {name: string; password: string}
-  url: string
-  project: {name: string}
-  stream: {name: string}
-  policy?: {view: string}
-}
-
-export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
-  ALL = 'ALL',
-  NONE = 'NONE',
-  BLOCKER = 'BLOCKER',
-  CRITICAL = 'CRITICAL',
-  MAJOR = 'MAJOR',
-  MINOR = 'MINOR',
-  OK = 'OK',
-  TRIVIAL = 'TRIVIAL',
-  UNSPECIFIED = 'UNSPECIFIED'
-}
-
-export interface Blackduck {
-  blackduck: BlackduckData
-}
-
-export interface BlackduckData {
-  url: string
-  token: string
-  install?: {directory: string}
-  scan?: {full?: boolean; failure?: {severities: BLACKDUCK_SCAN_FAILURE_SEVERITIES[]}}
-}
+import {Polaris, PolarisAssessmentType} from './input-data/polaris'
+import {InputData} from './input-data/input-data'
+import {Coverity} from './input-data/coverity'
+import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES} from './input-data/blackduck'
+import * as constants from '../application-constants'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -91,8 +29,15 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForPolaris(): string {
     let command = ''
+    let assessmentTypes: string[] = []
     const assessmentTypeEnums: PolarisAssessmentType[] = []
-    const assessmentTypes: string[] = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
+    if (inputs.POLARIS_ASSESSMENT_TYPES != null && inputs.POLARIS_ASSESSMENT_TYPES.length > 0) {
+      try {
+        assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
+      } catch (error) {
+        throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
+      }
+    }
 
     for (const assessmentType of assessmentTypes) {
       if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
@@ -180,7 +125,7 @@ export class SynopsysToolsParameter {
       try {
         failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
       } catch (error) {
-        throw new Error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
+        throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
       }
     }
     let command = ''
@@ -202,7 +147,7 @@ export class SynopsysToolsParameter {
       if (inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true' || inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'false') {
         scanFullValue = inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true'
       } else {
-        throw new Error('boolean value is required for blackduck_scan_full')
+        throw new Error('Missing boolean value for '.concat(constants.BLACKDUCK_SCAN_FULL_KEY))
       }
       blackduckData.data.blackduck.scan = {full: scanFullValue}
     }
@@ -212,7 +157,7 @@ export class SynopsysToolsParameter {
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
         if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
-          throw new Error('Provided Severity for blackduck is not valid')
+          throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
         } else {
           failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
         }

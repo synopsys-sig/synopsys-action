@@ -38,7 +38,7 @@ test('Not supported flow error - run', async () => {
 
   run().catch(error => {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Not Supported Flow')
+    expect(error.message).toContain('Requires at least one scan type')
   })
 })
 

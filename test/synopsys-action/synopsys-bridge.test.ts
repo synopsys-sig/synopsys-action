@@ -1,4 +1,4 @@
-import {SynopsysBridge, validateBridgeURL} from '../../src/synopsys-action/synopsys-bridge'
+import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
 import mock = jest.mock
 
 const ioUtils = require('@actions/io/lib/io-util')
@@ -95,31 +95,4 @@ test('Test executeBridgeCommand for bridge not found', () => {
   const response = sb.executeBridgeCommand('command', 'working_directory')
 
   expect(response).rejects.toThrowError()
-})
-
-test('Validate bridge URL Windows', () => {
-  Object.defineProperty(process, 'platform', {
-    value: 'win32'
-  })
-
-  const resp = validateBridgeURL('http://download/bridge-win.zip')
-  expect(resp).toBeTruthy()
-})
-
-test('Validate bridge URL MAC', () => {
-  Object.defineProperty(process, 'platform', {
-    value: 'darwin'
-  })
-
-  const resp = validateBridgeURL('http://download/bridge-mac.zip')
-  expect(resp).toBeTruthy()
-})
-
-test('Validate bridge URL Linux', () => {
-  Object.defineProperty(process, 'platform', {
-    value: 'linux'
-  })
-
-  const resp = validateBridgeURL('http://download/bridge-linux.zip')
-  expect(resp).toBeTruthy()
 })

@@ -47,29 +47,6 @@ exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severiti
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -82,84 +59,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core_1 = __nccwpck_require__(186);
-const tools_parameter_1 = __nccwpck_require__(80);
 const utility_1 = __nccwpck_require__(643);
 const synopsys_bridge_1 = __nccwpck_require__(659);
-const validators_1 = __nccwpck_require__(401);
-const inputs = __importStar(__nccwpck_require__(481));
 const config_variables_1 = __nccwpck_require__(222);
-const download_utility_1 = __nccwpck_require__(55);
-const io_1 = __nccwpck_require__(436);
-const fs = __importStar(__nccwpck_require__(747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
         try {
-            // Automatically configure bridge if Bridge download url is provided
-            if (inputs.BRIDGE_DOWNLOAD_URL) {
-                // Download file in temporary directory
-                (0, core_1.info)('Downloading and configuring Synopsys Bridge');
-                const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
-                const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || (0, synopsys_bridge_1.getBridgeDefaultPath)();
-                // Clear the existing bridge, if available
-                if (fs.existsSync(extractZippedFilePath)) {
-                    const files = fs.readdirSync(extractZippedFilePath);
-                    for (const file of files) {
-                        yield (0, io_1.rmRF)(file);
-                    }
-                }
-                yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
-                (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
-            }
-        }
-        catch (error) {
-            yield (0, utility_1.cleanupTempDir)(tempDir);
-            (0, core_1.info)(error);
-            if (error.message.includes('404') || error.message.toLowerCase().includes('invalid url')) {
-                let os = '';
-                if (process.env['RUNNER_OS']) {
-                    os = process.env['RUNNER_OS'];
-                }
-                return Promise.reject('Provided Bridge url is not valid for the configured '.concat(os, ' runner'));
-            }
-            else if (error.message.toLowerCase().includes('empty')) {
-                return Promise.reject('Provided Bridge URL cannot be empty');
-            }
-            else {
-                return Promise.reject(error);
-            }
-        }
-        try {
-            if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
-                (0, core_1.warning)('Not supported flow');
-                return Promise.reject(new Error('Not Supported Flow'));
-            }
-            if ((0, validators_1.validatePolarisInputs)()) {
-                const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
-                (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
-            }
-            if ((0, validators_1.validateCoverityInputs)()) {
-                const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
-            }
-            if ((0, validators_1.validateBlackDuckInputs)()) {
-                const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
-            }
-            if (formattedCommand.length === 0) {
-                return Promise.reject(new Error('Mandatory fields are missing for given scans'));
-            }
-        }
-        catch (error) {
-            yield (0, utility_1.cleanupTempDir)(tempDir);
-            (0, core_1.debug)(error.stackTrace);
-            return Promise.reject(error.message);
-        }
-        try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
+            // Download bridge
+            yield sb.downloadBridge(tempDir);
+            // Prepare bridge command
+            formattedCommand = yield sb.prepareCommand(tempDir);
+            // Execute bridge command
             yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
         catch (error) {
@@ -172,7 +86,7 @@ function run() {
 }
 exports.run = run;
 run().catch(error => {
-    if (error.message != undefined) {
+    if (error.message !== undefined) {
         (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
     }
     else {
@@ -288,6 +202,45 @@ exports.extractZipped = extractZipped;
 
 /***/ }),
 
+/***/ 619:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = void 0;
+var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
+(function (BLACKDUCK_SCAN_FAILURE_SEVERITIES) {
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["ALL"] = "ALL";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["NONE"] = "NONE";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["BLOCKER"] = "BLOCKER";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["CRITICAL"] = "CRITICAL";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["MAJOR"] = "MAJOR";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["MINOR"] = "MINOR";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["OK"] = "OK";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["TRIVIAL"] = "TRIVIAL";
+    BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
+})(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
+
+
+/***/ }),
+
+/***/ 678:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PolarisAssessmentType = void 0;
+var PolarisAssessmentType;
+(function (PolarisAssessmentType) {
+    PolarisAssessmentType["SCA"] = "SCA";
+    PolarisAssessmentType["SAST"] = "SAST";
+})(PolarisAssessmentType = exports.PolarisAssessmentType || (exports.PolarisAssessmentType = {}));
+
+
+/***/ }),
+
 /***/ 481:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -340,11 +293,11 @@ exports.COVERITY_POLICY_VIEW = (0, core_1.getInput)(constants.COVERITY_POLICY_VI
 exports.COVERITY_REPOSITORY_NAME = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY);
 exports.COVERITY_BRANCH_NAME = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY);
 // Blackduck related inputs
-exports.BLACKDUCK_URL = (0, core_1.getInput)('blackduck_url');
-exports.BLACKDUCK_API_TOKEN = (0, core_1.getInput)('blackduck_apiToken');
-exports.BLACKDUCK_INSTALL_DIRECTORY = (0, core_1.getInput)('blackduck_install_directory');
-exports.BLACKDUCK_SCAN_FULL = (0, core_1.getInput)('blackduck_scan_full');
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = (0, core_1.getInput)('blackduck_scan_failure_severities');
+exports.BLACKDUCK_URL = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY);
+exports.BLACKDUCK_API_TOKEN = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY);
+exports.BLACKDUCK_INSTALL_DIRECTORY = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY);
+exports.BLACKDUCK_SCAN_FULL = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY);
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY);
 
 
 /***/ }),
@@ -354,6 +307,29 @@ exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = (0, core_1.getInput)('blackduck_scan
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -367,7 +343,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBridgeURL = exports.getBridgeDefaultPath = exports.SynopsysBridge = void 0;
+exports.SynopsysBridge = void 0;
 const exec_1 = __nccwpck_require__(514);
 const inputs_1 = __nccwpck_require__(481);
 const core_1 = __nccwpck_require__(186);
@@ -375,9 +351,30 @@ const application_constants_1 = __nccwpck_require__(293);
 const io_util_1 = __nccwpck_require__(962);
 const path_1 = __importDefault(__nccwpck_require__(622));
 const utility_1 = __nccwpck_require__(643);
+const inputs = __importStar(__nccwpck_require__(481));
+const download_utility_1 = __nccwpck_require__(55);
+const fs_1 = __importDefault(__nccwpck_require__(747));
+const io_1 = __nccwpck_require__(436);
+const validators_1 = __nccwpck_require__(401);
+const tools_parameter_1 = __nccwpck_require__(80);
+const constants = __importStar(__nccwpck_require__(293));
 class SynopsysBridge {
     constructor() {
         this.bridgeExecutablePath = '';
+    }
+    getBridgeDefaultPath() {
+        let bridgeDefaultPath = '';
+        const osName = process.platform;
+        if (osName === 'darwin') {
+            bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC);
+        }
+        else if (osName === 'linux') {
+            bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX);
+        }
+        else if (osName === 'win32') {
+            bridgeDefaultPath = path_1.default.join(process.env['USERPROFILE'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS);
+        }
+        return bridgeDefaultPath;
     }
     checkIfSynopsysBridgeExists() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -386,7 +383,7 @@ class SynopsysBridge {
             if (!synopsysBridgePath) {
                 (0, core_1.info)('Synopsys Bridge path not found in configuration');
                 (0, core_1.info)('Looking for synopsys bridge in default path');
-                synopsysBridgePath = getBridgeDefaultPath();
+                synopsysBridgePath = this.getBridgeDefaultPath();
             }
             if (osName === 'win32') {
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('\\bridge'), ['.exe']);
@@ -429,37 +426,83 @@ class SynopsysBridge {
             return -1;
         });
     }
+    downloadBridge(tempDir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // Automatically configure bridge if Bridge download url is provided
+                if (inputs.BRIDGE_DOWNLOAD_URL) {
+                    // Download file in temporary directory
+                    (0, core_1.info)('Downloading and configuring Synopsys Bridge');
+                    const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, inputs.BRIDGE_DOWNLOAD_URL);
+                    const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath();
+                    // Clear the existing bridge, if available
+                    if (fs_1.default.existsSync(extractZippedFilePath)) {
+                        const files = fs_1.default.readdirSync(extractZippedFilePath);
+                        for (const file of files) {
+                            yield (0, io_1.rmRF)(file);
+                        }
+                    }
+                    yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
+                    (0, core_1.info)('Download and configuration of Synopsys Bridge is completed');
+                }
+            }
+            catch (e) {
+                const error = e.message;
+                yield (0, utility_1.cleanupTempDir)(tempDir);
+                if (error.includes('404') || error.toLowerCase().includes('invalid url')) {
+                    let os = '';
+                    if (process.env['RUNNER_OS']) {
+                        os = process.env['RUNNER_OS'];
+                    }
+                    return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')));
+                }
+                else if (error.toLowerCase().includes('empty')) {
+                    return Promise.reject(new Error('Provided Bridge URL cannot be empty'));
+                }
+                else {
+                    return Promise.reject(new Error(error));
+                }
+            }
+        });
+    }
+    prepareCommand(tempDir) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let formattedCommand = '';
+                if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
+                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
+                }
+                // validating and preparing command for polaris
+                if ((0, validators_1.validatePolarisInputs)()) {
+                    const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
+                    formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
+                    (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
+                }
+                // validating and preparing command for coverity
+                if ((0, validators_1.validateCoverityInputs)()) {
+                    const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
+                    formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
+                }
+                // validating and preparing command for blackduck
+                if ((0, validators_1.validateBlackDuckInputs)()) {
+                    const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
+                    formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
+                }
+                if (formattedCommand.length === 0) {
+                    return Promise.reject(new Error('Mandatory fields are missing for given scan[s]'));
+                }
+                return formattedCommand;
+            }
+            catch (e) {
+                const error = e;
+                yield (0, utility_1.cleanupTempDir)(tempDir);
+                (0, core_1.debug)(error.stack === undefined ? '' : error.stack.toString());
+                return Promise.reject(error.message);
+            }
+        });
+    }
 }
 exports.SynopsysBridge = SynopsysBridge;
-function getBridgeDefaultPath() {
-    let bridgeDefaultPath = '';
-    const osName = process.platform;
-    if (osName === 'darwin') {
-        bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC);
-    }
-    else if (osName === 'linux') {
-        bridgeDefaultPath = path_1.default.join(process.env['HOME'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX);
-    }
-    else if (osName === 'win32') {
-        bridgeDefaultPath = path_1.default.join(process.env['USERPROFILE'], application_constants_1.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS);
-    }
-    return bridgeDefaultPath;
-}
-exports.getBridgeDefaultPath = getBridgeDefaultPath;
-function validateBridgeURL(url) {
-    const osName = process.platform;
-    if (osName === 'darwin') {
-        return url.toLowerCase().includes('mac');
-    }
-    else if (osName === 'linux') {
-        return url.toLowerCase().includes('linux');
-    }
-    else if (osName === 'win32') {
-        return url.toLowerCase().includes('win');
-    }
-    return false;
-}
-exports.validateBridgeURL = validateBridgeURL;
 
 
 /***/ }),
@@ -496,43 +539,37 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SynopsysToolsParameter = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.PolarisAssessmentType = void 0;
+exports.SynopsysToolsParameter = void 0;
 const fs = __importStar(__nccwpck_require__(747));
 const path_1 = __importDefault(__nccwpck_require__(622));
 const core_1 = __nccwpck_require__(186);
 const validators_1 = __nccwpck_require__(401);
 const inputs = __importStar(__nccwpck_require__(481));
-var PolarisAssessmentType;
-(function (PolarisAssessmentType) {
-    PolarisAssessmentType["SCA"] = "SCA";
-    PolarisAssessmentType["SAST"] = "SAST";
-})(PolarisAssessmentType = exports.PolarisAssessmentType || (exports.PolarisAssessmentType = {}));
-var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
-(function (BLACKDUCK_SCAN_FAILURE_SEVERITIES) {
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["ALL"] = "ALL";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["NONE"] = "NONE";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["BLOCKER"] = "BLOCKER";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["CRITICAL"] = "CRITICAL";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["MAJOR"] = "MAJOR";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["MINOR"] = "MINOR";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["OK"] = "OK";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["TRIVIAL"] = "TRIVIAL";
-    BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
-})(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
+const polaris_1 = __nccwpck_require__(678);
+const blackduck_1 = __nccwpck_require__(619);
+const constants = __importStar(__nccwpck_require__(293));
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
     }
     getFormattedCommandForPolaris() {
         let command = '';
+        let assessmentTypes = [];
         const assessmentTypeEnums = [];
-        const assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
+        if (inputs.POLARIS_ASSESSMENT_TYPES != null && inputs.POLARIS_ASSESSMENT_TYPES.length > 0) {
+            try {
+                assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
+            }
+            catch (error) {
+                throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY));
+            }
+        }
         for (const assessmentType of assessmentTypes) {
-            if (!Object.values(PolarisAssessmentType).includes(assessmentType)) {
+            if (!Object.values(polaris_1.PolarisAssessmentType).includes(assessmentType)) {
                 throw new Error('Provided Assessment type not found');
             }
             else {
-                assessmentTypeEnums.push(PolarisAssessmentType[assessmentType]);
+                assessmentTypeEnums.push(polaris_1.PolarisAssessmentType[assessmentType]);
             }
         }
         const polData = {
@@ -600,7 +637,7 @@ class SynopsysToolsParameter {
                 failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
             }
             catch (error) {
-                throw new Error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+                throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
             }
         }
         let command = '';
@@ -621,7 +658,7 @@ class SynopsysToolsParameter {
                 scanFullValue = inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true';
             }
             else {
-                throw new Error('boolean value is required for blackduck_scan_full');
+                throw new Error('Missing boolean value for '.concat(constants.BLACKDUCK_SCAN_FULL_KEY));
             }
             blackduckData.data.blackduck.scan = { full: scanFullValue };
         }
@@ -629,11 +666,11 @@ class SynopsysToolsParameter {
             (0, validators_1.validateBlackduckFailureSeverities)(failureSeverities);
             const failureSeverityEnums = [];
             for (const failureSeverity of failureSeverities) {
-                if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
-                    throw new Error('Provided Severity for blackduck is not valid');
+                if (!Object.values(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
+                    throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
                 }
                 else {
-                    failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);
+                    failureSeverityEnums.push(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);
                 }
             }
             if (blackduckData.data.blackduck.scan) {
