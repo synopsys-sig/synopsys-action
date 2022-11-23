@@ -1,5 +1,5 @@
 import {exec, ExecOptions} from '@actions/exec'
-import {SYNOPSYS_BRIDGE_PATH} from './inputs'
+import {BRIDGE_DOWNLOAD_URL, SYNOPSYS_BRIDGE_PATH} from './inputs'
 import {debug, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
@@ -12,12 +12,21 @@ import {rmRF} from '@actions/io'
 import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
+import {HttpClient} from 'typed-rest-client/HttpClient'
+import DomParser from 'dom-parser'
 
 export class SynopsysBridge {
   bridgeExecutablePath: string
+  bridgeArtifactoryURL: string
+  bridgeUrlPattern: string
+  WINDOWS_PLATFORM = 'win64'
+  LINUX_PLATFORM = 'linux64'
+  MAC_PLATFORM = 'macosx'
 
   constructor() {
     this.bridgeExecutablePath = ''
+    this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action'
+    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/ci-package-$version-$platform.zip ')
   }
 
   private getBridgeDefaultPath(): string {
@@ -87,23 +96,39 @@ export class SynopsysBridge {
   async downloadBridge(tempDir: string): Promise<void> {
     try {
       // Automatically configure bridge if Bridge download url is provided
-      if (inputs.BRIDGE_DOWNLOAD_URL) {
-        // Download file in temporary directory
-        info('Downloading and configuring Synopsys Bridge')
-        const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, inputs.BRIDGE_DOWNLOAD_URL)
-        const extractZippedFilePath: string | Promise<string> = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
+      let bridgeUrl = ''
 
-        // Clear the existing bridge, if available
-        if (fs.existsSync(extractZippedFilePath)) {
-          const files: string[] = fs.readdirSync(extractZippedFilePath)
-          for (const file of files) {
-            await rmRF(file)
-          }
+      if (inputs.BRIDGE_DOWNLOAD_VERSION) {
+        if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
+          bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION.trim()).trim()
+        } else {
+          return Promise.reject(new Error('Provided bridge version not found in artifactory'))
         }
-
-        await extractZipped(downloadResponse.filePath, extractZippedFilePath)
-        info('Download and configuration of Synopsys Bridge is completed')
+      } else if (inputs.BRIDGE_DOWNLOAD_URL) {
+        bridgeUrl = BRIDGE_DOWNLOAD_URL
+        info('Provided Bridge download url is - '.concat(inputs.BRIDGE_DOWNLOAD_URL))
+      } else {
+        info('Checking for latest version of Bridge to download and configure')
+        const latestVersion = await this.getLatestVersion()
+        bridgeUrl = this.getVersionUrl(latestVersion).trim()
       }
+
+      info('Bridge URL is - '.concat(bridgeUrl))
+
+      info('Downloading and configuring Synopsys Bridge')
+      const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
+      const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
+
+      // Clear the existing bridge, if available
+      if (fs.existsSync(extractZippedFilePath)) {
+        const files: string[] = fs.readdirSync(extractZippedFilePath)
+        for (const file of files) {
+          await rmRF(file)
+        }
+      }
+
+      await extractZipped(downloadResponse.filePath, extractZippedFilePath)
+      info('Download and configuration of Synopsys Bridge completed')
     } catch (e) {
       const error = (e as Error).message
       await cleanupTempDir(tempDir)
@@ -157,5 +182,68 @@ export class SynopsysBridge {
       debug(error.stack === undefined ? '' : error.stack.toString())
       return Promise.reject(error.message)
     }
+  }
+
+  async getLatestVersion(): Promise<string> {
+    const versionArray: string[] = await this.getAllAvailableBridgeVersions()
+    let latestVersion = '0.0.0'
+
+    for (const version of versionArray) {
+      if (version > latestVersion) {
+        latestVersion = version
+      }
+    }
+
+    info('Available latest version is - '.concat(latestVersion))
+
+    return latestVersion
+  }
+
+  private async getAllAvailableBridgeVersions(): Promise<string[]> {
+    let htmlResponse = ''
+
+    const httpClient = new HttpClient('synopsys-action')
+    const httpResponse = await httpClient.get(this.bridgeArtifactoryURL, {Accept: 'text/html'})
+    htmlResponse = await httpResponse.readBody()
+
+    const domParser = new DomParser()
+    const doms = domParser.parseFromString(htmlResponse)
+    const elems = doms.getElementsByTagName('a') //querySelectorAll('a')
+    const versionArray: string[] = []
+
+    if (elems != null) {
+      for (const el of elems) {
+        const content = el.textContent
+        if (content != null) {
+          const v = content.match('^[0-9]+.[0-9]+.[0-9]+')
+
+          if (v != null && v.length === 1) {
+            versionArray.push(v[0])
+          }
+        }
+      }
+    }
+    return versionArray
+  }
+
+  async validateBridgeVersion(version: string): Promise<boolean> {
+    const versions = await this.getAllAvailableBridgeVersions()
+    return versions.includes(version.trim())
+  }
+
+  getVersionUrl(version: string): string {
+    const osName = process.platform
+
+    let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version)
+    bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version)
+    if (osName === 'darwin') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM)
+    } else if (osName === 'linux') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
+    } else if (osName === 'win32') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.WINDOWS_PLATFORM)
+    }
+
+    return bridgeDownloadUrl
   }
 }

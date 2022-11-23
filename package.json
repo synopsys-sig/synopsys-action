@@ -29,6 +29,7 @@
   },
   "homepage": "https://github.com/synopsys-sig/repository_name#readme",
   "devDependencies": {
+    "@types/dom-parser": "^0.1.1",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
@@ -50,7 +51,9 @@
     "@actions/io": "^1.1.2",
     "@actions/tool-cache": "^2.0.1",
     "@types/unzipper": "^0.10.5",
+    "dom-parser": "^0.1.6",
     "path": "^0.12.7",
+    "typed-rest-client": "^1.8.9",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2"
   },

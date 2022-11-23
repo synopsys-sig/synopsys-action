@@ -68,6 +68,9 @@ inputs:
   blackduck_scan_failure_severities:
     description: 'If provided, Blackduck will break the build if any issues produced match one of the given severities'
     required: false
+  bridge_download_version:
+    description: 'If provided, Synopsys-action will configure the version of Bridge'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

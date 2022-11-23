@@ -5,6 +5,7 @@ export const SYNOPSYS_BRIDGE_PATH = getInput('synopsys_bridge_path')
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')
+export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')
 
 // Polaris related inputs
 export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)
