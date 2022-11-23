@@ -28,7 +28,7 @@ test('Not supported flow error - run', async () => {
     await run()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Not Supported Flow')
+    expect(error.message).toContain('Requires at least one scan type: (polaris_serverUrl,coverity_url,blackduck_url)')
   }
 })
 
@@ -138,7 +138,7 @@ test('Run Bridge download and configure option with wrong download url - run', a
   try {
     await run()
   } catch (error: any) {
-    expect(error).toContain('not valid')
+    expect(error.message).toContain('Bridge url is not valid')
   }
 
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
@@ -160,7 +160,7 @@ test('Run Bridge download and configure option with empty url - run', async () =
   try {
     await run()
   } catch (error: any) {
-    expect(error).toContain('cannot be empty')
+    expect(error.message).toContain('Bridge URL cannot be empty')
   }
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
@@ -224,7 +224,7 @@ test('Run polaris flow with wrong bridge version - run', async () => {
   try {
     await run()
   } catch (error: any) {
-    expect(error.message).toContain('version is not available in artifactory')
+    expect(error.message).toContain('bridge version not found in artifactory')
   }
 
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})

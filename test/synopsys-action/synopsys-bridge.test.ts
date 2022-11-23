@@ -1,10 +1,11 @@
-import {SynopsysBridge, validateBridgeURL} from '../../src/synopsys-action/synopsys-bridge'
+import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
 import mock = jest.mock
 import Mocked = jest.Mocked
 import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import {Socket} from 'net'
 import * as inputs from '../../src/synopsys-action/inputs'
+import {validateBridgeUrl} from '../../src/synopsys-action/validators'
 
 const ioUtils = require('@actions/io/lib/io-util')
 mock('@actions/io/lib/io-util')
@@ -107,7 +108,7 @@ test('Validate bridge URL Windows', () => {
     value: 'win32'
   })
 
-  const resp = validateBridgeURL('http://download/bridge-win.zip')
+  const resp = validateBridgeUrl('http://download/bridge-win.zip')
   expect(resp).toBeTruthy()
 })
 
@@ -116,7 +117,7 @@ test('Validate bridge URL MAC', () => {
     value: 'darwin'
   })
 
-  const resp = validateBridgeURL('http://download/bridge-mac.zip')
+  const resp = validateBridgeUrl('http://download/bridge-mac.zip')
   expect(resp).toBeTruthy()
 })
 
@@ -125,7 +126,7 @@ test('Validate bridge URL Linux', () => {
     value: 'linux'
   })
 
-  const resp = validateBridgeURL('http://download/bridge-linux.zip')
+  const resp = validateBridgeUrl('http://download/bridge-linux.zip')
   expect(resp).toBeTruthy()
 })
 
