@@ -34,7 +34,7 @@ jobs:
         with:
 
           # Polaris
-          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+          polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "Application_For_Github_Actions"
           polaris_project_name: "Project_For_Github_Actions"

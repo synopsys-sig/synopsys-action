@@ -42,6 +42,9 @@ on:
     # Pull request analysis will be supported by Polaris in the future
     branches: [ master, main ]
 
+  pull_request:
+    branches: [ master, main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -51,7 +54,7 @@ jobs:
       - name: Synopsys Action
         uses: synopsys-sig/synopsys-action@<version>
         with:
-          polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
+          polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
@@ -66,9 +69,9 @@ jobs:
           # Optional parameter, but usually specified - the location of the Synopsys Bridge software
           # The Synopsys Bridge software distribution is platform specific - this must match the host OS
           # of your runner. For example in this case, we are using the latest version for Linux.
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
         env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux.zip"
+          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -133,9 +136,9 @@ jobs:
           # Optional parameter, but usually specified - the location of the Synopsys Bridge software
           # The Synopsys Bridge software distribution is platform specific - this must match the host OS
           # of your runner. For example in this case, we are using the latest version for Linux.
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
         env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux.zip"
+          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
 
 ## Synopsys GitHub Action - Black Duck
@@ -182,9 +185,16 @@ jobs:
           # Optional parameter. By default, pushes will initiate a full "intelligent" scan and pull requests
           # will initiate a rapid scan.
           blackduck_scan_full: false
-
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
-          blackduck_scan_failure_severities: "['ALL']"
+          # Single parameter
+          blackduck_scan_failure_severities: "[\"ALL\"]"
+          # multiple parameters
+          # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+
+          # Optional parameter, but usually specified - the location of the Synopsys Bridge software
+          # The Synopsys Bridge software distribution is platform specific - this must match the host OS
+          # of your runner. For example in this case, we are using the latest version for Linux.
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
