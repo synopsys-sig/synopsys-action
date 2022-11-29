@@ -42,6 +42,9 @@ on:
     # Pull request analysis will be supported by Polaris in the future
     branches: [ master, main ]
 
+  pull_request:
+    branches: [ master, main ]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -186,7 +189,7 @@ jobs:
           # Single parameter
           blackduck_scan_failure_severities: "[\"ALL\"]"
           # multiple parameters
-          #blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+          # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
 
           # Optional parameter, but usually specified - the location of the Synopsys Bridge software
           # The Synopsys Bridge software distribution is platform specific - this must match the host OS
