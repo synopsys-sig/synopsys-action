@@ -33,8 +33,8 @@ jobs:
         # Use the action defined in this repository
         uses: ./
         with:
-          polaris_serverUrl: "https://cdev.altair.synopsys.com/"
-          polaris_accessToken: "816smiaag16kl3p6e6417e0cr4aoi6s747nkdus8e4g5n5te46bsrkku6hatr7majpninibea6vm0"
+          polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "Application_For_Github_Actions"
           polaris_project_name: "Project_For_Github_Actions"
           polaris_assessment_types: '["SAST"]'
