@@ -4,7 +4,7 @@ import {debug, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
-import {checkIfGithubHostedAndLinux, cleanupTempDir} from './utility'
+import {cleanupTempDir} from './utility'
 import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs from 'fs'
@@ -77,10 +77,6 @@ export class SynopsysBridge {
           cwd: workingDirectory
         }
         try {
-          if (checkIfGithubHostedAndLinux()) {
-            return await exec('sudo '.concat(this.bridgeExecutablePath.concat(' ', bridgeCommand)), [], exectOp)
-          }
-
           return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand).concat(' --verbose'), [], exectOp)
         } catch (error) {
           throw error
