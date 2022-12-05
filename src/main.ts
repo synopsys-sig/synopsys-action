@@ -1,5 +1,5 @@
 import {info, setFailed} from '@actions/core'
-import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
+import {cleanupTempDir, createTempDir, formatAndGetErrorMessage} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 
@@ -23,9 +23,9 @@ export async function run() {
 }
 
 run().catch(error => {
-  if (error.message !== undefined) {
-    setFailed('Workflow failed! '.concat(error.message))
+  if (error.message != undefined) {
+    setFailed('Workflow failed! '.concat(formatAndGetErrorMessage(error.message)))
   } else {
-    setFailed('Workflow failed! '.concat(error))
+    setFailed('Workflow failed! '.concat(formatAndGetErrorMessage(error)))
   }
 })

@@ -86,11 +86,11 @@ function run() {
 }
 exports.run = run;
 run().catch(error => {
-    if (error.message !== undefined) {
-        (0, core_1.setFailed)('Workflow failed! '.concat(error.message));
+    if (error.message != undefined) {
+        (0, core_1.setFailed)('Workflow failed! '.concat((0, utility_1.formatAndGetErrorMessage)(error.message)));
     }
     else {
-        (0, core_1.setFailed)('Workflow failed! '.concat(error));
+        (0, core_1.setFailed)('Workflow failed! '.concat((0, utility_1.formatAndGetErrorMessage)(error)));
     }
 });
 
@@ -143,8 +143,6 @@ const core_1 = __nccwpck_require__(2186);
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const tool_cache_1 = __nccwpck_require__(7784);
 const fs = __importStar(__nccwpck_require__(5747));
-const utility_1 = __nccwpck_require__(7643);
-const exec_1 = __nccwpck_require__(1514);
 const validators_1 = __nccwpck_require__(8401);
 function getRemoteFile(destFilePath, url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -183,12 +181,7 @@ function extractZipped(file, destinationPath) {
             return Promise.reject(new Error('No destination directory found'));
         }
         try {
-            if ((0, utility_1.checkIfGithubHostedAndLinux)()) {
-                yield (0, exec_1.exec)('sudo unzip '.concat(file).concat(' -d ').concat(destinationPath));
-            }
-            else {
-                yield (0, tool_cache_1.extractZip)(file, destinationPath);
-            }
+            yield (0, tool_cache_1.extractZip)(file, destinationPath);
             (0, core_1.info)('Extraction complete.');
             return Promise.resolve(true);
         }
@@ -418,9 +411,6 @@ class SynopsysBridge {
                         cwd: workingDirectory
                     };
                     try {
-                        if ((0, utility_1.checkIfGithubHostedAndLinux)()) {
-                            return yield (0, exec_1.exec)('sudo '.concat(this.bridgeExecutablePath.concat(' ', bridgeCommand)), [], exectOp);
-                        }
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
@@ -828,7 +818,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.formatAndGetErrorMessage = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -861,6 +851,15 @@ function checkIfGithubHostedAndLinux() {
     return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && (process.platform === 'linux' || process.platform === 'darwin');
 }
 exports.checkIfGithubHostedAndLinux = checkIfGithubHostedAndLinux;
+function formatAndGetErrorMessage(errorMessage) {
+    var _a;
+    const appErrorPart = (_a = errorMessage.match(".*'([^']*)'.*")) === null || _a === void 0 ? void 0 : _a.at(1);
+    if (appErrorPart != null && appErrorPart.includes('bridge')) {
+        return errorMessage.replace(appErrorPart.toString(), 'Bridge');
+    }
+    return errorMessage;
+}
+exports.formatAndGetErrorMessage = formatAndGetErrorMessage;
 
 
 /***/ }),
