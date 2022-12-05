@@ -77,7 +77,7 @@ export class SynopsysBridge {
           cwd: workingDirectory
         }
         try {
-          return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand).concat(' --verbose'), [], exectOp)
+          return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
         } catch (error) {
           throw error
         }

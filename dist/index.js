@@ -411,7 +411,7 @@ class SynopsysBridge {
                         cwd: workingDirectory
                     };
                     try {
-                        return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand).concat(' --verbose'), [], exectOp);
+                        return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
                     catch (error) {
                         throw error;
