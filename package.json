@@ -12,7 +12,6 @@
     "lint-fix": "eslint src/**/*.ts --fix",
     "package": "ncc build --source-map",
     "all": "npm run build && npm run format && npm run lint && npm run package",
-    "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags"
   },
   "release": {
