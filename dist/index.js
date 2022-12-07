@@ -126,10 +126,10 @@ function logBridgeExitCodes(message) {
 exports.logBridgeExitCodes = logBridgeExitCodes;
 run().catch(error => {
     if (error.message != undefined) {
-        (0, core_1.setFailed)('Workflow failed! '.concat(logBridgeExitCodes((0, utility_1.formatAndGetErrorMessage)(error.message))));
+        (0, core_1.setFailed)('Workflow failed! '.concat(logBridgeExitCodes(error.message)));
     }
     else {
-        (0, core_1.setFailed)('Workflow failed! '.concat(logBridgeExitCodes((0, utility_1.formatAndGetErrorMessage)(error))));
+        (0, core_1.setFailed)('Workflow failed! '.concat(logBridgeExitCodes(error)));
     }
 });
 
@@ -857,7 +857,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.formatAndGetErrorMessage = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -890,15 +890,6 @@ function checkIfGithubHostedAndLinux() {
     return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && (process.platform === 'linux' || process.platform === 'darwin');
 }
 exports.checkIfGithubHostedAndLinux = checkIfGithubHostedAndLinux;
-function formatAndGetErrorMessage(errorMessage) {
-    var _a;
-    const appErrorPart = (_a = errorMessage.match(".*'([^']*)'.*")) === null || _a === void 0 ? void 0 : _a.at(1);
-    if (appErrorPart != null && appErrorPart.includes('bridge')) {
-        return errorMessage.replace(appErrorPart.toString(), 'Bridge');
-    }
-    return errorMessage;
-}
-exports.formatAndGetErrorMessage = formatAndGetErrorMessage;
 
 
 /***/ }),

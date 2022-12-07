@@ -1,5 +1,5 @@
 import {info, setFailed} from '@actions/core'
-import {cleanupTempDir, createTempDir, formatAndGetErrorMessage} from './synopsys-action/utility'
+import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from './application-constants'
@@ -31,8 +31,8 @@ export function logBridgeExitCodes(message: string): string {
 
 run().catch(error => {
   if (error.message != undefined) {
-    setFailed('Workflow failed! '.concat(logBridgeExitCodes(formatAndGetErrorMessage(error.message))))
+    setFailed('Workflow failed! '.concat(logBridgeExitCodes(error.message)))
   } else {
-    setFailed('Workflow failed! '.concat(logBridgeExitCodes(formatAndGetErrorMessage(error))))
+    setFailed('Workflow failed! '.concat(logBridgeExitCodes(error)))
   }
 })
