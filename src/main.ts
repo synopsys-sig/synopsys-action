@@ -14,6 +14,7 @@ import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SY
 
 async function run() {
   info('Synopsys Action started...')
+  info('Synopsys Action started...2')
 
   const tempDir = await createTempDir()
   let formattedCommand = ''

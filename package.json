@@ -17,17 +17,20 @@
     "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags"
   },
+  "release": {
+    "branches": ["master", "main"]
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/synopsys-sig/repository_name.git"
+    "url": "git+https://github.com/lokeshsynopsys/synopsys-action.git"
   },
   "keywords": [],
   "author": "Synopsys Inc.",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/synopsys-sig/repository_name/issues"
+    "url": "https://github.com/lokeshsynopsys/synopsys-action/issues"
   },
-  "homepage": "https://github.com/synopsys-sig/repository_name#readme",
+  "homepage": "https://github.com/lokeshsynopsys/synopsys-action#readme",
   "devDependencies": {
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.6",
@@ -49,8 +52,14 @@
     "@actions/github": "^5.0.3",
     "@actions/io": "^1.1.2",
     "@actions/tool-cache": "^2.0.1",
+    "@semantic-release/changelog": "^6.0.2",
+    "@semantic-release/commit-analyzer": "^9.0.2",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^8.0.7",
     "@types/unzipper": "^0.10.5",
+    "conventional-changelog-conventionalcommits": "^5.0.0",
     "path": "^0.12.7",
+    "semantic-release": "^19.0.5",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2"
   },
