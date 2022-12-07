@@ -2,6 +2,7 @@ import {info, setFailed} from '@actions/core'
 import {cleanupTempDir, createTempDir, formatAndGetErrorMessage} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
+import * as constants from './application-constants'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -19,13 +20,19 @@ export async function run() {
     throw error
   } finally {
     await cleanupTempDir(tempDir)
+    info('Synopsys Action workflow execution completed')
   }
+}
+
+export function logBridgeExitCodes(message: string): string {
+  var exitCode = message.trim().slice(-1)
+  return constants.EXIT_CODE_MAP.has(exitCode) ? 'Exit Code: ' + exitCode + ' ' + constants.EXIT_CODE_MAP.get(exitCode) : message
 }
 
 run().catch(error => {
   if (error.message != undefined) {
-    setFailed('Workflow failed! '.concat(formatAndGetErrorMessage(error.message)))
+    setFailed('Workflow failed! '.concat(logBridgeExitCodes(formatAndGetErrorMessage(error.message))))
   } else {
-    setFailed('Workflow failed! '.concat(formatAndGetErrorMessage(error)))
+    setFailed('Workflow failed! '.concat(logBridgeExitCodes(formatAndGetErrorMessage(error))))
   }
 })
