@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 env:
   NPM_TOKEN: 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
-  GH_TOKEN: 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
+  GH_TOKEN: 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
 jobs:
   release:
     runs-on: ubuntu-latest
