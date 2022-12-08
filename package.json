@@ -1,6 +1,6 @@
 {
   "name": "synopsys-unified",
-  "version": "0.0.1-SNAPSHOT",
+  "version": "0.1.0",
   "private": true,
   "description": "Perform security scan using Synopsys Tools",
   "main": "lib/main.js",
@@ -11,15 +11,18 @@
     "lint": "eslint src/**/*.ts",
     "lint-fix": "eslint src/**/*.ts --fix",
     "package": "ncc build --source-map",
-    "all": "npm run build && npm run format && npm run lint && npm run package",
+    "test": "jest",
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm test",
+    "preversion": "npm test",
+    "version": "npm run build && git add -A dist",
     "postversion": "git push && git push --tags"
-  },
-  "release": {
-    "branches": ["master", "main"]
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lokeshsynopsys/synopsys-action.git"
+  },
+  "release": {
+    "branches": ["master", "main", "SIGINT-437"]
   },
   "keywords": [],
   "author": "Synopsys Inc.",
@@ -29,6 +32,7 @@
   },
   "homepage": "https://github.com/lokeshsynopsys/synopsys-action#readme",
   "devDependencies": {
+    "@types/dom-parser": "^0.1.1",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.11.6",
     "@typescript-eslint/eslint-plugin": "^5.3.0",
@@ -52,12 +56,21 @@
     "@semantic-release/changelog": "^6.0.2",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^8.0.7",
+    "@semantic-release/gitlab": "^9.5.0",
     "@types/unzipper": "^0.10.5",
     "conventional-changelog-conventionalcommits": "^5.0.0",
+    "dom-parser": "^0.1.6",
     "path": "^0.12.7",
     "semantic-release": "^19.0.5",
+    "typed-rest-client": "^1.8.9",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2"
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "lines": 80
+      }
+    }
   }
 }
