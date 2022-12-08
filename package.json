@@ -19,7 +19,11 @@
     "url": "git+https://github.com/lokeshsynopsys/synopsys-action.git"
   },
   "release": {
-    "branches": ["master", "main", "SIGINT-437"]
+    "branches": [
+      "master",
+      "main",
+      "SIGINT-437"
+    ]
   },
   "keywords": [],
   "author": "Synopsys Inc.",
@@ -39,7 +43,9 @@
     [
       "@semantic-release/git",
       {
-        "assets": ["CHANGELOG.md"]
+        "assets": [
+          "CHANGELOG.md"
+        ]
       }
     ]
   ],
@@ -73,6 +79,7 @@
     "@types/unzipper": "^0.10.5",
     "conventional-changelog-conventionalcommits": "^5.0.0",
     "dom-parser": "^0.1.6",
+    "generate-changelog": "^1.8.0",
     "path": "^0.12.7",
     "semantic-release": "^19.0.5",
     "typed-rest-client": "^1.8.9",

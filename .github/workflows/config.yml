@@ -16,7 +16,6 @@ jobs:
         with:
           node-version: 'lts/*'
       - name: setup semantic-release
-        run: npm install generate-changelog -g
+        run: npm install -g semantic-release @semantic-release/github @semantic-release/changelog conventional-changelog-conventionalcommits @semantic-release/commit-analyzer @semantic-release/git
       - name: release
-        run: changelog generate
-
+        run: semantic-release
