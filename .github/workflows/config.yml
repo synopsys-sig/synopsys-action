@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 'lts/*'
       - name: setup semantic-release
-        run: npm install @semantic-release/changelog -D
+        run: npm install -g @semantic-release/changelog -D
       - name: release
         run: semantic-release
 
