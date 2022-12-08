@@ -5,8 +5,7 @@ on:
   pull_request:
     branches: [ main ]
 env:
-  NPM_TOKEN: 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
-  GITHUB_TOKEN: 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
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   release:
     runs-on: ubuntu-latest
