@@ -490,7 +490,6 @@ class SynopsysBridge {
                 if ((0, validators_1.validatePolarisInputs)()) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
-                    (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 }
                 // validating and preparing command for coverity
                 if ((0, validators_1.validateCoverityInputs)()) {
@@ -505,6 +504,7 @@ class SynopsysBridge {
                 if (formattedCommand.length === 0) {
                     return Promise.reject(new Error('Mandatory fields are missing for given scan[s]'));
                 }
+                (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
             }
             catch (e) {
@@ -949,7 +949,6 @@ function validateBlackDuckInputs() {
         const paramsMap = new Map();
         paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
         paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
-        paramsMap.set(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY, inputs.BLACKDUCK_INSTALL_DIRECTORY);
         paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL);
         return validateParameters(paramsMap, constants.BLACKDUCK_KEY);
     }
