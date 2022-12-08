@@ -1,4 +1,4 @@
-import {run} from '../src/main'
+import {logBridgeExitCodes, run} from '../src/main'
 import * as inputs from '../src/synopsys-action/inputs'
 import {SynopsysBridge} from '../src/synopsys-action/synopsys-bridge'
 import {DownloadFileResponse} from '../src/synopsys-action/download-utility'
@@ -305,4 +305,9 @@ test('Run polaris flow with wrong bridge version - run', async () => {
   }
 
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+})
+
+test('Test error messages with bridge exit codes', () => {
+  var errorMessage = 'Error: The process failed with exit code 2'
+  expect(logBridgeExitCodes(errorMessage)).toEqual('Exit Code: 2 Error from adapter end')
 })
