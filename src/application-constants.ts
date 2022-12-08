@@ -33,3 +33,13 @@ export const BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken'
 export const BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory'
 export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'
+
+// Bridge Exit Codes
+export let EXIT_CODE_MAP = new Map<string, string>([
+  ['0', 'Bridge execution successfully completed'],
+  ['1', 'Undefined error, check error logs'],
+  ['2', 'Error from adapter end'],
+  ['3', 'Failed to shutdown the bridge'],
+  ['8', 'The config option bridge.break has been set to true'],
+  ['9', 'Bridge initialization failed']
+])
