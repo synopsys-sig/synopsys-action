@@ -153,7 +153,6 @@ export class SynopsysBridge {
       if (validatePolarisInputs()) {
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
-        debug('Formatted command is - '.concat(formattedCommand))
       }
 
       // validating and preparing command for coverity
@@ -171,6 +170,7 @@ export class SynopsysBridge {
       if (formattedCommand.length === 0) {
         return Promise.reject(new Error('Mandatory fields are missing for given scan[s]'))
       }
+      debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {
       const error = e as Error
