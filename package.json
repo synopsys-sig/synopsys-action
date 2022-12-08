@@ -30,6 +30,22 @@
   "bugs": {
     "url": "https://github.com/lokeshsynopsys/synopsys-action/issues"
   },
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "CHANGELOG.md"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": ["CHANGELOG.md"]
+      }
+    ]
+  ],
   "homepage": "https://github.com/lokeshsynopsys/synopsys-action#readme",
   "devDependencies": {
     "@types/dom-parser": "^0.1.1",
