@@ -74,10 +74,14 @@ test('Polaris - With mandatory fields', async () => {
 
 // COVERITY
 test('Coverity - Without mandatory fields', async () => {
-  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'server_url'})
-  const response = validateCoverityInputs()
-  expect(response).toBe(false)
-
+  try {
+    Object.defineProperty(inputs, 'COVERITY_URL', {value: 'server_url'})
+    const response = validateCoverityInputs()
+    expect(response).toBe(false)
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('[coverity_user,coverity_passphrase,coverity_project_name,coverity_stream_name] - required parameters for coverity is missing')
+  }
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
 })
 
@@ -109,10 +113,13 @@ test('Coverity - With mandatory fields', async () => {
 // BLACKDUCK
 test('Blackduck - Without mandatory fields', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
-
-  const response = validateBlackDuckInputs()
-  expect(response).toBe(false)
-
+  try {
+    const response = validateBlackDuckInputs()
+    expect(response).toBe(false)
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('[blackduck_apiToken,blackduck_scan_full] - required parameters for blackduck is missing')
+  }
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
 })
 
