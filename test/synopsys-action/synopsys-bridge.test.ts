@@ -4,12 +4,7 @@ import Mocked = jest.Mocked
 import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import {Socket} from 'net'
-import * as inputs from '../../src/synopsys-action/inputs'
 import {validateBridgeUrl} from '../../src/synopsys-action/validators'
-import * as downloadUtility from '../../src/synopsys-action/download-utility'
-import {run} from '../../src/main'
-import {createTempDir} from '../../src/synopsys-action/utility'
-import * as constants from '../../src/application-constants'
 
 const ioUtils = require('@actions/io/lib/io-util')
 mock('@actions/io/lib/io-util')

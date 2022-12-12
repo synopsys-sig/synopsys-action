@@ -45,9 +45,14 @@ test('Test validate parameters', () => {
 // Polaris
 test('Polaris - Without mandatory fields', async () => {
   jest.setTimeout(25000)
-  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
-  const response = validatePolarisInputs()
-  expect(response).toBe(false)
+  try {
+    Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+    const response = validatePolarisInputs()
+    expect(response).toBe(false)
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('[polaris_accessToken,polaris_application_name,polaris_project_name,polaris_assessment_types] - required parameters for polaris is missing')
+  }
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
 })
 
