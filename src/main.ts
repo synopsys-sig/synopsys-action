@@ -17,6 +17,7 @@ async function run() {
   info('Synopsys Action started...2')
   info('Synopsys Action started...3')
   info('Synopsys Action started...4')
+  info('Synopsys Action started...5')
 
   const tempDir = await createTempDir()
   let formattedCommand = ''

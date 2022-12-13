@@ -44,6 +44,7 @@ function run() {
         (0, core_1.info)('Synopsys Action started...2');
         (0, core_1.info)('Synopsys Action started...3');
         (0, core_1.info)('Synopsys Action started...4');
+        (0, core_1.info)('Synopsys Action started...5');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
         // Automatically configure bridge if Bridge download url is provided
