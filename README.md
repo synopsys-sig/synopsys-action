@@ -2,7 +2,7 @@
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
 
-The latest version of the Synopsys Bridge is: [Version 0.1.114](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.114/)
+The latest version of the Synopsys Bridge is available at: [Synopsys Bridge](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/)
 
 The Synopsys GitHub Action allows you to configure your pipeline to run Synopsys security testing and take action on the security results. The GitHub Action leverages the Synopsys Bridge, a foundational piece of technology that has built-in knowledge of how to run all major Synopsys security testing solutions, plus common workflows for platforms like GitHub.
 
@@ -215,8 +215,7 @@ jobs:
 
 The most common way to set up the Synopsys Bridge is to configure the action to download the small (~50 MB) CLI utility that is then automatically run at the right stage of your pipeline.
 
-This requires setting the `bridge_download_url` parameter which will be included in the examples below. The latest version of the Synopsys Bridge can    always be found here:
-- https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/
+The latest version of Synopsys Bridge will be downloaded by default.
 
 ## Manual Synopsys Bridge
 
