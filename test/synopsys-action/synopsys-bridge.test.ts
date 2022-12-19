@@ -129,21 +129,55 @@ test('Validate bridge URL Linux', () => {
   expect(resp).toBeTruthy()
 })
 
-test('Test getLatestVersion', async () => {
+test('Test getLatestVersion - Patch version', async () => {
   const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
 
   const httpResponse: Mocked<HttpClientResponse> = {
     message: incomingMessage,
     readBody: jest.fn()
   }
-  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
+  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '<a href="0.1.114/">0.1.114/</a>  17-Oct-2022 19:46    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
 
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
   const sb = new SynopsysBridge()
   const response = await sb.getLatestVersion()
 
-  expect(response).toBe('0.1.72')
+  expect(response).toBe('0.1.114')
+})
+
+test('Test getLatestVersion - Minor version', async () => {
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '<a href="0.2.1/">0.2.1/</a>  17-Oct-2022 19:58    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
+
+  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
+
+  const sb = new SynopsysBridge()
+  const response = await sb.getLatestVersion()
+
+  expect(response).toBe('0.2.1')
+})
+
+test('Test getLatestVersion - Major version', async () => {
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '<a href="0.2.1/">0.2.1/</a>  17-Oct-2022 19:58    -\n' + '<a href="1.0.0/">1.0.0/</a>  17-Oct-2022 19:58    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
+
+  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
+
+  const sb = new SynopsysBridge()
+  const response = await sb.getLatestVersion()
+
+  expect(response).toBe('1.0.0')
 })
 
 test('Test validateBridgeVersion', async () => {

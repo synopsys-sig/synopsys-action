@@ -187,7 +187,7 @@ export class SynopsysBridge {
     for (const version of versionArray) {
       const latestVersionParts = latestVersion.split('.')
       const versionParts = version.split('.')
-      if (parseInt(versionParts[0]) >= parseInt(latestVersionParts[0]) && parseInt(versionParts[1]) >= parseInt(latestVersionParts[1]) && parseInt(versionParts[2]) >= parseInt(latestVersionParts[2])) {
+      if ((parseInt(versionParts[0]) >= parseInt(latestVersionParts[0]) && parseInt(versionParts[1]) >= parseInt(latestVersionParts[1]) && parseInt(versionParts[2]) >= parseInt(latestVersionParts[2])) || (parseInt(versionParts[0]) >= parseInt(latestVersionParts[0]) && parseInt(versionParts[1]) >= parseInt(latestVersionParts[1])) || parseInt(versionParts[0]) >= parseInt(latestVersionParts[0])) {
         latestVersion = version
       }
     }
