@@ -185,7 +185,9 @@ export class SynopsysBridge {
     let latestVersion = '0.0.0'
 
     for (const version of versionArray) {
-      if (version > latestVersion) {
+      const latestVersionParts = latestVersion.split('.')
+      const versionParts = version.split('.')
+      if (parseInt(versionParts[0]) >= parseInt(latestVersionParts[0]) && parseInt(versionParts[1]) >= parseInt(latestVersionParts[1]) && parseInt(versionParts[2]) >= parseInt(latestVersionParts[2])) {
         latestVersion = version
       }
     }
