@@ -205,9 +205,9 @@ jobs:
   
 - **bridge_download_url** - Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]
 
-- **bridge_download_version** - Provide bridge version. If provided, Synopsys Bridge will of specified version will be downloaded and configured.
+- **bridge_download_version** - Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.
 
-[Note - If **bridge_download_version** and **bridge_download_url** is not provided, Synopsys Action will download and configure the lates version of Bridge]
+[Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
 
 
 
