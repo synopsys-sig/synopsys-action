@@ -1,0 +1,67 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CAC-Coverity
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: [ubuntu-latest]
+
+    env:
+      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
+      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
+
+      BRIDGE_COVERITY_CONNECT_URL: ${{ secrets.COVERITY_URL }}
+      BRIDGE_COVERITY_CONNECT_USER_NAME: ${{ secrets.COVERITY_USER }}
+      BRIDGE_COVERITY_CONNECT_USER_PASSWORD: ${{ secrets.COVERITY_PASSPHRASE }}
+      BRIDGE_COVERITY_CONNECT_STREAM_NAME: ${{ secrets.COVERITY_STREAM_NAME }}
+      BRIDGE_COVERITY_CONNECT_PROJECT_NAME: ${{ secrets.COVERITY_PROJECT_NAME }}
+      BRIDGE_COVERITY_POLICY_VIEW: ${{ secrets.COVERITY_POLICY_VIEW }}
+      BRIDGE_COVERITY_REPOSITORY_NAME: ${{ secrets.COVERITY_REPOSITORY_NAME }}
+      BRIDGE_COVERITY_BRANCH_NAME: ${{ secrets.COVERITY_BRANCH_NAME }}
+      # Mandatory for windows hosted environment
+      BRIDGE_COVERITY_INSTALL_DIRECTORY: ${{ secrets.COVERITY_INSTALL_DIRECTORY }}
+
+    #    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      #      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Synopsys-action for Windows
+        if: ${{ runner.os == 'Windows' }}
+        run: |
+          Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
+          tar -xf bridge.zip
+          .\bridge.exe --stage connect
+        shell: powershell
+
+      - name: Synopsys-action for MAC
+        if: ${{  runner.os == 'macOS'  }}
+        run: |
+          brew install unzip
+          curl -o bridge.zip -L $MAC_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage connect
+        shell: bash
+
+      - name: Synopsys-action for Linux
+        if: ${{  runner.os == 'Linux'  }}
+        run: |
+          apt install unzip
+          curl -o bridge.zip -L $LINUX_BRIDGE_URL
+          unzip bridge.zip
+          ./bridge --stage connect
+        shell: bash
