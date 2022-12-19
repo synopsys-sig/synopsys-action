@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js
+      - name: Setup Node.js and running emantic
         uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
