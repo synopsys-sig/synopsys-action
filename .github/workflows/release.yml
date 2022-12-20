@@ -1,4 +1,4 @@
-name: Release
+name: Changelog and Release
 on:
   workflow_dispatch:
 env:
@@ -12,16 +12,11 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Rebuild the dist/ directory
+      - name: install dependencies
+        # installs necessary dependencies as semantic-release executes command mentioned in package.json under "scripts" tag
         run: |
-          npm run build
-          npm run package
-
-      - name: setup semantic-release
-        run: |
+          npm install -g typescript jest ncc
           npm install -g semantic-release @semantic-release/github @semantic-release/changelog conventional-changelog-conventionalcommits @semantic-release/commit-analyzer @semantic-release/git
+        shell: bash
       - name: release
         run: npx semantic-release
