@@ -15,19 +15,41 @@
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test",
     "preversion": "npm test",
     "version": "npm run build && git add -A dist",
-    "postversion": "git push && git push --tags"
+    "postversion": "git add * && git commit -m 'updated CHANGELOG and version from semantic' && git push && git push origin && git push origin --tags"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/synopsys-sig/repository_name.git"
+    "url": "git+https://github.com/synopsys-sig/synopsys-action.git"
   },
   "keywords": [],
   "author": "Synopsys Inc.",
   "license": "Apache 2.0",
   "bugs": {
-    "url": "https://github.com/synopsys-sig/repository_name/issues"
+    "url": "https://github.com/synopsys-sig/synopsys-action/issues"
   },
-  "homepage": "https://github.com/synopsys-sig/repository_name#readme",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/npm",
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github",
+    "@semantic-release/git"
+  ],
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "beta", "prerelease": true}
+    ],
+    "prepare": [
+      {
+        "path": "@semantic-release/changelog",
+        "changelogFile": "CHANGELOG.md"
+      },
+      "@semantic-release/git"
+    ]
+  },
+  "homepage": "https://github.com/synopsys-sig/synopsys-action#readme",
   "devDependencies": {
     "@types/dom-parser": "^0.1.1",
     "@types/jest": "^27.5.2",
@@ -38,6 +60,7 @@
     "eslint": "^8.1.0",
     "eslint-plugin-github": "^4.3.5",
     "eslint-plugin-jest": "^26.0.0",
+    "semantic-release": "^19.0.5",
     "jest": "^27.5.1",
     "prettier": "^2.4.1",
     "ts-jest": "^27.1.5",
