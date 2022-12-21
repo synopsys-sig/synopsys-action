@@ -1,10 +1,10 @@
-import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
+import {SynopsysBridge} from '../../../src/synopsys-action/synopsys-bridge'
 import mock = jest.mock
 import Mocked = jest.Mocked
 import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import {Socket} from 'net'
-import {validateBridgeUrl} from '../../src/synopsys-action/validators'
+import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
 
 const ioUtils = require('@actions/io/lib/io-util')
 mock('@actions/io/lib/io-util')
