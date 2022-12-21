@@ -1,8 +1,8 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-  clearMocks: true,
+  clearMocks: false,
   moduleFileExtensions: ['js', 'ts'],
-  testMatch: ['**/unit/**/*.test.ts'],
+  testMatch: ['**/contract/**/*.e2e.test.ts'],
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },

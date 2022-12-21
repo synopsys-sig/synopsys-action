@@ -1,6 +1,6 @@
 import mock = jest.mock
-import {extractZipped, getRemoteFile} from '../../src/synopsys-action/download-utility'
-import {cleanupTempDir, createTempDir} from '../../src/synopsys-action/utility'
+import {extractZipped, getRemoteFile} from '../../../src/synopsys-action/download-utility'
+import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utility'
 import {tmpdir} from 'os'
 
 const path = require('path')

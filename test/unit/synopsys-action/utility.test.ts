@@ -1,5 +1,5 @@
 test('cleanUrl() trailing slash', () => {
-  const utilitFunction = require('../../src/synopsys-action/utility')
+  const utilitFunction = require('../../../src/synopsys-action/utility')
 
   const validUrl = 'https://my-domain.com'
   const testUrl = `${validUrl}/`
@@ -8,7 +8,7 @@ test('cleanUrl() trailing slash', () => {
 })
 
 test('cleanUrl() no trailing slash', () => {
-  const utilitFunction = require('../../src/synopsys-action/utility')
+  const utilitFunction = require('../../../src/synopsys-action/utility')
 
   const testUrl = 'https://my-domain.com'
   const cleanUrl = utilitFunction.cleanUrl(testUrl)

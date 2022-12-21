@@ -1,6 +1,6 @@
-import {validateBlackduckFailureSeverities, validateBlackDuckInputs, validateCoverityInputs, validateCoverityInstallDirectoryParam, validateParameters, validatePolarisInputs} from '../../src/synopsys-action/validators'
-import * as constants from '../../src/application-constants'
-import * as inputs from '../../src/synopsys-action/inputs'
+import {validateBlackduckFailureSeverities, validateBlackDuckInputs, validateCoverityInputs, validateCoverityInstallDirectoryParam, validateParameters, validatePolarisInputs} from '../../../src/synopsys-action/validators'
+import * as constants from '../../../src/application-constants'
+import * as inputs from '../../../src/synopsys-action/inputs'
 
 test('Test missing install directory for coverity', () => {
   try {
