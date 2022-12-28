@@ -77,4 +77,21 @@ describe('Polaris flow contract', () => {
       error(err)
     }
   })
+
+  it('With bridge.break set to tru', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockPolarisParamsExcept('NONE')
+    process.env['POLARIS_ISSUE_FAILURE'] = 'true'
+
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 8')
+      error(err)
+    } finally {
+      process.env['POLARIS_ISSUE_FAILURE'] = undefined
+    }
+  })
 })
