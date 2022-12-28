@@ -5,13 +5,6 @@ import * as io from '@actions/io'
 import * as utility from '../../src/synopsys-action/utility'
 import * as inputs from '../../src/synopsys-action/inputs'
 
-const polarisParamsMap: Map<string, string> = new Map<string, string>()
-polarisParamsMap.set('POLARIS_SERVER_URL', 'POLARIS_SERVER_URL')
-polarisParamsMap.set('POLARIS_ACCESS_TOKEN', 'POLARIS_ACCESS_TOKEN')
-polarisParamsMap.set('POLARIS_APPLICATION_NAME', 'POLARIS_APPLICATION_NAME')
-polarisParamsMap.set('POLARIS_PROJECT_NAME', 'POLARIS_PROJECT_NAME')
-polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', '["SCA", "SAST"]')
-
 export function setAllMocks() {
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('/Users/kishori/Project')
   jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(true)
@@ -31,18 +24,4 @@ export function getBridgeDownloadUrl(): string {
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
-}
-
-export function mockPolarisParamsExcept(polarisConstant: string) {
-  polarisParamsMap.forEach((value, key) => {
-    if (polarisConstant != key) {
-      Object.defineProperty(inputs, key, {value: value})
-    }
-  })
-}
-
-export function resetMockPolarisParams() {
-  polarisParamsMap.forEach((value, key) => {
-    Object.defineProperty(inputs, key, {value: null})
-  })
 }

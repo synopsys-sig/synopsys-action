@@ -1,7 +1,16 @@
 import {run} from '../../src/main'
-import {error, info} from '@actions/core'
-import * as inputs from '../../src/synopsys-action/inputs'
-import {setAllMocks} from './mocking-utility.test'
+// import {error, info} from '@actions/core'
+// import * as inputs from '../../src/synopsys-action/inputs'
+import {mockBridgeDownloadUrlAndSynopsysBridgePath, setAllMocks} from './mocking-utility.test'
+import * as inputs from "../../src/synopsys-action/inputs";
+import {info} from "@actions/core";
+
+const blackduckParamMap: Map<string, string> = new Map<string, string>()
+blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
+blackduckParamMap.set('BLACKDUCK_API_TOKEN', 'BLACKDUCK_API_TOKEN')
+blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'true')
+blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', '[ALL]')
+blackduckParamMap.set('BLACKDUCK_INSTALL_DIRECTORY', '/User/home')
 
 describe('Blackduck flow contract', () => {
   afterAll(() => {
@@ -10,24 +19,12 @@ describe('Blackduck flow contract', () => {
 
   beforeEach(() => {
     jest.resetModules()
-    Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
-    Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: null})
-
-    Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
-    Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: null})
-    Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: null})
-    Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: null})
-    Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: null})
+    resetMockBlackduckParams()
   })
 
   it('With all mandatory fields', async () => {
-    Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.61/ci-package-0.1.61-macosx.zip'})
-    Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
-    Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
-    Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
-    Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'true'})
-    Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
-    Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES'])
 
     setAllMocks()
 
@@ -36,15 +33,17 @@ describe('Blackduck flow contract', () => {
   })
 })
 
-/*function setAllMocks() {
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('/Users/kishori/Project')
-  jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(true)
+export function resetMockBlackduckParams() {
+  blackduckParamMap.forEach((value, key) => {
+    Object.defineProperty(inputs, key, {value: null})
+  })
+}
 
-  //---------------------------------------------
-  jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
-  jest.spyOn(io, 'rmRF').mockResolvedValue()
-  jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')
-  jest.spyOn(validator, 'validateBridgeUrl').mockReturnValue(true)
-  jest.spyOn(utility, 'cleanupTempDir').mockResolvedValue()
-  jest.spyOn(utility, 'createTempDir').mockResolvedValue(__dirname)
-}*/
+export function mockBlackduckParamsExcept(blackduckConstants: string[]) {
+  blackduckParamMap.forEach((value, key) => {
+    if (!blackduckConstants.includes(key)) {
+      info(key)
+      Object.defineProperty(inputs, key, {value: value})
+    }
+  })
+}

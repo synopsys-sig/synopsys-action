@@ -1,6 +1,14 @@
 import {run} from '../../src/main'
 import {error, info} from '@actions/core'
-import {mockBridgeDownloadUrlAndSynopsysBridgePath, mockPolarisParamsExcept, resetMockPolarisParams, setAllMocks} from './mocking-utility.test'
+import {mockBridgeDownloadUrlAndSynopsysBridgePath, setAllMocks} from './mocking-utility.test'
+import * as inputs from "../../src/synopsys-action/inputs";
+
+const polarisParamsMap: Map<string, string> = new Map<string, string>()
+polarisParamsMap.set('POLARIS_SERVER_URL', 'POLARIS_SERVER_URL')
+polarisParamsMap.set('POLARIS_ACCESS_TOKEN', 'POLARIS_ACCESS_TOKEN')
+polarisParamsMap.set('POLARIS_APPLICATION_NAME', 'POLARIS_APPLICATION_NAME')
+polarisParamsMap.set('POLARIS_PROJECT_NAME', 'POLARIS_PROJECT_NAME')
+polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', '["SCA", "SAST"]')
 
 describe('Polaris flow contract', () => {
   afterAll(() => {
@@ -95,3 +103,17 @@ describe('Polaris flow contract', () => {
     }
   })
 })
+
+export function mockPolarisParamsExcept(polarisConstant: string) {
+  polarisParamsMap.forEach((value, key) => {
+    if (polarisConstant != key) {
+      Object.defineProperty(inputs, key, {value: value})
+    }
+  })
+}
+
+export function resetMockPolarisParams() {
+  polarisParamsMap.forEach((value, key) => {
+    Object.defineProperty(inputs, key, {value: null})
+  })
+}
