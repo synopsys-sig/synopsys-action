@@ -3,13 +3,14 @@ import {run} from '../../src/main'
 // import * as inputs from '../../src/synopsys-action/inputs'
 import {mockBridgeDownloadUrlAndSynopsysBridgePath, setAllMocks} from './mocking-utility.test'
 import * as inputs from "../../src/synopsys-action/inputs";
-import {info} from "@actions/core";
+import {error, info} from "@actions/core";
+import {mockPolarisParamsExcept} from "./polaris.e2e.test";
 
 const blackduckParamMap: Map<string, string> = new Map<string, string>()
 blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
 blackduckParamMap.set('BLACKDUCK_API_TOKEN', 'BLACKDUCK_API_TOKEN')
 blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'true')
-blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', '[ALL]')
+blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', '["ALL"]')
 blackduckParamMap.set('BLACKDUCK_INSTALL_DIRECTORY', '/User/home')
 
 describe('Blackduck flow contract', () => {
@@ -30,6 +31,77 @@ describe('Blackduck flow contract', () => {
 
     const resp = await run()
     expect(resp).toBe(0)
+  })
+
+  it('With missing mandatory fields blackduck.url', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_URL'])
+
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With missing mandatory fields blackduck.api.token', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_API_TOKEN'])
+
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With all mandatory and optional fields', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['NONE'])
+
+    setAllMocks()
+
+    const resp = await run()
+    expect(resp).toBe(0)
+  })
+
+  it('With wrong optional field blackduck.install.directories', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY'])
+
+    Object.defineProperty(inputs, "BLACKDUCK_INSTALL_DIRECTORY", {value: '/something'})
+
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With failure.severities set to true', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockPolarisParamsExcept('NONE')
+    process.env['BLACKDUCK_ISSUE_FAILURE'] = 'true'
+
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 8')
+      error(err)
+    } finally {
+      process.env['BLACKDUCK_ISSUE_FAILURE'] = undefined
+    }
   })
 })
 
