@@ -34,6 +34,7 @@ jobs:
         run: |
           npm install -g nrm
           nrm use npm
+          rm package-lock.json
           npm install --loglevel=error
 
       - name: Rebuild the dist/ directory
