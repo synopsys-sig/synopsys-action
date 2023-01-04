@@ -103,6 +103,20 @@ describe('Coverity flow contract', () => {
       error(err)
     }
   })
+
+  it('With all mandatory and optional fields', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockCoverityParamsExcept(['NONE'])
+
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
 })
 
 export function resetMockCoverityParams() {
