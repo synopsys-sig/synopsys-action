@@ -1,6 +1,4 @@
 import {run} from '../../src/main'
-// import {error, info} from '@actions/core'
-// import * as inputs from '../../src/synopsys-action/inputs'
 import {mockBridgeDownloadUrlAndSynopsysBridgePath, setAllMocks} from './mocking-utility.test'
 import * as inputs from "../../src/synopsys-action/inputs";
 import {error, info} from "@actions/core";

@@ -38,6 +38,12 @@ jobs:
           npm run build
           npm run package
 
+      - name: Unit Tests
+        run: npm run contract-test
+
+      - name: Contract Tests
+        run: npm run contract-test
+
       - name: Compare the expected and actual dist/ directories
         run: |
           if [ "$(git diff --ignore-space-at-eol dist/ | wc -l)" -gt "0" ]; then
