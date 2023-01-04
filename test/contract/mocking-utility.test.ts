@@ -6,7 +6,7 @@ import * as utility from '../../src/synopsys-action/utility'
 import * as inputs from '../../src/synopsys-action/inputs'
 
 export function setAllMocks() {
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('/Users/kishori/Project')
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
   jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(true)
 
   jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
