@@ -39,7 +39,7 @@ jobs:
           npm run package
 
       - name: Unit Tests
-        run: npm run contract-test
+        run: npm run test
 
       - name: Contract Tests
         run: npm run contract-test

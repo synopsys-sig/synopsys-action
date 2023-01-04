@@ -37,7 +37,7 @@ polarisParamsMap.set('POLARIS_APPLICATION_NAME', 'POLARIS_APPLICATION_NAME');
 polarisParamsMap.set('POLARIS_PROJECT_NAME', 'POLARIS_PROJECT_NAME');
 polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', '["SCA", "SAST"]');
 function setAllMocks() {
-    jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('/Users/kishori/Project');
+    jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname);
     jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(true);
     jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname);
     jest.spyOn(io, 'rmRF').mockResolvedValue();
