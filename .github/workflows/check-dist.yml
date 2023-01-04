@@ -28,13 +28,14 @@ jobs:
       - name: Set Node.js 12.x
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Install dependencies
         run: |
           npm install -g nrm
           nrm use npm
           rm package-lock.json
+          npm i --package-lock-only
           npm install --loglevel=error
 
       - name: Rebuild the dist/ directory
