@@ -34,7 +34,7 @@ jobs:
         run: |
           npm install -g nrm
           nrm use npm
-          npm ci --loglevel=error
+          npm install --loglevel=error
 
       - name: Rebuild the dist/ directory
         run: |
