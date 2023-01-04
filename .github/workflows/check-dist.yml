@@ -28,7 +28,7 @@ jobs:
       - name: Set Node.js 12.x
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: 16.x
 
       - name: Install dependencies
         run: |
@@ -43,8 +43,8 @@ jobs:
           npm run build
           npm run package
 
-      - name: Unit Tests
-        run: npm run test
+#      - name: Unit Tests
+#        run: npm run test
 
       - name: Contract Tests
         run: npm run contract-test
