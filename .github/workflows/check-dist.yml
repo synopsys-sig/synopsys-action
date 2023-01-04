@@ -20,7 +20,7 @@ on:
 
 jobs:
   check-dist:
-    runs-on: macos-latest
+    runs-on: linux-latest
 
     steps:
       - uses: actions/checkout@v3
