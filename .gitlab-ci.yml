@@ -10,6 +10,7 @@ include:
 # List of job stages in their order of execution
 stages:
   - build
+  - contract_test
   - coverage_report
   - versioning
   - sbom
@@ -28,6 +29,11 @@ variables:
 build_job:
   extends:
     - .build_unit_tests
+  stage: build
+
+contract_test_job:
+  extends:
+    - .contract_tests
   stage: build
 
 code_coverage_job:
