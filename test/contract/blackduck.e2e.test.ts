@@ -1,8 +1,6 @@
 import {run} from '../../src/main'
-// import {mockBridgeDownloadUrlAndSynopsysBridgePath, setAllMocks} from './mocking-utility.test'
 import * as inputs from "../../src/synopsys-action/inputs";
 import {error, info} from "@actions/core";
-// import {mockPolarisParamsExcept} from "./polaris.e2e.test";
 import * as configVariables from "@actions/artifact/lib/internal/config-variables";
 import * as validator from "../../src/synopsys-action/validators";
 import * as toolCache from "@actions/tool-cache";
@@ -26,11 +24,7 @@ describe('Blackduck flow contract', () => {
     resetMockBlackduckParams()
   })
 
-    it('should ', function () {
-        expect(true).toBe(true)
-    });
-
-  /*it('With all mandatory fields', async () => {
+  it('With all mandatory fields', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES'])
 
@@ -109,7 +103,7 @@ describe('Blackduck flow contract', () => {
     } finally {
       process.env['BLACKDUCK_ISSUE_FAILURE'] = undefined
     }
-  })*/
+  })
 })
 
 export function resetMockBlackduckParams() {

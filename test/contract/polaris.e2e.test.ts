@@ -1,6 +1,5 @@
 import {run} from '../../src/main'
 import {error} from '@actions/core'
-// import {mockBridgeDownloadUrlAndSynopsysBridgePath, setAllMocks} from './mocking-utility.test'
 import * as inputs from "../../src/synopsys-action/inputs";
 import * as configVariables from "@actions/artifact/lib/internal/config-variables";
 import * as validator from "../../src/synopsys-action/validators";
@@ -15,8 +14,6 @@ polarisParamsMap.set('POLARIS_ACCESS_TOKEN', 'POLARIS_ACCESS_TOKEN')
 polarisParamsMap.set('POLARIS_APPLICATION_NAME', 'POLARIS_APPLICATION_NAME')
 polarisParamsMap.set('POLARIS_PROJECT_NAME', 'POLARIS_PROJECT_NAME')
 polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', '["SCA", "SAST"]')
-
-jest.mock('@actions/tool-cache')
 
 describe('Polaris flow contract', () => {
   afterAll(() => {
@@ -38,7 +35,7 @@ describe('Polaris flow contract', () => {
     expect(resp).toBe(0)
   })
 
-  /*it('With missing mandatory field polaris.access.token', async () => {
+  it('With missing mandatory field polaris.access.token', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockPolarisParamsExcept('POLARIS_ACCESS_TOKEN')
 
@@ -109,7 +106,7 @@ describe('Polaris flow contract', () => {
     } finally {
       process.env['POLARIS_ISSUE_FAILURE'] = undefined
     }
-  })*/
+  })
 })
 
 export function mockPolarisParamsExcept(polarisConstant: string) {
