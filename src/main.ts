@@ -8,6 +8,19 @@ export async function run() {
   info('Synopsys Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
+
+  const githubToken = process.env['GITHUB_TOKEN']
+  const githubRepo = process.env['GITHUB_REPOSITORY']
+  const githubRefName = process.env['GITHUB_REF_NAME']
+  const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER']
+
+  if (githubToken != undefined && githubRepo != undefined && githubRefName != undefined && githubRepoOwner != undefined) {
+    info('Github Token '.concat(githubToken))
+    info('Github repo '.concat(githubRepo))
+    info('Github Ref Name '.concat(githubRefName))
+    info('Github repo owner '.concat(githubRepoOwner))
+  }
+
   try {
     const sb = new SynopsysBridge()
     // Download bridge

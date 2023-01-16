@@ -33,6 +33,7 @@ export const BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken'
 export const BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory'
 export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'
+export const BLACKDUCK_AUTOMATION_FIXPR = 'blackduck_automation_fixpr'
 
 // Bridge Exit Codes
 export let EXIT_CODE_MAP = new Map<string, string>([
