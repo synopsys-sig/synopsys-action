@@ -1,12 +1,12 @@
 import * as fs from 'fs'
 import path from 'path'
-import {debug} from '@actions/core'
+import {debug, info} from '@actions/core'
 import {validateCoverityInstallDirectoryParam, validateBlackduckFailureSeverities} from './validators'
 import * as inputs from './inputs'
 import {Polaris, PolarisAssessmentType} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
-import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES} from './input-data/blackduck'
+import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES} from './input-data/blackduck'
 import * as constants from '../application-constants'
 
 export class SynopsysToolsParameter {
@@ -170,6 +170,11 @@ export class SynopsysToolsParameter {
       }
     }
 
+    // Check and put environment variable for fix pull request
+    if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
+      this.setBlackduckEnvironmentVariable()
+    }
+
     const inputJson = JSON.stringify(blackduckData)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
@@ -180,5 +185,23 @@ export class SynopsysToolsParameter {
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
+  }
+
+  private setBlackduckEnvironmentVariable(): void {
+    info('Blackduck Automation Fix PR is enabled')
+    const githubToken = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.GITHUB_ENV]
+    const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.GITHUB_ENV]
+    const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/'), githubRepo.length) : ''
+    const githubRefName = process.env['GITHUB_REF_NAME']
+    const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER']
+
+    if (githubToken == null) {
+      throw new Error('Missing required github token for fix pull request')
+    }
+
+    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.BRIDGE_ENV] = githubToken
+    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.BRIDGE_ENV] = githubRepoName
+    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME.BRIDGE_ENV] = githubRefName
+    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER.BRIDGE_ENV] = githubRepoOwner
   }
 }

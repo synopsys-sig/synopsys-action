@@ -101,16 +101,6 @@ function run() {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
-        const githubToken = process.env['GITHUB_TOKEN'];
-        const githubRepo = process.env['GITHUB_REPOSITORY'];
-        const githubRefName = process.env['GITHUB_REF_NAME'];
-        const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER'];
-        // if (githubToken != undefined && githubRepo != undefined && githubRefName != undefined && githubRepoOwner != undefined) {
-        (0, core_1.info)('Github Token ' + githubToken);
-        (0, core_1.info)('Github repo ' + githubRepo);
-        (0, core_1.info)('Github Ref Name ' + githubRefName);
-        (0, core_1.info)('Github repo owner ' + githubRepoOwner);
-        // }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
             // Download bridge
@@ -251,7 +241,7 @@ exports.extractZipped = extractZipped;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = void 0;
+exports.FIXPR_ENVIRONMENT_VARIABLES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = void 0;
 var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
 (function (BLACKDUCK_SCAN_FAILURE_SEVERITIES) {
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["ALL"] = "ALL";
@@ -264,22 +254,6 @@ var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["TRIVIAL"] = "TRIVIAL";
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
 })(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
-
-
-/***/ }),
-
-/***/ 7678:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FIXPR_ENVIRONMENT_VARIABLES = exports.PolarisAssessmentType = void 0;
-var PolarisAssessmentType;
-(function (PolarisAssessmentType) {
-    PolarisAssessmentType["SCA"] = "SCA";
-    PolarisAssessmentType["SAST"] = "SAST";
-})(PolarisAssessmentType = exports.PolarisAssessmentType || (exports.PolarisAssessmentType = {}));
 exports.FIXPR_ENVIRONMENT_VARIABLES = {
     'GITHUB_TOKEN': {
         'GITHUB_ENV': 'GITHUB_TOKEN',
@@ -298,6 +272,22 @@ exports.FIXPR_ENVIRONMENT_VARIABLES = {
         'BRIDGE_ENV': 'BRIDGE_github_repository_owner_name'
     }
 };
+
+
+/***/ }),
+
+/***/ 7678:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PolarisAssessmentType = void 0;
+var PolarisAssessmentType;
+(function (PolarisAssessmentType) {
+    PolarisAssessmentType["SCA"] = "SCA";
+    PolarisAssessmentType["SAST"] = "SAST";
+})(PolarisAssessmentType = exports.PolarisAssessmentType || (exports.PolarisAssessmentType = {}));
 
 
 /***/ }),
@@ -829,6 +819,10 @@ class SynopsysToolsParameter {
                 blackduckData.data.blackduck.scan = { failure: { severities: failureSeverityEnums } };
             }
         }
+        // Check and put environment variable for fix pull request
+        if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
+            this.setBlackduckEnvironmentVariable();
+        }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
@@ -836,6 +830,21 @@ class SynopsysToolsParameter {
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
+    }
+    setBlackduckEnvironmentVariable() {
+        (0, core_1.info)('Blackduck Automation Fix PR is enabled');
+        const githubToken = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.GITHUB_ENV];
+        const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.GITHUB_ENV];
+        const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/'), githubRepo.length) : '';
+        const githubRefName = process.env['GITHUB_REF_NAME'];
+        const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER'];
+        if (githubToken == null) {
+            throw new Error('Missing required github token for fix pull request');
+        }
+        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.BRIDGE_ENV] = githubToken;
+        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.BRIDGE_ENV] = githubRepoName;
+        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME.BRIDGE_ENV] = githubRefName;
+        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER.BRIDGE_ENV] = githubRepoOwner;
     }
 }
 exports.SynopsysToolsParameter = SynopsysToolsParameter;
