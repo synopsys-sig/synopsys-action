@@ -9,7 +9,7 @@ export async function run() {
   const tempDir = await createTempDir()
   let formattedCommand = ''
 
-  const githubToken = process.env['GITHUB_TOKEN']
+  const githubToken = process.env['github.token']
   const githubRepo = process.env['GITHUB_REPOSITORY']
   const githubRefName = process.env['GITHUB_REF_NAME']
   const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER']
