@@ -105,12 +105,12 @@ function run() {
         const githubRepo = process.env['GITHUB_REPOSITORY'];
         const githubRefName = process.env['GITHUB_REF_NAME'];
         const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER'];
-        if (githubToken != undefined && githubRepo != undefined && githubRefName != undefined && githubRepoOwner != undefined) {
-            (0, core_1.info)('Github Token '.concat(githubToken));
-            (0, core_1.info)('Github repo '.concat(githubRepo));
-            (0, core_1.info)('Github Ref Name '.concat(githubRefName));
-            (0, core_1.info)('Github repo owner '.concat(githubRepoOwner));
-        }
+        // if (githubToken != undefined && githubRepo != undefined && githubRefName != undefined && githubRepoOwner != undefined) {
+        (0, core_1.info)('Github Token ' + githubToken);
+        (0, core_1.info)('Github repo ' + githubRepo);
+        (0, core_1.info)('Github Ref Name ' + githubRefName);
+        (0, core_1.info)('Github repo owner ' + githubRepoOwner);
+        // }
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
             // Download bridge

@@ -14,12 +14,12 @@ export async function run() {
   const githubRefName = process.env['GITHUB_REF_NAME']
   const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER']
 
-  if (githubToken != undefined && githubRepo != undefined && githubRefName != undefined && githubRepoOwner != undefined) {
-    info('Github Token '.concat(githubToken))
-    info('Github repo '.concat(githubRepo))
-    info('Github Ref Name '.concat(githubRefName))
-    info('Github repo owner '.concat(githubRepoOwner))
-  }
+  // if (githubToken != undefined && githubRepo != undefined && githubRefName != undefined && githubRepoOwner != undefined) {
+    info('Github Token ' + githubToken)
+    info('Github repo ' + githubRepo)
+    info('Github Ref Name ' + githubRefName)
+    info('Github repo owner ' + githubRepoOwner)
+  // }
 
   try {
     const sb = new SynopsysBridge()
