@@ -173,6 +173,9 @@ export class SynopsysToolsParameter {
     // Check and put environment variable for fix pull request
     if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
       this.setBlackduckEnvironmentVariable()
+    } else {
+      // Disable fix pull request for adapters
+      blackduckData.data.blackduck.automation = {fixpr: false}
     }
 
     const inputJson = JSON.stringify(blackduckData)

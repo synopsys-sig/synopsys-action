@@ -255,21 +255,21 @@ var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
 })(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
 exports.FIXPR_ENVIRONMENT_VARIABLES = {
-    'GITHUB_TOKEN': {
-        'GITHUB_ENV': 'GITHUB_TOKEN',
-        'BRIDGE_ENV': 'BRIDGE_github_user_token'
+    GITHUB_TOKEN: {
+        GITHUB_ENV: 'GITHUB_TOKEN',
+        BRIDGE_ENV: 'BRIDGE_github_user_token'
     },
-    'GITHUB_REPOSITORY': {
-        'GITHUB_ENV': 'GITHUB_REPOSITORY',
-        'BRIDGE_ENV': 'BRIDGE_github_repository_name'
+    GITHUB_REPOSITORY: {
+        GITHUB_ENV: 'GITHUB_REPOSITORY',
+        BRIDGE_ENV: 'BRIDGE_github_repository_name'
     },
-    'GITHUB_REF_NAME': {
-        'GITHUB_ENV': 'GITHUB_REF_NAME',
-        'BRIDGE_ENV': 'BRIDGE_github_repository_branch_name'
+    GITHUB_REF_NAME: {
+        GITHUB_ENV: 'GITHUB_REF_NAME',
+        BRIDGE_ENV: 'BRIDGE_github_repository_branch_name'
     },
-    'GITHUB_REPOSITORY_OWNER': {
-        'GITHUB_ENV': 'GITHUB_REPOSITORY_OWNER',
-        'BRIDGE_ENV': 'BRIDGE_github_repository_owner_name'
+    GITHUB_REPOSITORY_OWNER: {
+        GITHUB_ENV: 'GITHUB_REPOSITORY_OWNER',
+        BRIDGE_ENV: 'BRIDGE_github_repository_owner_name'
     }
 };
 
@@ -822,6 +822,10 @@ class SynopsysToolsParameter {
         // Check and put environment variable for fix pull request
         if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
             this.setBlackduckEnvironmentVariable();
+        }
+        else {
+            // Disable fix pull request for adapters
+            blackduckData.data.blackduck.automation = { fixpr: false };
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
