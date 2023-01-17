@@ -1,6 +1,5 @@
 import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
-import {GITHUB_TOKEN_KEY} from "../application-constants";
 
 export const SYNOPSYS_BRIDGE_PATH = getInput('synopsys_bridge_path')
 
@@ -33,4 +32,3 @@ export const BLACKDUCK_INSTALL_DIRECTORY = getInput(constants.BLACKDUCK_INSTALL_
 export const BLACKDUCK_SCAN_FULL = getInput(constants.BLACKDUCK_SCAN_FULL_KEY)
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES = getInput(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)
 export const BLACKDUCK_AUTOMATION_FIXPR = getInput(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)
-export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)
