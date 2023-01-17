@@ -7,7 +7,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXIT_CODE_MAP = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.EXIT_CODE_MAP = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -38,7 +38,7 @@ exports.BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken';
 exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory';
 exports.BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full';
 exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities';
-exports.BLACKDUCK_AUTOMATION_FIXPR = 'blackduck_automation_fixpr';
+exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr';
 // Bridge Exit Codes
 exports.EXIT_CODE_MAP = new Map([
     ['0', 'Bridge execution successfully completed'],
@@ -255,22 +255,10 @@ var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
 })(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
 exports.FIXPR_ENVIRONMENT_VARIABLES = {
-    GITHUB_TOKEN: {
-        GITHUB_ENV: 'GITHUB_TOKEN',
-        BRIDGE_ENV: 'BRIDGE_github_user_token'
-    },
-    GITHUB_REPOSITORY: {
-        GITHUB_ENV: 'GITHUB_REPOSITORY',
-        BRIDGE_ENV: 'BRIDGE_github_repository_name'
-    },
-    GITHUB_REF_NAME: {
-        GITHUB_ENV: 'GITHUB_REF_NAME',
-        BRIDGE_ENV: 'BRIDGE_github_repository_branch_name'
-    },
-    GITHUB_REPOSITORY_OWNER: {
-        GITHUB_ENV: 'GITHUB_REPOSITORY_OWNER',
-        BRIDGE_ENV: 'BRIDGE_github_repository_owner_name'
-    }
+    GITHUB_TOKEN: 'GITHUB_TOKEN',
+    GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
+    GITHUB_REF_NAME: 'GITHUB_REF_NAME',
+    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
 };
 
 
@@ -350,7 +338,7 @@ exports.BLACKDUCK_API_TOKEN = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN
 exports.BLACKDUCK_INSTALL_DIRECTORY = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY);
 exports.BLACKDUCK_SCAN_FULL = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY);
 exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY);
-exports.BLACKDUCK_AUTOMATION_FIXPR = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR);
+exports.BLACKDUCK_AUTOMATION_FIXPR = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY);
 
 
 /***/ }),
@@ -821,7 +809,7 @@ class SynopsysToolsParameter {
         }
         // Check and put environment variable for fix pull request
         if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
-            this.setBlackduckEnvironmentVariable();
+            this.setGithubData(blackduckData);
         }
         else {
             // Disable fix pull request for adapters
@@ -835,20 +823,38 @@ class SynopsysToolsParameter {
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
-    setBlackduckEnvironmentVariable() {
+    setGithubData(blackDuckData) {
         (0, core_1.info)('Blackduck Automation Fix PR is enabled');
-        const githubToken = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.GITHUB_ENV];
-        const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.GITHUB_ENV];
+        const githubToken = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN];
+        const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/'), githubRepo.length) : '';
-        const githubRefName = process.env['GITHUB_REF_NAME'];
-        const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER'];
+        const githubRefName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
+        const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if (githubToken == null) {
             throw new Error('Missing required github token for fix pull request');
         }
-        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.BRIDGE_ENV] = githubToken;
-        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.BRIDGE_ENV] = githubRepoName;
-        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME.BRIDGE_ENV] = githubRefName;
-        process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER.BRIDGE_ENV] = githubRepoOwner;
+        // This condition is required as per ts-lint as these fields may have undefined as well
+        if (githubRepo != null && githubRefName != null && githubRepoOwner != null) {
+            const githubData = {
+                user: {
+                    token: githubToken
+                },
+                repository: {
+                    name: githubRepoName,
+                    owner: {
+                        name: githubRepoOwner
+                    },
+                    branch: {
+                        name: githubRefName
+                    }
+                }
+            };
+            blackDuckData.data.github = githubData;
+        }
+        // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.BRIDGE_ENV] = githubToken
+        // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.BRIDGE_ENV] = githubRepoName
+        // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME.BRIDGE_ENV] = githubRefName
+        // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER.BRIDGE_ENV] = githubRepoOwner
     }
 }
 exports.SynopsysToolsParameter = SynopsysToolsParameter;

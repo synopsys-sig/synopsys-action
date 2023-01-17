@@ -12,6 +12,7 @@ export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
 
 export interface Blackduck {
   blackduck: BlackduckData
+  github?: GithubData
 }
 
 export interface BlackduckData {
@@ -22,21 +23,32 @@ export interface BlackduckData {
   automation?: {fixpr?: boolean}
 }
 
+export interface Branch {
+  name: string
+}
+
+export interface Owner {
+  name: string
+}
+
+export interface User {
+  token: string
+}
+
+export interface Repository {
+  name: string
+  branch: Branch
+  owner: Owner
+}
+
+export interface GithubData {
+  user: User
+  repository: Repository
+}
+
 export const FIXPR_ENVIRONMENT_VARIABLES = {
-  GITHUB_TOKEN: {
-    GITHUB_ENV: 'GITHUB_TOKEN',
-    BRIDGE_ENV: 'BRIDGE_github_user_token'
-  },
-  GITHUB_REPOSITORY: {
-    GITHUB_ENV: 'GITHUB_REPOSITORY',
-    BRIDGE_ENV: 'BRIDGE_github_repository_name'
-  },
-  GITHUB_REF_NAME: {
-    GITHUB_ENV: 'GITHUB_REF_NAME',
-    BRIDGE_ENV: 'BRIDGE_github_repository_branch_name'
-  },
-  GITHUB_REPOSITORY_OWNER: {
-    GITHUB_ENV: 'GITHUB_REPOSITORY_OWNER',
-    BRIDGE_ENV: 'BRIDGE_github_repository_owner_name'
-  }
+  GITHUB_TOKEN: 'GITHUB_TOKEN',
+  GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
+  GITHUB_REF_NAME: 'GITHUB_REF_NAME',
+  GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
 }

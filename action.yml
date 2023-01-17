@@ -71,6 +71,9 @@ inputs:
   blackduck_automation_fixpr:
     description: 'If set as true, Fix PRs will be created if vulnerability is found after scan'
     required: false
+  bridge_download_version:
+    description: 'If provided, Synopsys-action will configure the version of Bridge'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

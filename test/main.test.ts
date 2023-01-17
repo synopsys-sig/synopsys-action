@@ -102,10 +102,6 @@ test('Run blackduck flow with Fix pull request - run', async () => {
 
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
-  // Object.defineProperty(process.env, 'GITHUB_TOKEN', {value: null})
-  // Object.defineProperty(process.env, 'GITHUB_REPOSITORY', {value: null})
-  // Object.defineProperty(process.env, 'GITHUB_REF_NAME', {value: null})
-  // Object.defineProperty(process.env, 'GITHUB_REPOSITORY_OWNER', {value: null})
 })
 
 test('Run blackduck flow with Fix pull request, missing github token - run', async () => {

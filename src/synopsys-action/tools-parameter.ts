@@ -6,7 +6,7 @@ import * as inputs from './inputs'
 import {Polaris, PolarisAssessmentType} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
-import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES} from './input-data/blackduck'
+import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, FIXPR_ENVIRONMENT_VARIABLES} from './input-data/blackduck'
 import * as constants from '../application-constants'
 
 export class SynopsysToolsParameter {
@@ -172,7 +172,7 @@ export class SynopsysToolsParameter {
 
     // Check and put environment variable for fix pull request
     if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
-      this.setBlackduckEnvironmentVariable()
+      this.setGithubData(blackduckData)
     } else {
       // Disable fix pull request for adapters
       blackduckData.data.blackduck.automation = {fixpr: false}
@@ -190,21 +190,41 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  private setBlackduckEnvironmentVariable(): void {
+  private setGithubData(blackDuckData: InputData<Blackduck>): void {
     info('Blackduck Automation Fix PR is enabled')
-    const githubToken = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.GITHUB_ENV]
-    const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.GITHUB_ENV]
+    const githubToken = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN]
+    const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/'), githubRepo.length) : ''
-    const githubRefName = process.env['GITHUB_REF_NAME']
-    const githubRepoOwner = process.env['GITHUB_REPOSITORY_OWNER']
+    const githubRefName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
+    const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
 
     if (githubToken == null) {
       throw new Error('Missing required github token for fix pull request')
     }
 
-    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.BRIDGE_ENV] = githubToken
-    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.BRIDGE_ENV] = githubRepoName
-    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME.BRIDGE_ENV] = githubRefName
-    process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER.BRIDGE_ENV] = githubRepoOwner
+    // This condition is required as per ts-lint as these fields may have undefined as well
+    if (githubRepo != null && githubRefName != null && githubRepoOwner != null) {
+      const githubData: GithubData = {
+        user: {
+          token: githubToken
+        },
+        repository: {
+          name: githubRepoName,
+          owner: {
+            name: githubRepoOwner
+          },
+          branch: {
+            name: githubRefName
+          }
+        }
+      }
+
+      blackDuckData.data.github = githubData
+    }
+
+    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.BRIDGE_ENV] = githubToken
+    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.BRIDGE_ENV] = githubRepoName
+    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME.BRIDGE_ENV] = githubRefName
+    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER.BRIDGE_ENV] = githubRepoOwner
   }
 }
