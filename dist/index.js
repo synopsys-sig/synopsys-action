@@ -826,8 +826,9 @@ class SynopsysToolsParameter {
     setGithubData(blackDuckData) {
         (0, core_1.info)('Blackduck Automation Fix PR is enabled');
         const githubToken = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN];
+        (0, core_1.info)('github token ------ ' + githubToken);
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
-        const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/'), githubRepo.length) : '';
+        const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
         const githubRefName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
         const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if (githubToken == null) {
