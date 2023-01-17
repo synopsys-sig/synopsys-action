@@ -193,7 +193,6 @@ export class SynopsysToolsParameter {
   private setGithubData(blackDuckData: InputData<Blackduck>): void {
     info('Blackduck Automation Fix PR is enabled')
     const githubToken = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN]
-    info('github token ------ ' + githubToken)
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
     const githubRefName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
@@ -222,10 +221,5 @@ export class SynopsysToolsParameter {
 
       blackDuckData.data.github = githubData
     }
-
-    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN.BRIDGE_ENV] = githubToken
-    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY.BRIDGE_ENV] = githubRepoName
-    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME.BRIDGE_ENV] = githubRefName
-    // process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER.BRIDGE_ENV] = githubRepoOwner
   }
 }
