@@ -54,7 +54,6 @@ export function validateBlackDuckInputs(): boolean {
     const paramsMap = new Map()
     paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
     paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
-    paramsMap.set(constants.BLACKDUCK_SCAN_FULL_KEY, inputs.BLACKDUCK_SCAN_FULL)
     return validateParameters(paramsMap, constants.BLACKDUCK_KEY)
   }
   return false
