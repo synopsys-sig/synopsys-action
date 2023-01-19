@@ -127,7 +127,27 @@ test('Run blackduck flow with Fix pull request, missing github token - run', asy
   }
 })
 
-test('Run coverity flow - run', async () => {
+test('Run coverity flow - run - without optional fields', async () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+
+  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+
+  const response = await run()
+  expect(response).not.toBe(null)
+
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
+})
+
+test('Run coverity flow - run - with optional fields', async () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
   Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
   Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
@@ -151,7 +171,26 @@ test('Run coverity flow - run', async () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
 })
 
-test('Run blackduck flow with download and configure option - run', async () => {
+test('Run blackduck flow with download and configure option - run without optional fields', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://download-bridge-win.zip'})
+
+  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+
+  const response = await run()
+  expect(response).not.toBe(null)
+
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
+})
+
+test('Run blackduck flow with download and configure option - run with optional fields', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
