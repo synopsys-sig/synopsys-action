@@ -68,6 +68,9 @@ inputs:
   blackduck_scan_failure_severities:
     description: 'If provided, Blackduck will break the build if any issues produced match one of the given severities'
     required: false
+  blackduck_automation_fixpr:
+    description: 'If set as true, Fix PRs will be created if vulnerability is found after scan'
+    required: false
   bridge_download_version:
     description: 'If provided, Synopsys-action will configure the version of Bridge'
     required: false

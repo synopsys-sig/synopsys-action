@@ -8,6 +8,7 @@ export async function run() {
   info('Synopsys Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
+
   try {
     const sb = new SynopsysBridge()
     // Download bridge
