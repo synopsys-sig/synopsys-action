@@ -808,7 +808,7 @@ class SynopsysToolsParameter {
             }
         }
         // Check and put environment variable for fix pull request
-        if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
+        if (inputs.BLACKDUCK_AUTOMATION_FIXPR && inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
             this.setGithubData(blackduckData);
         }
         else {
