@@ -159,13 +159,14 @@ wanted to only report newly found policy violations on rapid scans, you would no
 `DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
 GitHub workflow.
 
-**Note about Fix Pull requests creation:** By default fix pull request creation will be enabled (i.e. Create
+**Note about Fix Pull requests creation:** <br/>
+blackduck_automation_fixpr: By default fix pull request creation will be enabled (i.e. Create
 fix pull requests if vulnerabilities are reported). To disable this feature, we need to pass blackduck_automation_fixpr
-as false. It is mandatory to pass github_token parameter with token having required permissions. The token can be github
-specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)
-
-**Current observation regarding Fix Pull request creation** As per rate limit restriction of github rest api calls, we may
-observe fewer pull requests to be created.
+as false.<br/> 
+github_token: It is mandatory to pass github_token parameter with token having required permissions. The token can be github
+specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
+**As per observation, due to rate limit restriction of github rest api calls, we may
+observe fewer pull requests to be created.**
 
 ```yaml
 
