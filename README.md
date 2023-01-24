@@ -178,9 +178,6 @@ jobs:
         uses: actions/checkout@v3
       - name: Synopsys Action
         uses: synopsys-sig/synopsys-action@<version>
-        env:
-          # Required parameter if blackduck_automation_fixpr is enabled
-          GITHUB_TOKEN: GITHUB_PAT_TOKEN
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
@@ -188,9 +185,6 @@ jobs:
           # Optional parameter. By default, pushes will initiate a full "intelligent" scan and pull requests
           # will initiate a rapid scan.
           blackduck_scan_full: false
-          # Optional parameter. By default, create fix pull requests if vulnerabilities are reported
-          # Passing false will disable fix pull request creation 
-          blackduck_automation_fixpr: false
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
           blackduck_scan_failure_severities: "[\"ALL\"]"
