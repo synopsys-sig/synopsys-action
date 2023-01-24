@@ -74,6 +74,9 @@ inputs:
   bridge_download_version:
     description: 'If provided, Synopsys-action will configure the version of Bridge'
     required: false
+  github_token:
+    description: 'Github token to be used for git related rest operation'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

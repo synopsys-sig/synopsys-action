@@ -35,6 +35,8 @@ export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'
 export const BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr'
 
+export const GITHUB_TOKEN_KEY = 'github_token'
+
 // Bridge Exit Codes
 export let EXIT_CODE_MAP = new Map<string, string>([
   ['0', 'Bridge execution successfully completed'],
