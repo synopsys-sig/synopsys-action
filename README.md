@@ -159,6 +159,14 @@ wanted to only report newly found policy violations on rapid scans, you would no
 `DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
 GitHub workflow.
 
+**Note about Fix Pull requests creation:** By default fix pull request creation will be enabled (i.e. Create
+fix pull requests if vulnerabilities are reported). To disable this feature, we need to pass blackduck_automation_fixpr
+as false. It is mandatory to pass github_token parameter with token having required permissions. The token can be github
+specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication)
+
+**Current observation regarding Fix Pull request creation** As per rate limit restriction of github rest api calls, we may
+observe fewer pull requests to be created.
+
 ```yaml
 
 name: Synopsys Security Testing
@@ -185,6 +193,12 @@ jobs:
           # Optional parameter. By default, pushes will initiate a full "intelligent" scan and pull requests
           # will initiate a rapid scan.
           blackduck_scan_full: false
+          # Required parameter if blackduck_automation_fixpr is enabled
+          # Make sure GITHUB_TOKEN have appropriate permissions
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Optional parameter. By default, create fix pull requests if vulnerabilities are reported
+          # Passing false will disable fix pull request creation 
+          blackduck_automation_fixpr: true
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
           blackduck_scan_failure_severities: "[\"ALL\"]"
