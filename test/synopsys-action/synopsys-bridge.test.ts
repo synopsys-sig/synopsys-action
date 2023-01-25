@@ -163,6 +163,41 @@ test('Test getLatestVersion - Minor version', async () => {
   expect(response).toBe('0.2.1')
 })
 
+test('Test getLatestVersion - Minor version without sequence', async () => {
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+  httpResponse.readBody.mockResolvedValueOnce(
+    '\n' +
+      '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' +
+      '<html>\n' +
+      '<head><meta name="robots" content="noindex" />\n' +
+      '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' +
+      '</head>\n' +
+      '<body>\n' +
+      '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' +
+      '<pre>Name     Last modified      Size</pre><hr/>\n' +
+      '<pre><a href="../">../</a>\n' +
+      '<a href="0.1.114/">0.1.114/</a>  16-Dec-2022 16:45    -\n' +
+      '<a href="0.1.162/">0.1.162/</a>  24-Jan-2023 18:41    -\n' +
+      '<a href="0.1.61/">0.1.61/</a>   04-Oct-2022 23:05    -\n' +
+      '<a href="0.1.67/">0.1.67/</a>   07-Oct-2022 00:35    -\n' +
+      '<a href="0.1.72/">0.1.72/</a>   17-Oct-2022 19:46    -\n' +
+      '</pre>\n' +
+      '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address><script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=1&cb=1747967294" async></script></body></html>'
+  )
+
+  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
+
+  const sb = new SynopsysBridge()
+  const response = await sb.getLatestVersion()
+
+  expect(response).toBe('0.1.162')
+})
+
 test('Test getLatestVersion - Major version', async () => {
   const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
 
