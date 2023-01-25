@@ -569,15 +569,7 @@ class SynopsysBridge {
             const versionArray = yield this.getAllAvailableBridgeVersions();
             let latestVersion = '0.0.0';
             for (const version of versionArray) {
-                const latestVersionParts = latestVersion.split('.');
-                const versionParts = version.split('.');
-                if (parseInt(versionParts[0]) > parseInt(latestVersionParts[0])) {
-                    latestVersion = version;
-                }
-                else if (parseInt(versionParts[1]) > parseInt(latestVersionParts[1])) {
-                    latestVersion = version;
-                }
-                else if (parseInt(versionParts[1]) > parseInt(latestVersionParts[1])) {
+                if (version.localeCompare(latestVersion, undefined, { numeric: true, sensitivity: 'base' }) === 1) {
                     latestVersion = version;
                 }
             }
