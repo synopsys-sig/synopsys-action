@@ -91,7 +91,7 @@ describe('Polaris flow contract', () => {
     }
   })
 
-  it('With bridge.break set to tru', async () => {
+  it('With bridge.break set to true', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockPolarisParamsExcept('NONE')
     process.env['POLARIS_ISSUE_FAILURE'] = 'true'
