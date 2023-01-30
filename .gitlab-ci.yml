@@ -26,7 +26,7 @@ variables:
 
 ##### MERGE REQUEST PIPELINE #####
 
-build_job:
+build_unit_test_job:
   extends:
     - .build_unit_tests
   stage: build
