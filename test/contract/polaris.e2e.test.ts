@@ -1,12 +1,12 @@
 import {run} from '../../src/main'
 import {error} from '@actions/core'
-import * as inputs from "../../src/synopsys-action/inputs";
-import * as configVariables from "@actions/artifact/lib/internal/config-variables";
-import * as validator from "../../src/synopsys-action/validators";
-import * as toolCache from "@actions/tool-cache";
-import * as io from "@actions/io";
-import * as utility from "../../src/synopsys-action/utility";
-import {BRIDGE_DOWNLOAD_URL, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from "../../src/synopsys-action/inputs";
+import * as inputs from '../../src/synopsys-action/inputs'
+import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import * as validator from '../../src/synopsys-action/validators'
+import * as toolCache from '@actions/tool-cache'
+import * as io from '@actions/io'
+import * as utility from '../../src/synopsys-action/utility'
+import {BRIDGE_DOWNLOAD_URL, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from '../../src/synopsys-action/inputs'
 
 const polarisParamsMap: Map<string, string> = new Map<string, string>()
 polarisParamsMap.set('POLARIS_SERVER_URL', 'POLARIS_SERVER_URL')

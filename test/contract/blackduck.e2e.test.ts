@@ -1,11 +1,11 @@
 import {run} from '../../src/main'
-import * as inputs from "../../src/synopsys-action/inputs";
-import {error, info} from "@actions/core";
-import * as configVariables from "@actions/artifact/lib/internal/config-variables";
-import * as validator from "../../src/synopsys-action/validators";
-import * as toolCache from "@actions/tool-cache";
-import * as io from "@actions/io";
-import * as utility from "../../src/synopsys-action/utility";
+import * as inputs from '../../src/synopsys-action/inputs'
+import {error, info} from '@actions/core'
+import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import * as validator from '../../src/synopsys-action/validators'
+import * as toolCache from '@actions/tool-cache'
+import * as io from '@actions/io'
+import * as utility from '../../src/synopsys-action/utility'
 
 const blackduckParamMap: Map<string, string> = new Map<string, string>()
 blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
@@ -76,7 +76,7 @@ describe('Blackduck flow contract', () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY'])
 
-    Object.defineProperty(inputs, "BLACKDUCK_INSTALL_DIRECTORY", {value: '/something'})
+    Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: '/something'})
 
     setAllMocks()
 

@@ -1,11 +1,11 @@
 import {run} from '../../src/main'
-import * as inputs from "../../src/synopsys-action/inputs";
-import {error, info} from "@actions/core";
-import * as configVariables from "@actions/artifact/lib/internal/config-variables";
-import * as validator from "../../src/synopsys-action/validators";
-import * as toolCache from "@actions/tool-cache";
-import * as io from "@actions/io";
-import * as utility from "../../src/synopsys-action/utility";
+import * as inputs from '../../src/synopsys-action/inputs'
+import {error, info} from '@actions/core'
+import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import * as validator from '../../src/synopsys-action/validators'
+import * as toolCache from '@actions/tool-cache'
+import * as io from '@actions/io'
+import * as utility from '../../src/synopsys-action/utility'
 
 const coverityParamMap: Map<string, string> = new Map<string, string>()
 coverityParamMap.set('COVERITY_URL', 'https://testing.coverity.synopsys.com')
