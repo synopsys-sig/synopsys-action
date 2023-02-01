@@ -145,10 +145,6 @@ export class SynopsysBridge {
   async prepareCommand(tempDir: string): Promise<string> {
     try {
       let formattedCommand = ''
-      if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
-        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
-      }
-
       // validating and preparing command for polaris
       if (validatePolarisInputs()) {
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
@@ -168,7 +164,7 @@ export class SynopsysBridge {
       }
 
       if (formattedCommand.length === 0) {
-        return Promise.reject(new Error('Mandatory fields are missing for given scan[s]'))
+        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
       }
       debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand

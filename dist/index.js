@@ -104,10 +104,10 @@ function run() {
         let formattedCommand = '';
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
-            // Download bridge
-            yield sb.downloadBridge(tempDir);
             // Prepare bridge command
             formattedCommand = yield sb.prepareCommand(tempDir);
+            // Download bridge
+            yield sb.downloadBridge(tempDir);
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
@@ -532,9 +532,6 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let formattedCommand = '';
-                if (inputs.POLARIS_SERVER_URL == null && inputs.COVERITY_URL == null && inputs.BLACKDUCK_URL == null) {
-                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
-                }
                 // validating and preparing command for polaris
                 if ((0, validators_1.validatePolarisInputs)()) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
@@ -551,7 +548,7 @@ class SynopsysBridge {
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
                 if (formattedCommand.length === 0) {
-                    return Promise.reject(new Error('Mandatory fields are missing for given scan[s]'));
+                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
                 }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
