@@ -35,6 +35,18 @@
     - npm ci
     - npm run all
 
+.contract_tests:
+  extends:
+    - .retry
+  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - .m2/
+  script:
+    - npm ci
+    - npm run contract-test
+
 .code_coverage:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
   script:

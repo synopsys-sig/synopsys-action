@@ -16,7 +16,7 @@ export async function run() {
     // Prepare bridge command
     formattedCommand = await sb.prepareCommand(tempDir)
     // Execute bridge command
-    await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error) {
     throw error
   } finally {

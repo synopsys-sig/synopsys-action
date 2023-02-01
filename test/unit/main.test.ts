@@ -1,9 +1,9 @@
-import {logBridgeExitCodes, run} from '../src/main'
-import * as inputs from '../src/synopsys-action/inputs'
+import {logBridgeExitCodes, run} from '../../src/main'
+import * as inputs from '../../src/synopsys-action/inputs'
 import mock = jest.mock
-import {SynopsysBridge} from '../src/synopsys-action/synopsys-bridge'
-import {DownloadFileResponse} from '../src/synopsys-action/download-utility'
-import * as downloadUtility from './../src/synopsys-action/download-utility'
+import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
+import {DownloadFileResponse} from '../../src/synopsys-action/download-utility'
+import * as downloadUtility from './../../src/synopsys-action/download-utility'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
 
 beforeEach(() => {
