@@ -36,8 +36,8 @@ jobs:
           # Polaris
           polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "Application_For_Github_Actions"
-          polaris_project_name: "Project_For_Github_Actions"
+          polaris_application_name: "tb_app1"
+          polaris_project_name: "tb_proj"
           polaris_assessment_types: '["SAST"]'
 
           # Blackduck
@@ -57,6 +57,6 @@ jobs:
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
-          coverity_install_directory: "/root"
+          #coverity_install_directory: "/root"
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 

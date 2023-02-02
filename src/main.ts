@@ -11,10 +11,10 @@ export async function run() {
 
   try {
     const sb = new SynopsysBridge()
-    // Download bridge
-    await sb.downloadBridge(tempDir)
     // Prepare bridge command
     formattedCommand = await sb.prepareCommand(tempDir)
+    // Download bridge
+    await sb.downloadBridge(tempDir)
     // Execute bridge command
     return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error) {

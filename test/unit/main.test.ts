@@ -1,6 +1,5 @@
 import {logBridgeExitCodes, run} from '../../src/main'
 import * as inputs from '../../src/synopsys-action/inputs'
-import mock = jest.mock
 import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
 import {DownloadFileResponse} from '../../src/synopsys-action/download-utility'
 import * as downloadUtility from './../../src/synopsys-action/download-utility'
@@ -18,6 +17,24 @@ test('Not supported flow error - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
+
+  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+
+  try {
+    await run()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Requires at least one scan type: (polaris_serverUrl,coverity_url,blackduck_url)')
+  }
+})
+
+test('Not supported flow error (empty strings) - run', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: ''})
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: ''})
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: ''})
 
   jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
