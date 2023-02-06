@@ -1,8 +1,0 @@
-{
-  "modules": [
-    {
-      "at": ".",
-      "templates": ["source", "dependencies"]
-    }
-  ]
-}

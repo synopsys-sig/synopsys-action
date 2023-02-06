@@ -29,21 +29,20 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForPolaris(): string {
     let command = ''
-    let assessmentTypes: string[] = []
     const assessmentTypeEnums: PolarisAssessmentType[] = []
-    if (inputs.POLARIS_ASSESSMENT_TYPES != null && inputs.POLARIS_ASSESSMENT_TYPES.length > 0) {
+    const assessmentTypesValues = inputs.POLARIS_ASSESSMENT_TYPES;
+    if (assessmentTypesValues != null &&  assessmentTypesValues.length > 0) {
       try {
-        assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
+        const assetmentTypes = assessmentTypesValues.split(',')
+        for (const assessmentType of assetmentTypes) {
+          if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
+            throw new Error('Provided Assessment type not found')
+          } else {
+            assessmentTypeEnums.push(PolarisAssessmentType[assessmentType as keyof typeof PolarisAssessmentType])
+          }
+        }
       } catch (error) {
         throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
-      }
-    }
-
-    for (const assessmentType of assessmentTypes) {
-      if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
-        throw new Error('Provided Assessment type not found')
-      } else {
-        assessmentTypeEnums.push(PolarisAssessmentType[assessmentType as keyof typeof PolarisAssessmentType])
       }
     }
 
