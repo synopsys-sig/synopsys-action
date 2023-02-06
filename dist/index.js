@@ -116,8 +116,8 @@ function run() {
         }
         finally {
             yield (0, utility_1.cleanupTempDir)(tempDir);
-            (0, core_1.info)('Synopsys Action workflow execution completed');
         }
+        (0, core_1.info)('Synopsys Action workflow execution completed');
     });
 }
 exports.run = run;

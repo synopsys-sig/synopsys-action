@@ -21,8 +21,8 @@ export async function run() {
     throw error
   } finally {
     await cleanupTempDir(tempDir)
-    info('Synopsys Action workflow execution completed')
   }
+  info('Synopsys Action workflow execution completed')
 }
 
 export function logBridgeExitCodes(message: string): string {
