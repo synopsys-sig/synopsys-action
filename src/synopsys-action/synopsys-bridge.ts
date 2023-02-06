@@ -173,6 +173,10 @@ export class SynopsysBridge {
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
+      if (formattedCommand.length === 0) {
+        return Promise.reject(new Error('Failed because of previous errors'))
+      }
+
       debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {

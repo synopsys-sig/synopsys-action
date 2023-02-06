@@ -556,6 +556,9 @@ class SynopsysBridge {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
+                if (formattedCommand.length === 0) {
+                    return Promise.reject(new Error('Failed because of previous errors'));
+                }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
             }
