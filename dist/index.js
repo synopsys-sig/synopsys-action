@@ -532,6 +532,15 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let formattedCommand = '';
+                const paramsMap = new Map();
+                paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
+                paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
+                paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
+                const invalidParams = (0, validators_1.isNullOrEmpty)(paramsMap);
+                (0, core_1.info)('Number of scans requested: '.concat(String(invalidParams.length)));
+                if (invalidParams.length === 3) {
+                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
+                }
                 // validating and preparing command for polaris
                 if ((0, validators_1.validatePolarisInputs)()) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
@@ -546,9 +555,6 @@ class SynopsysBridge {
                 if ((0, validators_1.validateBlackDuckInputs)()) {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
-                }
-                if (formattedCommand.length === 0) {
-                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
                 }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
@@ -967,7 +973,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBridgeUrl = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
+exports.validateBridgeUrl = exports.isNullOrEmpty = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
@@ -1029,12 +1035,7 @@ function validateBlackDuckInputs() {
 }
 exports.validateBlackDuckInputs = validateBlackDuckInputs;
 function validateParameters(params, toolName) {
-    const invalidParams = [];
-    for (const param of params.entries()) {
-        if (param[1] == null || param[1].length === 0) {
-            invalidParams.push(param[0]);
-        }
-    }
+    const invalidParams = isNullOrEmpty(params);
     if (invalidParams.length > 0) {
         (0, core_1.error)(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`);
         return false;
@@ -1042,6 +1043,16 @@ function validateParameters(params, toolName) {
     return true;
 }
 exports.validateParameters = validateParameters;
+function isNullOrEmpty(params) {
+    const invalidParams = [];
+    for (const param of params.entries()) {
+        if (param[1] == null || param[1].length === 0) {
+            invalidParams.push(param[0]);
+        }
+    }
+    return invalidParams;
+}
+exports.isNullOrEmpty = isNullOrEmpty;
 function validateBridgeUrl(url) {
     if (!url.match('.*\\.(zip|ZIP)$')) {
         return false;

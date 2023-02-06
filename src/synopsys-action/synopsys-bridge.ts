@@ -9,7 +9,7 @@ import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs from 'fs'
 import {rmRF} from '@actions/io'
-import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs} from './validators'
+import {isNullOrEmpty, validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
@@ -145,6 +145,16 @@ export class SynopsysBridge {
   async prepareCommand(tempDir: string): Promise<string> {
     try {
       let formattedCommand = ''
+
+      const paramsMap = new Map()
+      paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
+      paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
+      paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
+      const invalidParams: string[] = isNullOrEmpty(paramsMap)
+      info('Number of scans requested: '.concat(String(invalidParams.length)))
+      if (invalidParams.length === 3) {
+        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
+      }
       // validating and preparing command for polaris
       if (validatePolarisInputs()) {
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
@@ -163,9 +173,6 @@ export class SynopsysBridge {
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
-      if (formattedCommand.length === 0) {
-        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
-      }
       debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {

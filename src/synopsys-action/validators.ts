@@ -60,17 +60,22 @@ export function validateBlackDuckInputs(): boolean {
 }
 
 export function validateParameters(params: Map<string, string>, toolName: string): boolean {
+  const invalidParams: string[] = isNullOrEmpty(params)
+  if (invalidParams.length > 0) {
+    error(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`)
+    return false
+  }
+  return true
+}
+
+export function isNullOrEmpty(params: Map<string, string>): string[] {
   const invalidParams: string[] = []
   for (const param of params.entries()) {
     if (param[1] == null || param[1].length === 0) {
       invalidParams.push(param[0])
     }
   }
-  if (invalidParams.length > 0) {
-    error(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`)
-    return false
-  }
-  return true
+  return invalidParams
 }
 
 export function validateBridgeUrl(url: string): boolean {
