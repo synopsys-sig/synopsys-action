@@ -34,7 +34,7 @@ jobs:
         uses: ./
         with:
           coverity_url: ${{ secrets.COVERITY_URL }}
-          #coverity_user: ${{ secrets.COVERITY_USER }}
+          coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}

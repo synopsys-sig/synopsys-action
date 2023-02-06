@@ -537,7 +537,6 @@ class SynopsysBridge {
                 paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
                 paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
                 const invalidParams = (0, validators_1.isNullOrEmpty)(paramsMap);
-                (0, core_1.info)('Number of scans requested: '.concat(String(invalidParams.length)));
                 if (invalidParams.length === 3) {
                     return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
                 }
