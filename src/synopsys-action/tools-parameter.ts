@@ -33,7 +33,8 @@ getFormattedCommandForPolaris(): string {
     const assessmentTypesValues = inputs.POLARIS_ASSESSMENT_TYPES;
     if (assessmentTypesValues != null &&  assessmentTypesValues.length > 0) {
       try {
-        const assessmentTypes = assessmentTypesValues.toUpperCase().split(',') // converting provided assessmentTypes to uppercase
+        // converting provided assessmentTypes to uppercase
+        const assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
         for (const assessmentType of assessmentTypes) {
           if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
             throw new Error('Provided Assessment type not found')
