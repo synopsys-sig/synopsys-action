@@ -13,7 +13,7 @@ polarisParamsMap.set('POLARIS_SERVER_URL', 'POLARIS_SERVER_URL')
 polarisParamsMap.set('POLARIS_ACCESS_TOKEN', 'POLARIS_ACCESS_TOKEN')
 polarisParamsMap.set('POLARIS_APPLICATION_NAME', 'POLARIS_APPLICATION_NAME')
 polarisParamsMap.set('POLARIS_PROJECT_NAME', 'POLARIS_PROJECT_NAME')
-polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', '["SCA", "SAST"]')
+polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', "SCA,SAST")
 
 describe('Polaris flow contract', () => {
   afterAll(() => {
