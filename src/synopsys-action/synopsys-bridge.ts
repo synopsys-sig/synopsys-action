@@ -1,6 +1,6 @@
 import {exec, ExecOptions} from '@actions/exec'
 import {BRIDGE_DOWNLOAD_URL, SYNOPSYS_BRIDGE_PATH} from './inputs'
-import {debug, info} from '@actions/core'
+import {debug, error, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
@@ -78,8 +78,8 @@ export class SynopsysBridge {
         }
         try {
           return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
-        } catch (error) {
-          throw error
+        } catch (errorObject) {
+          throw errorObject
         }
       }
     } else {
@@ -126,18 +126,18 @@ export class SynopsysBridge {
       await extractZipped(downloadResponse.filePath, extractZippedFilePath)
       info('Download and configuration of Synopsys Bridge completed')
     } catch (e) {
-      const error = (e as Error).message
+      const errorObject = (e as Error).message
       await cleanupTempDir(tempDir)
-      if (error.includes('404') || error.toLowerCase().includes('invalid url')) {
+      if (errorObject.includes('404') || errorObject.toLowerCase().includes('invalid url')) {
         let os = ''
         if (process.env['RUNNER_OS']) {
           os = process.env['RUNNER_OS']
         }
         return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')))
-      } else if (error.toLowerCase().includes('empty')) {
+      } else if (errorObject.toLowerCase().includes('empty')) {
         return Promise.reject(new Error('Provided Bridge URL cannot be empty'))
       } else {
-        return Promise.reject(new Error(error))
+        return Promise.reject(new Error(errorObject))
       }
     }
   }
@@ -156,40 +156,43 @@ export class SynopsysBridge {
       }
       // validating and preparing command for polaris
       const polarisErrors: string[] = validatePolarisInputs()
-      if (polarisErrors.length > 0) {
+      if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
       }
 
       // validating and preparing command for coverity
       const coverityErrors: string[] = validateCoverityInputs()
-      if (coverityErrors.length > 0) {
+      if (coverityErrors.length === 0 && inputs.COVERITY_PASSPHRASE) {
         const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
       }
 
       // validating and preparing command for blackduck
       const blackduckErrors: string[] = validateBlackDuckInputs()
-      if (blackduckErrors.length > 0) {
+      if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
         const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
-      const allErrors: string[] = []
-      allErrors.concat(polarisErrors)
-      allErrors.concat(coverityErrors)
-      allErrors.concat(blackduckErrors)
-      if (allErrors.length > 0) {
+      let allErrors: string[] = []
+      allErrors = allErrors.concat(polarisErrors)
+      allErrors = allErrors.concat(coverityErrors)
+      allErrors = allErrors.concat(blackduckErrors)
+      if (formattedCommand.length === 0) {
         return Promise.reject(new Error(allErrors.join(',')))
+      }
+      if (allErrors.length > 0) {
+        error(new Error(allErrors.join(',')))
       }
 
       debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {
-      const error = e as Error
+      const errorObject = e as Error
       await cleanupTempDir(tempDir)
-      debug(error.stack === undefined ? '' : error.stack.toString())
-      return Promise.reject(error.message)
+      debug(errorObject.stack === undefined ? '' : errorObject.stack.toString())
+      return Promise.reject(errorObject.message)
     }
   }
 

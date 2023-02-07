@@ -462,8 +462,8 @@ class SynopsysBridge {
                     try {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
-                    catch (error) {
-                        throw error;
+                    catch (errorObject) {
+                        throw errorObject;
                     }
                 }
             }
@@ -510,20 +510,20 @@ class SynopsysBridge {
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
             catch (e) {
-                const error = e.message;
+                const errorObject = e.message;
                 yield (0, utility_1.cleanupTempDir)(tempDir);
-                if (error.includes('404') || error.toLowerCase().includes('invalid url')) {
+                if (errorObject.includes('404') || errorObject.toLowerCase().includes('invalid url')) {
                     let os = '';
                     if (process.env['RUNNER_OS']) {
                         os = process.env['RUNNER_OS'];
                     }
                     return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')));
                 }
-                else if (error.toLowerCase().includes('empty')) {
+                else if (errorObject.toLowerCase().includes('empty')) {
                     return Promise.reject(new Error('Provided Bridge URL cannot be empty'));
                 }
                 else {
-                    return Promise.reject(new Error(error));
+                    return Promise.reject(new Error(errorObject));
                 }
             }
         });
@@ -542,37 +542,40 @@ class SynopsysBridge {
                 }
                 // validating and preparing command for polaris
                 const polarisErrors = (0, validators_1.validatePolarisInputs)();
-                if (polarisErrors.length > 0) {
+                if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
                 }
                 // validating and preparing command for coverity
                 const coverityErrors = (0, validators_1.validateCoverityInputs)();
-                if (coverityErrors.length > 0) {
+                if (coverityErrors.length === 0 && inputs.COVERITY_PASSPHRASE) {
                     const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
                 }
                 // validating and preparing command for blackduck
                 const blackduckErrors = (0, validators_1.validateBlackDuckInputs)();
-                if (blackduckErrors.length > 0) {
+                if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
-                const allErrors = [];
-                allErrors.concat(polarisErrors);
-                allErrors.concat(coverityErrors);
-                allErrors.concat(blackduckErrors);
-                if (allErrors.length > 0) {
+                let allErrors = [];
+                allErrors = allErrors.concat(polarisErrors);
+                allErrors = allErrors.concat(coverityErrors);
+                allErrors = allErrors.concat(blackduckErrors);
+                if (formattedCommand.length === 0) {
                     return Promise.reject(new Error(allErrors.join(',')));
+                }
+                if (allErrors.length > 0) {
+                    (0, core_1.error)(new Error(allErrors.join(',')));
                 }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
             }
             catch (e) {
-                const error = e;
+                const errorObject = e;
                 yield (0, utility_1.cleanupTempDir)(tempDir);
-                (0, core_1.debug)(error.stack === undefined ? '' : error.stack.toString());
-                return Promise.reject(error.message);
+                (0, core_1.debug)(errorObject.stack === undefined ? '' : errorObject.stack.toString());
+                return Promise.reject(errorObject.message);
             }
         });
     }
