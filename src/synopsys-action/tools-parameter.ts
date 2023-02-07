@@ -27,14 +27,14 @@ export class SynopsysToolsParameter {
     this.tempDir = tempDir
   }
 
-  getFormattedCommandForPolaris(): string {
+getFormattedCommandForPolaris(): string {
     let command = ''
     const assessmentTypeEnums: PolarisAssessmentType[] = []
     const assessmentTypesValues = inputs.POLARIS_ASSESSMENT_TYPES;
     if (assessmentTypesValues != null &&  assessmentTypesValues.length > 0) {
       try {
-        const assetmentTypes = assessmentTypesValues.split(',')
-        for (const assessmentType of assetmentTypes) {
+        const assessmentTypes = assessmentTypesValues.toUpperCase().split(',') // converting provided assessmentTypes to uppercase
+        for (const assessmentType of assessmentTypes) {
           if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
             throw new Error('Provided Assessment type not found')
           } else {
