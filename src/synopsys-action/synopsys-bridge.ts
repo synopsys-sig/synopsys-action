@@ -155,25 +155,32 @@ export class SynopsysBridge {
         return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
       }
       // validating and preparing command for polaris
-      if (validatePolarisInputs()) {
+      const polarisErrors: string[] = validatePolarisInputs()
+      if (polarisErrors.length > 0) {
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
       }
 
       // validating and preparing command for coverity
-      if (validateCoverityInputs()) {
+      const coverityErrors: string[] = validateCoverityInputs()
+      if (coverityErrors.length > 0) {
         const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
       }
 
       // validating and preparing command for blackduck
-      if (validateBlackDuckInputs()) {
+      const blackduckErrors: string[] = validateBlackDuckInputs()
+      if (blackduckErrors.length > 0) {
         const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
-      if (formattedCommand.length === 0) {
-        return Promise.reject(new Error('Failed because of previous errors'))
+      const allErrors: string[] = []
+      allErrors.concat(polarisErrors)
+      allErrors.concat(coverityErrors)
+      allErrors.concat(blackduckErrors)
+      if (allErrors.length > 0) {
+        return Promise.reject(new Error(allErrors.join(',')))
       }
 
       debug('Formatted command is - '.concat(formattedCommand))

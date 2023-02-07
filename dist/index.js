@@ -541,22 +541,29 @@ class SynopsysBridge {
                     return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
                 }
                 // validating and preparing command for polaris
-                if ((0, validators_1.validatePolarisInputs)()) {
+                const polarisErrors = (0, validators_1.validatePolarisInputs)();
+                if (polarisErrors.length > 0) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
                 }
                 // validating and preparing command for coverity
-                if ((0, validators_1.validateCoverityInputs)()) {
+                const coverityErrors = (0, validators_1.validateCoverityInputs)();
+                if (coverityErrors.length > 0) {
                     const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
                 }
                 // validating and preparing command for blackduck
-                if ((0, validators_1.validateBlackDuckInputs)()) {
+                const blackduckErrors = (0, validators_1.validateBlackDuckInputs)();
+                if (blackduckErrors.length > 0) {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
-                if (formattedCommand.length === 0) {
-                    return Promise.reject(new Error('Failed because of previous errors'));
+                const allErrors = [];
+                allErrors.concat(polarisErrors);
+                allErrors.concat(coverityErrors);
+                allErrors.concat(blackduckErrors);
+                if (allErrors.length > 0) {
+                    return Promise.reject(new Error(allErrors.join(',')));
                 }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
@@ -1001,6 +1008,7 @@ function validateBlackduckFailureSeverities(severities) {
 }
 exports.validateBlackduckFailureSeverities = validateBlackduckFailureSeverities;
 function validatePolarisInputs() {
+    let errors = [];
     if (inputs.POLARIS_SERVER_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
@@ -1008,12 +1016,13 @@ function validatePolarisInputs() {
         paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
         paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
         paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
-        return validateParameters(paramsMap, constants.POLARIS_KEY);
+        errors = validateParameters(paramsMap, constants.POLARIS_KEY);
     }
-    return false;
+    return errors;
 }
 exports.validatePolarisInputs = validatePolarisInputs;
 function validateCoverityInputs() {
+    let errors = [];
     if (inputs.COVERITY_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
@@ -1021,28 +1030,29 @@ function validateCoverityInputs() {
         paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
         paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
         paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
-        return validateParameters(paramsMap, constants.COVERITY_KEY);
+        errors = validateParameters(paramsMap, constants.COVERITY_KEY);
     }
-    return false;
+    return errors;
 }
 exports.validateCoverityInputs = validateCoverityInputs;
 function validateBlackDuckInputs() {
+    let errors = [];
     if (inputs.BLACKDUCK_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
         paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
-        return validateParameters(paramsMap, constants.BLACKDUCK_KEY);
+        errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY);
     }
-    return false;
+    return errors;
 }
 exports.validateBlackDuckInputs = validateBlackDuckInputs;
 function validateParameters(params, toolName) {
     const invalidParams = isNullOrEmpty(params);
+    const errors = [];
     if (invalidParams.length > 0) {
-        (0, core_1.error)(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`);
-        return false;
+        errors.push(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`);
     }
-    return true;
+    return errors;
 }
 exports.validateParameters = validateParameters;
 function isNullOrEmpty(params) {
