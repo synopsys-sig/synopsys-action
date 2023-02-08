@@ -34,6 +34,7 @@ export class SynopsysToolsParameter {
     if (assessmentTypesValues != null &&  assessmentTypesValues.length > 0) {
       try {
         // converting provided assessmentTypes to uppercase
+        console.log("assessmentTypes::" + assessmentTypes)
         let assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
         for (let assessmentType of assessmentTypes) {
           assessmentType = assessmentType.trim()
