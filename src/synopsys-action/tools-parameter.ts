@@ -34,8 +34,9 @@ export class SynopsysToolsParameter {
     if (assessmentTypesValues != null &&  assessmentTypesValues.length > 0) {
       try {
         // converting provided assessmentTypes to uppercase
-        const assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
-        for (const assessmentType of assessmentTypes) {
+        let assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
+        for (let assessmentType of assessmentTypes) {
+          assessmentType = assessmentType.trim();
           if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
             throw new Error('Provided Assessment type not found')
           } else {
