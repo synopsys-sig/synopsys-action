@@ -31,21 +31,19 @@ export class SynopsysToolsParameter {
     let command = ''
     const assessmentTypeEnums: PolarisAssessmentType[] = []
     const assessmentTypesValues = inputs.POLARIS_ASSESSMENT_TYPES
-    if (assessmentTypesValues != null &&  assessmentTypesValues.length > 0) {
+    if (assessmentTypesValues != null && assessmentTypesValues.length > 0) {
       try {
         // converting provided assessmentTypes to uppercase
-        console.log("assessmentTypes::" + assessmentTypes)
-        let assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
-        for (let assessmentType of assessmentTypes) {
-          assessmentType = assessmentType.trim()
-          if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
+
+        const assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
+        for (const assessmentType of assessmentTypes) {
+          if (!Object.values(PolarisAssessmentType).includes(assessmentType.trim() as PolarisAssessmentType)) {
             throw new Error('Provided Assessment type not found')
           } else {
-            assessmentTypeEnums.push(PolarisAssessmentType[assessmentType as keyof typeof PolarisAssessmentType])
+            assessmentTypeEnums.push(PolarisAssessmentType[assessmentType.trim() as keyof typeof PolarisAssessmentType])
           }
         }
       } catch (error) {
-        console.log("assessmentTypesValues::" + assessmentTypesValues)
         throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
       }
     }
