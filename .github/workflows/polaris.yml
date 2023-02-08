@@ -6,9 +6,9 @@ name: CI-Polaris
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "SIGINT-533AssessmentTypes" ]
+    branches: [ "SIGINT-553AssessmentTypes" ]
   pull_request:
-    branches: [ "SIGINT-533AssessmentTypes" ]
+    branches: [ "SIGINT-553AssessmentTypes" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
