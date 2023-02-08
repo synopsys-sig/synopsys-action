@@ -45,6 +45,7 @@ export class SynopsysToolsParameter {
           }
         }
       } catch (error) {
+        console.log("assessmentTypesValues::" + assessmentTypesValues)
         throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
       }
     }
