@@ -686,22 +686,23 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForPolaris() {
         let command = '';
-        let assessmentTypes = [];
         const assessmentTypeEnums = [];
-        if (inputs.POLARIS_ASSESSMENT_TYPES != null && inputs.POLARIS_ASSESSMENT_TYPES.length > 0) {
+        const assessmentTypesValues = inputs.POLARIS_ASSESSMENT_TYPES;
+        if (assessmentTypesValues != null && assessmentTypesValues.length > 0) {
             try {
-                assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES);
+                // converting provided assessmentTypes to uppercase
+                const assessmentTypes = assessmentTypesValues.toUpperCase().split(',');
+                for (const assessmentType of assessmentTypes) {
+                    if (!Object.values(polaris_1.PolarisAssessmentType).includes(assessmentType.trim())) {
+                        throw new Error('Provided Assessment type not found');
+                    }
+                    else {
+                        assessmentTypeEnums.push(polaris_1.PolarisAssessmentType[assessmentType.trim()]);
+                    }
+                }
             }
             catch (error) {
                 throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY));
-            }
-        }
-        for (const assessmentType of assessmentTypes) {
-            if (!Object.values(polaris_1.PolarisAssessmentType).includes(assessmentType)) {
-                throw new Error('Provided Assessment type not found');
-            }
-            else {
-                assessmentTypeEnums.push(polaris_1.PolarisAssessmentType[assessmentType]);
             }
         }
         const polData = {
