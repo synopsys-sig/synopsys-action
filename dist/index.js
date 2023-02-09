@@ -693,10 +693,7 @@ class SynopsysToolsParameter {
                 // converting provided assessmentTypes to uppercase
                 const assessmentTypes = assessmentTypesValues.toUpperCase().split(',');
                 for (const assessmentType of assessmentTypes) {
-                    if (!Object.values(polaris_1.PolarisAssessmentType).includes(assessmentType.trim())) {
-                        throw new Error('Provided Assessment type not found');
-                    }
-                    else {
+                    if (assessmentType.trim().length > 0) {
                         assessmentTypeEnums.push(polaris_1.PolarisAssessmentType[assessmentType.trim()]);
                     }
                 }

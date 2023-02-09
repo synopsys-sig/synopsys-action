@@ -55,7 +55,7 @@ test('Run polaris flow - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: "SCA,sast"})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,sast'})
 
   jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
@@ -280,7 +280,7 @@ test('Run polaris flow for bridge command failure - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: "SCA"})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
 
   jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
@@ -303,7 +303,7 @@ test('Run polaris flow with provided bridge version - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: "SCA"})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
@@ -325,7 +325,7 @@ test('Run polaris flow with wrong bridge version - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: "SCA"})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(false)
