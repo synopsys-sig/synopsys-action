@@ -37,9 +37,7 @@ export class SynopsysToolsParameter {
 
         const assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
         for (const assessmentType of assessmentTypes) {
-          if (!Object.values(PolarisAssessmentType).includes(assessmentType.trim() as PolarisAssessmentType)) {
-            throw new Error('Provided Assessment type not found')
-          } else {
+          if (assessmentType.trim().length > 0 ) {
             assessmentTypeEnums.push(PolarisAssessmentType[assessmentType.trim() as keyof typeof PolarisAssessmentType])
           }
         }
