@@ -23,6 +23,14 @@ export function validateBlackduckFailureSeverities(severities: string[]): boolea
   return true
 }
 
+export function validateScanTypes(): string[] {
+  const paramsMap = new Map()
+  paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
+  paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
+  paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
+  return isNullOrEmpty(paramsMap)
+}
+
 export function validatePolarisInputs(): string[] {
   let errors: string[] = []
   if (inputs.POLARIS_SERVER_URL) {
@@ -74,7 +82,7 @@ export function validateParameters(params: Map<string, string>, toolName: string
 export function isNullOrEmpty(params: Map<string, string>): string[] {
   const invalidParams: string[] = []
   for (const param of params.entries()) {
-    if (param[1] == null || param[1].length === 0) {
+    if (param[1] == null || param[1].length === 0 || param[1].toString().includes(' ')) {
       invalidParams.push(param[0])
     }
   }

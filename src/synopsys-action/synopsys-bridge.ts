@@ -9,7 +9,7 @@ import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs from 'fs'
 import {rmRF} from '@actions/io'
-import {isNullOrEmpty, validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs} from './validators'
+import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
@@ -145,12 +145,7 @@ export class SynopsysBridge {
   async prepareCommand(tempDir: string): Promise<string> {
     try {
       let formattedCommand = ''
-
-      const paramsMap = new Map()
-      paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
-      paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
-      paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
-      const invalidParams: string[] = isNullOrEmpty(paramsMap)
+      const invalidParams: string[] = validateScanTypes()
       if (invalidParams.length === 3) {
         return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
       }
@@ -163,7 +158,7 @@ export class SynopsysBridge {
 
       // validating and preparing command for coverity
       const coverityErrors: string[] = validateCoverityInputs()
-      if (coverityErrors.length === 0 && inputs.COVERITY_PASSPHRASE) {
+      if (coverityErrors.length === 0 && inputs.COVERITY_URL) {
         const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
       }
@@ -175,15 +170,15 @@ export class SynopsysBridge {
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
-      let allErrors: string[] = []
-      allErrors = allErrors.concat(polarisErrors)
-      allErrors = allErrors.concat(coverityErrors)
-      allErrors = allErrors.concat(blackduckErrors)
+      let validationErrors: string[] = []
+      validationErrors = validationErrors.concat(polarisErrors)
+      validationErrors = validationErrors.concat(coverityErrors)
+      validationErrors = validationErrors.concat(blackduckErrors)
       if (formattedCommand.length === 0) {
-        return Promise.reject(new Error(allErrors.join(',')))
+        return Promise.reject(new Error(validationErrors.join(',')))
       }
-      if (allErrors.length > 0) {
-        error(new Error(allErrors.join(',')))
+      if (validationErrors.length > 0) {
+        error(new Error(validationErrors.join(',')))
       }
 
       debug('Formatted command is - '.concat(formattedCommand))
