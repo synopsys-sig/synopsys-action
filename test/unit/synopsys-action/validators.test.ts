@@ -70,8 +70,8 @@ test('Polaris - With mandatory fields', async () => {
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
   Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: '["SCA"]'})
 
-  const response = validatePolarisInputs()
-  expect(response).toBe(true)
+  let response = validatePolarisInputs()
+  expect(response.length).toBe(0)
 
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
   jest.restoreAllMocks()
@@ -97,8 +97,8 @@ test('Coverity - With one or more non-mandatory fields', async () => {
   Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
   Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
   Object.defineProperty(inputs, 'COVERITY_INSTALL_DIRECTORY', {value: 'COVERITY_INSTALL_DIRECTORY'})
-  const response = validateCoverityInputs()
-  expect(response).toBe(true)
+  let response = validateCoverityInputs()
+  expect(response.length).toBe(0)
 
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
 })
@@ -109,8 +109,8 @@ test('Coverity - With mandatory fields', async () => {
   Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
   Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
   Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
-  const response = validateCoverityInputs()
-  expect(response).toBe(true)
+  let response = validateCoverityInputs()
+  expect(response.length).toBe(0)
 
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
 })
@@ -119,8 +119,7 @@ test('Coverity - With mandatory fields', async () => {
 test('Blackduck - Without mandatory fields', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   try {
-    const response = validateBlackDuckInputs()
-    expect(response).toBe(false)
+    validateBlackDuckInputs()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('[blackduck_apiToken,blackduck_scan_full] - required parameters for blackduck is missing')
@@ -135,8 +134,8 @@ test('Blackduck - With one or more non-mandatory fields', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
 
-  const response = validateBlackDuckInputs()
-  expect(response).toBe(true)
+  let response = validateBlackDuckInputs()
+  expect(response.length).toBe(0)
 
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
 })
@@ -147,8 +146,8 @@ test('Blackduck - With mandatory fields', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://download-bridge-win.zip'})
 
-  const response = validateBlackDuckInputs()
-  expect(response).toBe(true)
+  let response = validateBlackDuckInputs()
+  expect(response.length).toBe(0)
 
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
