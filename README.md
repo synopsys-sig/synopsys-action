@@ -65,11 +65,6 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-
-          # Optional parameter, but usually specified - the location of the Synopsys Bridge software
-          # The Synopsys Bridge software distribution is platform specific - this must match the host OS
-          # of your runner. For example in this case, we are using the latest version for Linux.
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
         env:
           LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
@@ -132,11 +127,6 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-
-          # Optional parameter, but usually specified - the location of the Synopsys Bridge software
-          # The Synopsys Bridge software distribution is platform specific - this must match the host OS
-          # of your runner. For example in this case, we are using the latest version for Linux.
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
         env:
           LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
@@ -207,11 +197,6 @@ jobs:
           blackduck_scan_failure_severities: "[\"ALL\"]"
           # multiple parameters
           # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
-
-          # Optional parameter, but usually specified - the location of the Synopsys Bridge software
-          # The Synopsys Bridge software distribution is platform specific - this must match the host OS
-          # of your runner. For example in this case, we are using the latest version for Linux.
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
