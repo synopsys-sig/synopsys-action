@@ -693,7 +693,7 @@ class SynopsysToolsParameter {
                 // converting provided assessmentTypes to uppercase
                 const assessmentTypes = assessmentTypesValues.toUpperCase().split(',');
                 for (const assessmentType of assessmentTypes) {
-                    const regEx = new RegExp('^[0-9a-zA-Z]+$');
+                    const regEx = new RegExp('^[a-zA-Z]+$');
                     if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
                         assessmentTypeEnums.push(polaris_1.PolarisAssessmentType[assessmentType.trim()]);
                     }

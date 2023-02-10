@@ -65,8 +65,6 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-        env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -127,8 +125,6 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-        env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
 
 ## Synopsys GitHub Action - Black Duck
