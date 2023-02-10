@@ -23,7 +23,16 @@ export function validateBlackduckFailureSeverities(severities: string[]): boolea
   return true
 }
 
-export function validatePolarisInputs(): boolean {
+export function validateScanTypes(): string[] {
+  const paramsMap = new Map()
+  paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
+  paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
+  paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
+  return isNullOrEmpty(paramsMap)
+}
+
+export function validatePolarisInputs(): string[] {
+  let errors: string[] = []
   if (inputs.POLARIS_SERVER_URL) {
     const paramsMap = new Map()
     paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN)
@@ -31,12 +40,13 @@ export function validatePolarisInputs(): boolean {
     paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME)
     paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
     paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES)
-    return validateParameters(paramsMap, constants.POLARIS_KEY)
+    errors = validateParameters(paramsMap, constants.POLARIS_KEY)
   }
-  return false
+  return errors
 }
 
-export function validateCoverityInputs(): boolean {
+export function validateCoverityInputs(): string[] {
+  let errors: string[] = []
   if (inputs.COVERITY_URL) {
     const paramsMap = new Map()
     paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER)
@@ -44,33 +54,39 @@ export function validateCoverityInputs(): boolean {
     paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
     paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME)
     paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME)
-    return validateParameters(paramsMap, constants.COVERITY_KEY)
+    errors = validateParameters(paramsMap, constants.COVERITY_KEY)
   }
-  return false
+  return errors
 }
 
-export function validateBlackDuckInputs(): boolean {
+export function validateBlackDuckInputs(): string[] {
+  let errors: string[] = []
   if (inputs.BLACKDUCK_URL) {
     const paramsMap = new Map()
     paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
     paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
-    return validateParameters(paramsMap, constants.BLACKDUCK_KEY)
+    errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY)
   }
-  return false
+  return errors
 }
 
-export function validateParameters(params: Map<string, string>, toolName: string): boolean {
+export function validateParameters(params: Map<string, string>, toolName: string): string[] {
+  const invalidParams: string[] = isNullOrEmpty(params)
+  const errors: string[] = []
+  if (invalidParams.length > 0) {
+    errors.push(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`)
+  }
+  return errors
+}
+
+export function isNullOrEmpty(params: Map<string, string>): string[] {
   const invalidParams: string[] = []
   for (const param of params.entries()) {
-    if (param[1] == null || param[1].length === 0) {
+    if (param[1] == null || param[1].length === 0 || param[1].toString().includes(' ')) {
       invalidParams.push(param[0])
     }
   }
-  if (invalidParams.length > 0) {
-    error(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`)
-    return false
-  }
-  return true
+  return invalidParams
 }
 
 export function validateBridgeUrl(url: string): boolean {

@@ -462,8 +462,8 @@ class SynopsysBridge {
                     try {
                         return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                     }
-                    catch (error) {
-                        throw error;
+                    catch (errorObject) {
+                        throw errorObject;
                     }
                 }
             }
@@ -510,20 +510,20 @@ class SynopsysBridge {
                 (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
             }
             catch (e) {
-                const error = e.message;
+                const errorObject = e.message;
                 yield (0, utility_1.cleanupTempDir)(tempDir);
-                if (error.includes('404') || error.toLowerCase().includes('invalid url')) {
+                if (errorObject.includes('404') || errorObject.toLowerCase().includes('invalid url')) {
                     let os = '';
                     if (process.env['RUNNER_OS']) {
                         os = process.env['RUNNER_OS'];
                     }
                     return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')));
                 }
-                else if (error.toLowerCase().includes('empty')) {
+                else if (errorObject.toLowerCase().includes('empty')) {
                     return Promise.reject(new Error('Provided Bridge URL cannot be empty'));
                 }
                 else {
-                    return Promise.reject(new Error(error));
+                    return Promise.reject(new Error(errorObject));
                 }
             }
         });
@@ -532,32 +532,46 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let formattedCommand = '';
+                const invalidParams = (0, validators_1.validateScanTypes)();
+                if (invalidParams.length === 3) {
+                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
+                }
                 // validating and preparing command for polaris
-                if ((0, validators_1.validatePolarisInputs)()) {
+                const polarisErrors = (0, validators_1.validatePolarisInputs)();
+                if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
                 }
                 // validating and preparing command for coverity
-                if ((0, validators_1.validateCoverityInputs)()) {
+                const coverityErrors = (0, validators_1.validateCoverityInputs)();
+                if (coverityErrors.length === 0 && inputs.COVERITY_URL) {
                     const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
                 }
                 // validating and preparing command for blackduck
-                if ((0, validators_1.validateBlackDuckInputs)()) {
+                const blackduckErrors = (0, validators_1.validateBlackDuckInputs)();
+                if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
+                let validationErrors = [];
+                validationErrors = validationErrors.concat(polarisErrors);
+                validationErrors = validationErrors.concat(coverityErrors);
+                validationErrors = validationErrors.concat(blackduckErrors);
                 if (formattedCommand.length === 0) {
-                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
+                    return Promise.reject(new Error(validationErrors.join(',')));
+                }
+                if (validationErrors.length > 0) {
+                    (0, core_1.error)(new Error(validationErrors.join(',')));
                 }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
             }
             catch (e) {
-                const error = e;
+                const errorObject = e;
                 yield (0, utility_1.cleanupTempDir)(tempDir);
-                (0, core_1.debug)(error.stack === undefined ? '' : error.stack.toString());
-                return Promise.reject(error.message);
+                (0, core_1.debug)(errorObject.stack === undefined ? '' : errorObject.stack.toString());
+                return Promise.reject(errorObject.message);
             }
         });
     }
@@ -966,7 +980,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBridgeUrl = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
+exports.validateBridgeUrl = exports.isNullOrEmpty = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateScanTypes = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
@@ -991,7 +1005,16 @@ function validateBlackduckFailureSeverities(severities) {
     return true;
 }
 exports.validateBlackduckFailureSeverities = validateBlackduckFailureSeverities;
+function validateScanTypes() {
+    const paramsMap = new Map();
+    paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
+    paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
+    paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
+    return isNullOrEmpty(paramsMap);
+}
+exports.validateScanTypes = validateScanTypes;
 function validatePolarisInputs() {
+    let errors = [];
     if (inputs.POLARIS_SERVER_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
@@ -999,12 +1022,13 @@ function validatePolarisInputs() {
         paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
         paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
         paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
-        return validateParameters(paramsMap, constants.POLARIS_KEY);
+        errors = validateParameters(paramsMap, constants.POLARIS_KEY);
     }
-    return false;
+    return errors;
 }
 exports.validatePolarisInputs = validatePolarisInputs;
 function validateCoverityInputs() {
+    let errors = [];
     if (inputs.COVERITY_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
@@ -1012,35 +1036,41 @@ function validateCoverityInputs() {
         paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
         paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
         paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
-        return validateParameters(paramsMap, constants.COVERITY_KEY);
+        errors = validateParameters(paramsMap, constants.COVERITY_KEY);
     }
-    return false;
+    return errors;
 }
 exports.validateCoverityInputs = validateCoverityInputs;
 function validateBlackDuckInputs() {
+    let errors = [];
     if (inputs.BLACKDUCK_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
         paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
-        return validateParameters(paramsMap, constants.BLACKDUCK_KEY);
+        errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY);
     }
-    return false;
+    return errors;
 }
 exports.validateBlackDuckInputs = validateBlackDuckInputs;
 function validateParameters(params, toolName) {
+    const invalidParams = isNullOrEmpty(params);
+    const errors = [];
+    if (invalidParams.length > 0) {
+        errors.push(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`);
+    }
+    return errors;
+}
+exports.validateParameters = validateParameters;
+function isNullOrEmpty(params) {
     const invalidParams = [];
     for (const param of params.entries()) {
-        if (param[1] == null || param[1].length === 0) {
+        if (param[1] == null || param[1].length === 0 || param[1].toString().includes(' ')) {
             invalidParams.push(param[0]);
         }
     }
-    if (invalidParams.length > 0) {
-        (0, core_1.error)(`[${invalidParams.join()}] - required parameters for ${toolName} is missing`);
-        return false;
-    }
-    return true;
+    return invalidParams;
 }
-exports.validateParameters = validateParameters;
+exports.isNullOrEmpty = isNullOrEmpty;
 function validateBridgeUrl(url) {
     if (!url.match('.*\\.(zip|ZIP)$')) {
         return false;
