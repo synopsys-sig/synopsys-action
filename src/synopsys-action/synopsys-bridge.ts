@@ -1,6 +1,6 @@
 import {exec, ExecOptions} from '@actions/exec'
 import {BRIDGE_DOWNLOAD_URL, SYNOPSYS_BRIDGE_PATH} from './inputs'
-import {debug, error, info} from '@actions/core'
+import {debug, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
@@ -9,7 +9,7 @@ import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs from 'fs'
 import {rmRF} from '@actions/io'
-import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
+import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
@@ -78,8 +78,8 @@ export class SynopsysBridge {
         }
         try {
           return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
-        } catch (errorObject) {
-          throw errorObject
+        } catch (error) {
+          throw error
         }
       }
     } else {
@@ -126,18 +126,18 @@ export class SynopsysBridge {
       await extractZipped(downloadResponse.filePath, extractZippedFilePath)
       info('Download and configuration of Synopsys Bridge completed')
     } catch (e) {
-      const errorObject = (e as Error).message
+      const error = (e as Error).message
       await cleanupTempDir(tempDir)
-      if (errorObject.includes('404') || errorObject.toLowerCase().includes('invalid url')) {
+      if (error.includes('404') || error.toLowerCase().includes('invalid url')) {
         let os = ''
         if (process.env['RUNNER_OS']) {
           os = process.env['RUNNER_OS']
         }
         return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')))
-      } else if (errorObject.toLowerCase().includes('empty')) {
+      } else if (error.toLowerCase().includes('empty')) {
         return Promise.reject(new Error('Provided Bridge URL cannot be empty'))
       } else {
-        return Promise.reject(new Error(errorObject))
+        return Promise.reject(new Error(error))
       }
     }
   }
@@ -145,49 +145,34 @@ export class SynopsysBridge {
   async prepareCommand(tempDir: string): Promise<string> {
     try {
       let formattedCommand = ''
-      const invalidParams: string[] = validateScanTypes()
-      if (invalidParams.length === 3) {
-        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
-      }
       // validating and preparing command for polaris
-      const polarisErrors: string[] = validatePolarisInputs()
-      if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
+      if (validatePolarisInputs()) {
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris())
       }
 
       // validating and preparing command for coverity
-      const coverityErrors: string[] = validateCoverityInputs()
-      if (coverityErrors.length === 0 && inputs.COVERITY_URL) {
+      if (validateCoverityInputs()) {
         const coverityCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity())
       }
 
       // validating and preparing command for blackduck
-      const blackduckErrors: string[] = validateBlackDuckInputs()
-      if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
+      if (validateBlackDuckInputs()) {
         const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
-      let validationErrors: string[] = []
-      validationErrors = validationErrors.concat(polarisErrors)
-      validationErrors = validationErrors.concat(coverityErrors)
-      validationErrors = validationErrors.concat(blackduckErrors)
       if (formattedCommand.length === 0) {
-        return Promise.reject(new Error(validationErrors.join(',')))
+        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
       }
-      if (validationErrors.length > 0) {
-        error(new Error(validationErrors.join(',')))
-      }
-
       debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {
-      const errorObject = e as Error
+      const error = e as Error
       await cleanupTempDir(tempDir)
-      debug(errorObject.stack === undefined ? '' : errorObject.stack.toString())
-      return Promise.reject(errorObject.message)
+      debug(error.stack === undefined ? '' : error.stack.toString())
+      return Promise.reject(error.message)
     }
   }
 
