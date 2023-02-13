@@ -139,9 +139,9 @@ export function mockCoverityParamsExcept(coverityConstants: string[]) {
 }
 
 export function setAllMocks() {
+  let coverity: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
-  jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(true)
-
+  jest.spyOn(validator, 'validateCoverityInputs').mockReturnValueOnce(coverity)
   jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')

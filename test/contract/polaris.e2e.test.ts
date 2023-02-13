@@ -124,8 +124,9 @@ export function resetMockPolarisParams() {
 }
 
 export function setAllMocks() {
+  let polaris: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
-  jest.spyOn(validator, 'validatePolarisInputs').mockReturnValue(true)
+  jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(polaris)
   jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')
