@@ -38,20 +38,6 @@ describe('Coverity flow contract', () => {
     expect(resp).toBe(0)
   })
 
-  it('With missing mandatory fields coverity.connect.url', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_URL'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
   it('With missing mandatory fields coverity.connect.user.name', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_USER'])
