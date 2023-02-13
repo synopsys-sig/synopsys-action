@@ -36,7 +36,7 @@ describe('Blackduck flow contract', () => {
 
   it('With missing mandatory fields blackduck.api.token', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDCK_API_TOKEN'])
+    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_API_TOKEN'])
 
     setAllMocks()
 
