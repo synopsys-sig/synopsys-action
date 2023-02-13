@@ -3,7 +3,7 @@ import path from 'path'
 import {debug, info} from '@actions/core'
 import {validateCoverityInstallDirectoryParam, validateBlackduckFailureSeverities} from './validators'
 import * as inputs from './inputs'
-import {Polaris, PolarisAssessmentType} from './input-data/polaris'
+import {Polaris} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, FIXPR_ENVIRONMENT_VARIABLES} from './input-data/blackduck'
@@ -29,16 +29,16 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForPolaris(): string {
     let command = ''
-    const assessmentTypeEnums: PolarisAssessmentType[] = []
-    const assessmentTypesValues = inputs.POLARIS_ASSESSMENT_TYPES
-    if (assessmentTypesValues != null && assessmentTypesValues.length > 0) {
+    const assessmentTypeArray: string[] = []
+    const assessmentTypesInput = inputs.POLARIS_ASSESSMENT_TYPES
+    if (assessmentTypesInput != null && assessmentTypesInput.length > 0) {
       try {
         // converting provided assessmentTypes to uppercase
-        const assessmentTypes = assessmentTypesValues.toUpperCase().split(',')
+        const assessmentTypes = assessmentTypesInput.toUpperCase().split(',')
         for (const assessmentType of assessmentTypes) {
           const regEx = new RegExp('^[a-zA-Z]+$')
           if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
-            assessmentTypeEnums.push(PolarisAssessmentType[assessmentType.trim() as keyof typeof PolarisAssessmentType])
+            assessmentTypeArray.push(assessmentType.trim())
           }
         }
       } catch (error) {
@@ -53,7 +53,7 @@ export class SynopsysToolsParameter {
           serverUrl: inputs.POLARIS_SERVER_URL,
           application: {name: inputs.POLARIS_APPLICATION_NAME},
           project: {name: inputs.POLARIS_PROJECT_NAME},
-          assessment: {types: assessmentTypeEnums}
+          assessment: {types: assessmentTypeArray}
         }
       }
     }

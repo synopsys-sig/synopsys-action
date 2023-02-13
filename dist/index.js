@@ -265,22 +265,6 @@ exports.FIXPR_ENVIRONMENT_VARIABLES = {
 
 /***/ }),
 
-/***/ 7678:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.PolarisAssessmentType = void 0;
-var PolarisAssessmentType;
-(function (PolarisAssessmentType) {
-    PolarisAssessmentType["SCA"] = "SCA";
-    PolarisAssessmentType["SAST"] = "SAST";
-})(PolarisAssessmentType = exports.PolarisAssessmentType || (exports.PolarisAssessmentType = {}));
-
-
-/***/ }),
-
 /***/ 7481:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -677,7 +661,6 @@ const path_1 = __importDefault(__nccwpck_require__(5622));
 const core_1 = __nccwpck_require__(2186);
 const validators_1 = __nccwpck_require__(8401);
 const inputs = __importStar(__nccwpck_require__(7481));
-const polaris_1 = __nccwpck_require__(7678);
 const blackduck_1 = __nccwpck_require__(6619);
 const constants = __importStar(__nccwpck_require__(9717));
 class SynopsysToolsParameter {
@@ -686,16 +669,16 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForPolaris() {
         let command = '';
-        const assessmentTypeEnums = [];
-        const assessmentTypesValues = inputs.POLARIS_ASSESSMENT_TYPES;
-        if (assessmentTypesValues != null && assessmentTypesValues.length > 0) {
+        const assessmentTypeArray = [];
+        const assessmentTypesInput = inputs.POLARIS_ASSESSMENT_TYPES;
+        if (assessmentTypesInput != null && assessmentTypesInput.length > 0) {
             try {
                 // converting provided assessmentTypes to uppercase
-                const assessmentTypes = assessmentTypesValues.toUpperCase().split(',');
+                const assessmentTypes = assessmentTypesInput.toUpperCase().split(',');
                 for (const assessmentType of assessmentTypes) {
                     const regEx = new RegExp('^[a-zA-Z]+$');
                     if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
-                        assessmentTypeEnums.push(polaris_1.PolarisAssessmentType[assessmentType.trim()]);
+                        assessmentTypeArray.push(assessmentType.trim());
                     }
                 }
             }
@@ -710,7 +693,7 @@ class SynopsysToolsParameter {
                     serverUrl: inputs.POLARIS_SERVER_URL,
                     application: { name: inputs.POLARIS_APPLICATION_NAME },
                     project: { name: inputs.POLARIS_PROJECT_NAME },
-                    assessment: { types: assessmentTypeEnums }
+                    assessment: { types: assessmentTypeArray }
                 }
             }
         };
