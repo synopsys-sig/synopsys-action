@@ -3,7 +3,7 @@ import path from 'path'
 import {debug, info} from '@actions/core'
 import {validateCoverityInstallDirectoryParam, validateBlackduckFailureSeverities} from './validators'
 import * as inputs from './inputs'
-import {Polaris, PolarisAssessmentType} from './input-data/polaris'
+import {Polaris} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, FIXPR_ENVIRONMENT_VARIABLES} from './input-data/blackduck'
@@ -29,21 +29,20 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForPolaris(): string {
     let command = ''
-    let assessmentTypes: string[] = []
-    const assessmentTypeEnums: PolarisAssessmentType[] = []
-    if (inputs.POLARIS_ASSESSMENT_TYPES != null && inputs.POLARIS_ASSESSMENT_TYPES.length > 0) {
+    const assessmentTypeArray: string[] = []
+    const assessmentTypesInput = inputs.POLARIS_ASSESSMENT_TYPES
+    if (assessmentTypesInput != null && assessmentTypesInput.length > 0) {
       try {
-        assessmentTypes = JSON.parse(inputs.POLARIS_ASSESSMENT_TYPES)
+        // converting provided assessmentTypes to uppercase
+        const assessmentTypes = assessmentTypesInput.toUpperCase().split(',')
+        for (const assessmentType of assessmentTypes) {
+          const regEx = new RegExp('^[a-zA-Z]+$')
+          if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
+            assessmentTypeArray.push(assessmentType.trim())
+          }
+        }
       } catch (error) {
         throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
-      }
-    }
-
-    for (const assessmentType of assessmentTypes) {
-      if (!Object.values(PolarisAssessmentType).includes(assessmentType as PolarisAssessmentType)) {
-        throw new Error('Provided Assessment type not found')
-      } else {
-        assessmentTypeEnums.push(PolarisAssessmentType[assessmentType as keyof typeof PolarisAssessmentType])
       }
     }
 
@@ -54,7 +53,7 @@ export class SynopsysToolsParameter {
           serverUrl: inputs.POLARIS_SERVER_URL,
           application: {name: inputs.POLARIS_APPLICATION_NAME},
           project: {name: inputs.POLARIS_PROJECT_NAME},
-          assessment: {types: assessmentTypeEnums}
+          assessment: {types: assessmentTypeArray}
         }
       }
     }

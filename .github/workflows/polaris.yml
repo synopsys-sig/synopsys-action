@@ -37,5 +37,5 @@ jobs:
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "tb_app1"
           polaris_project_name: "tb_proj"
-          polaris_assessment_types: '["SAST"]'
+          polaris_assessment_types: "SCA"
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}

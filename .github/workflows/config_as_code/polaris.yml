@@ -25,7 +25,7 @@ jobs:
       BRIDGE_polaris_serverUrl: ${{ secrets.POLARIS_SEVER_URL }}
       BRIDGE_polaris_application_name: testapp1
       BRIDGE_polaris_project_name: testproj1
-      BRIDGE_polaris_assessment_types: "[\"SAST\"]"
+      BRIDGE_polaris_assessment_types: "SAST"
       POLARIS_FF_TEST_COVERITY_BETA_VERSIONS: true
       MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
       LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"

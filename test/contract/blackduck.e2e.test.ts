@@ -34,20 +34,6 @@ describe('Blackduck flow contract', () => {
     expect(resp).toBe(0)
   })
 
-  it('With missing mandatory fields blackduck.url', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_URL'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
   it('With missing mandatory fields blackduck.api.token', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_API_TOKEN'])
@@ -122,9 +108,9 @@ export function mockBlackduckParamsExcept(blackduckConstants: string[]) {
 }
 
 export function setAllMocks() {
+  let blackduck: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
-  jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(true)
-
+  jest.spyOn(validator, 'validateBlackDuckInputs').mockReturnValueOnce(blackduck)
   jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')

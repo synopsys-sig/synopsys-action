@@ -12,5 +12,5 @@ export interface PolarisData {
   serverUrl: string
   application: {name: string}
   project: {name: string}
-  assessment: {types: PolarisAssessmentType[]}
+  assessment: {types: string[]}
 }

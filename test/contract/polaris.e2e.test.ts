@@ -13,7 +13,7 @@ polarisParamsMap.set('POLARIS_SERVER_URL', 'POLARIS_SERVER_URL')
 polarisParamsMap.set('POLARIS_ACCESS_TOKEN', 'POLARIS_ACCESS_TOKEN')
 polarisParamsMap.set('POLARIS_APPLICATION_NAME', 'POLARIS_APPLICATION_NAME')
 polarisParamsMap.set('POLARIS_PROJECT_NAME', 'POLARIS_PROJECT_NAME')
-polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', '["SCA", "SAST"]')
+polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', 'SCA,SAST')
 
 describe('Polaris flow contract', () => {
   afterAll(() => {
@@ -124,9 +124,9 @@ export function resetMockPolarisParams() {
 }
 
 export function setAllMocks() {
+  let polaris: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
-  jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(true)
-
+  jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(polaris)
   jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')

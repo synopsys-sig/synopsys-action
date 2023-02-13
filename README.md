@@ -58,15 +58,13 @@ jobs:
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
-          polaris_assessment_types: "[\"SCA\", \"SAST\"]"
+          polaris_assessment_types: "SCA,SAST"
 
           # Optional parameter to specify path to synopsys bridge.
           # This can be used if you want to pre-configure your GitHub Runner with the
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-        env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -127,8 +125,6 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-        env:
-          LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
 ```
 
 ## Synopsys GitHub Action - Black Duck
