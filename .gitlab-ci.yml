@@ -67,9 +67,8 @@ generate_sbom:
     refs:
       - main
 
-polaris_bridge:
-  stage: analysis
-  extends: .polaris_bridge
+pop_polaris:
+  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
 
 pop_blackduck:
   stage: analysis
