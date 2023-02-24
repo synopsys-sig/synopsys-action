@@ -69,7 +69,7 @@ generate_sbom:
 
 polaris_bridge:
   stage: analysis
-  extends: .polaris_bridgez
+  extends: .polaris_bridge
 
 pop_blackduck:
   stage: analysis
