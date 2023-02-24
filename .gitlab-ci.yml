@@ -73,9 +73,6 @@ pop_polaris:
 polaris_bridge:
   stage: analysis
   extends: .polaris_bridge
-  rules:
-    - if: '$CI_MERGE_REQUEST_ID'
-      when: always
 
 pop_blackduck:
   stage: analysis
