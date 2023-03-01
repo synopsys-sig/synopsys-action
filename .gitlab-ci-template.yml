@@ -100,7 +100,7 @@
        # fi
       #fi
     - VERSION=`cat version.txt`
-    - echo " Version ${VERSION}"
+    - echo "Version ${VERSION}"
   #    - npm version VERSION
   artifacts:
     paths:
