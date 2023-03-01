@@ -7,7 +7,7 @@ include:
     ref: master
     file: sbom-generate.yml
 
-# List of job stages in their order of execution
+# List of job stages in their order of execution.
 stages:
   - build
   - contract_test
