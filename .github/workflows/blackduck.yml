@@ -28,15 +28,6 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - name: Use synopsys unified-action - blackduck-detect
-       # Use the action defined in this repository
-        uses: ./
-        with:
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
-          GITHUB_TOKEN: ${{ secrets.PAT_GIT }}
       - name: Synopsys Action
         uses: synopsys-sig/synopsys-action
         with:
