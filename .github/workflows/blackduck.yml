@@ -7,7 +7,6 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "SIGINT-614" ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -22,8 +21,8 @@ jobs:
 
   env:
      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
-     LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
-     WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
+     #LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
+     #INDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
