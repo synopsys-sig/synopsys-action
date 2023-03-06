@@ -124,7 +124,6 @@ export class SynopsysToolsParameter {
       try {
         const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES
         if (failureSeveritiesInput != null && failureSeveritiesInput.length > 0) {
-          console.log("failureSeveritiesInput:" + failureSeveritiesInput)
           const failureSeveritiesArray = failureSeveritiesInput.toUpperCase().split(',')
           for (const failureSeverity of failureSeveritiesArray) {
             if (failureSeverity.trim().length > 0) {
