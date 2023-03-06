@@ -6,10 +6,9 @@ name: CI-Blackduck
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ "SIGINT-614" ]
   pull_request:
-    branches: [ "main" ]
-
+    branches: [ "SIGINT-614" ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -18,22 +17,22 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-   runs-on: [ubuntu-latest]
-#    runs-on: [self-hosted, Windows, kiran]
-#    runs-on: [self-hosted, Linux, kishor-linux]
+    runs-on: [self-hosted]
+    #    runs-on: [self-hosted, Windows, kiran]
+    #    runs-on: [self-hosted, Linux, kishor-linux]
 
-   env:
-     MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
-     LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
-     WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
-     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    env:
+      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.192/ci-package-0.1.72-macosx.zip"
+      #LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
+      #WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-   steps:
+      # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Use synopsys unified-action - blackduck-detect
-       # Use the action defined in this repository
+        # Use the action defined in this repository
         uses: ./
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
