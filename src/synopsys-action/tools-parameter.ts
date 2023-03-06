@@ -122,7 +122,15 @@ export class SynopsysToolsParameter {
     let failureSeverities: string[] = []
     if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
-        failureSeverities = JSON.parse(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
+        const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES
+        if (failureSeveritiesInput != null && failureSeveritiesInput.length > 0) {
+          const failureSeverities = failureSeveritiesInput.toUpperCase().split(',')
+            for (const failureSeverity of failureSeverities) {
+              if (failureSeverity.trim().length > 0) {
+                failureSeverities.push(failureSeverity.trim())
+              }
+            }
+          }
       } catch (error) {
         throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
       }
