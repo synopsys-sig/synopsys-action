@@ -20,10 +20,10 @@ jobs:
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
    env:
-     MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.192/ci-package-0.1.192-macosx.zip"
+     #MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.192/ci-package-0.1.192-macosx.zip"
      #LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
      #WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
-     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     GITHUB_TOKEN: ${{ secrets.PAT_GIT }}
 
     # Steps represent a sequence of tasks that will be executed as part of the job
    steps:
