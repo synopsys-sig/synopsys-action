@@ -29,7 +29,7 @@ jobs:
    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action
+      - uses: synopsys-sig/synopsys-action
         with:
             blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
             blackduck_url: ${{ secrets.BLACKDUCK_URL }}
@@ -39,7 +39,7 @@ jobs:
             blackduck_scan_full: false
             # Required parameter if blackduck_automation_fixpr is enabled
             # Make sure GITHUB_TOKEN have appropriate permissions
-            github_token: ${{ secrets.GITHUB_TOKEN }}
+            github_token: ${{ secrets.PAT_GIT }}
             # Optional parameter. By default, create fix pull requests if vulnerabilities are reported
             # Passing false will disable fix pull request creation
             blackduck_automation_fixpr: false
