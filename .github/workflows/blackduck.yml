@@ -28,8 +28,10 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Synopsys Action
       - uses: synopsys-sig/synopsys-action
+      - name:  Synopsys Action
+       # Use the action defined in this repository
+        uses: ./
         with:
             blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
             blackduck_url: ${{ secrets.BLACKDUCK_URL }}
