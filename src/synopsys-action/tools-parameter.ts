@@ -120,14 +120,12 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForBlackduck(): string {
     const failureSeverities: string[] = []
-    console.log('inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES')
-    console.log('inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES:' + inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
+    console.log(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
     if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
         const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES
         if (failureSeveritiesInput != null && failureSeveritiesInput.length > 0) {
           const failureSeveritiesArray = failureSeveritiesInput.toUpperCase().split(',')
-          console.log('failureSeveritiesArray:' + failureSeveritiesArray)
           for (const failureSeverity of failureSeveritiesArray) {
             if (failureSeverity.trim().length > 0) {
               failureSeverities.push(failureSeverity.trim())
