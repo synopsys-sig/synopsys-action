@@ -23,10 +23,12 @@ jobs:
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
    env:
-     MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
+     MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72--macosx.zip"
      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     # Optional, default false
+     INCLUDE_DIAGNOSTICS: false
 
     # Steps represent a sequence of tasks that will be executed as part of the job
    steps:
@@ -38,4 +40,16 @@ jobs:
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          include_diagnostics: ${{ env.INCLUDE_DIAGNOSTICS }}
+          blackduck_automation_fixpr: false
+
+      - name: Include diagnostics
+        uses: actions/upload-artifact@v3
+        if: ${{ failure() || env.INCLUDE_DIAGNOSTICS }}
+        with:
+          # If a path (or paths), result in no files being found for the artifact, the action will succeed but print out a warning.
+          path: ${{ github.workspace }}/.bridge/
+          name: bridge_diagnostics
+          # Artifacts are retained for 90 days by default
+          retention-days: 10

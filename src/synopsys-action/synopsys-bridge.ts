@@ -54,9 +54,9 @@ export class SynopsysBridge {
     }
 
     if (osName === 'win32') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\bridge'), ['.exe'])
+      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe'])
     } else {
-      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/bridge'), [])
+      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/synopsys-bridge'), [])
     }
 
     if (this.bridgeExecutablePath) {
@@ -179,6 +179,11 @@ export class SynopsysBridge {
       }
       if (validationErrors.length > 0) {
         error(new Error(validationErrors.join(',')))
+      }
+
+      info('diagnostics flag: '.concat(inputs.INCLUDE_DIAGNOSTICS))
+      if (inputs.INCLUDE_DIAGNOSTICS) {
+        formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
       }
 
       debug('Formatted command is - '.concat(formattedCommand))

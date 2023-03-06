@@ -48,6 +48,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+    # Optional, default false
+    # INCLUDE_DIAGNOSTICS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -65,6 +68,16 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
+      # Optional 
+      #- name: Include diagnostics
+      #  uses: actions/upload-artifact@v3
+      #  if: ${{ failure() || env.INCLUDE_DIAGNOSTICS }}
+      #  with:
+      #    # If a path (or paths), result in no files being found for the artifact, the action will succeed but print out a warning.
+      #    path: ${{ github.workspace }}/.bridge/
+      #    name: bridge_diagnostics
+      #    # Artifacts are retained for 90 days by default
+      #    retention-days: 10
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -98,6 +111,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+    # Optional, default false
+    # INCLUDE_DIAGNOSTICS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -125,6 +141,16 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
+      # Optional 
+      #- name: Include diagnostics
+      #  uses: actions/upload-artifact@v3
+      #  if: ${{ failure() || env.INCLUDE_DIAGNOSTICS }}
+      #  with:
+      #    # If a path (or paths), result in no files being found for the artifact, the action will succeed but print out a warning.
+      #    path: ${{ github.workspace }}/.bridge/
+      #    name: bridge_diagnostics
+      #    # Artifacts are retained for 90 days by default
+      #    retention-days: 10
 ```
 
 ## Synopsys GitHub Action - Black Duck
@@ -170,6 +196,9 @@ on:
 jobs:
   build:
     runs-on: [self-hosted]
+    env:
+      # Optional, default false
+      # INCLUDE_DIAGNOSTICS: true
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -193,6 +222,16 @@ jobs:
           blackduck_scan_failure_severities: "[\"ALL\"]"
           # multiple parameters
           # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+      # Optional 
+      #- name: Include diagnostics
+      #  uses: actions/upload-artifact@v3
+      #  if: ${{ failure() || env.INCLUDE_DIAGNOSTICS }}
+      #  with:
+      #    # If a path (or paths), result in no files being found for the artifact, the action will succeed but print out a warning.
+      #    path: ${{ github.workspace }}/.bridge/
+      #    name: bridge_diagnostics
+      #    # Artifacts are retained for 90 days by default
+      #    retention-days: 10
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
@@ -204,6 +243,8 @@ jobs:
 - **bridge_download_url** - Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]
 
 - **bridge_download_version** - Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.
+
+- **include_diagnostics** - If provided, diagnostics files will be zipped and downloadable. [Note - Diagnostics Artifacts are enabled by default if there is any failure and Diagnostics Artifacts are retained for 90 days by default] 
 
 [Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
 
