@@ -746,7 +746,8 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForBlackduck() {
         const failureSeverities = [];
-        console.log('failureSeverities:' + failureSeverities);
+        console.log('inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES');
+        console.log('inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES:' + inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
         if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
             try {
                 const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES;
