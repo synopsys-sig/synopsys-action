@@ -34,6 +34,6 @@ jobs:
           blackduck_automation_fixpr: false
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
-          blackduck_scan_failure_severities: 'BLOCKER,CRITICAL,TRIVIAL,a'
+          blackduck_scan_failure_severities: 'BLOCKER,CRITICAL,TRIVIAL'
           # multiple parameters
           # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
