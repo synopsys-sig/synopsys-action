@@ -6,34 +6,36 @@ name: CI-Blackduck
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "SIGINT-614" ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # This workflow contains a single job called "build"
   build:
-    runs-on: [self-hosted]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@SIGINT-614
-        with:
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+    # The type of runner that the job will run on
+   runs-on: [ubuntu-latest]
+#    runs-on: [self-hosted, Windows, kiran]
+#    runs-on: [self-hosted, Linux, kishor-linux]
 
-          # Optional parameter. By default, pushes will initiate a full "intelligent" scan and pull requests
-          # will initiate a rapid scan.
-          blackduck_scan_full: false
-          # Required parameter if blackduck_automation_fixpr is enabled
-          # Make sure GITHUB_TOKEN have appropriate permissions
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          # Optional parameter. By default, create fix pull requests if vulnerabilities are reported
-          # Passing false will disable fix pull request creation
-          blackduck_automation_fixpr: false
-          # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
-          # Single parameter
-          blackduck_scan_failure_severities: 'BLOCKER,CRITICAL,TRIVIAL'
-          # multiple parameters
-          # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+   env:
+     MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
+     LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
+     WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
+     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+   steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Use synopsys unified-action - blackduck-detect
+       # Use the action defined in this repository
+        uses: ./
+        with:
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
