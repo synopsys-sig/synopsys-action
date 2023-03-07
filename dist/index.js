@@ -761,7 +761,7 @@ class SynopsysToolsParameter {
                 }
             }
             catch (error) {
-                throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
+                throw new Error('Invalid value for ');
             }
         }
         let command = '';
@@ -791,7 +791,7 @@ class SynopsysToolsParameter {
             const failureSeverityEnums = [];
             for (const failureSeverity of failureSeverities) {
                 if (!Object.values(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
-                    throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
+                    throw new Error('Invalid value for ');
                 }
                 else {
                     failureSeverityEnums.push(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);

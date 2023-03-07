@@ -133,7 +133,7 @@ export class SynopsysToolsParameter {
           }
         }
       } catch (error) {
-        throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
+        throw new Error('Invalid value for ')
       }
     }
     let command = ''
@@ -165,7 +165,7 @@ export class SynopsysToolsParameter {
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
         if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
-          throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
+          throw new Error('Invalid value for ')
         } else {
           failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
         }
