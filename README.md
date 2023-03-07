@@ -190,9 +190,9 @@ jobs:
           blackduck_automation_fixpr: true
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
-          blackduck_scan_failure_severities: 'ALL'
+          blackduck_scan_failure_severities: "[\"ALL\"]"
           # multiple parameters
-          # blackduck_scan_failure_severities:'BLOCKER,CRITICAL,TRIVIAL'
+          # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
