@@ -746,7 +746,8 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForBlackduck() {
         const failureSeverities = [];
-        (0, core_1.debug)('getFormattedCommandForBlackduck state json file at - '.concat(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES));
+        console.log('getFormattedCommandForBlackduck state json file at - ');
+        console.log(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
         if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
             try {
                 const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES;
@@ -786,6 +787,7 @@ class SynopsysToolsParameter {
             blackduckData.data.blackduck.scan = { full: scanFullValue };
         }
         if (failureSeverities && failureSeverities.length > 0) {
+            console.log("failureSeverities:::" + failureSeverities);
             (0, validators_1.validateBlackduckFailureSeverities)(failureSeverities);
             const failureSeverityEnums = [];
             for (const failureSeverity of failureSeverities) {
