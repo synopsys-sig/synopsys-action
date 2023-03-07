@@ -78,7 +78,7 @@ test('Run blackduck flow - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
-  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
 
   jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
@@ -99,7 +99,7 @@ test('Run blackduck flow with Fix pull request - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
-  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
 
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'true'})
   Object.defineProperty(process.env, 'GITHUB_TOKEN', {value: 'token123456789'})
@@ -126,7 +126,7 @@ test('Run blackduck flow with Fix pull request, missing github token - run', asy
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
-  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
 
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
 
@@ -212,7 +212,7 @@ test('Run blackduck flow with download and configure option - run with optional 
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
-  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://download-bridge-win.zip'})
@@ -236,7 +236,7 @@ test('Run Bridge download and configure option with wrong download url - run', a
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
-  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://wrong-url-mac.zip'})
@@ -259,7 +259,7 @@ test('Run Bridge download and configure option with empty url - run', async () =
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
-  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '["ALL"]'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://wrong-url-mac.zip'})
 

@@ -11,7 +11,7 @@ const blackduckParamMap: Map<string, string> = new Map<string, string>()
 blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
 blackduckParamMap.set('BLACKDUCK_API_TOKEN', 'BLACKDUCK_API_TOKEN')
 blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'true')
-blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', '["ALL"]')
+blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'ALL')
 blackduckParamMap.set('BLACKDUCK_INSTALL_DIRECTORY', '/User/home')
 
 describe('Blackduck flow contract', () => {
