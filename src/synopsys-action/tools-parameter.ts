@@ -162,6 +162,7 @@ export class SynopsysToolsParameter {
     }
 
     if (failureSeverities && failureSeverities.length > 0) {
+      console.log("failureSeverities:::" + failureSeverities)
       validateBlackduckFailureSeverities(failureSeverities)
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
