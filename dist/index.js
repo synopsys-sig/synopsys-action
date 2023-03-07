@@ -754,7 +754,6 @@ class SynopsysToolsParameter {
                     const failureSeveritiesArray = failureSeveritiesInput.toUpperCase().split(',');
                     for (const failureSeverity of failureSeveritiesArray) {
                         if (failureSeverity.trim().length > 0) {
-                            (0, core_1.info)('failureSeverity:'.concat(failureSeverity));
                             failureSeverities.push(failureSeverity.trim());
                         }
                     }
@@ -790,7 +789,6 @@ class SynopsysToolsParameter {
             (0, validators_1.validateBlackduckFailureSeverities)(failureSeverities);
             const failureSeverityEnums = [];
             for (const failureSeverity of failureSeverities) {
-                (0, core_1.info)('inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES:'.concat(failureSeverity));
                 if (!Object.values(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
                     throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
                 }
