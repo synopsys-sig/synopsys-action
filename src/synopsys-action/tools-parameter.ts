@@ -121,7 +121,7 @@ export class SynopsysToolsParameter {
   getFormattedCommandForBlackduck(): string {
     const failureSeverities: string[] = []
     console.log('getFormattedCommandForBlackduck state json file at - ')
-    console.log(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
+    info(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
     if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
         const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES
