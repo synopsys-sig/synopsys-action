@@ -120,7 +120,6 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForBlackduck(): string {
     const failureSeverities: string[] = []
-    info('getFormattedCommandForBlackduck state json file at - ')
     info(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
     if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
@@ -134,7 +133,7 @@ export class SynopsysToolsParameter {
           }
         }
       } catch (error) {
-        throw new Error(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
+        throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
       }
     }
     let command = ''
@@ -166,7 +165,7 @@ export class SynopsysToolsParameter {
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
         if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
-          throw new Error(failureSeverities+"")
+          throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
         } else {
           failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
         }

@@ -747,7 +747,6 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForBlackduck() {
         const failureSeverities = [];
-        (0, core_1.info)('getFormattedCommandForBlackduck state json file at - ');
         (0, core_1.info)(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
         if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
             try {
@@ -762,7 +761,7 @@ class SynopsysToolsParameter {
                 }
             }
             catch (error) {
-                throw new Error(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
+                throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
             }
         }
         let command = '';
@@ -792,7 +791,7 @@ class SynopsysToolsParameter {
             const failureSeverityEnums = [];
             for (const failureSeverity of failureSeverities) {
                 if (!Object.values(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity)) {
-                    throw new Error(failureSeverities + "");
+                    throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY));
                 }
                 else {
                     failureSeverityEnums.push(blackduck_1.BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity]);
