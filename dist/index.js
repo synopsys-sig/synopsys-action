@@ -762,7 +762,7 @@ class SynopsysToolsParameter {
                 }
             }
             catch (error) {
-                throw new Error('Invalid value for '.concat(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES));
+                throw new Error(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES);
             }
         }
         let command = '';
