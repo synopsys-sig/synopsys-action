@@ -754,6 +754,7 @@ class SynopsysToolsParameter {
                     const failureSeveritiesArray = failureSeveritiesInput.toUpperCase().split(',');
                     for (const failureSeverity of failureSeveritiesArray) {
                         if (failureSeverity.trim().length > 0) {
+                            (0, core_1.info)('failureSeverity:'.concat(failureSeverity));
                             failureSeverities.push(failureSeverity.trim());
                         }
                     }
