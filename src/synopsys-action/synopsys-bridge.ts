@@ -167,7 +167,7 @@ export class SynopsysBridge {
       const blackduckErrors: string[] = validateBlackDuckInputs()
       if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
         const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
-        info('blackDuckCommandFormatter'.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck()))
+        info('blackDuckCommandFormatter')
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 

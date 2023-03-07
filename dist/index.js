@@ -536,7 +536,7 @@ class SynopsysBridge {
                 const blackduckErrors = (0, validators_1.validateBlackDuckInputs)();
                 if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                    (0, core_1.info)('blackDuckCommandFormatter'.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck()));
+                    (0, core_1.info)('blackDuckCommandFormatter');
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
                 let validationErrors = [];
