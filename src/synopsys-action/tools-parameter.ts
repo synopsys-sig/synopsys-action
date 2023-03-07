@@ -134,7 +134,7 @@ export class SynopsysToolsParameter {
           }
         }
       } catch (error) {
-        throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
+        throw new Error('Invalid value for '.concat(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES))
       }
     }
     let command = ''
