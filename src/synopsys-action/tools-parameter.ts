@@ -120,7 +120,7 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForBlackduck(): string {
     const failureSeverities: string[] = []
-    console.log('getFormattedCommandForBlackduck state json file at - ')
+    info('getFormattedCommandForBlackduck state json file at - ')
     info(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES)
     if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
@@ -162,7 +162,6 @@ export class SynopsysToolsParameter {
     }
 
     if (failureSeverities && failureSeverities.length > 0) {
-      console.log("failureSeverities:::" + failureSeverities)
       validateBlackduckFailureSeverities(failureSeverities)
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
