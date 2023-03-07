@@ -164,10 +164,10 @@ export class SynopsysToolsParameter {
       validateBlackduckFailureSeverities(failureSeverities)
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
+        info('inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES:'.concat(failureSeverity))
         if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
           throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
         } else {
-          info('inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES:'.concat(inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES))
           failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
         }
       }
