@@ -12,24 +12,13 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-   runs-on: [self-hosted]
-#    runs-on: [self-hosted, Windows, kiran]
-#    runs-on: [self-hosted, Linux, kishor-linux]
-
-   #env:
-     #MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.192/ci-package-0.1.192-macosx.zip"
-     #LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
-     #WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
-     #GITHUB_TOKEN: ${{ secrets.PAT_GIT }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-   steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Synopsys Action
-      - uses: synopsys-sig/synopsys-action
+        uses: synopsys-sig/synopsys-action@<version>
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
@@ -39,10 +28,12 @@ jobs:
           blackduck_scan_full: false
           # Required parameter if blackduck_automation_fixpr is enabled
           # Make sure GITHUB_TOKEN have appropriate permissions
-          github_token: ${{ secrets.PAT_GIT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           # Optional parameter. By default, create fix pull requests if vulnerabilities are reported
           # Passing false will disable fix pull request creation
-          blackduck_automation_fixpr: false
+          blackduck_automation_fixpr: true
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
-          blackduck_scan_failure_severities: "BLOCKER,CRITICAL,MAJOR"
+          blackduck_scan_failure_severities: "[\"ALL\"]"
+          # multiple parameters
+          # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
