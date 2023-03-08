@@ -21,7 +21,7 @@ jobs:
     runs-on: [ubuntu-latest]
 
     env:
-      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72--macosx.zip"
+      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
       LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
       WINDOWS_BRIDGE_URL: "http://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/latest/synopsys-bridge-0.1.211-win64.zip"
       # Optional, default false
@@ -41,7 +41,7 @@ jobs:
           polaris_project_name: "tb_proj"
           polaris_assessment_types: "SCA"
           include_diagnostics: ${{ env.INCLUDE_DIAGNOSTICS }}
-          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
 
       - name: Include diagnostics
         uses: actions/upload-artifact@v3
