@@ -35,3 +35,4 @@ export const BLACKDUCK_AUTOMATION_FIXPR = getInput(constants.BLACKDUCK_AUTOMATIO
 
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)
+export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)
