@@ -1,0 +1,12 @@
+{
+  "name": "Synopsys Action",
+  "description": "Synopsys Action CI starter workflow.",
+  "categories": [
+    "TypeScript"
+  ],
+  "filePatterns": [
+    "package.json$",
+    "^Dockerfile",
+    ".*\\.md$"
+  ]
+}
