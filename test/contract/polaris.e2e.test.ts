@@ -136,10 +136,12 @@ export function setAllMocks() {
 }
 
 export function getBridgeDownloadUrl(): string {
-  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.634/ci-package-0.1.61-macosx.zip'
+  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-macosx.zip'
 }
 
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
+  Object.defineProperty(inputs, 'include_diagnostics', {value: true})
+  Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
 }

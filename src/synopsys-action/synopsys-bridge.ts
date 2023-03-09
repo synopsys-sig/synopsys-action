@@ -181,7 +181,6 @@ export class SynopsysBridge {
         error(new Error(validationErrors.join(',')))
       }
 
-      info('diagnostics flag: '.concat(inputs.INCLUDE_DIAGNOSTICS))
       if (inputs.INCLUDE_DIAGNOSTICS) {
         formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
       }

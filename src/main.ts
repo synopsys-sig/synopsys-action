@@ -3,6 +3,8 @@ import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from './application-constants'
+import * as inputs from './synopsys-action/inputs'
+import {uploadDiagnostics} from './synopsys-action/diagnostics'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -20,6 +22,9 @@ export async function run() {
   } catch (error) {
     throw error
   } finally {
+    if (inputs.INCLUDE_DIAGNOSTICS) {
+      await uploadDiagnostics()
+    }
     await cleanupTempDir(tempDir)
   }
   info('Synopsys Action workflow execution completed')
