@@ -21,9 +21,10 @@ jobs:
     runs-on: [ubuntu-latest]
 
     env:
-      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
-      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-win64.zip"
+      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-macosx.zip"
+      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-win64.zip"
+      INCLUDE_DIAGNOSTICS: true
 
     steps:
       #      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
