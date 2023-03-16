@@ -146,9 +146,9 @@ wanted to only report newly found policy violations on rapid scans, you would no
 GitHub workflow.
 
 **Note about Fix Pull requests creation:** <br/>
-* **blackduck_automation_fixpr:**- By default fix pull request creation will be enabled (i.e. Create
-fix pull requests if vulnerabilities are reported). To disable this feature, set blackduck_automation_fixpr
-as false.<br/> 
+* **blackduck_automation_fixpr:**- By default fix pull request creation will be disabled (i.e. Create
+fix pull requests if vulnerabilities are reported). To enable this feature, set blackduck_automation_fixpr
+as true.<br/> 
 * **github_token:** It is mandatory to pass github_token parameter with required permissions. The token can be github
 specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
   * Note - If blackduck_automation_fixpr is set to false, github_token is not required
