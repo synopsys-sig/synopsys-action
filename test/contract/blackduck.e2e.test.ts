@@ -13,6 +13,7 @@ blackduckParamMap.set('BLACKDUCK_API_TOKEN', 'BLACKDUCK_API_TOKEN')
 blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'true')
 blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'ALL')
 blackduckParamMap.set('BLACKDUCK_INSTALL_DIRECTORY', '/User/home')
+blackduckParamMap.set('BLACKDUCK_AUTOMATION_PRCOMMENT', 'true')
 
 describe('Blackduck flow contract', () => {
   afterAll(() => {
@@ -120,10 +121,15 @@ export function setAllMocks() {
 }
 
 export function getBridgeDownloadUrl(): string {
-  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.634/ci-package-0.1.61-macosx.zip'
+  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-macosx.zip'
 }
 
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
+  process.env['GITHUB_TOKEN'] = 'token'
+  process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
+  process.env['GITHUB_HEAD_REF'] = 'branch-name'
+  process.env['GITHUB_REF'] = 'refs/pull/1/merge'
+  process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
 }

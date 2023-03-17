@@ -25,8 +25,8 @@ export class SynopsysBridge {
 
   constructor() {
     this.bridgeExecutablePath = ''
-    this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action'
-    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/ci-package-$version-$platform.zip ')
+    this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
+    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ')
   }
 
   private getBridgeDefaultPath(): string {
@@ -54,9 +54,9 @@ export class SynopsysBridge {
     }
 
     if (osName === 'win32') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\bridge'), ['.exe'])
+      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe'])
     } else {
-      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/bridge'), [])
+      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/synopsys-bridge'), [])
     }
 
     if (this.bridgeExecutablePath) {

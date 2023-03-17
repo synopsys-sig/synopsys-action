@@ -1,6 +1,9 @@
+import {GithubData} from './blackduck'
+
 export interface Coverity {
   coverity: CoverityConnect
   project: ProjectData
+  github?: GithubData
 }
 
 export interface ProjectData {
@@ -8,9 +11,14 @@ export interface ProjectData {
   branch?: {name: string}
 }
 
+export interface AutomationData {
+  prcomment?: boolean
+}
+
 export interface CoverityConnect {
   connect: CoverityData
   install?: {directory: string}
+  automation: AutomationData
 }
 
 export interface CoverityData {

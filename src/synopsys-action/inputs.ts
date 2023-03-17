@@ -24,6 +24,7 @@ export const COVERITY_INSTALL_DIRECTORY = getInput(constants.COVERITY_INSTALL_DI
 export const COVERITY_POLICY_VIEW = getInput(constants.COVERITY_POLICY_VIEW_KEY)
 export const COVERITY_REPOSITORY_NAME = getInput(constants.COVERITY_REPOSITORY_NAME_KEY)
 export const COVERITY_BRANCH_NAME = getInput(constants.COVERITY_BRANCH_NAME_KEY)
+export const COVERITY_AUTOMATION_PRCOMMENT = getInput(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)
 
 // Blackduck related inputs
 export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)
@@ -32,5 +33,6 @@ export const BLACKDUCK_INSTALL_DIRECTORY = getInput(constants.BLACKDUCK_INSTALL_
 export const BLACKDUCK_SCAN_FULL = getInput(constants.BLACKDUCK_SCAN_FULL_KEY)
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES = getInput(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)
 export const BLACKDUCK_AUTOMATION_FIXPR = getInput(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)
+export const BLACKDUCK_AUTOMATION_PRCOMMENT = getInput(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)
 
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)
