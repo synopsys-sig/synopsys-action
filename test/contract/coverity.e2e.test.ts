@@ -17,6 +17,7 @@ coverityParamMap.set('COVERITY_INSTALL_DIRECTORY', '/user/coverity')
 coverityParamMap.set('COVERITY_POLICY_VIEW', 'policy')
 coverityParamMap.set('COVERITY_REPOSITORY_NAME', 'repo')
 coverityParamMap.set('COVERITY_BRANCH_NAME', 'branch')
+coverityParamMap.set('COVERITY_AUTOMATION_PRCOMMENT', 'true')
 
 describe('Coverity flow contract', () => {
   afterAll(() => {

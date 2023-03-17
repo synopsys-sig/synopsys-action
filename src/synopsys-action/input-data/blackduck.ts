@@ -20,7 +20,7 @@ export interface BlackduckData {
   token: string
   install?: {directory: string}
   scan?: {full?: boolean; failure?: {severities: BLACKDUCK_SCAN_FAILURE_SEVERITIES[]}}
-  automation?: {fixpr?: boolean}
+  automation: AutomationData
 }
 
 export interface Branch {
@@ -39,6 +39,12 @@ export interface Repository {
   name: string
   branch: Branch
   owner: Owner
+  pull: {number: number}
+}
+
+export interface AutomationData {
+  prcomment?: boolean
+  fixpr?: boolean
 }
 
 export interface GithubData {
@@ -49,6 +55,7 @@ export interface GithubData {
 export const FIXPR_ENVIRONMENT_VARIABLES = {
   GITHUB_TOKEN: 'GITHUB_TOKEN',
   GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
-  GITHUB_REF_NAME: 'GITHUB_REF_NAME',
+  GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
+  GITHUB_REF: 'GITHUB_REF',
   GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
 }
