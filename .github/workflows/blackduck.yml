@@ -40,4 +40,4 @@ jobs:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           #blackduck_automation_prcomment: false
-          blackduck_automation_fixpr: true
+          blackduck_automation_fixpr: false
