@@ -144,4 +144,9 @@ export function getBridgeDownloadUrl(): string {
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
+  process.env['GITHUB_TOKEN'] = 'token'
+  process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
+  process.env['GITHUB_HEAD_REF'] = 'branch-name'
+  process.env['GITHUB_REF'] = 'refs/pull/1/merge'
+  process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
 }
