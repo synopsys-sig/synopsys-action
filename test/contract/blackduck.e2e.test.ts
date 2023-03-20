@@ -13,6 +13,7 @@ blackduckParamMap.set('BLACKDUCK_API_TOKEN', 'BLACKDUCK_API_TOKEN')
 blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'true')
 blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'ALL')
 blackduckParamMap.set('BLACKDUCK_INSTALL_DIRECTORY', '/User/home')
+blackduckParamMap.set('BLACKDUCK_AUTOMATION_PRCOMMENT', 'true')
 
 describe('Blackduck flow contract', () => {
   afterAll(() => {
@@ -126,6 +127,11 @@ export function getBridgeDownloadUrl(): string {
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
+  process.env['GITHUB_TOKEN'] = 'token'
+  process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
+  process.env['GITHUB_HEAD_REF'] = 'branch-name'
+  process.env['GITHUB_REF'] = 'refs/pull/1/merge'
+  process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
 }

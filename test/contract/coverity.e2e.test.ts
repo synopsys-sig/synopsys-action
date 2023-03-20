@@ -17,6 +17,7 @@ coverityParamMap.set('COVERITY_INSTALL_DIRECTORY', '/user/coverity')
 coverityParamMap.set('COVERITY_POLICY_VIEW', 'policy')
 coverityParamMap.set('COVERITY_REPOSITORY_NAME', 'repo')
 coverityParamMap.set('COVERITY_BRANCH_NAME', 'branch')
+coverityParamMap.set('COVERITY_AUTOMATION_PRCOMMENT', 'true')
 
 describe('Coverity flow contract', () => {
   afterAll(() => {
@@ -145,4 +146,9 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
+  process.env['GITHUB_TOKEN'] = 'token'
+  process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
+  process.env['GITHUB_HEAD_REF'] = 'branch-name'
+  process.env['GITHUB_REF'] = 'refs/pull/1/merge'
+  process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
 }

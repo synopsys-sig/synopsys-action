@@ -122,6 +122,7 @@ jobs:
           # Below fields are optional
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          # coverity_automation_prcomment: true
           
           # Optional parameter to specify path to synopsys bridge.
           # This can be used if you want to pre-configure your GitHub Runner with the
@@ -197,7 +198,8 @@ jobs:
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
           blackduck_scan_failure_severities: "[\"ALL\"]"
-          # multiple parameters
+          # blackduck_automation_prcomment: true
+# multiple parameters
           # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
           # Optional
           # include_diagnostics: true

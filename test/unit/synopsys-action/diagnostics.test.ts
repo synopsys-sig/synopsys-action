@@ -1,4 +1,3 @@
-import {ArtifactClient, UploadResponse} from '@actions/artifact'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
 import {tmpdir} from 'os'
 import {uploadDiagnostics} from '../../../src/synopsys-action/diagnostics'
@@ -7,6 +6,7 @@ const fs = require('fs')
 import * as artifact from '@actions/artifact'
 
 import * as inputs from '../../../src/synopsys-action/inputs'
+import {UploadResponse} from '@actions/artifact'
 
 let tempPath = '/temp'
 
@@ -16,31 +16,6 @@ beforeEach(() => {
     value: 'linux'
   })
 })
-/*
-test('Test uploadDiagnostics', () => {
-  const uploadResponse: UploadResponse = {
-    artifactItems: ['bridge.log'],
-    artifactName: 'bridge_diagnostics',
-    failedItems: [],
-    size: 0
-  }
-  let files: string[] = ['bridge.log']
-  Object.defineProperty(inputs, 'DIAGNOSTICS_RETENTION_DAYS', {value: 10})
-
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('../synopsys-action')
-
-  const mockObj = (artifact.create().uploadArtifact = jest.fn()).mockImplementation()
-  mockObj.mockReturnValue(uploadResponse)
-
-  fs.readdirSync = jest.fn()
-  fs.readdirSync.mockReturnValue(files)
-
-  jest.spyOn(fs.statSync('../synopsys-action/.bridge/bridge.log'), 'isDirectory').mockReturnValue(false)
-
-  uploadDiagnostics().then(data => {
-    expect(data.artifactName).toBe(uploadResponse.artifactName)
-  })
-})*/
 
 test('Test uploadDiagnostics expect API error', () => {
   const uploadResponse: UploadResponse = {
