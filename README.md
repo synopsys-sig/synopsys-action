@@ -65,9 +65,6 @@ jobs:
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-          # Optional
-          # include_diagnostics: true
-          # diagnostics_retention_days: 10
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -122,16 +119,12 @@ jobs:
           # Below fields are optional
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
-          # coverity_automation_prcomment: true
           
           # Optional parameter to specify path to synopsys bridge.
           # This can be used if you want to pre-configure your GitHub Runner with the
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
           #synopsys_bridge_path: "/path_to_bridge_executable"
-          # Optional
-          # include_diagnostics: true
-          # diagnostics_retention_days: 10
 ```
 
 ## Synopsys GitHub Action - Black Duck
@@ -198,12 +191,8 @@ jobs:
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
           blackduck_scan_failure_severities: "[\"ALL\"]"
-          # blackduck_automation_prcomment: true
-# multiple parameters
+          # multiple parameters
           # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
-          # Optional
-          # include_diagnostics: true
-          # diagnostics_retention_days: 10
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
@@ -215,8 +204,6 @@ jobs:
 - **bridge_download_url** - Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]
 
 - **bridge_download_version** - Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.
-
-- **include_diagnostics** - If provided, diagnostics files will be zipped and downloadable. [Note - Diagnostics Artifacts are enabled when this variable has passed and retained for 90 days by default, if 'diagnostics_retention_days' is not passed.]
 
 [Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
 
