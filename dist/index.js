@@ -190,21 +190,33 @@ const artifact = __importStar(__nccwpck_require__(2605));
 const config_variables_1 = __nccwpck_require__(2222);
 const fs = __importStar(__nccwpck_require__(5747));
 const inputs = __importStar(__nccwpck_require__(7481));
+const core_1 = __nccwpck_require__(2186);
 function uploadDiagnostics() {
     return __awaiter(this, void 0, void 0, function* () {
         const artifactClient = artifact.create();
-        const pwd = (0, config_variables_1.getWorkSpaceDirectory)().concat('/.bridge/');
+        const pwd = (0, config_variables_1.getWorkSpaceDirectory)().concat(getBridgeDiagnosticsFolder());
         let files = [];
         files = getFiles(pwd, files);
         const options = {};
         options.continueOnError = false;
         if (inputs.DIAGNOSTICS_RETENTION_DAYS) {
+            if (!Number.isInteger(parseInt(inputs.DIAGNOSTICS_RETENTION_DAYS))) {
+                (0, core_1.warning)('Invalid Diagnostics Retention Days, hence continuing with default 90 days');
+            }
             options.retentionDays = parseInt(inputs.DIAGNOSTICS_RETENTION_DAYS);
         }
         return yield artifactClient.uploadArtifact('bridge_diagnostics', files, pwd, options);
     });
 }
 exports.uploadDiagnostics = uploadDiagnostics;
+function getBridgeDiagnosticsFolder() {
+    if (process.platform === 'win32') {
+        return '\\.bridge';
+    }
+    else {
+        return '/.bridge';
+    }
+}
 function getFiles(dir, allFiles) {
     allFiles = allFiles || [];
     const currDirFiles = fs.readdirSync(dir);
