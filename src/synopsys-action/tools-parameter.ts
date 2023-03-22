@@ -213,7 +213,7 @@ export class SynopsysToolsParameter {
   }
 
   private setGithubData(): GithubData | undefined {
-    const githubToken = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN]
+    const githubToken = inputs.GITHUB_TOKEN
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
     const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]
