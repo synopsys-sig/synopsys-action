@@ -39,6 +39,7 @@ jobs:
           polaris_application_name: "tb_app1"
           polaris_project_name: "tb_proj"
           polaris_assessment_types: "SAST"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
           # Blackduck
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}

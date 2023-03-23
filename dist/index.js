@@ -743,9 +743,13 @@ class SynopsysToolsParameter {
         if (inputs.COVERITY_BRANCH_NAME) {
             covData.data.project.branch = { name: inputs.COVERITY_BRANCH_NAME };
         }
-        if (inputs.COVERITY_AUTOMATION_PRCOMMENT) {
+        if ((0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
+            (0, core_1.info)('Coverity Automation comment is enabled');
             covData.data.github = this.setGithubData();
-            covData.data.coverity.automation.prcomment = Boolean(inputs.COVERITY_AUTOMATION_PRCOMMENT);
+            covData.data.coverity.automation.prcomment = true;
+        }
+        else {
+            covData.data.coverity.automation.prcomment = false;
         }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
@@ -815,7 +819,7 @@ class SynopsysToolsParameter {
             }
         }
         // Check and put environment variable for fix pull request
-        if ((0, utility_1.parseBoolean)(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
+        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
             (0, core_1.info)('Blackduck Automation Fix PR is enabled');
             blackduckData.data.github = this.setGithubData();
             blackduckData.data.blackduck.automation.fixpr = true;
@@ -824,10 +828,13 @@ class SynopsysToolsParameter {
             // Disable fix pull request for adapters
             blackduckData.data.blackduck.automation.fixpr = false;
         }
-        if ((0, utility_1.parseBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
+        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
             (0, core_1.info)('Blackduck Automation comment is enabled');
             blackduckData.data.github = this.setGithubData();
-            blackduckData.data.blackduck.automation.prcomment = Boolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT);
+            blackduckData.data.blackduck.automation.prcomment = true;
+        }
+        else {
+            blackduckData.data.blackduck.automation.prcomment = false;
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
@@ -838,7 +845,7 @@ class SynopsysToolsParameter {
         return command;
     }
     setGithubData() {
-        const githubToken = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN];
+        const githubToken = inputs.GITHUB_TOKEN;
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
         const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF];
@@ -929,7 +936,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -962,10 +969,13 @@ function checkIfGithubHostedAndLinux() {
     return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && (process.platform === 'linux' || process.platform === 'darwin');
 }
 exports.checkIfGithubHostedAndLinux = checkIfGithubHostedAndLinux;
-function parseBoolean(value) {
-    return [true, 'true', 'True', 'TRUE', '1', 1].includes(value);
+function parseToBoolean(value) {
+    if (value !== null && value !== '' && (value.toString().toLowerCase() === 'true' || value === true)) {
+        return true;
+    }
+    return false;
 }
-exports.parseBoolean = parseBoolean;
+exports.parseToBoolean = parseToBoolean;
 
 
 /***/ }),

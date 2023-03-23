@@ -8,7 +8,7 @@ import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData} from './input-data/blackduck'
 import * as constants from '../application-constants'
-import {parseBoolean} from './utility'
+import {parseToBoolean} from './utility'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -108,9 +108,12 @@ export class SynopsysToolsParameter {
       covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
     }
 
-    if (inputs.COVERITY_AUTOMATION_PRCOMMENT) {
+    if (parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
+      info('Coverity Automation comment is enabled')
       covData.data.github = this.setGithubData()
-      covData.data.coverity.automation.prcomment = Boolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)
+      covData.data.coverity.automation.prcomment = true
+    } else {
+      covData.data.coverity.automation.prcomment = false
     }
 
     const inputJson = JSON.stringify(covData)
@@ -186,7 +189,7 @@ export class SynopsysToolsParameter {
     }
 
     // Check and put environment variable for fix pull request
-    if (parseBoolean(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
+    if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
       info('Blackduck Automation Fix PR is enabled')
       blackduckData.data.github = this.setGithubData()
       blackduckData.data.blackduck.automation.fixpr = true
@@ -195,10 +198,12 @@ export class SynopsysToolsParameter {
       blackduckData.data.blackduck.automation.fixpr = false
     }
 
-    if (parseBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
+    if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
       info('Blackduck Automation comment is enabled')
       blackduckData.data.github = this.setGithubData()
-      blackduckData.data.blackduck.automation.prcomment = Boolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)
+      blackduckData.data.blackduck.automation.prcomment = true
+    } else {
+      blackduckData.data.blackduck.automation.prcomment = false
     }
 
     const inputJson = JSON.stringify(blackduckData)
@@ -214,7 +219,7 @@ export class SynopsysToolsParameter {
   }
 
   private setGithubData(): GithubData | undefined {
-    const githubToken = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_TOKEN]
+    const githubToken = inputs.GITHUB_TOKEN
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
     const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]
