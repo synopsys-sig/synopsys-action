@@ -8,6 +8,7 @@ import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData} from './input-data/blackduck'
 import * as constants from '../application-constants'
+import {parseBoolean} from './utility'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -185,15 +186,16 @@ export class SynopsysToolsParameter {
     }
 
     // Check and put environment variable for fix pull request
-    if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
+    if (parseBoolean(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
       info('Blackduck Automation Fix PR is enabled')
       blackduckData.data.github = this.setGithubData()
+      blackduckData.data.blackduck.automation.fixpr = true
     } else {
       // Disable fix pull request for adapters
       blackduckData.data.blackduck.automation.fixpr = false
     }
 
-    if (inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) {
+    if (parseBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
       info('Blackduck Automation comment is enabled')
       blackduckData.data.github = this.setGithubData()
       blackduckData.data.blackduck.automation.prcomment = Boolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)

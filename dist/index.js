@@ -668,6 +668,7 @@ const validators_1 = __nccwpck_require__(8401);
 const inputs = __importStar(__nccwpck_require__(7481));
 const blackduck_1 = __nccwpck_require__(6619);
 const constants = __importStar(__nccwpck_require__(9717));
+const utility_1 = __nccwpck_require__(7643);
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
@@ -814,15 +815,16 @@ class SynopsysToolsParameter {
             }
         }
         // Check and put environment variable for fix pull request
-        if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
+        if ((0, utility_1.parseBoolean)(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
             (0, core_1.info)('Blackduck Automation Fix PR is enabled');
             blackduckData.data.github = this.setGithubData();
+            blackduckData.data.blackduck.automation.fixpr = true;
         }
         else {
             // Disable fix pull request for adapters
             blackduckData.data.blackduck.automation.fixpr = false;
         }
-        if (inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) {
+        if ((0, utility_1.parseBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
             (0, core_1.info)('Blackduck Automation comment is enabled');
             blackduckData.data.github = this.setGithubData();
             blackduckData.data.blackduck.automation.prcomment = Boolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT);
@@ -927,7 +929,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.parseBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -960,6 +962,10 @@ function checkIfGithubHostedAndLinux() {
     return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && (process.platform === 'linux' || process.platform === 'darwin');
 }
 exports.checkIfGithubHostedAndLinux = checkIfGithubHostedAndLinux;
+function parseBoolean(value) {
+    return [true, 'true', 'True', 'TRUE', '1', 1].includes(value);
+}
+exports.parseBoolean = parseBoolean;
 
 
 /***/ }),

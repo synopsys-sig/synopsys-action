@@ -6,6 +6,11 @@ import * as inputs from '../../../src/synopsys-action/inputs'
 let tempPath = '/temp'
 
 beforeAll(() => {
+  process.env['GITHUB_TOKEN'] = 'token'
+  process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
+  process.env['GITHUB_HEAD_REF'] = 'branch-name'
+  process.env['GITHUB_REF'] = 'refs/pull/1/merge'
+  process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   createTempDir().then(path => (tempPath = path))
 })
 
@@ -76,6 +81,73 @@ test('Test getFormattedCommandForCoverity', () => {
   expect(resp).toContain('--stage connect')
 })
 
+test('Test getFormattedCommandForCoverity - pr comment', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_INSTALL_DIRECTORY', {value: 'COVERITY_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
+  Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
+  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  let resp = stp.getFormattedCommandForCoverity()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: false})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'false'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'true'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'FALSE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'TRUE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'FALSEEEE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'TRUEEEE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: ' '})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForCoverity()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
 test('Test missing data error in getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
@@ -109,7 +181,7 @@ test('Test getFormattedCommandForBlackduck', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   const resp = stp.getFormattedCommandForBlackduck()
@@ -118,11 +190,131 @@ test('Test getFormattedCommandForBlackduck', () => {
   expect(resp).toContain('--stage blackduck')
 })
 
+test('Test getFormattedCommandForBlackduck - fix pr test cases', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
+  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  let resp = stp.getFormattedCommandForBlackduck()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: false})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: ' '})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'TRUE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'FALSE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'TRUEEE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'FALSEEEE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: ' '})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+})
+
+test('Test getFormattedCommandForBlackduck - pr comment test cases', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: true})
+  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  let resp = stp.getFormattedCommandForBlackduck()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: false})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: 'false'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: ' '})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: 'TRUE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: 'FALSE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: 'TRUEEE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: 'FALSEEEE'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+})
+
 test('Test missing data error in getFormattedCommandForBlackduck', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '   BLOCKER    , CRITICAL, MAJOR'})
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
+  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: false})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
