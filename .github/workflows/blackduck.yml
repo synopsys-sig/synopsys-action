@@ -39,3 +39,4 @@ jobs:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          blackduck_automation_fixpr: true
