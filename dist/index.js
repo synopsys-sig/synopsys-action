@@ -745,7 +745,7 @@ class SynopsysToolsParameter {
         }
         if ((0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
             (0, core_1.info)('Coverity Automation comment is enabled');
-            covData.data.github = this.setGithubData();
+            covData.data.github = this.setGithubData(true);
             covData.data.coverity.automation.prcomment = true;
         }
         else {
@@ -821,7 +821,7 @@ class SynopsysToolsParameter {
         // Check and put environment variable for fix pull request
         if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
             (0, core_1.info)('Blackduck Automation Fix PR is enabled');
-            blackduckData.data.github = this.setGithubData();
+            blackduckData.data.github = this.setGithubData(false);
             blackduckData.data.blackduck.automation.fixpr = true;
         }
         else {
@@ -830,7 +830,7 @@ class SynopsysToolsParameter {
         }
         if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
             (0, core_1.info)('Blackduck Automation comment is enabled');
-            blackduckData.data.github = this.setGithubData();
+            blackduckData.data.github = this.setGithubData(true);
             blackduckData.data.blackduck.automation.prcomment = true;
         }
         else {
@@ -844,21 +844,24 @@ class SynopsysToolsParameter {
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
-    setGithubData() {
+    setGithubData(isCommentFlow) {
         const githubToken = inputs.GITHUB_TOKEN;
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
         const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF];
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
         // pr number will be part of "refs/pull/<pr_number>/merge"
-        const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : null;
+        const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : undefined;
         const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if (githubToken == null) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
+        if (isCommentFlow && githubPrNumber === undefined) {
+            throw new Error('Coverity/Blackduck automation PR comment can be run only by raising PR/MR');
+        }
         // This condition is required as per ts-lint as these fields may have undefined as well
-        if (githubRepo != null && githubBranchName != null && githubRepoOwner != null && githubPrNumber != null) {
-            return {
+        if (githubRepo != null && githubBranchName != null && githubRepoOwner != null) {
+            const githubData = {
                 user: {
                     token: githubToken
                 },
@@ -867,14 +870,16 @@ class SynopsysToolsParameter {
                     owner: {
                         name: githubRepoOwner
                     },
-                    pull: {
-                        number: parseInt(githubPrNumber)
-                    },
+                    pull: {},
                     branch: {
                         name: githubBranchName
                     }
                 }
             };
+            if (githubPrNumber != null) {
+                githubData.repository.pull.number = Number(githubPrNumber);
+            }
+            return githubData;
         }
         return undefined;
     }
