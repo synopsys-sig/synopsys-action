@@ -225,14 +225,14 @@ export class SynopsysToolsParameter {
     const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]
     const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
     // pr number will be part of "refs/pull/<pr_number>/merge"
-    const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : undefined
+    const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : null
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
 
     if (githubToken == null) {
       throw new Error('Missing required github token for fix pull request/automation comment')
     }
 
-    if (isCommentFlow && githubPrNumber === undefined) {
+    if (isCommentFlow && githubPrNumber == null) {
       throw new Error('Coverity/Blackduck automation PR comment can be run only by raising PR/MR')
     }
 
