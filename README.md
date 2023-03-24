@@ -210,8 +210,6 @@ jobs:
 
 - **bridge_download_version** - Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.
 
-- **include_diagnostics** - If true, diagnostics files will be downloadable from the github actions job page. [Note - Diagnostics Artifacts are enabled when this variable has passed and retained for 90 days by default, if 'diagnostics_retention_days' is not passed.]
-
 [Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
 
 
