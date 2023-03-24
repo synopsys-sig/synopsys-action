@@ -39,7 +39,7 @@ export interface Repository {
   name: string
   branch: Branch
   owner: Owner
-  pull: {number: number}
+  pull: {number?: number}
 }
 
 export interface AutomationData {

@@ -44,5 +44,5 @@ jobs:
           bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
           # Mandatory for windows hosted environment
           #coverity_install_directory: "/root"
-          #coverity_automation_prcomment: true
+          coverity_automation_prcomment: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
