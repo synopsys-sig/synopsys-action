@@ -64,10 +64,7 @@ jobs:
           # This can be used if you want to pre-configure your GitHub Runner with the
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable"
-          # Optional
-          # include_diagnostics: true
-          # diagnostics_retention_days: 10
+          #synopsys_bridge_path: "/path_to_bridge_executable"  
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -132,9 +129,6 @@ jobs:
           # Allows users to enable the feedback as pull request comments from Coverity security testing 
           # coverity_automation_prcomment: true
           
-          # Optional
-          # include_diagnostics: true
-          # diagnostics_retention_days: 10
 ```
 
 ## Synopsys GitHub Action - Black Duck
@@ -207,10 +201,6 @@ jobs:
           # Optional
           #Allows users to enable the feedback as pull request comments from Blackduck security testing
           #blackduck_automation_fixpr: true
-
-          # Optional
-          # include_diagnostics: true
-          # diagnostics_retention_days: 10
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
@@ -226,7 +216,6 @@ jobs:
 - **include_diagnostics** - If true, diagnostics files will be downloadable from the github actions job page. [Note - Diagnostics Artifacts are enabled when this variable has passed and retained for 90 days by default, if 'diagnostics_retention_days' is not passed.]
 
 [Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
-
 
 
 # Synopsys Bridge Setup
