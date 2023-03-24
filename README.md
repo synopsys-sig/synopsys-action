@@ -128,7 +128,7 @@ jobs:
           
           
 ```
-**Note: To enable feedback from Coverity security testing as pull request comments, set coverity_automation_prcomment: true**
+**Note: To enable feedback from Coverity security testing as pull request comment, set coverity_automation_prcomment: true**
           
 ## Synopsys GitHub Action - Black Duck
 The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
@@ -159,7 +159,7 @@ specified secrets.GITHUB_TOKEN with required permissions. For more information o
 * **As per observation, due to rate limit restriction of github rest api calls, we may
 observe fewer pull requests to be created.**
 
-**Note: To enable feedback from Blackduck security testing as pull request comments, set blackduck_automation_fixpr: true**
+**Note: To enable feedback from Blackduck security testing as pull request comments, set blackduck_automation_prcomment: true**
 
 ```yaml
 
