@@ -64,7 +64,7 @@ jobs:
           # This can be used if you want to pre-configure your GitHub Runner with the
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable"  
+          #synopsys_bridge_path: "/path_to_bridge_executable" 
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -124,13 +124,12 @@ jobs:
           # This can be used if you want to pre-configure your GitHub Runner with the
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable"
-
-          # Allows users to enable the feedback as pull request comments from Coverity security testing 
-          # coverity_automation_prcomment: true
+          #synopsys_bridge_path: "/path_to_bridge_executable"     
+          
           
 ```
-
+**Note: To enable feedback from Coverity security testing as pull request comments, set coverity_automation_prcomment: true**
+          
 ## Synopsys GitHub Action - Black Duck
 The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
 
@@ -159,6 +158,8 @@ specified secrets.GITHUB_TOKEN with required permissions. For more information o
   
 * **As per observation, due to rate limit restriction of github rest api calls, we may
 observe fewer pull requests to be created.**
+
+**Note: To enable feedback from Blackduck security testing as pull request comments, set blackduck_automation_fixpr: true**
 
 ```yaml
 
@@ -197,10 +198,6 @@ jobs:
           blackduck_scan_failure_severities: 'ALL'
           # multiple parameters
           # blackduck_scan_failure_severities:'BLOCKER,CRITICAL,TRIVIAL'
-
-          # Optional
-          #Allows users to enable the feedback as pull request comments from Blackduck security testing
-          #blackduck_automation_fixpr: true
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
