@@ -262,6 +262,7 @@ exports.FIXPR_ENVIRONMENT_VARIABLES = {
     GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
     GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
     GITHUB_REF: 'GITHUB_REF',
+    GITHUB_REF_NAME: 'GITHUB_REF_NAME',
     GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
 };
 
@@ -848,7 +849,7 @@ class SynopsysToolsParameter {
         const githubToken = inputs.GITHUB_TOKEN;
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF];
+        const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name

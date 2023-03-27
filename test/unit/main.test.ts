@@ -8,7 +8,7 @@ import * as configVariables from '@actions/artifact/lib/internal/config-variable
 beforeEach(() => {
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
-  process.env['GITHUB_HEAD_REF'] = 'branch-name'
+  process.env['GITHUB_REF_NAME'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   jest.resetModules()
