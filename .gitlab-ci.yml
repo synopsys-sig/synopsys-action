@@ -13,11 +13,12 @@ stages:
   - contract_test
   - coverage_report
   - versioning
-  - sbom
 #  - Check_dist
 #  - changelog
   - analysis
+  - sbom
   - notification
+
 
 
 variables:
@@ -79,14 +80,7 @@ polaris_bridge:
 pop_blackduck:
   stage: analysis
   extends: .pop_blackduck_analysis
-
-new_pop_blackduck:
-  stage: analysis
-  extends: .new_pop_blackduck_analysis
-  dependencies:
-    - versioning_job
-    - build_unit_test_job
-
+  
 #changelog_job:
 #  extends:
 #    - .changelog
