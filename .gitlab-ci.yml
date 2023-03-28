@@ -76,10 +76,6 @@ polaris_bridge:
   stage: analysis
   extends: .polaris_bridge
 
-pop_blackduck:
-  stage: analysis
-  extends: .pop_blackduck_analysis
-
 new_pop_blackduck:
   stage: analysis
   extends: .new_pop_blackduck_analysis
