@@ -13,10 +13,10 @@ stages:
   - contract_test
   - coverage_report
   - versioning
-  - sbom
 #  - Check_dist
 #  - changelog
   - analysis
+  - sbom
   - notification
 
 
