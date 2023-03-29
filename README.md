@@ -64,7 +64,7 @@ jobs:
           # This can be used if you want to pre-configure your GitHub Runner with the
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable"
+          #synopsys_bridge_path: "/path_to_bridge_executable" 
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -124,9 +124,12 @@ jobs:
           # This can be used if you want to pre-configure your GitHub Runner with the
           # Synopsys Bridge software
           # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable"
+          #synopsys_bridge_path: "/path_to_bridge_executable"     
+          
+          
 ```
-
+**Note: To enable feedback from Coverity security testing as pull request comment, set coverity_automation_prcomment: true**
+          
 ## Synopsys GitHub Action - Black Duck
 The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
 
@@ -146,15 +149,17 @@ wanted to only report newly found policy violations on rapid scans, you would no
 GitHub workflow.
 
 **Note about Fix Pull requests creation:** <br/>
-* **blackduck_automation_fixpr:**- By default fix pull request creation will be enabled (i.e. Create
-fix pull requests if vulnerabilities are reported). To disable this feature, set blackduck_automation_fixpr
-as false.<br/> 
+* **blackduck_automation_fixpr:**- By default fix pull request creation will be disabled (i.e. Create
+fix pull requests if vulnerabilities are reported). To enable this feature, set blackduck_automation_fixpr
+as true.<br/> 
 * **github_token:** It is mandatory to pass github_token parameter with required permissions. The token can be github
 specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
   * Note - If blackduck_automation_fixpr is set to false, github_token is not required
   
 * **As per observation, due to rate limit restriction of github rest api calls, we may
 observe fewer pull requests to be created.**
+
+**Note: To enable feedback from Blackduck security testing as pull request comments, set blackduck_automation_prcomment: true**
 
 ```yaml
 
@@ -190,9 +195,9 @@ jobs:
           blackduck_automation_fixpr: true
           # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
           # Single parameter
-          blackduck_scan_failure_severities: "[\"ALL\"]"
+          blackduck_scan_failure_severities: "ALL"
           # multiple parameters
-          # blackduck_scan_failure_severities: "[\"BLOCKER\", \"CRITICAL\", \"TRIVIAL\"]"
+          # blackduck_scan_failure_severities: "BLOCKER,CRITICAL,TRIVIAL"
 ```
 
  **Note:** Replace <version> with the required synopsys-action version.
@@ -206,7 +211,6 @@ jobs:
 - **bridge_download_version** - Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.
 
 [Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
-
 
 
 # Synopsys Bridge Setup
