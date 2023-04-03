@@ -467,7 +467,7 @@ class SynopsysBridge {
                     cwd: workingDirectory
                 };
                 try {
-                    (0, core_1.info)('workingDirectory :: '.concat(workingDirectory));
+                    (0, core_1.info)('bridgeExecutablePath :: '.concat(this.bridgeExecutablePath));
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
                 catch (errorObject) {
