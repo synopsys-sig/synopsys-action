@@ -8,6 +8,7 @@ import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData} from './input-data/blackduck'
 import * as constants from '../application-constants'
+import {parseToBoolean} from './utility'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -108,9 +109,12 @@ export class SynopsysToolsParameter {
       covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
     }
 
-    if (inputs.COVERITY_AUTOMATION_PRCOMMENT) {
-      covData.data.github = this.setGithubData()
-      covData.data.coverity.automation.prcomment = Boolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)
+    if (parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
+      info('Coverity Automation comment is enabled')
+      covData.data.github = this.getGithubRepoInfo()
+      covData.data.coverity.automation.prcomment = true
+    } else {
+      covData.data.coverity.automation.prcomment = false
     }
 
     const inputJson = JSON.stringify(covData)
@@ -186,18 +190,21 @@ export class SynopsysToolsParameter {
     }
 
     // Check and put environment variable for fix pull request
-    if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
+    if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
       info('Blackduck Automation Fix PR is enabled')
-      blackduckData.data.github = this.setGithubData()
+      blackduckData.data.github = this.getGithubRepoInfo()
+      blackduckData.data.blackduck.automation.fixpr = true
     } else {
       // Disable fix pull request for adapters
       blackduckData.data.blackduck.automation.fixpr = false
     }
 
-    if (inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) {
+    if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
       info('Blackduck Automation comment is enabled')
-      blackduckData.data.github = this.setGithubData()
-      blackduckData.data.blackduck.automation.prcomment = Boolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)
+      blackduckData.data.github = this.getGithubRepoInfo()
+      blackduckData.data.blackduck.automation.prcomment = true
+    } else {
+      blackduckData.data.blackduck.automation.prcomment = false
     }
 
     const inputJson = JSON.stringify(blackduckData)
@@ -212,40 +219,51 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  private setGithubData(): GithubData | undefined {
+  private getGithubRepoInfo(): GithubData | undefined {
     const githubToken = inputs.GITHUB_TOKEN
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]
+    const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
     const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
     // pr number will be part of "refs/pull/<pr_number>/merge"
-    const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : null
+    // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
+    const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
 
     if (githubToken == null) {
       throw new Error('Missing required github token for fix pull request/automation comment')
     }
 
+    if ((parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)) && isNaN(Number(githubPrNumber))) {
+      throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.')
+    }
+
     // This condition is required as per ts-lint as these fields may have undefined as well
-    if (githubRepo != null && githubBranchName != null && githubRepoOwner != null && githubPrNumber != null) {
-      return {
-        user: {
-          token: githubToken
+    if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
+      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber)
+    }
+    return undefined
+  }
+
+  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string): GithubData {
+    const githubData: GithubData = {
+      user: {
+        token: githubToken
+      },
+      repository: {
+        name: githubRepoName,
+        owner: {
+          name: githubRepoOwner
         },
-        repository: {
-          name: githubRepoName,
-          owner: {
-            name: githubRepoOwner
-          },
-          pull: {
-            number: parseInt(githubPrNumber)
-          },
-          branch: {
-            name: githubBranchName
-          }
+        pull: {},
+        branch: {
+          name: githubBranchName
         }
       }
     }
-    return undefined
+    if (githubPrNumber != null) {
+      githubData.repository.pull.number = Number(githubPrNumber)
+    }
+    return githubData
   }
 }

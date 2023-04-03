@@ -358,6 +358,7 @@ exports.FIXPR_ENVIRONMENT_VARIABLES = {
     GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
     GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
     GITHUB_REF: 'GITHUB_REF',
+    GITHUB_REF_NAME: 'GITHUB_REF_NAME',
     GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
 };
 
@@ -769,6 +770,7 @@ const validators_1 = __nccwpck_require__(8401);
 const inputs = __importStar(__nccwpck_require__(7481));
 const blackduck_1 = __nccwpck_require__(6619);
 const constants = __importStar(__nccwpck_require__(9717));
+const utility_1 = __nccwpck_require__(7643);
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
@@ -843,9 +845,13 @@ class SynopsysToolsParameter {
         if (inputs.COVERITY_BRANCH_NAME) {
             covData.data.project.branch = { name: inputs.COVERITY_BRANCH_NAME };
         }
-        if (inputs.COVERITY_AUTOMATION_PRCOMMENT) {
-            covData.data.github = this.setGithubData();
-            covData.data.coverity.automation.prcomment = Boolean(inputs.COVERITY_AUTOMATION_PRCOMMENT);
+        if ((0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
+            (0, core_1.info)('Coverity Automation comment is enabled');
+            covData.data.github = this.getGithubRepoInfo();
+            covData.data.coverity.automation.prcomment = true;
+        }
+        else {
+            covData.data.coverity.automation.prcomment = false;
         }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
@@ -915,18 +921,22 @@ class SynopsysToolsParameter {
             }
         }
         // Check and put environment variable for fix pull request
-        if (inputs.BLACKDUCK_AUTOMATION_FIXPR.toLowerCase() !== 'false') {
+        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
             (0, core_1.info)('Blackduck Automation Fix PR is enabled');
-            blackduckData.data.github = this.setGithubData();
+            blackduckData.data.github = this.getGithubRepoInfo();
+            blackduckData.data.blackduck.automation.fixpr = true;
         }
         else {
             // Disable fix pull request for adapters
             blackduckData.data.blackduck.automation.fixpr = false;
         }
-        if (inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) {
+        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
             (0, core_1.info)('Blackduck Automation comment is enabled');
-            blackduckData.data.github = this.setGithubData();
-            blackduckData.data.blackduck.automation.prcomment = Boolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT);
+            blackduckData.data.github = this.getGithubRepoInfo();
+            blackduckData.data.blackduck.automation.prcomment = true;
+        }
+        else {
+            blackduckData.data.blackduck.automation.prcomment = false;
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
@@ -936,39 +946,48 @@ class SynopsysToolsParameter {
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
-    setGithubData() {
+    getGithubRepoInfo() {
         const githubToken = inputs.GITHUB_TOKEN;
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF];
+        const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
         // pr number will be part of "refs/pull/<pr_number>/merge"
-        const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : null;
+        // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
+        const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
         const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if (githubToken == null) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
+        if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) && isNaN(Number(githubPrNumber))) {
+            throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.');
+        }
         // This condition is required as per ts-lint as these fields may have undefined as well
-        if (githubRepo != null && githubBranchName != null && githubRepoOwner != null && githubPrNumber != null) {
-            return {
-                user: {
-                    token: githubToken
-                },
-                repository: {
-                    name: githubRepoName,
-                    owner: {
-                        name: githubRepoOwner
-                    },
-                    pull: {
-                        number: parseInt(githubPrNumber)
-                    },
-                    branch: {
-                        name: githubBranchName
-                    }
-                }
-            };
+        if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
+            return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber);
         }
         return undefined;
+    }
+    setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber) {
+        const githubData = {
+            user: {
+                token: githubToken
+            },
+            repository: {
+                name: githubRepoName,
+                owner: {
+                    name: githubRepoOwner
+                },
+                pull: {},
+                branch: {
+                    name: githubBranchName
+                }
+            }
+        };
+        if (githubPrNumber != null) {
+            githubData.repository.pull.number = Number(githubPrNumber);
+        }
+        return githubData;
     }
 }
 exports.SynopsysToolsParameter = SynopsysToolsParameter;
@@ -1029,7 +1048,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -1062,6 +1081,13 @@ function checkIfGithubHostedAndLinux() {
     return String(process.env['RUNNER_NAME']).includes('Hosted Agent') && (process.platform === 'linux' || process.platform === 'darwin');
 }
 exports.checkIfGithubHostedAndLinux = checkIfGithubHostedAndLinux;
+function parseToBoolean(value) {
+    if (value !== null && value !== '' && (value.toString().toLowerCase() === 'true' || value === true)) {
+        return true;
+    }
+    return false;
+}
+exports.parseToBoolean = parseToBoolean;
 
 
 /***/ }),

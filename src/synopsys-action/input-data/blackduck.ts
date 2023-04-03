@@ -39,7 +39,7 @@ export interface Repository {
   name: string
   branch: Branch
   owner: Owner
-  pull: {number: number}
+  pull: {number?: number}
 }
 
 export interface AutomationData {
@@ -57,5 +57,6 @@ export const FIXPR_ENVIRONMENT_VARIABLES = {
   GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
   GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
   GITHUB_REF: 'GITHUB_REF',
+  GITHUB_REF_NAME: 'GITHUB_REF_NAME',
   GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
 }
