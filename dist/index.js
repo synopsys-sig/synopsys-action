@@ -440,7 +440,9 @@ class SynopsysBridge {
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
             }
             else {
+                (0, core_1.info)('####bridgeExecutablePath before :: '.concat(this.bridgeExecutablePath));
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('/synopsys-bridge'), []);
+                (0, core_1.info)('####bridgeExecutablePath after :: '.concat(this.bridgeExecutablePath));
                 versionFilePath = synopsysBridgePath.concat('/versions.txt');
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
             }

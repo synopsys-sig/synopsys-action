@@ -64,7 +64,9 @@ export class SynopsysBridge {
       versionFilePath = synopsysBridgePath.concat('\\versions.txt')
       versionFileExists = checkIfPathExists(versionFilePath)
     } else {
+      info('####bridgeExecutablePath before :: '.concat(this.bridgeExecutablePath))
       this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/synopsys-bridge'), [])
+      info('####bridgeExecutablePath after :: '.concat(this.bridgeExecutablePath))
       versionFilePath = synopsysBridgePath.concat('/versions.txt')
       versionFileExists = checkIfPathExists(versionFilePath)
     }
