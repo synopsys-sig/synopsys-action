@@ -4,10 +4,10 @@ import {debug, error, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
-import {cleanupTempDir} from './utility'
+import {checkIfPathExists, cleanupTempDir} from './utility'
 import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
-import fs from 'fs'
+import fs, {readFileSync} from 'fs'
 import {rmRF} from '@actions/io'
 import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
@@ -44,47 +44,60 @@ export class SynopsysBridge {
     return bridgeDefaultPath
   }
 
-  private async checkIfSynopsysBridgeExists(): Promise<boolean> {
+  async checkIfSynopsysBridgeExists(bridgeVersion: string): Promise<boolean> {
     let synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
     const osName = process.platform
+    let versionFilePath = ''
+    let versionFileExists = false
+
     if (!synopsysBridgePath) {
-      info('Synopsys Bridge path not found in configuration')
       info('Looking for synopsys bridge in default path')
       synopsysBridgePath = this.getBridgeDefaultPath()
+    } else {
+      if (!checkIfPathExists(synopsysBridgePath)) {
+        throw new Error('Path '.concat(synopsysBridgePath, ' does not exists'))
+      }
     }
 
     if (osName === 'win32') {
       this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe'])
+      versionFilePath = synopsysBridgePath.concat('\\versions.txt')
+      versionFileExists = checkIfPathExists(versionFilePath)
     } else {
       this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/synopsys-bridge'), [])
+      versionFilePath = synopsysBridgePath.concat('/versions.txt')
+      versionFileExists = checkIfPathExists(versionFilePath)
     }
 
-    if (this.bridgeExecutablePath) {
+    if (versionFileExists && this.bridgeExecutablePath) {
       debug('Bridge executable found at '.concat(synopsysBridgePath))
-      return true
+      debug('Version file found at '.concat(synopsysBridgePath))
+      if (await this.checkIfVersionExists(bridgeVersion, versionFilePath)) {
+        return true
+      }
     } else {
-      info('Bridge executable could not be found at '.concat(synopsysBridgePath))
+      info('Bridge executable and version file could not be found at '.concat(synopsysBridgePath))
     }
 
     return false
   }
 
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
-    if (await this.checkIfSynopsysBridgeExists()) {
-      const osName: string = process.platform
-      if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
-        const exectOp: ExecOptions = {
-          cwd: workingDirectory
-        }
-        try {
-          return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
-        } catch (errorObject) {
-          throw errorObject
-        }
+    // if (await this.checkIfSynopsysBridgeExists()) {
+    const osName: string = process.platform
+    if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
+      const exectOp: ExecOptions = {
+        cwd: workingDirectory
       }
-    } else {
-      throw new Error('Bridge could not be found')
+      try {
+        return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
+      } catch (errorObject) {
+        throw errorObject
+      }
     }
+    // } else {
+    //   throw new Error('Bridge could not be found')
+    // }
 
     return -1
   }
@@ -93,38 +106,48 @@ export class SynopsysBridge {
     try {
       // Automatically configure bridge if Bridge download url is provided
       let bridgeUrl = ''
+      let bridgeVersion = ''
 
       if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION.trim()).trim()
+          bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION.trim()
         } else {
           return Promise.reject(new Error('Provided bridge version not found in artifactory'))
         }
       } else if (inputs.BRIDGE_DOWNLOAD_URL) {
         bridgeUrl = BRIDGE_DOWNLOAD_URL
         info('Provided Bridge download url is - '.concat(inputs.BRIDGE_DOWNLOAD_URL))
+        const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
+        if (versionInfo != null) {
+          bridgeVersion = versionInfo[1]
+        }
       } else {
         info('Checking for latest version of Bridge to download and configure')
         const latestVersion = await this.getLatestVersion()
         bridgeUrl = this.getVersionUrl(latestVersion).trim()
+        bridgeVersion = latestVersion
       }
 
-      info('Bridge URL is - '.concat(bridgeUrl))
+      if ((await this.checkIfSynopsysBridgeExists(bridgeVersion)) === false) {
+        info('Bridge URL is - '.concat(bridgeUrl))
+        info('Downloading and configuring Synopsys Bridge')
+        const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
+        const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
 
-      info('Downloading and configuring Synopsys Bridge')
-      const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
-      const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
-
-      // Clear the existing bridge, if available
-      if (fs.existsSync(extractZippedFilePath)) {
-        const files: string[] = fs.readdirSync(extractZippedFilePath)
-        for (const file of files) {
-          await rmRF(file)
+        // Clear the existing bridge, if available
+        if (fs.existsSync(extractZippedFilePath)) {
+          const files: string[] = fs.readdirSync(extractZippedFilePath)
+          for (const file of files) {
+            await rmRF(file)
+          }
         }
-      }
 
-      await extractZipped(downloadResponse.filePath, extractZippedFilePath)
-      info('Download and configuration of Synopsys Bridge completed')
+        await extractZipped(downloadResponse.filePath, extractZippedFilePath)
+        info('Download and configuration of Synopsys Bridge completed'.concat())
+      } else {
+        info('Bridge already exists, download has been skipped')
+      }
     } catch (e) {
       const errorObject = (e as Error).message
       await cleanupTempDir(tempDir)
@@ -252,5 +275,16 @@ export class SynopsysBridge {
     }
 
     return bridgeDownloadUrl
+  }
+
+  async checkIfVersionExists(bridgeVersion: string, bridgeVersionFilePath: string): Promise<boolean> {
+    try {
+      const contents = readFileSync(bridgeVersionFilePath, 'utf-8')
+      const result = contents.includes('Synopsys Bridge Package: '.concat(bridgeVersion))
+      return result
+    } catch (e) {
+      const errorObject = (e as Error).message
+      throw errorObject
+    }
   }
 }

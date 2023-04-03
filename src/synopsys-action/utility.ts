@@ -34,3 +34,10 @@ export function parseToBoolean(value: string | boolean): boolean {
   }
   return false
 }
+
+export function checkIfPathExists(fileOrDirectoryPath: string): boolean {
+  if (fileOrDirectoryPath && fs.existsSync(fileOrDirectoryPath.trim())) {
+    return true
+  }
+  return false
+}
