@@ -17,6 +17,7 @@ import DomParser from 'dom-parser'
 
 export class SynopsysBridge {
   bridgeExecutablePath: string
+  synopsysBridgePath: string
   bridgeArtifactoryURL: string
   bridgeUrlPattern: string
   WINDOWS_PLATFORM = 'win64'
@@ -25,6 +26,7 @@ export class SynopsysBridge {
 
   constructor() {
     this.bridgeExecutablePath = ''
+    this.synopsysBridgePath = ''
     this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
     this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ')
   }
@@ -45,40 +47,38 @@ export class SynopsysBridge {
   }
 
   async checkIfSynopsysBridgeExists(bridgeVersion: string): Promise<boolean> {
-    let synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
+    this.synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
     const osName = process.platform
     let versionFilePath = ''
     let versionFileExists = false
 
-    if (!synopsysBridgePath) {
+    if (!this.synopsysBridgePath) {
       info('Looking for synopsys bridge in default path')
-      synopsysBridgePath = this.getBridgeDefaultPath()
+      this.synopsysBridgePath = this.getBridgeDefaultPath()
     } else {
-      if (!checkIfPathExists(synopsysBridgePath)) {
-        throw new Error('Path '.concat(synopsysBridgePath, ' does not exists'))
+      if (!checkIfPathExists(this.synopsysBridgePath)) {
+        throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'))
       }
     }
 
     if (osName === 'win32') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe'])
-      versionFilePath = synopsysBridgePath.concat('\\versions.txt')
+      this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe'])
+      versionFilePath = this.synopsysBridgePath.concat('\\versions.txt')
       versionFileExists = checkIfPathExists(versionFilePath)
     } else {
-      info('####bridgeExecutablePath before :: '.concat(this.bridgeExecutablePath))
-      this.bridgeExecutablePath = await tryGetExecutablePath(synopsysBridgePath.concat('/synopsys-bridge'), [])
-      info('####bridgeExecutablePath after :: '.concat(this.bridgeExecutablePath))
-      versionFilePath = synopsysBridgePath.concat('/versions.txt')
+      this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('/synopsys-bridge'), [])
+      versionFilePath = this.synopsysBridgePath.concat('/versions.txt')
       versionFileExists = checkIfPathExists(versionFilePath)
     }
 
     if (versionFileExists && this.bridgeExecutablePath) {
-      debug('Bridge executable found at '.concat(synopsysBridgePath))
-      debug('Version file found at '.concat(synopsysBridgePath))
+      debug('Bridge executable found at '.concat(this.synopsysBridgePath))
+      debug('Version file found at '.concat(this.synopsysBridgePath))
       if (await this.checkIfVersionExists(bridgeVersion, versionFilePath)) {
         return true
       }
     } else {
-      info('Bridge executable and version file could not be found at '.concat(synopsysBridgePath))
+      info('Bridge executable and version file could not be found at '.concat(this.synopsysBridgePath))
     }
 
     return false
@@ -148,7 +148,12 @@ export class SynopsysBridge {
         }
 
         await extractZipped(downloadResponse.filePath, extractZippedFilePath)
-        info('Download and configuration of Synopsys Bridge completed'.concat())
+        if (process.platform === 'win32') {
+          this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe'])
+        } else {
+          this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('/synopsys-bridge'), [])
+        }
+        info('Download and configuration of Synopsys Bridge completed'.concat(this.bridgeExecutablePath))
       } else {
         info('Bridge already exists, download has been skipped')
       }

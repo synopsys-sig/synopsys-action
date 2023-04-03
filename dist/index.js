@@ -402,6 +402,7 @@ class SynopsysBridge {
         this.LINUX_PLATFORM = 'linux64';
         this.MAC_PLATFORM = 'macosx';
         this.bridgeExecutablePath = '';
+        this.synopsysBridgePath = '';
         this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/';
         this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ');
     }
@@ -421,40 +422,38 @@ class SynopsysBridge {
     }
     checkIfSynopsysBridgeExists(bridgeVersion) {
         return __awaiter(this, void 0, void 0, function* () {
-            let synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_PATH;
+            this.synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_PATH;
             const osName = process.platform;
             let versionFilePath = '';
             let versionFileExists = false;
-            if (!synopsysBridgePath) {
+            if (!this.synopsysBridgePath) {
                 (0, core_1.info)('Looking for synopsys bridge in default path');
-                synopsysBridgePath = this.getBridgeDefaultPath();
+                this.synopsysBridgePath = this.getBridgeDefaultPath();
             }
             else {
-                if (!(0, utility_1.checkIfPathExists)(synopsysBridgePath)) {
-                    throw new Error('Path '.concat(synopsysBridgePath, ' does not exists'));
+                if (!(0, utility_1.checkIfPathExists)(this.synopsysBridgePath)) {
+                    throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'));
                 }
             }
             if (osName === 'win32') {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
-                versionFilePath = synopsysBridgePath.concat('\\versions.txt');
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
+                versionFilePath = this.synopsysBridgePath.concat('\\versions.txt');
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
             }
             else {
-                (0, core_1.info)('####bridgeExecutablePath before :: '.concat(this.bridgeExecutablePath));
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(synopsysBridgePath.concat('/synopsys-bridge'), []);
-                (0, core_1.info)('####bridgeExecutablePath after :: '.concat(this.bridgeExecutablePath));
-                versionFilePath = synopsysBridgePath.concat('/versions.txt');
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
+                versionFilePath = this.synopsysBridgePath.concat('/versions.txt');
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
             }
             if (versionFileExists && this.bridgeExecutablePath) {
-                (0, core_1.debug)('Bridge executable found at '.concat(synopsysBridgePath));
-                (0, core_1.debug)('Version file found at '.concat(synopsysBridgePath));
+                (0, core_1.debug)('Bridge executable found at '.concat(this.synopsysBridgePath));
+                (0, core_1.debug)('Version file found at '.concat(this.synopsysBridgePath));
                 if (yield this.checkIfVersionExists(bridgeVersion, versionFilePath)) {
                     return true;
                 }
             }
             else {
-                (0, core_1.info)('Bridge executable and version file could not be found at '.concat(synopsysBridgePath));
+                (0, core_1.info)('Bridge executable and version file could not be found at '.concat(this.synopsysBridgePath));
             }
             return false;
         });
@@ -524,7 +523,13 @@ class SynopsysBridge {
                         }
                     }
                     yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
-                    (0, core_1.info)('Download and configuration of Synopsys Bridge completed'.concat());
+                    if (process.platform === 'win32') {
+                        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
+                    }
+                    else {
+                        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
+                    }
+                    (0, core_1.info)('Download and configuration of Synopsys Bridge completed'.concat(this.bridgeExecutablePath));
                 }
                 else {
                     (0, core_1.info)('Bridge already exists, download has been skipped');
