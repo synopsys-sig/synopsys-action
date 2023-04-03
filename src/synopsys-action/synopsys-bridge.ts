@@ -84,12 +84,14 @@ export class SynopsysBridge {
 
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     // if (await this.checkIfSynopsysBridgeExists()) {
+    info('executeBridgeCommand method :: start')
     const osName: string = process.platform
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
       const exectOp: ExecOptions = {
         cwd: workingDirectory
       }
       try {
+        info('workingDirectory :: '.concat(workingDirectory))
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
         throw errorObject

@@ -460,12 +460,14 @@ class SynopsysBridge {
     executeBridgeCommand(bridgeCommand, workingDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
             // if (await this.checkIfSynopsysBridgeExists()) {
+            (0, core_1.info)('executeBridgeCommand method :: start');
             const osName = process.platform;
             if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
                 const exectOp = {
                     cwd: workingDirectory
                 };
                 try {
+                    (0, core_1.info)('workingDirectory :: '.concat(workingDirectory));
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
                 catch (errorObject) {
