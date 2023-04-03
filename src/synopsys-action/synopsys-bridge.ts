@@ -181,6 +181,10 @@ export class SynopsysBridge {
         error(new Error(validationErrors.join(',')))
       }
 
+      if (inputs.INCLUDE_DIAGNOSTICS) {
+        formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
+      }
+
       debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {

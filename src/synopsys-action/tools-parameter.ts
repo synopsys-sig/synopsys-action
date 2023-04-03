@@ -13,6 +13,7 @@ import {parseToBoolean} from './utility'
 export class SynopsysToolsParameter {
   tempDir: string
   private static STAGE_OPTION = '--stage'
+  static DIAGNOSTICS_OPTION = '--diagnostics'
   private static STATE_OPTION = '--state'
   private static POLARIS_STAGE = 'polaris'
   private static POLARIS_STATE_FILE_NAME = 'polaris_input.json'
@@ -20,7 +21,7 @@ export class SynopsysToolsParameter {
   private static BD_STATE_FILE_NAME = 'bd_input.json'
   // Coverity parameters
   private static COVERITY_STAGE = 'connect'
-  private static SPACE = ' '
+  static SPACE = ' '
   // Blackduck parameters
   private static BLACKDUCK_STAGE = 'blackduck'
 

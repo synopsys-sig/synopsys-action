@@ -38,6 +38,8 @@ export const BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr'
 export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment'
 
 export const GITHUB_TOKEN_KEY = 'github_token'
+export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
+export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
 
 // Bridge Exit Codes
 export let EXIT_CODE_MAP = new Map<string, string>([
