@@ -4,6 +4,8 @@ import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
 import {DownloadFileResponse} from '../../src/synopsys-action/download-utility'
 import * as downloadUtility from './../../src/synopsys-action/download-utility'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import * as diagnostics from '../../src/synopsys-action/diagnostics'
+import {UploadResponse} from '@actions/artifact'
 
 beforeEach(() => {
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
@@ -12,6 +14,8 @@ beforeEach(() => {
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   jest.resetModules()
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadDiagnostics').mockResolvedValueOnce(uploadResponse)
 })
 
 afterEach(() => {
@@ -68,7 +72,6 @@ test('Run polaris flow - run', async () => {
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-
   const response = await run()
 
   expect(response).not.toBe(null)
@@ -93,7 +96,8 @@ test('Run blackduck flow - run', async () => {
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadDiagnostics').mockResolvedValueOnce(uploadResponse)
   const response = await run()
   expect(response).not.toBe(null)
 
@@ -144,7 +148,6 @@ test('Run blackduck flow with Fix pull request - run', async () => {
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-
   const response = await run()
   expect(response).not.toBe(null)
 
@@ -188,7 +191,6 @@ test('Run coverity flow - run - without optional fields', async () => {
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-
   const response = await run()
   expect(response).not.toBe(null)
 
@@ -213,7 +215,6 @@ test('Run coverity flow - run - with optional fields', async () => {
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-
   const response = await run()
   expect(response).not.toBe(null)
 
@@ -260,7 +261,6 @@ test('Run blackduck flow with download and configure option - run without option
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-
   const response = await run()
   expect(response).not.toBe(null)
 
@@ -284,7 +284,6 @@ test('Run blackduck flow with download and configure option - run with optional 
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-
   const response = await run()
   expect(response).not.toBe(null)
 

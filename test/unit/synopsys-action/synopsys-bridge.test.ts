@@ -258,7 +258,7 @@ test('Test getVersionUrl win', () => {
   Object.defineProperty(process, 'platform', {value: null})
 })
 
-test('Test getVersionUrl win', () => {
+test('Test getVersionUrl linux', () => {
   Object.defineProperty(process, 'platform', {value: 'linux'})
 
   const sb = new SynopsysBridge()

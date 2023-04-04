@@ -13,10 +13,10 @@ stages:
   - contract_test
   - coverage_report
   - versioning
-  - sbom
 #  - Check_dist
 #  - changelog
   - analysis
+  - sbom
   - notification
 
 
@@ -75,10 +75,6 @@ pop_polaris:
 polaris_bridge:
   stage: analysis
   extends: .polaris_bridge
-
-pop_blackduck:
-  stage: analysis
-  extends: .pop_blackduck_analysis
 
 new_pop_blackduck:
   stage: analysis

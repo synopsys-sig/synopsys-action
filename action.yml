@@ -83,6 +83,12 @@ inputs:
   github_token:
     description: 'Github token to be used for git related rest operation'
     required: false
+  include_diagnostics:
+    description: 'To include diagnostics info and export as zip'
+    required: false
+  diagnostics_retention_days:
+    description: 'Number of days to keep the diagnostics files downloadable'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

@@ -133,4 +133,6 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
+  Object.defineProperty(inputs, 'include_diagnostics', {value: true})
+  Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
 }
