@@ -302,7 +302,6 @@ exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUC
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = (0, core_1.getInput)('synopsys_bridge_path');
-// export const SYNOPSYS_BRIDGE_PATH = '/Users/spurohit/code'
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = (0, core_1.getInput)('bridge_download_url');
 exports.BRIDGE_DOWNLOAD_VERSION = (0, core_1.getInput)('bridge_download_version');
@@ -326,8 +325,6 @@ exports.COVERITY_AUTOMATION_PRCOMMENT = (0, core_1.getInput)(constants.COVERITY_
 // Blackduck related inputs
 exports.BLACKDUCK_URL = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY);
 exports.BLACKDUCK_API_TOKEN = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY);
-// export const BLACKDUCK_URL = 'https://testing.blackduck.synopsys.com'
-// export const BLACKDUCK_API_TOKEN = 'MDQxNjNjMTAtMGY4NS00YmMzLTgyOTMtYmM5ZTYwM2E5NTY1OjkzYmExMThiLTdmOTctNDk4ZS04ZGU0LTNhNmJlYmM0MWM5OA=='
 exports.BLACKDUCK_INSTALL_DIRECTORY = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY);
 exports.BLACKDUCK_SCAN_FULL = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY);
 exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY);
@@ -460,8 +457,6 @@ class SynopsysBridge {
     }
     executeBridgeCommand(bridgeCommand, workingDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
-            // if (await this.checkIfSynopsysBridgeExists()) {
-            (0, core_1.info)('executeBridgeCommand method :: start');
             const osName = process.platform;
             if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
                 const exectOp = {
@@ -475,9 +470,6 @@ class SynopsysBridge {
                     throw errorObject;
                 }
             }
-            // } else {
-            //   throw new Error('Bridge could not be found')
-            // }
             return -1;
         });
     }
@@ -498,7 +490,6 @@ class SynopsysBridge {
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_URL) {
                     bridgeUrl = inputs_1.BRIDGE_DOWNLOAD_URL;
-                    (0, core_1.info)('Provided Bridge download url is - '.concat(inputs.BRIDGE_DOWNLOAD_URL));
                     const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*');
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
@@ -511,8 +502,8 @@ class SynopsysBridge {
                     bridgeVersion = latestVersion;
                 }
                 if ((yield this.checkIfSynopsysBridgeExists(bridgeVersion)) === false) {
-                    (0, core_1.info)('Bridge URL is - '.concat(bridgeUrl));
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
+                    (0, core_1.info)('Bridge URL is - '.concat(bridgeUrl));
                     const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, bridgeUrl);
                     const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath();
                     // Clear the existing bridge, if available
@@ -529,7 +520,7 @@ class SynopsysBridge {
                     else {
                         this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
                     }
-                    (0, core_1.info)('Download and configuration of Synopsys Bridge completed'.concat(this.bridgeExecutablePath));
+                    (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
                 }
                 else {
                     (0, core_1.info)('Bridge already exists, download has been skipped');

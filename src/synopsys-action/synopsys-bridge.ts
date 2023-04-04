@@ -85,8 +85,6 @@ export class SynopsysBridge {
   }
 
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
-    // if (await this.checkIfSynopsysBridgeExists()) {
-    info('executeBridgeCommand method :: start')
     const osName: string = process.platform
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
       const exectOp: ExecOptions = {
@@ -99,10 +97,6 @@ export class SynopsysBridge {
         throw errorObject
       }
     }
-    // } else {
-    //   throw new Error('Bridge could not be found')
-    // }
-
     return -1
   }
 
@@ -111,7 +105,6 @@ export class SynopsysBridge {
       // Automatically configure bridge if Bridge download url is provided
       let bridgeUrl = ''
       let bridgeVersion = ''
-
       if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION.trim()).trim()
@@ -121,7 +114,6 @@ export class SynopsysBridge {
         }
       } else if (inputs.BRIDGE_DOWNLOAD_URL) {
         bridgeUrl = BRIDGE_DOWNLOAD_URL
-        info('Provided Bridge download url is - '.concat(inputs.BRIDGE_DOWNLOAD_URL))
         const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
@@ -134,8 +126,8 @@ export class SynopsysBridge {
       }
 
       if ((await this.checkIfSynopsysBridgeExists(bridgeVersion)) === false) {
-        info('Bridge URL is - '.concat(bridgeUrl))
         info('Downloading and configuring Synopsys Bridge')
+        info('Bridge URL is - '.concat(bridgeUrl))
         const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
         const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
 
@@ -153,7 +145,7 @@ export class SynopsysBridge {
         } else {
           this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('/synopsys-bridge'), [])
         }
-        info('Download and configuration of Synopsys Bridge completed'.concat(this.bridgeExecutablePath))
+        info('Download and configuration of Synopsys Bridge completed')
       } else {
         info('Bridge already exists, download has been skipped')
       }
