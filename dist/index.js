@@ -758,8 +758,8 @@ class SynopsysBridge {
             }
             catch (e) {
                 (0, core_1.info)('Error reading version file content: '.concat(e.message));
-                return false;
             }
+            return false;
         });
     }
 }

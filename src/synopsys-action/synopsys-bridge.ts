@@ -287,7 +287,7 @@ export class SynopsysBridge {
       return contents.includes('Synopsys Bridge Package: '.concat(bridgeVersion))
     } catch (e) {
       info('Error reading version file content: '.concat((e as Error).message))
-      return false
     }
+    return false
   }
 }
