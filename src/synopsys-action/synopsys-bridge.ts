@@ -91,7 +91,6 @@ export class SynopsysBridge {
         cwd: workingDirectory
       }
       try {
-        info('bridgeExecutablePath :: '.concat(this.bridgeExecutablePath))
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
         throw errorObject
@@ -285,11 +284,10 @@ export class SynopsysBridge {
   async checkIfVersionExists(bridgeVersion: string, bridgeVersionFilePath: string): Promise<boolean> {
     try {
       const contents = readFileSync(bridgeVersionFilePath, 'utf-8')
-      const result = contents.includes('Synopsys Bridge Package: '.concat(bridgeVersion))
-      return result
+      return contents.includes('Synopsys Bridge Package: '.concat(bridgeVersion))
     } catch (e) {
-      const errorObject = (e as Error).message
-      throw errorObject
+      info('Error reading version file content: '.concat((e as Error).message))
+      return false
     }
   }
 }

@@ -561,7 +561,6 @@ class SynopsysBridge {
                     cwd: workingDirectory
                 };
                 try {
-                    (0, core_1.info)('bridgeExecutablePath :: '.concat(this.bridgeExecutablePath));
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
                 catch (errorObject) {
@@ -755,12 +754,11 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const contents = (0, fs_1.readFileSync)(bridgeVersionFilePath, 'utf-8');
-                const result = contents.includes('Synopsys Bridge Package: '.concat(bridgeVersion));
-                return result;
+                return contents.includes('Synopsys Bridge Package: '.concat(bridgeVersion));
             }
             catch (e) {
-                const errorObject = e.message;
-                throw errorObject;
+                (0, core_1.info)('Error reading version file content: '.concat(e.message));
+                return false;
             }
         });
     }

@@ -287,6 +287,24 @@ test('Test invalid path for SYNOPSYS_BRIDGE_PATH', () => {
 
 test('Test version file not exist failure', () => {
   const sb = new SynopsysBridge()
-  const response = sb.checkIfVersionExists('0.1.1', '')
-  expect(response).rejects.toContain('ENOENT: no such file or directory, open')
+  let response = sb.checkIfVersionExists('0.1.1', '')
+  expect(response).resolves.toEqual(false)
+})
+
+test('Test invalid path for SYNOPSYS_BRIDGE_PATH windows', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(process, 'platform', {value: 'win32'})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: 'c:\\working_directory'})
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('c:\\')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('c:\\working_directory')
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockReturnValueOnce(true)
+
+  const response = sb.checkIfSynopsysBridgeExists('0.1.1')
+  expect(response).resolves.toEqual(false)
 })
