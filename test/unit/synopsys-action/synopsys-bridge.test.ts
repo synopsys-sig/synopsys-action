@@ -5,6 +5,9 @@ import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import {Socket} from 'net'
 import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
+import * as inputs from '../../../src/synopsys-action/inputs'
+import {existsSync} from 'fs'
+const fs = require('fs')
 
 const ioUtils = require('@actions/io/lib/io-util')
 mock('@actions/io/lib/io-util')
@@ -84,21 +87,22 @@ test('Test executeBridgeCommand for Windows', () => {
   expect(response).resolves.toEqual(0)
 })
 
-test('Test executeBridgeCommand for bridge not found', () => {
+test('Test executeBridgeCommand for bridge failure', () => {
   const sb = new SynopsysBridge()
 
   ioUtils.tryGetExecutablePath = jest.fn()
   ioUtils.tryGetExecutablePath.mockReturnValueOnce('')
 
   ex.exec = jest.fn()
-  ex.exec.mockReturnValueOnce(0)
+  ex.exec.mockImplementation(() => {
+    throw new Error()
+  })
 
   Object.defineProperty(process, 'platform', {
     value: 'linux'
   })
 
-  const response = sb.executeBridgeCommand('command', 'working_directory')
-
+  const response = sb.executeBridgeCommand('', 'working_directory')
   expect(response).rejects.toThrowError()
 })
 
@@ -263,4 +267,44 @@ test('Test getVersionUrl linux', () => {
   expect(response).toContain('linux')
 
   Object.defineProperty(process, 'platform', {value: null})
+})
+
+test('Test fetch version details from BRIDGE_DOWNLOAD_URL', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-0.1.1-macosx.zip'})
+
+  const response = sb.downloadBridge('/working_directory')
+  expect(response).rejects.toThrowError()
+})
+
+test('Test invalid path for SYNOPSYS_BRIDGE_PATH', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: '/test-dir'})
+  const response = sb.downloadBridge('/working_directory')
+  expect(response).rejects.toThrowError()
+})
+
+test('Test version file not exist failure', () => {
+  const sb = new SynopsysBridge()
+  let response = sb.checkIfVersionExists('0.1.1', '')
+  expect(response).resolves.toEqual(false)
+})
+
+test('Test invalid path for SYNOPSYS_BRIDGE_PATH windows', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(process, 'platform', {value: 'win32'})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: 'c:\\working_directory'})
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('c:\\')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('c:\\working_directory')
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockReturnValueOnce(true)
+
+  const response = sb.checkIfSynopsysBridgeExists('0.1.1')
+  expect(response).resolves.toEqual(false)
 })
