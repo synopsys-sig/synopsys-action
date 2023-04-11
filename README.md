@@ -52,19 +52,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@<version>
+        uses: synopsys-sig/synopsys-action@v1.1.0
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
           polaris_assessment_types: "SCA,SAST"
-
-          # Optional parameter to specify path to synopsys bridge.
-          # This can be used if you want to pre-configure your GitHub Runner with the
-          # Synopsys Bridge software
-          # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable" 
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -103,7 +97,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@<version>
+        uses: synopsys-sig/synopsys-action@v1.1.0
         with:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
@@ -119,13 +113,6 @@ jobs:
           # Below fields are optional
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
-          
-          # Optional parameter to specify path to synopsys bridge.
-          # This can be used if you want to pre-configure your GitHub Runner with the
-          # Synopsys Bridge software
-          # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable"     
-          
           
 ```
 **Note: To enable feedback from Coverity security testing as pull request comment, set coverity_automation_prcomment: true**
@@ -179,7 +166,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@<version>
+        uses: synopsys-sig/synopsys-action@v1.1.0
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
@@ -199,8 +186,6 @@ jobs:
           # multiple parameters
           # blackduck_scan_failure_severities: "BLOCKER,CRITICAL,TRIVIAL"
 ```
-
- **Note:** Replace <version> with the required synopsys-action version.
 
 ## Additional Parameters
 
