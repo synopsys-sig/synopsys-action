@@ -52,7 +52,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@<version>
+        uses: synopsys-sig/synopsys-action@v1.1.0
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
@@ -97,7 +97,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@<version>
+        uses: synopsys-sig/synopsys-action@v1.1.0
         with:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
@@ -166,7 +166,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@<version>
+        uses: synopsys-sig/synopsys-action@v1.1.0
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
@@ -186,8 +186,6 @@ jobs:
           # multiple parameters
           # blackduck_scan_failure_severities: "BLOCKER,CRITICAL,TRIVIAL"
 ```
-
- **Note:** Replace <version> with the required synopsys-action version.
 
 ## Additional Parameters
 
