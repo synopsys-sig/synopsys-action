@@ -59,12 +59,6 @@ jobs:
           polaris_application_name: "testapp1"
           polaris_project_name: "testproj1"
           polaris_assessment_types: "SCA,SAST"
-
-          # Optional parameter to specify path to synopsys bridge.
-          # This can be used if you want to pre-configure your GitHub Runner with the
-          # Synopsys Bridge software
-          # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable" 
 ```
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
@@ -119,13 +113,6 @@ jobs:
           # Below fields are optional
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
-          
-          # Optional parameter to specify path to synopsys bridge.
-          # This can be used if you want to pre-configure your GitHub Runner with the
-          # Synopsys Bridge software
-          # The default is either /{user_home}/synopsys-bridge or in linux /usr/synopsys-bridge
-          #synopsys_bridge_path: "/path_to_bridge_executable"     
-          
           
 ```
 **Note: To enable feedback from Coverity security testing as pull request comment, set coverity_automation_prcomment: true**
