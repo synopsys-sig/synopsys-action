@@ -108,6 +108,62 @@ describe('Coverity flow contract', () => {
       error(err)
     }
   })
+
+  it('With coverity.automation.prcomment true and empty github token', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockCoverityParamsExcept(['NONE'])
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With coverity.automation.prcomment true and empty github repo name', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockCoverityParamsExcept(['NONE'])
+    process.env['GITHUB_REPOSITORY'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With coverity.automation.prcomment true and empty github branch name', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockCoverityParamsExcept(['NONE'])
+    process.env['GITHUB_REF_NAME'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With coverity.automation.prcomment true and empty github owner name', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockCoverityParamsExcept(['NONE'])
+    process.env['GITHUB_REPOSITORY_OWNER'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
 })
 
 export function resetMockCoverityParams() {
@@ -151,4 +207,5 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
+  process.env['GITHUB_REF_NAME'] = 'synopsys-sig'
 }

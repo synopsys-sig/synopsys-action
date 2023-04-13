@@ -6,6 +6,7 @@ import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
 import * as io from '@actions/io'
 import * as utility from '../../src/synopsys-action/utility'
+import {format} from 'path'
 
 const blackduckParamMap: Map<string, string> = new Map<string, string>()
 blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
@@ -92,6 +93,62 @@ describe('Blackduck flow contract', () => {
       process.env['BLACKDUCK_ISSUE_FAILURE'] = undefined
     }
   })
+
+  it('With blackduck.automation.fixpr true and empty github token', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['NONE'])
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With blackduck.automation.fixpr true and empty github repo name', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['NONE'])
+    process.env['GITHUB_REPOSITORY'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With blackduck.automation.fixpr true and empty github branch name', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['NONE'])
+    process.env['GITHUB_REF_NAME'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
+
+  it('With blackduck.automation.fixpr true and empty github owner name', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['NONE'])
+    process.env['GITHUB_REPOSITORY_OWNER'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  })
 })
 
 export function resetMockBlackduckParams() {
@@ -133,6 +190,7 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
+  process.env['GITHUB_REF_NAME'] = 'synopsys-sig'
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
 }
