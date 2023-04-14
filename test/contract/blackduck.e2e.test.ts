@@ -103,7 +103,7 @@ describe('Blackduck flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
+      expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
   })
@@ -117,7 +117,7 @@ describe('Blackduck flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
+      expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
   })
@@ -131,12 +131,27 @@ describe('Blackduck flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
+      expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
   })
 
   it('With blackduck.automation.fixpr true and empty github owner name', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['NONE'])
+    blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'false') //rapid scan
+    process.env['GITHUB_REPOSITORY_OWNER'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 1')
+      error(err)
+    }
+  })
+
+  it('With blackduck.automation.prcomment true and empty github owner name', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     process.env['GITHUB_REPOSITORY_OWNER'] = ''
@@ -145,10 +160,11 @@ describe('Blackduck flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
+      expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
   })
+
 })
 
 export function resetMockBlackduckParams() {
