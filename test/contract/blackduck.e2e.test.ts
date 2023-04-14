@@ -164,7 +164,6 @@ describe('Blackduck flow contract', () => {
       error(err)
     }
   })
-
 })
 
 export function resetMockBlackduckParams() {
