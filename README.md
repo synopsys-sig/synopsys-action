@@ -199,7 +199,7 @@ jobs:
 
 
 [Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
-
+ 
 
 # Synopsys Bridge Setup
 
