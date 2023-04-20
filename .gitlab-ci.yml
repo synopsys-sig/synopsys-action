@@ -64,7 +64,7 @@ generate_sbom:
     SBOM_ART_TOKEN_VAULT_PATH: sbom/integrations/github-actions
     PRODUCT: synopsys-action-ci-cd
     GENERATE_CONFIGURATION_FILE: 1
-    GENERATION_OPTIONS: "--entry Bridge@@Adapters:synopsys-action-ci-cd --provide-zip --output-zipfile Synopsys-CICD-actions.zip"
+    GENERATION_OPTIONS: "--entry integrations/synopsys-action/synopsys-action-ci-cd:synopsys-action-ci-cd-0.1.0 --provide-zip --output-zipfile Synopsys-CICD-actions.zip"
   only:
     refs:
       - main
