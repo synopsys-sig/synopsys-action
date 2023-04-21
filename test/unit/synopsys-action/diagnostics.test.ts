@@ -26,10 +26,10 @@ describe('uploadDiagnostics - success', () => {
     }
     const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
 
-    const mockPwd = '../synopsys-action/.bridge'
-    const mockFiles = ['../synopsys-action/.bridge/bridge.log']
+    const mockPwd = './.bridge'
+    const mockFiles = ['./.bridge/bridge.log']
     const mockOptions: UploadOptions = {continueOnError: false}
-    jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('../synopsys-action')
+    jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
 
     await uploadDiagnostics()
 
