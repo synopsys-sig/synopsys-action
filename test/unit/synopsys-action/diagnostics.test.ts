@@ -47,11 +47,11 @@ test('Test uploadDiagnostics expect API error', () => {
   }
   let files: string[] = ['bridge.log']
   Object.defineProperty(inputs, 'DIAGNOSTICS_RETENTION_DAYS', {value: 10})
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('../synopsys-action')
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
 
   const dir = (fs.readdirSync = jest.fn())
   dir.mockReturnValue(files)
-  jest.spyOn(fs.statSync('../synopsys-action/.bridge/bridge.log'), 'isDirectory').mockReturnValue(false)
+  jest.spyOn(fs.statSync('./.bridge/bridge.log'), 'isDirectory').mockReturnValue(false)
   uploadDiagnostics().catch(Error)
 })
 
@@ -64,10 +64,10 @@ test('Test uploadDiagnostics - invalid value for retention days', () => {
   }
   let files: string[] = ['bridge.log']
   Object.defineProperty(inputs, 'DIAGNOSTICS_RETENTION_DAYS', {value: 'invalid'})
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('../synopsys-action')
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
 
   const dir = (fs.readdirSync = jest.fn())
   dir.mockReturnValue(files)
-  jest.spyOn(fs.statSync('../synopsys-action/.bridge/bridge.log'), 'isDirectory').mockReturnValue(false)
+  jest.spyOn(fs.statSync('./.bridge/bridge.log'), 'isDirectory').mockReturnValue(false)
   uploadDiagnostics().catch(Error)
 })
