@@ -6,7 +6,7 @@ import * as inputs from './inputs'
 import {UploadOptions} from '@actions/artifact/lib/internal/upload-options'
 import {warning} from '@actions/core'
 
-export async function uploadDiagnostics(): Promise<UploadResponse> {
+export async function uploadDiagnostics(): Promise<UploadResponse | void> {
   const artifactClient = artifact.create()
   const pwd = getWorkSpaceDirectory().concat(getBridgeDiagnosticsFolder())
   let files: string[] = []
@@ -19,7 +19,9 @@ export async function uploadDiagnostics(): Promise<UploadResponse> {
     }
     options.retentionDays = parseInt(inputs.DIAGNOSTICS_RETENTION_DAYS)
   }
-  return await artifactClient.uploadArtifact('bridge_diagnostics', files, pwd, options)
+  if (files.length > 0) {
+    return await artifactClient.uploadArtifact('bridge_diagnostics', files, pwd, options)
+  }
 }
 
 function getBridgeDiagnosticsFolder(): string {
