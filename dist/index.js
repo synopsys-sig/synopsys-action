@@ -205,7 +205,9 @@ function uploadDiagnostics() {
             }
             options.retentionDays = parseInt(inputs.DIAGNOSTICS_RETENTION_DAYS);
         }
-        return yield artifactClient.uploadArtifact('bridge_diagnostics', files, pwd, options);
+        if (files.length > 0) {
+            return yield artifactClient.uploadArtifact('bridge_diagnostics', files, pwd, options);
+        }
     });
 }
 exports.uploadDiagnostics = uploadDiagnostics;
