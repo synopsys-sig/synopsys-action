@@ -34,6 +34,7 @@ function getBridgeDiagnosticsFolder(): string {
 
 export function getFiles(dir: string, allFiles: string[]): string[] {
   allFiles = allFiles || []
+
   if (fs.existsSync(dir)) {
     const currDirFiles = fs.readdirSync(dir)
     for (const item of currDirFiles) {
