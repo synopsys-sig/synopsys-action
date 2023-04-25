@@ -34,13 +34,15 @@ function getBridgeDiagnosticsFolder(): string {
 
 export function getFiles(dir: string, allFiles: string[]): string[] {
   allFiles = allFiles || []
-  const currDirFiles = fs.readdirSync(dir)
-  for (const item of currDirFiles) {
-    const name = dir.concat('/').concat() + item
-    if (fs.statSync(name).isDirectory()) {
-      getFiles(name, allFiles)
-    } else {
-      allFiles.push(name)
+  if (fs.existsSync(dir)) {
+    const currDirFiles = fs.readdirSync(dir)
+    for (const item of currDirFiles) {
+      const name = dir.concat('/').concat() + item
+      if (fs.statSync(name).isDirectory()) {
+        getFiles(name, allFiles)
+      } else {
+        allFiles.push(name)
+      }
     }
   }
   return allFiles
