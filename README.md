@@ -89,10 +89,10 @@ We recommend configuring sensitive data like username and password, and even URL
 | `coverity_url` | The url of coverity server            | Mandatory     |
 | `coverity_user`        | The user name of coverity             | Mandatory     |
 | `coverity_passphrase`        | The passphrase of coverity            | Mandatory     |
-| `coverity_project_name`        | The project name of coverity          | Mandatory     ||
-| `coverity_stream_name`        | The stream name of coverity           | Mandatory     ||
-| `coverity_install_directory`        | The install directory path of coverity | Optional    ||
-| `coverity_policy_view`        | The policy view  of coverity          | Optional    ||
+| `coverity_project_name`        | The project name of coverity          | Mandatory     |
+| `coverity_stream_name`        | The stream name of coverity           | Mandatory     |
+| `coverity_install_directory`        | The install directory path of coverity | Optional    |
+| `coverity_policy_view`        | The policy view  of coverity          | Optional    |
 | `coverity_automation_prcomment`        | The automation pr comment of coverity | Optional    |
 | `coverity_repository_name`        | The repository name of coverity       | Optional    |
 | `coverity_branch_name`        | The branch name of coverity           | Optional    |
@@ -121,7 +121,6 @@ jobs:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-         
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ github.event.repository.name }}
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
@@ -162,15 +161,15 @@ observe fewer pull requests to be created.**
 **Note: To enable feedback from Blackduck security testing as pull request comments, set blackduck_automation_prcomment: true**
 
 
-| Input Parameter | Description                              | Mandatory/Optional |
-|-----------------|------------------------------------------|----------|
-|`blackduck_url`| The url of blackduck server              | Mandatory     |
-| `blackduck_apiToken`      | The api token of blackduck               | Mandatory     |
-| `blackduck_install_directory`      | The install directory path of blackduck  | Optional     |
-| `blackduck_scan_full`      | The scan full of blackduck               | Optional     |
+| Input Parameter | Description                                                                                                                                      | Mandatory/Optional |
+|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+|`blackduck_url`| The url of blackduck server                                                                                                                      | Mandatory     |
+| `blackduck_apiToken`      | The api token of blackduck                                                                                                                       | Mandatory     |
+| `blackduck_install_directory`      | The install directory path of blackduck                                                                                                          | Optional     |
+| `blackduck_scan_full`      | Blackduck scan full type   <br/>Sample values: true or false                                                                                     | Optional     |
 | `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Sample values:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
-| `blackduck_automation_fixpr`      | The automation fixpr of blackduck        | Optional    |
-| `blackduck_automation_prcomment`      | The automation prcomment of blackduck    | Optional    |
+| `blackduck_automation_fixpr`      | The automation fixpr of blackduck                                                                                                                | Optional    |
+| `blackduck_automation_prcomment`      | The automation prcomment of blackduck                                                                                                            | Optional    |
 
 ```yaml
 
@@ -198,7 +197,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}    
           blackduck_automation_fixpr: true
           blackduck_scan_failure_severities: "ALL"
-          
 ```
 
 ## Additional Parameters
