@@ -166,7 +166,7 @@ observe fewer pull requests to be created.**
 |`blackduck_url`| The url of blackduck server                                                                                                                      | Mandatory     |
 | `blackduck_apiToken`      | The api token of blackduck                                                                                                                       | Mandatory     |
 | `blackduck_install_directory`      | The install directory path of blackduck                                                                                                          | Optional     |
-| `blackduck_scan_full`      | Blackduck scan full type   <br/>Sample values: true or false                                                                                     | Optional     |
+| `blackduck_scan_full`      | Specifies whether full scan is required or not <br/>Sample values: true or false                                                                 | Optional     |
 | `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Sample values:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
 | `blackduck_automation_fixpr`      | The automation fixpr of blackduck                                                                                                                | Optional    |
 | `blackduck_automation_prcomment`      | The automation prcomment of blackduck                                                                                                            | Optional    |
