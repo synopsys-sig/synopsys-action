@@ -37,7 +37,7 @@ We recommend configuring sensitive data like access tokens and even URLs, using 
 | `polaris_accessToken`      | The access token of polaris                                       | Mandatory               |
 | `polaris_application_name` | The application name of polaris                                   | Mandatory               |
 | `polaris_project_name`     | The project name of polaris                                       | Mandatory               |
-| `polaris_assessment_types` | Various assessment types of polaris <br/> Sample inputs: SCA,SAST | Mandatory               |
+| `polaris_assessment_types` | Various assessment types of polaris <br/> Sample values: SCA,SAST | Mandatory               |
 
 ```yaml
 name: Synopsys Security Testing
@@ -168,7 +168,7 @@ observe fewer pull requests to be created.**
 | `blackduck_apiToken`      | The api token of blackduck               | Mandatory     |
 | `blackduck_install_directory`      | The install directory path of blackduck  | Optional     |
 | `blackduck_scan_full`      | The scan full of blackduck               | Optional     |
-| `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Sample inputs:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
+| `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Sample values:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
 | `blackduck_automation_fixpr`      | The automation fixpr of blackduck        | Optional    |
 | `blackduck_automation_prcomment`      | The automation prcomment of blackduck    | Optional    |
 
