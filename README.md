@@ -37,7 +37,7 @@ We recommend configuring sensitive data like access tokens and even URLs, using 
 | `polaris_accessToken`      | Polaris access token                                              | Mandatory          |
 | `polaris_application_name` | Applictaion name in Polaris                                       | Mandatory          |
 | `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
-| `polaris_assessment_types` | Polaris assessment types <br/> Example: SCA,SAST                  | Mandatory          |
+| `polaris_assessment_types` | Polaris assessment types <br/>Example: SCA,SAST                  | Mandatory          |
 
 ```yaml
 name: Synopsys Security Testing
