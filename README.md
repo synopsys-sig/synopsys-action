@@ -33,11 +33,11 @@ We recommend configuring sensitive data like access tokens and even URLs, using 
 
 | Input Parameter            | Description                                                       | Mandatory/Optional | 
 |----------------------------|-------------------------------------------------------------------|--------------------|
-| `polaris_serverUrl`        | The url of Polaris server                                         | Mandatory               |
-| `polaris_accessToken`      | The access token of polaris                                       | Mandatory               |
-| `polaris_application_name` | The application name of polaris                                   | Mandatory               |
-| `polaris_project_name`     | The project name of polaris                                       | Mandatory               |
-| `polaris_assessment_types` | Various assessment types of polaris <br/> Sample values: SCA,SAST | Mandatory               |
+| `polaris_serverUrl`        | Polaris server URL                                                | Mandatory          |
+| `polaris_accessToken`      | Polaris access token                                              | Mandatory          |
+| `polaris_application_name` | Applictaion name in Polaris                                       | Mandatory          |
+| `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
+| `polaris_assessment_types` | Polaris assessment types <br/> Example: SCA,SAST                  | Mandatory          |
 
 ```yaml
 name: Synopsys Security Testing
@@ -86,16 +86,16 @@ We recommend configuring sensitive data like username and password, and even URL
 
 | Input Parameter   | Description                           | Mandatory/Optional |
 |-------------------|---------------------------------------|----------|
-| `coverity_url` | The url of coverity server            | Mandatory     |
-| `coverity_user`        | The user name of coverity             | Mandatory     |
-| `coverity_passphrase`        | The passphrase of coverity            | Mandatory     |
-| `coverity_project_name`        | The project name of coverity          | Mandatory     |
-| `coverity_stream_name`        | The stream name of coverity           | Mandatory     |
-| `coverity_install_directory`        | The install directory path of coverity | Optional    |
+| `coverity_url` | Coverity server URL            | Mandatory     |
+| `coverity_user`        | Coverity username            | Mandatory     |
+| `coverity_passphrase`        | Coverity passphrase            | Mandatory     |
+| `coverity_project_name`        | Project name in coverity          | Mandatory     |
+| `coverity_stream_name`        | Stream name in coverity           | Mandatory     |
+| `coverity_install_directory`        | Install directory path of coverity | Optional    |
 | `coverity_policy_view`        | The policy view  of coverity          | Optional    |
-| `coverity_automation_prcomment`        | The automation pr comment of coverity | Optional    |
-| `coverity_repository_name`        | The repository name of coverity       | Optional    |
-| `coverity_branch_name`        | The branch name of coverity           | Optional    |
+| `coverity_automation_prcomment`        | Flag to enable automatic pull request comment based on coverity scan result | Optional    |
+| `coverity_repository_name`        | Repository name in coverity     | Optional    |
+| `coverity_branch_name`        | Branch name in coverity           | Optional    |
 
 ```yaml
 
@@ -163,11 +163,11 @@ observe fewer pull requests to be created.**
 
 | Input Parameter | Description                                                                                                                                      | Mandatory/Optional |
 |-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-|`blackduck_url`| The url of blackduck server                                                                                                                      | Mandatory     |
-| `blackduck_apiToken`      | The api token of blackduck                                                                                                                       | Mandatory     |
-| `blackduck_install_directory`      | The install directory path of blackduck                                                                                                          | Optional     |
-| `blackduck_scan_full`      | Specifies whether full scan is required or not <br/>Sample values: true or false                                                                 | Optional     |
-| `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Sample values:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
+|`blackduck_url`| Blackduck server URL                                                                                                                      | Mandatory     |
+| `blackduck_apiToken`      | API token for Blackduck                                                                                                                       | Mandatory     |
+| `blackduck_install_directory`      | The install directory path of Blackduck                                                                                                          | Optional     |
+| `blackduck_scan_full`      | Specifies whether full scan is required or not <br/> Example: true or false                                                                 | Optional     |
+| `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Example:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
 | `blackduck_automation_fixpr`      | The automation fixpr of blackduck                                                                                                                | Optional    |
 | `blackduck_automation_prcomment`      | The automation prcomment of blackduck                                                                                                            | Optional    |
 
