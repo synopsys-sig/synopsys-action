@@ -31,14 +31,6 @@ pushes to main branches.
 
 We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets.
 
-| Input Parameter            | Description                                                       | Mandatory/Optional | 
-|----------------------------|-------------------------------------------------------------------|--------------------|
-| `polaris_serverUrl`        | Polaris server URL                                                | Mandatory          |
-| `polaris_accessToken`      | Polaris access token                                              | Mandatory          |
-| `polaris_application_name` | Applictaion name in Polaris                                       | Mandatory          |
-| `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
-| `polaris_assessment_types` | Polaris assessment types <br/>Example: SCA,SAST                  | Mandatory          |
-
 ```yaml
 name: Synopsys Security Testing
 
@@ -67,6 +59,14 @@ jobs:
           polaris_assessment_types: "SCA,SAST"
 ```
 
+| Input Parameter            | Description                                                       | Mandatory/Optional | 
+|----------------------------|-------------------------------------------------------------------|--------------------|
+| `polaris_serverUrl`        | URL for Polaris Server                                            | Mandatory          |
+| `polaris_accessToken`      | Access token for Polaris                                          | Mandatory          |
+| `polaris_application_name` | Application name in Polaris                                       | Mandatory          |
+| `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
+| `polaris_assessment_types` | Polaris assessment types. Example: SCA,SAST                       | Mandatory          |
+
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
 
 Please note that the Synopsys Action at this time supports only the Coverity cloud deployment model (Kubernetes-based)
@@ -83,19 +83,6 @@ Before you can run a pipeline using the Synopsys Action and Coverity, you must m
 project and stream are set in your Coverity Connect server environment.
 
 We recommend configuring sensitive data like username and password, and even URL, using GitHub secrets.
-
-| Input Parameter   | Description                           | Mandatory/Optional |
-|-------------------|---------------------------------------|----------|
-| `coverity_url` | Coverity server URL            | Mandatory     |
-| `coverity_user`        | Coverity username            | Mandatory     |
-| `coverity_passphrase`        | Coverity passphrase            | Mandatory     |
-| `coverity_project_name`        | Project name in coverity          | Mandatory     |
-| `coverity_stream_name`        | Stream name in coverity           | Mandatory     |
-| `coverity_install_directory`        | Install directory path of coverity | Optional    |
-| `coverity_policy_view`        | The policy view  of coverity          | Optional    |
-| `coverity_automation_prcomment`        | Flag to enable automatic pull request comment based on coverity scan result | Optional    |
-| `coverity_repository_name`        | Repository name in coverity     | Optional    |
-| `coverity_branch_name`        | Branch name in coverity           | Optional    |
 
 ```yaml
 
@@ -123,11 +110,26 @@ jobs:
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ github.event.repository.name }}
-          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
-          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          #To enable feedback from Coverity security testing as pull request comment, set coverity_automation_prcomment: true
+          coverity_automation_prcomment: true
           
 ```
-**Note: To enable feedback from Coverity security testing as pull request comment, set coverity_automation_prcomment: true**
+
+| Input Parameter   | Description                           | Mandatory/Optional |
+|-------------------|---------------------------------------|----------|
+| `coverity_url` | URL for Coverity server        | Mandatory     |
+| `coverity_user`        | Username for Coverity        | Mandatory     |
+| `coverity_passphrase`        | Passphrase for Coverity       | Mandatory     |
+| `coverity_project_name`        | Project name in Coverity          | Mandatory     |
+| `coverity_stream_name`        | Stream name in Coverity           | Mandatory     |
+| `coverity_install_directory`        | Directory path to install Coverity | Optional    |
+| `coverity_policy_view`        | The policy view  of Coverity. If any defects are found within this view when applied to the project, the build will be failed with an exit code. Example: coverity_policy_view: 100001        | Optional    |
+| `coverity_repository_name`        | Repository name in Coverity     | Optional    |
+| `coverity_branch_name`        | Branch name in Coverity           | Optional    |
+| `coverity_automation_prcomment`        | Flag to enable automatic pull request comment based on Coverity scan result.
+Supported values: true or false | Optional    |
+
+
           
 ## Synopsys GitHub Action - Black Duck
 The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
@@ -158,18 +160,6 @@ specified secrets.GITHUB_TOKEN with required permissions. For more information o
 * **As per observation, due to rate limit restriction of github rest api calls, we may
 observe fewer pull requests to be created.**
 
-**Note: To enable feedback from Blackduck security testing as pull request comments, set blackduck_automation_prcomment: true**
-
-
-| Input Parameter | Description                                                                                                                                      | Mandatory/Optional |
-|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-|`blackduck_url`| Blackduck server URL                                                                                                                      | Mandatory     |
-| `blackduck_apiToken`      | API token for Blackduck                                                                                                                       | Mandatory     |
-| `blackduck_install_directory`      | The install directory path of Blackduck                                                                                                          | Optional     |
-| `blackduck_scan_full`      | Specifies whether full scan is required or not <br/> Example: true or false                                                                 | Optional     |
-| `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Example:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
-| `blackduck_automation_fixpr`      | The automation fixpr of blackduck                                                                                                                | Optional    |
-| `blackduck_automation_prcomment`      | The automation prcomment of blackduck                                                                                                            | Optional    |
 
 ```yaml
 
@@ -193,16 +183,34 @@ jobs:
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_scan_full: false
-          github_token: ${{ secrets.GITHUB_TOKEN }}    
-          blackduck_automation_fixpr: true
-          blackduck_scan_failure_severities: "ALL"
+            
+          #To enable feedback from Black Duck security testing as pull request comment, set blackduck_automation_prcomment: true
+          blackduck_automation_prcomment: true
+          
+          # To enable autoamtic fix pull request creation if vulnerabilities are reported
+          #blackduck_automation_fixpr: true
+          # Required parameter if blackduck_automation_fixpr is enabled
+          # Make sure GITHUB_TOKEN have appropriate permissions
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
+
 ```
+
+
+| Input Parameter | Description |  Mandatory/Optional |
+|-----------------|-------------|---------------------|
+|`blackduck_url`  | URL for Black Duck server  | Mandatory     |
+| `blackduck_apiToken` | API token for Black Duck | Mandatory     |
+| `blackduck_install_directory` | Directory path to install Black Duck  | Optional     |
+| `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. Supported values: true or false | Optional     |
+| `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. Supported values : ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED. Example: blackduck_scan_failure_severities: "BLOCKER|CRITICAL" | Optional |
+| `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. Supported values: true or false| Optional    |
+| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. Supported values: true or false| Optional    |
+
 
 ## Additional Parameters
 | Input Parameter | Description                              |
 |-----------------|------------------------------------------|
-|`synopsys_bridge_path`| Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]             |
+|`synopsys_bridge_path`| Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]. If the configured Synopsys Bridge is not the latest one, latest Synopsys Bridge version will be downloaded          |
 | `bridge_download_url`      | Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]               |
 |`bridge_download_version`| Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.              |
 | `include_diagnostics`      | All diagnostics files will be available to download when 'true' passed, Additionally **diagnostics_retention_days** can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).               |
@@ -211,6 +219,7 @@ Note - If **bridge_download_version** or **bridge_download_url** is not provided
  
 
 # Synopsys Bridge Setup
+
 The latest version of the Synopsys Bridge is available at: [Synopsys Bridge](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/)
 
 The most common way to set up the Synopsys Bridge is to configure the action to download the small (~50 MB) CLI utility that is then automatically run at the right stage of your pipeline.
