@@ -59,7 +59,7 @@ jobs:
           polaris_assessment_types: "SCA,SAST"
 ```
 
-| Input Parameter            | Description                                                       | Mandatory/Optional | 
+| Input Parameter            | Description                                                       | Mandatory/ Optional | 
 |----------------------------|-------------------------------------------------------------------|--------------------|
 | `polaris_serverUrl`        | URL for Polaris Server                                            | Mandatory          |
 | `polaris_accessToken`      | Access token for Polaris                                          | Mandatory          |
@@ -108,14 +108,20 @@ jobs:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          # Many customers prefer to set their Coverity project and stream names to match the GitHub repository name
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ github.event.repository.name }}
-          #To enable feedback from Coverity security testing as pull request comment, set coverity_automation_prcomment: true
-          coverity_automation_prcomment: true
+          # Optionally you may specify the ID number of a saved view to apply as a "break the build" policy.
+          # If any defects are found within this view when applied to the project, the build will be failed
+          # with an exit code.
+          #coverity_policy_view: 100001
+          # Below fields are optional
+          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
+          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           
 ```
 
-| Input Parameter   | Description                           | Mandatory/Optional |
+| Input Parameter   | Description                           | Mandatory/ Optional |
 |-------------------|---------------------------------------|----------|
 | `coverity_url` | URL for Coverity server        | Mandatory     |
 | `coverity_user`        | Username for Coverity        | Mandatory     |
@@ -196,7 +202,7 @@ jobs:
 ```
 
 
-| Input Parameter | Description |  Mandatory/Optional |
+| Input Parameter | Description |  Mandatory/ Optional |
 |-----------------|-------------|---------------------|
 |`blackduck_url`  | URL for Black Duck server  | Mandatory     |
 | `blackduck_apiToken` | API token for Black Duck | Mandatory     |
