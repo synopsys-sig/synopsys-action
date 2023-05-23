@@ -59,7 +59,7 @@ jobs:
           polaris_assessment_types: "SCA,SAST"
 ```
 
-| Input Parameter            | Description                                                       | Mandatory/ Optional | 
+| Input Parameter            | Description                                                       | Mandatory / Optional | 
 |----------------------------|-------------------------------------------------------------------|--------------------|
 | `polaris_serverUrl`        | URL for Polaris Server                                            | Mandatory          |
 | `polaris_accessToken`      | Access token for Polaris                                          | Mandatory          |
@@ -121,7 +121,7 @@ jobs:
           
 ```
 
-| Input Parameter   | Description                           | Mandatory/ Optional |
+| Input Parameter   | Description                           | Mandatory / Optional |
 |-------------------|---------------------------------------|----------|
 | `coverity_url` | URL for Coverity server        | Mandatory     |
 | `coverity_user`        | Username for Coverity        | Mandatory     |
@@ -202,7 +202,7 @@ jobs:
 ```
 
 
-| Input Parameter | Description |  Mandatory/ Optional |
+| Input Parameter | Description |  Mandatory / Optional |
 |-----------------|-------------|---------------------|
 |`blackduck_url`  | URL for Black Duck server  | Mandatory     |
 | `blackduck_apiToken` | API token for Black Duck | Mandatory     |
