@@ -2,6 +2,8 @@
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
 
+The latest version of the Synopsys Bridge is available at: [Synopsys Bridge](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/)
+
 The Synopsys GitHub Action allows you to configure your pipeline to run Synopsys security testing and take action on the security results. The GitHub Action leverages the Synopsys Bridge, a foundational piece of technology that has built-in knowledge of how to run all major Synopsys security testing solutions, plus common workflows for platforms like GitHub.
 
 **Please Note:** This action requires the appropriate licenses for the Synopsys security testing solutions (E.g. Polaris, Coverity, or Black Duck).
@@ -30,14 +32,6 @@ At this time, Polaris does not support the analysis of pull requests. We recomme
 pushes to main branches.
 
 We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets.
-
-| Input Parameter            | Description                                                       | Mandatory/Optional | 
-|----------------------------|-------------------------------------------------------------------|--------------------|
-| `polaris_serverUrl`        | Polaris server URL                                                | Mandatory          |
-| `polaris_accessToken`      | Polaris access token                                              | Mandatory          |
-| `polaris_application_name` | Applictaion name in Polaris                                       | Mandatory          |
-| `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
-| `polaris_assessment_types` | Polaris assessment types <br/>Example: SCA,SAST                  | Mandatory          |
 
 ```yaml
 name: Synopsys Security Testing
@@ -84,19 +78,6 @@ project and stream are set in your Coverity Connect server environment.
 
 We recommend configuring sensitive data like username and password, and even URL, using GitHub secrets.
 
-| Input Parameter   | Description                           | Mandatory/Optional |
-|-------------------|---------------------------------------|----------|
-| `coverity_url` | Coverity server URL            | Mandatory     |
-| `coverity_user`        | Coverity username            | Mandatory     |
-| `coverity_passphrase`        | Coverity passphrase            | Mandatory     |
-| `coverity_project_name`        | Project name in coverity          | Mandatory     |
-| `coverity_stream_name`        | Stream name in coverity           | Mandatory     |
-| `coverity_install_directory`        | Install directory path of coverity | Optional    |
-| `coverity_policy_view`        | The policy view  of coverity          | Optional    |
-| `coverity_automation_prcomment`        | Flag to enable automatic pull request comment based on coverity scan result | Optional    |
-| `coverity_repository_name`        | Repository name in coverity     | Optional    |
-| `coverity_branch_name`        | Branch name in coverity           | Optional    |
-
 ```yaml
 
 name: Synopsys Security Testing
@@ -121,8 +102,15 @@ jobs:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          # Many customers prefer to set their Coverity project and stream names to match
+          # the GitHub repository name
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ github.event.repository.name }}
+          # Optionally you may specify the ID number of a saved view to apply as a "break the build" policy.
+          # If any defects are found within this view when applied to the project, the build will be failed
+          # with an exit code.
+          #coverity_policy_view: 100001
+          # Below fields are optional
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           
@@ -160,17 +148,6 @@ observe fewer pull requests to be created.**
 
 **Note: To enable feedback from Blackduck security testing as pull request comments, set blackduck_automation_prcomment: true**
 
-
-| Input Parameter | Description                                                                                                                                      | Mandatory/Optional |
-|-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------|----------|
-|`blackduck_url`| Blackduck server URL                                                                                                                      | Mandatory     |
-| `blackduck_apiToken`      | API token for Blackduck                                                                                                                       | Mandatory     |
-| `blackduck_install_directory`      | The install directory path of Blackduck                                                                                                          | Optional     |
-| `blackduck_scan_full`      | Specifies whether full scan is required or not <br/> Example: true or false                                                                 | Optional     |
-| `blackduck_scan_failure_severities`      | The scan failure severities of blackduck<br/><br/>Example:<br/>ALL,NONE,BLOCKER,<br/>CRITICAL,MAJOR,<br/>MINOR,OK,<br/>TRIVIAL,UNSPECIFIED | Optional     |
-| `blackduck_automation_fixpr`      | The automation fixpr of blackduck                                                                                                                | Optional    |
-| `blackduck_automation_prcomment`      | The automation prcomment of blackduck                                                                                                            | Optional    |
-
 ```yaml
 
 name: Synopsys Security Testing
@@ -193,25 +170,38 @@ jobs:
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+
+          # Optional parameter. By default, pushes will initiate a full "intelligent" scan and pull requests
+          # will initiate a rapid scan.
           blackduck_scan_full: false
-          github_token: ${{ secrets.GITHUB_TOKEN }}    
+          # Required parameter if blackduck_automation_fixpr is enabled
+          # Make sure GITHUB_TOKEN have appropriate permissions
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Optional parameter. By default, create fix pull requests if vulnerabilities are reported
+          # Passing false will disable fix pull request creation 
           blackduck_automation_fixpr: true
+          # Optional parameter. The values could be. ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED
+          # Single parameter
           blackduck_scan_failure_severities: "ALL"
+          # multiple parameters
+          # blackduck_scan_failure_severities: "BLOCKER,CRITICAL,TRIVIAL"
 ```
 
 ## Additional Parameters
-| Input Parameter | Description                              |
-|-----------------|------------------------------------------|
-|`synopsys_bridge_path`| Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]             |
-| `bridge_download_url`      | Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]               |
-|`bridge_download_version`| Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.              |
-| `include_diagnostics`      | All diagnostics files will be available to download when 'true' passed, Additionally **diagnostics_retention_days** can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).               |
 
-Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge
+- **synopsys_bridge_path** - Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]
+  
+- **bridge_download_url** - Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]
+
+- **bridge_download_version** - Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.
+
+- **include_diagnostics** - All diagnostics files will be available to download when 'true' passed, Additionally **diagnostics_retention_days** can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).
+
+
+[Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge]
  
 
 # Synopsys Bridge Setup
-The latest version of the Synopsys Bridge is available at: [Synopsys Bridge](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/)
 
 The most common way to set up the Synopsys Bridge is to configure the action to download the small (~50 MB) CLI utility that is then automatically run at the right stage of your pipeline.
 
