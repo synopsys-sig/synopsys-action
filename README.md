@@ -130,10 +130,9 @@ jobs:
 | `coverity_stream_name`        | Stream name in Coverity           | Mandatory     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
-| `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> 
-Supported values: true or false </br>| Optional    |
-| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github
-specified secrets.GITHUB_TOKEN with required permissions. <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if  coverity_automation_prcomment is set true. |
+| `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
+| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if  coverity_automation_prcomment is set true. |
+
 
 
 
