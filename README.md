@@ -59,13 +59,13 @@ jobs:
           polaris_assessment_types: "SCA,SAST"
 ```
 
-| Input Parameter            | Description                                                       | Mandatory / Optional | 
+|Input Parameter            |Description                                                       |Mandatory / Optional | 
 |----------------------------|-------------------------------------------------------------------|--------------------|
 | `polaris_serverUrl`        | URL for Polaris Server                                            | Mandatory          |
 | `polaris_accessToken`      | Access token for Polaris                                          | Mandatory          |
 | `polaris_application_name` | Application name in Polaris                                       | Mandatory          |
 | `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
-| `polaris_assessment_types` | Polaris assessment types. <br> Example: SCA,SAST                       | Mandatory          |
+| `polaris_assessment_types` | Polaris assessment types. <br> Example: SCA,SAST  </br>           | Mandatory          |
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
 
@@ -121,20 +121,17 @@ jobs:
         
 ```
 
-| Input Parameter   | Description                           | Mandatory / Optional |
+|Input Parameter   |Description                           |Mandatory / Optional |
 |-------------------|---------------------------------------|----------|
-| `coverity_url` | URL for Coverity server        | Mandatory     |
-| `coverity_user`        | Username for Coverity        | Mandatory     |
-| `coverity_passphrase`        | Passphrase for Coverity       | Mandatory     |
-| `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>      | Mandatory     |
-| `coverity_stream_name`        | Stream name in Coverity           | Mandatory     |
+| `coverity_url`    | URL for Coverity server               | Mandatory     |
+| `coverity_user`        | Username for Coverity            | Mandatory     |
+| `coverity_passphrase`        | Passphrase for Coverity    | Mandatory     |
+| `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>                     | Mandatory     |
+| `coverity_stream_name`        | Stream name in Coverity   | Mandatory     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
 | `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if  coverity_automation_prcomment is set true. |
-
-
-
 
           
 ## Synopsys GitHub Action - Black Duck
@@ -182,7 +179,7 @@ jobs:
 ```
 
 
-| Input Parameter | Description |  Mandatory / Optional |
+|Input Parameter |Description | Mandatory / Optional |
 |-----------------|-------------|---------------------|
 |`blackduck_url`  | URL for Black Duck server  | Mandatory     |
 | `blackduck_apiToken` | API token for Black Duck | Mandatory     |
@@ -191,8 +188,7 @@ jobs:
 | `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values : ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED. <br> Example: blackduck_scan_failure_severities: "BLOCKER|CRITICAL" </br>| Optional |
 | `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. <br> Supported values: true or false </br>| Optional    |
 | `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled <br> Supported values: true or false </br>| Optional    |
-| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github
-specified secrets.GITHUB_TOKEN with required permissions <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true |
+| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example: github_token: ${{ secrets.GITHUB_TOKEN }} </br>| Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true |
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
 can be passed through environment variables. This is a standard capability of Detect. For example, if you
@@ -214,7 +210,7 @@ observe fewer pull requests to be created.**
 
 
 ## Additional Parameters
-| Input Parameter | Description                              |
+|Input Parameter |Description                              |
 |-----------------|------------------------------------------|
 |`synopsys_bridge_path`| Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]. If the configured Synopsys Bridge is not the latest one, latest Synopsys Bridge version will be downloaded          |
 | `bridge_download_url`      | Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]               |
