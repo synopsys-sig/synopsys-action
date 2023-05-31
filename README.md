@@ -65,7 +65,7 @@ jobs:
 | `polaris_accessToken`      | Access token for Polaris                                          | Mandatory          |
 | `polaris_application_name` | Application name in Polaris                                       | Mandatory          |
 | `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
-| `polaris_assessment_types` | Polaris assessment types. Example: SCA,SAST                       | Mandatory          |
+| `polaris_assessment_types` | Polaris assessment types. <br> Example: SCA,SAST                       | Mandatory          |
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
 
@@ -108,17 +108,17 @@ jobs:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          # Many customers prefer to set their Coverity project and stream names to match the GitHub repository name
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ github.event.repository.name }}
-          # Optionally you may specify the ID number of a saved view to apply as a "break the build" policy.
-          # If any defects are found within this view when applied to the project, the build will be failed
-          # with an exit code.
-          #coverity_policy_view: 100001
-          # Below fields are optional
-          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
-          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           
+          #Optional- you may specify the ID number of a saved view to apply as a "break the build" policy.
+          #coverity_policy_view: 100001
+          
+          #Optional- To enable feedback from Coverity security testing as pull request comment
+          #coverity_automation_prcomment: true
+          #Mandatory if coverity_automation_prcomment is set to true
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
+        
 ```
 
 | Input Parameter   | Description                           | Mandatory / Optional |
@@ -126,12 +126,15 @@ jobs:
 | `coverity_url` | URL for Coverity server        | Mandatory     |
 | `coverity_user`        | Username for Coverity        | Mandatory     |
 | `coverity_passphrase`        | Passphrase for Coverity       | Mandatory     |
-| `coverity_project_name`        | Project name in Coverity          | Mandatory     |
+| `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>      | Mandatory     |
 | `coverity_stream_name`        | Stream name in Coverity           | Mandatory     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
-| `coverity_policy_view`        | The policy view  of Coverity. If any defects are found within this view when applied to the project, the build will be failed with an exit code. Example: coverity_policy_view: 100001        | Optional    |
-| `coverity_automation_prcomment`        | Flag to enable automatic pull request comment based on Coverity scan result.
-Supported values: true or false | Optional    |
+| `coverity_policy_view`        | ID number of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
+| `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> 
+Supported values: true or false </br>| Optional    |
+| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github
+specified secrets.GITHUB_TOKEN with required permissions. <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if  coverity_automation_prcomment is set true. |
+
 
 
           
@@ -145,24 +148,6 @@ On pushes, a full "intelligent" Black Duck scan will be run. On pull requests, a
 A future release of the action will provide code review feedback for newly introduced findings to the pull request.
 
 We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets.
-
-**Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
-can be passed through environment variables. This is a standard capability of Detect. For example, if you
-wanted to only report newly found policy violations on rapid scans, you would normally use the command line 
-`--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the 
-`DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
-GitHub workflow.
-
-**Note about Fix Pull requests creation:** <br/>
-* **blackduck_automation_fixpr:**- By default fix pull request creation will be disabled (i.e. Create
-fix pull requests if vulnerabilities are reported). To enable this feature, set blackduck_automation_fixpr
-as true.<br/> 
-* **github_token:** It is mandatory to pass github_token parameter with required permissions. The token can be github
-specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
-  * Note - If blackduck_automation_fixpr is set to false, github_token is not required
-  
-* **As per observation, due to rate limit restriction of github rest api calls, we may
-observe fewer pull requests to be created.**
 
 
 ```yaml
@@ -186,15 +171,13 @@ jobs:
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-            
-          #To enable feedback from Black Duck security testing as pull request comment, set blackduck_automation_prcomment: true
-          blackduck_automation_prcomment: true
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}  
           
-          # To enable autoamtic fix pull request creation if vulnerabilities are reported
+          #Optional- To enable feedback from Black Duck security testing as pull request comment
+          #blackduck_automation_prcomment: true
+          #Optional- To enable autoamtic fix pull request creation if vulnerabilities are reported
           #blackduck_automation_fixpr: true
-          # Required parameter if blackduck_automation_fixpr is enabled
-          # Make sure GITHUB_TOKEN have appropriate permissions
+          #Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true
           #github_token: ${{ secrets.GITHUB_TOKEN }}
 
 ```
@@ -205,10 +188,30 @@ jobs:
 |`blackduck_url`  | URL for Black Duck server  | Mandatory     |
 | `blackduck_apiToken` | API token for Black Duck | Mandatory     |
 | `blackduck_install_directory` | Directory path to install Black Duck  | Optional     |
-| `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. Supported values: true or false | Optional     |
-| `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. Supported values : ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED. Example: blackduck_scan_failure_severities: "BLOCKER|CRITICAL" | Optional |
-| `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. Supported values: true or false| Optional    |
-| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. Supported values: true or false| Optional    |
+| `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. <br> Supported values: true or false </br>| Optional     |
+| `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values : ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED. <br> Example: blackduck_scan_failure_severities: "BLOCKER|CRITICAL" </br>| Optional |
+| `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. <br> Supported values: true or false </br>| Optional    |
+| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled <br> Supported values: true or false </br>| Optional    |
+| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github
+specified secrets.GITHUB_TOKEN with required permissions <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true |
+
+**Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
+can be passed through environment variables. This is a standard capability of Detect. For example, if you
+wanted to only report newly found policy violations on rapid scans, you would normally use the command line 
+`--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the 
+`DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
+GitHub workflow.
+
+**Note about Fix Pull requests creation:** <br/>
+* **blackduck_automation_fixpr:**- By default fix pull request creation will be disabled (i.e. Create
+fix pull requests if vulnerabilities are reported). To enable this feature, set blackduck_automation_fixpr
+as true.<br/> 
+* **github_token:** It is mandatory to pass github_token parameter with required permissions. The token can be github
+specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
+  * Note - If blackduck_automation_fixpr is set to false, github_token is not required
+  
+* **As per observation, due to rate limit restriction of github rest api calls, we may
+observe fewer pull requests to be created.**
 
 
 ## Additional Parameters
