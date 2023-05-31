@@ -130,8 +130,6 @@ jobs:
 | `coverity_stream_name`        | Stream name in Coverity           | Mandatory     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | The policy view  of Coverity. If any defects are found within this view when applied to the project, the build will be failed with an exit code. Example: coverity_policy_view: 100001        | Optional    |
-| `coverity_repository_name`        | Repository name in Coverity     | Optional    |
-| `coverity_branch_name`        | Branch name in Coverity           | Optional    |
 | `coverity_automation_prcomment`        | Flag to enable automatic pull request comment based on Coverity scan result.
 Supported values: true or false | Optional    |
 
