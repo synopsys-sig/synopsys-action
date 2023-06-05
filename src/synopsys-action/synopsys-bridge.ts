@@ -106,8 +106,8 @@ export class SynopsysBridge {
       let bridgeVersion = ''
       if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
-          bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION.trim()).trim()
-          bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION.trim()
+          bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
+          bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION
         } else {
           return Promise.reject(new Error('Provided bridge version not found in artifactory'))
         }
