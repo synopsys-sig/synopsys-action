@@ -14,7 +14,7 @@ export class SynopsysToolsParameter {
   tempDir: string
   private static STAGE_OPTION = '--stage'
   static DIAGNOSTICS_OPTION = '--diagnostics'
-  private static STATE_OPTION = '--state'
+  private static INPUT_OPTION = '--input'
   private static POLARIS_STAGE = 'polaris'
   private static POLARIS_STATE_FILE_NAME = 'polaris_input.json'
   private static COVERITY_STATE_FILE_NAME = 'coverity_input.json'
@@ -68,7 +68,7 @@ export class SynopsysToolsParameter {
     debug('Generated state json file at - '.concat(stateFilePath))
     debug('Generated state json file content is - '.concat(inputJson))
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
   }
 
@@ -125,7 +125,7 @@ export class SynopsysToolsParameter {
     debug('Generated state json file at - '.concat(stateFilePath))
     debug('Generated state json file content is - '.concat(inputJson))
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
   }
 
@@ -215,7 +215,7 @@ export class SynopsysToolsParameter {
     debug('Generated state json file at - '.concat(stateFilePath))
     debug('Generated state json file content is - '.concat(inputJson))
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
   }
 

@@ -853,7 +853,7 @@ class SynopsysToolsParameter {
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
-        command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+        command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
     getFormattedCommandForCoverity() {
@@ -901,7 +901,7 @@ class SynopsysToolsParameter {
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
-        command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+        command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
     getFormattedCommandForBlackduck() {
@@ -986,7 +986,7 @@ class SynopsysToolsParameter {
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
-        command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.STATE_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+        command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
     getGithubRepoInfo() {
@@ -1036,7 +1036,7 @@ class SynopsysToolsParameter {
 exports.SynopsysToolsParameter = SynopsysToolsParameter;
 SynopsysToolsParameter.STAGE_OPTION = '--stage';
 SynopsysToolsParameter.DIAGNOSTICS_OPTION = '--diagnostics';
-SynopsysToolsParameter.STATE_OPTION = '--state';
+SynopsysToolsParameter.INPUT_OPTION = '--input';
 SynopsysToolsParameter.POLARIS_STAGE = 'polaris';
 SynopsysToolsParameter.POLARIS_STATE_FILE_NAME = 'polaris_input.json';
 SynopsysToolsParameter.COVERITY_STATE_FILE_NAME = 'coverity_input.json';
