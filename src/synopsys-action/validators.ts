@@ -82,7 +82,7 @@ export function validateParameters(params: Map<string, string>, toolName: string
 export function isNullOrEmpty(params: Map<string, string>): string[] {
   const invalidParams: string[] = []
   for (const param of params.entries()) {
-    if (param[1] == null || param[1].length === 0 || param[1].toString().includes(' ')) {
+    if (param[1] == null || param[1].length === 0) {
       invalidParams.push(param[0])
     }
   }
