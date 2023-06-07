@@ -38,7 +38,7 @@ jobs:
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/0.2.55/synopsys-bridge-0.2.55-macosx.zip'
           blackduck_scan_failure_severities : "BLOCKER,CRITICAL,MAJOR"
           #blackduck_automation_fixpr: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
