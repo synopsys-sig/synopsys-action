@@ -44,4 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           include_diagnostics: true
           diagnostics_retention_days: 90
-          air_gap: false
+          air_gap: true
+          synopsys_bridge_path: Users/lokesha/synopsys-bridge
+
