@@ -1,7 +1,7 @@
 import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
 
-export const SYNOPSYS_BRIDGE_PATH = '/Users/kirann/actions/synopsys-bridge-0.1.272-macosx'
+export const SYNOPSYS_BRIDGE_PATH = '/Users/kirann/Downloads/synopsys-bridge-0.1.272-macosx-NEW'
 export const ENABLE_AIR_GAP = true
 
 //Bridge download url

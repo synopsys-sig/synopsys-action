@@ -407,7 +407,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_AIR_GAP = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
-exports.SYNOPSYS_BRIDGE_PATH = '/Users/kirann/actions/synopsys-bridge-0.1.272-macosx';
+exports.SYNOPSYS_BRIDGE_PATH = '/Users/kirann/Downloads/synopsys-bridge-0.1.272-macosx-NEW';
 exports.ENABLE_AIR_GAP = true;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_a = (0, core_1.getInput)('bridge_download_url')) === null || _a === void 0 ? void 0 : _a.trim()) || '';
