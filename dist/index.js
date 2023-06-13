@@ -584,11 +584,11 @@ class SynopsysBridge {
                             else {
                                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), []);
                             }
-                            // if (!fs.existsSync(this.bridgeExecutablePath)) {
-                            //   throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
-                            // }
+                            if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
+                                throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'));
+                            }
                         }
-                        else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
+                        else if (this.getBridgeDefaultPath().length !== 0) {
                             (0, core_1.info)('elseif');
                             (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()));
                             if (osName === 'win32') {
@@ -597,9 +597,9 @@ class SynopsysBridge {
                             else {
                                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.getBridgeDefaultPath().concat('/synopsys-bridge'), []);
                             }
-                            // if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
-                            //   throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
-                            // }
+                            if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
+                                throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
+                            }
                         }
                         else {
                             (0, core_1.info)('else');

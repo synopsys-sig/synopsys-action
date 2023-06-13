@@ -105,10 +105,10 @@ export class SynopsysBridge {
               this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), [])
             }
 
-            // if (!fs.existsSync(this.bridgeExecutablePath)) {
-            //   throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
-            // }
-          } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
+            if (!fs.existsSync(this.bridgeExecutablePath)) {
+              throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
+            }
+          } else if (this.getBridgeDefaultPath().length !== 0) {
             info('elseif')
             info('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()))
 
@@ -117,9 +117,9 @@ export class SynopsysBridge {
             } else {
               this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('/synopsys-bridge'), [])
             }
-            // if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
-            //   throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
-            // }
+            if (!fs.existsSync(this.bridgeExecutablePath)) {
+              throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
+            }
           } else {
             info('else')
             throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'))
