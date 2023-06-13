@@ -91,23 +91,25 @@ export class SynopsysBridge {
         cwd: workingDirectory
       }
       try {
-        if (inputs.ENABLE_AIR_GAP) {
-          info('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
-          if (inputs.SYNOPSYS_BRIDGE_PATH) {
-            this.bridgeExecutablePath = SYNOPSYS_BRIDGE_PATH
-            if (!fs.existsSync(this.bridgeExecutablePath)) {
-              throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
-            }
-          } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
-            info('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(this.getBridgeDefaultPath()))
-            this.bridgeExecutablePath = this.getBridgeDefaultPath()
-            if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
-              throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
-            }
-          } else {
-            throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'))
-          }
-        }
+        info('inputs.ENABLE_AIR_GAP:' + inputs.ENABLE_AIR_GAP)
+
+        // if (inputs.ENABLE_AIR_GAP) {
+        //   info('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
+        //   if (inputs.SYNOPSYS_BRIDGE_PATH) {
+        //     this.bridgeExecutablePath = SYNOPSYS_BRIDGE_PATH
+        //     if (!fs.existsSync(this.bridgeExecutablePath)) {
+        //       throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
+        //     }
+        //   } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
+        //     info('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(this.getBridgeDefaultPath()))
+        //     this.bridgeExecutablePath = this.getBridgeDefaultPath()
+        //     if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
+        //       throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
+        //     }
+        //   } else {
+        //     throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'))
+        //   }
+        // }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
         throw errorObject
