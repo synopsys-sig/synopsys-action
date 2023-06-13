@@ -410,6 +410,7 @@ exports.ENABLE_AIR_GAP = (0, core_1.getInput)('enable_air_gap') || false;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_b = (0, core_1.getInput)('bridge_download_url')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_c = (0, core_1.getInput)('bridge_download_version')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
+//github api rul
 exports.GITHUB_API_URL = ((_d = (0, core_1.getInput)('github_api_url')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
 // Polaris related inputs
 exports.POLARIS_ACCESS_TOKEN = ((_e = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';

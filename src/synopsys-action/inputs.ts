@@ -8,6 +8,7 @@ export const ENABLE_AIR_GAP = getInput('enable_air_gap') || false
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim() || ''
 
+//github api rul
 export const GITHUB_API_URL = getInput('github_api_url')?.trim() || ''
 
 // Polaris related inputs
