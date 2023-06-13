@@ -42,7 +42,7 @@ jobs:
           blackduck_scan_failure_severities : "BLOCKER,CRITICAL,MAJOR"
           #blackduck_automation_fixpr: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
-          #include_diagnostics: true
+          include_diagnostics: false
           diagnostics_retention_days: 90
           air_gap: true
           synopsys_bridge_path: /Users/kirann/actions/synopsys-bridge-0.1.272-macosx
