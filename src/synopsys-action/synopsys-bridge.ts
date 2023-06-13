@@ -117,12 +117,7 @@ export class SynopsysBridge {
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
             info('elseif')
             info('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()))
-
-            if (osName === 'win32') {
-              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('\\synopsys-bridge'), ['.exe'])
-            } else {
-              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('/synopsys-bridge'), [])
-            }
+            this.bridgeExecutablePath = this.getBridgeDefaultPath()
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
