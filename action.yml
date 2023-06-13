@@ -5,6 +5,9 @@ branding:
 description: 'Find and fix software weaknesses and vulnerabilities during development, before you ship or deploy!'
 author: 'Synopsys Inc'
 inputs:
+  air_gap:
+    description: 'enable air gap'
+    required: false
   coverity_url:
     description: 'Coverity url'
     required: false
