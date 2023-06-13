@@ -100,7 +100,6 @@ exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
-const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const diagnostics_1 = __nccwpck_require__(1721);
@@ -114,13 +113,13 @@ function run() {
             // Prepare bridge command
             formattedCommand = yield sb.prepareCommand(tempDir);
             // Download bridge
-            (0, core_1.info)('inputs.ENABLE_AIR_GAP:');
+            (0, core_1.info)('inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
             if (!inputs.ENABLE_AIR_GAP) {
                 yield sb.downloadBridge(tempDir);
             }
             (0, core_1.info)('inputs.ENABLE_AIR_GAP121:');
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            return yield sb.executeBridgeCommand(formattedCommand, '/Users/kiran');
         }
         catch (error) {
             throw error;
@@ -402,13 +401,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_AIR_GAP = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = '/Users/kirann/actions/synopsys-bridge-0.1.272-macosx';
-exports.ENABLE_AIR_GAP = (0, core_1.getInput)(constants.ENABLE_AIR_GAP) || false;
+exports.ENABLE_AIR_GAP = true;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_a = (0, core_1.getInput)('bridge_download_url')) === null || _a === void 0 ? void 0 : _a.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_b = (0, core_1.getInput)('bridge_download_version')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
@@ -430,16 +429,16 @@ exports.COVERITY_REPOSITORY_NAME = ((_q = (0, core_1.getInput)(constants.COVERIT
 exports.COVERITY_BRANCH_NAME = ((_r = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
 exports.COVERITY_AUTOMATION_PRCOMMENT = ((_s = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
 // Blackduck related inputs
-exports.BLACKDUCK_URL = ((_t = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
-exports.BLACKDUCK_API_TOKEN = ((_u = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
-exports.BLACKDUCK_INSTALL_DIRECTORY = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
-exports.BLACKDUCK_SCAN_FULL = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_FIXPR = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
-exports.GITHUB_TOKEN = ((_0 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
-exports.INCLUDE_DIAGNOSTICS = ((_1 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
-exports.DIAGNOSTICS_RETENTION_DAYS = ((_2 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
+exports.BLACKDUCK_URL = 'https://testing.blackduck.synopsys.com';
+exports.BLACKDUCK_API_TOKEN = 'MTA1YmY4NTAtNTJjMS00YThlLTlkOWEtMzQ5OGRmZjFkNmYwOjRhN2Y4OWIzLTU5OWUtNDIzZS1iZmQ1LWJjMzljMTJkYmFjNw';
+exports.BLACKDUCK_INSTALL_DIRECTORY = ((_t = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
+exports.BLACKDUCK_SCAN_FULL = ((_u = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_FIXPR = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
+exports.GITHUB_TOKEN = ((_y = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
+exports.INCLUDE_DIAGNOSTICS = ((_z = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
+exports.DIAGNOSTICS_RETENTION_DAYS = ((_0 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
 
 
 /***/ }),
@@ -717,7 +716,7 @@ class SynopsysBridge {
                     formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION);
                 }
                 if (inputs.ENABLE_AIR_GAP) {
-                    formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION).concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.AIRGAP);
+                    formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION);
                 }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;

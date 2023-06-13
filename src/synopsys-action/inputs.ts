@@ -2,7 +2,7 @@ import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_PATH = '/Users/kirann/actions/synopsys-bridge-0.1.272-macosx'
-export const ENABLE_AIR_GAP = getInput(constants.ENABLE_AIR_GAP) || false
+export const ENABLE_AIR_GAP = true
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
@@ -28,8 +28,8 @@ export const COVERITY_BRANCH_NAME = getInput(constants.COVERITY_BRANCH_NAME_KEY)
 export const COVERITY_AUTOMATION_PRCOMMENT = getInput(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)?.trim() || ''
 
 // Blackduck related inputs
-export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''
-export const BLACKDUCK_API_TOKEN = getInput(constants.BLACKDUCK_API_TOKEN_KEY)?.trim() || ''
+export const BLACKDUCK_URL = 'https://testing.blackduck.synopsys.com'
+export const BLACKDUCK_API_TOKEN = 'MTA1YmY4NTAtNTJjMS00YThlLTlkOWEtMzQ5OGRmZjFkNmYwOjRhN2Y4OWIzLTU5OWUtNDIzZS1iZmQ1LWJjMzljMTJkYmFjNw'
 export const BLACKDUCK_INSTALL_DIRECTORY = getInput(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)?.trim() || ''
 export const BLACKDUCK_SCAN_FULL = getInput(constants.BLACKDUCK_SCAN_FULL_KEY)?.trim() || ''
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES = getInput(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)?.trim() || ''

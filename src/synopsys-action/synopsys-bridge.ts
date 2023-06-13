@@ -234,7 +234,7 @@ export class SynopsysBridge {
       }
 
       if (inputs.ENABLE_AIR_GAP) {
-        formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.AIRGAP)
+        formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
       }
 
       debug('Formatted command is - '.concat(formattedCommand))
