@@ -85,6 +85,7 @@ export class SynopsysBridge {
   }
 
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
+    info('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath))
     const osName: string = process.platform
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
       const exectOp: ExecOptions = {
@@ -96,26 +97,35 @@ export class SynopsysBridge {
         if (inputs.ENABLE_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             info('if')
-            this.bridgeExecutablePath = SYNOPSYS_BRIDGE_PATH
-            info('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath))
 
-            if (!fs.existsSync(this.bridgeExecutablePath)) {
-              throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
+            info('bridgeExecutablePath---------------'.concat(this.bridgeExecutablePath))
+            if (osName === 'win32') {
+              this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('\\synopsys-bridge'), ['.exe'])
+            } else {
+              this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), [])
             }
+
+            // if (!fs.existsSync(this.bridgeExecutablePath)) {
+            //   throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
+            // }
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
             info('elseif')
             info('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()))
-            this.bridgeExecutablePath = this.getBridgeDefaultPath()
-            info('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath))
 
-            if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
-              throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
+            if (osName === 'win32') {
+              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('\\synopsys-bridge'), ['.exe'])
+            } else {
+              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('/synopsys-bridge'), [])
             }
+            // if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
+            //   throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
+            // }
           } else {
             info('else')
             throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'))
           }
         }
+        info('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath))
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
         throw errorObject

@@ -22,7 +22,7 @@ export async function run() {
     }
     info('inputs.ENABLE_AIR_GAP121:')
     // Execute bridge command
-    return await sb.executeBridgeCommand(formattedCommand, '/Users/kiran')
+    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error) {
     throw error
   } finally {

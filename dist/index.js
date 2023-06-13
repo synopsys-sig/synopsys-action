@@ -100,6 +100,7 @@ exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
+const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const diagnostics_1 = __nccwpck_require__(1721);
@@ -119,7 +120,7 @@ function run() {
             }
             (0, core_1.info)('inputs.ENABLE_AIR_GAP121:');
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, '/Users/kiran');
+            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
         catch (error) {
             throw error;
@@ -565,6 +566,7 @@ class SynopsysBridge {
     }
     executeBridgeCommand(bridgeCommand, workingDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath));
             const osName = process.platform;
             if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
                 const exectOp = {
@@ -575,26 +577,36 @@ class SynopsysBridge {
                     if (inputs.ENABLE_AIR_GAP) {
                         if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
                             (0, core_1.info)('if');
-                            this.bridgeExecutablePath = inputs_1.SYNOPSYS_BRIDGE_PATH;
-                            (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath));
-                            if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
-                                throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'));
+                            (0, core_1.info)('bridgeExecutablePath---------------'.concat(this.bridgeExecutablePath));
+                            if (osName === 'win32') {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(inputs.SYNOPSYS_BRIDGE_PATH.concat('\\synopsys-bridge'), ['.exe']);
                             }
+                            else {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), []);
+                            }
+                            // if (!fs.existsSync(this.bridgeExecutablePath)) {
+                            //   throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
+                            // }
                         }
                         else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
                             (0, core_1.info)('elseif');
                             (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()));
-                            this.bridgeExecutablePath = this.getBridgeDefaultPath();
-                            (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath));
-                            if (!fs_1.default.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
-                                throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
+                            if (osName === 'win32') {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.getBridgeDefaultPath().concat('\\synopsys-bridge'), ['.exe']);
                             }
+                            else {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.getBridgeDefaultPath().concat('/synopsys-bridge'), []);
+                            }
+                            // if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
+                            //   throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
+                            // }
                         }
                         else {
                             (0, core_1.info)('else');
                             throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'));
                         }
                     }
+                    (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath));
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
                 catch (errorObject) {
