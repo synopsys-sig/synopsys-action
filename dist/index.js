@@ -727,9 +727,6 @@ class SynopsysBridge {
                 if (inputs.INCLUDE_DIAGNOSTICS) {
                     formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION);
                 }
-                if (inputs.ENABLE_AIR_GAP) {
-                    formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION);
-                }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
             }
