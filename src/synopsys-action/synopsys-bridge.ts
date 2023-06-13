@@ -94,7 +94,7 @@ export class SynopsysBridge {
         info('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
 
         if (inputs.ENABLE_AIR_GAP) {
-          if (inputs.SYNOPSYS_BRIDGE_PATH) {
+          if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             info('if')
             this.bridgeExecutablePath = SYNOPSYS_BRIDGE_PATH
             info('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath))
