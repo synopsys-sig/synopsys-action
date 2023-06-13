@@ -95,8 +95,8 @@ export class SynopsysBridge {
         info('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
 
         if (inputs.ENABLE_AIR_GAP) {
-          const SYNOPSYS_BRIDGE_PATHboolean = new Boolean(inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length === 0).toString()
-          const getBridgeDefaultPathboolean = new Boolean(this.getBridgeDefaultPath().length === 0).toString()
+          const SYNOPSYS_BRIDGE_PATHboolean = new Boolean(inputs.SYNOPSYS_BRIDGE_PATH.length === 0).toString()
+          const getBridgeDefaultPathboolean = new Boolean(this.getBridgeDefaultPath().length !== 0).toString()
 
           info('inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && '.concat(SYNOPSYS_BRIDGE_PATHboolean))
           info('inputs.this.getBridgeDefaultPath().length === 0:.length === 0'.concat(getBridgeDefaultPathboolean))
