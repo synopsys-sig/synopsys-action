@@ -95,16 +95,7 @@ export class SynopsysBridge {
         info('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
 
         if (inputs.ENABLE_AIR_GAP) {
-          const SYNOPSYS_BRIDGE_PATHboolean = new Boolean(inputs.SYNOPSYS_BRIDGE_PATH.length === 0).toString()
-          const getBridgeDefaultPathboolean = new Boolean(this.getBridgeDefaultPath().length !== 0).toString()
-
-          info('inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && '.concat(SYNOPSYS_BRIDGE_PATHboolean))
-          info('inputs.this.getBridgeDefaultPath().length === 0:.length === 0'.concat(getBridgeDefaultPathboolean))
-
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
-            info('if')
-
-            info('bridgeExecutablePath---------------'.concat(this.bridgeExecutablePath))
             if (osName === 'win32') {
               this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('\\synopsys-bridge'), ['.exe'])
             } else {
@@ -115,18 +106,14 @@ export class SynopsysBridge {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
-            info('elseif')
-            info('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()))
             this.bridgeExecutablePath = this.getBridgeDefaultPath()
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else {
-            info('else')
-            throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'))
+            throw new Error('Path does not exists')
           }
         }
-        info('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath))
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
         throw errorObject

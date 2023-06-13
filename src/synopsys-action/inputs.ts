@@ -2,11 +2,13 @@ import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_PATH = getInput('synopsys_bridge_path')?.trim() || ''
-export const ENABLE_AIR_GAP = getInput('air_gap') || false
+export const ENABLE_AIR_GAP = getInput('enable_air_gap') || false
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim() || ''
+
+export const GITHUB_API_URL = getInput('github_api_url')?.trim() || ''
 
 // Polaris related inputs
 export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''

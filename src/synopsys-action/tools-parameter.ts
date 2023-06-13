@@ -57,6 +57,9 @@ export class SynopsysToolsParameter {
           application: {name: inputs.POLARIS_APPLICATION_NAME},
           project: {name: inputs.POLARIS_PROJECT_NAME},
           assessment: {types: assessmentTypeArray}
+        },
+        github: {
+          url: inputs.GITHUB_API_URL
         }
       }
     }
@@ -154,6 +157,9 @@ export class SynopsysToolsParameter {
           url: inputs.BLACKDUCK_URL,
           token: inputs.BLACKDUCK_API_TOKEN,
           automation: {}
+        },
+        githuburl: {
+          url: inputs.GITHUB_API_URL
         }
       }
     }

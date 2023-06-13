@@ -5,6 +5,7 @@ export enum PolarisAssessmentType {
 
 export interface Polaris {
   polaris: PolarisData
+  github: GithubApiURLData
 }
 
 export interface PolarisData {
@@ -13,4 +14,8 @@ export interface PolarisData {
   application: {name: string}
   project: {name: string}
   assessment: {types: string[]}
+}
+
+export interface GithubApiURLData {
+  url: string
 }
