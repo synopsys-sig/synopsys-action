@@ -7,7 +7,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.ENABLE_AIR_GAP = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -43,6 +43,7 @@ exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr';
 exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment';
 exports.GITHUB_TOKEN_KEY = 'github_token';
 exports.INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics';
+exports.ENABLE_AIR_GAP = 'air_gap';
 exports.DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days';
 // Bridge Exit Codes
 exports.EXIT_CODE_MAP = new Map([
@@ -113,7 +114,10 @@ function run() {
             // Prepare bridge command
             formattedCommand = yield sb.prepareCommand(tempDir);
             // Download bridge
-            yield sb.downloadBridge(tempDir);
+            (0, core_1.info)('inputs.ENABLE_AIR_GAP:' + inputs.ENABLE_AIR_GAP);
+            if (!inputs.ENABLE_AIR_GAP) {
+                yield sb.downloadBridge(tempDir);
+            }
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
@@ -399,10 +403,11 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
+exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_AIR_GAP = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)('synopsys_bridge_path')) === null || _a === void 0 ? void 0 : _a.trim()) || '';
+exports.ENABLE_AIR_GAP = (0, core_1.getInput)(constants.ENABLE_AIR_GAP) || false;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_b = (0, core_1.getInput)('bridge_download_url')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_c = (0, core_1.getInput)('bridge_download_version')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
@@ -566,6 +571,25 @@ class SynopsysBridge {
                     cwd: workingDirectory
                 };
                 try {
+                    if (inputs.ENABLE_AIR_GAP) {
+                        (0, core_1.info)('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(inputs.SYNOPSYS_BRIDGE_PATH));
+                        if (inputs.SYNOPSYS_BRIDGE_PATH) {
+                            this.bridgeExecutablePath = inputs_1.SYNOPSYS_BRIDGE_PATH;
+                            if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
+                                throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'));
+                            }
+                        }
+                        else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
+                            (0, core_1.info)('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(this.getBridgeDefaultPath()));
+                            this.bridgeExecutablePath = this.getBridgeDefaultPath();
+                            if (!fs_1.default.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
+                                throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
+                            }
+                        }
+                        else {
+                            throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'));
+                        }
+                    }
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
                 catch (errorObject) {
