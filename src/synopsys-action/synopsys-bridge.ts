@@ -95,6 +95,8 @@ export class SynopsysBridge {
         info('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
 
         if (inputs.ENABLE_AIR_GAP) {
+          const cont = new Boolean(inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length === 0).toString()
+          info('inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length === 0:'.concat(cont))
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             info('if')
 
@@ -108,7 +110,7 @@ export class SynopsysBridge {
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
-          } else if (this.getBridgeDefaultPath().length !== 0) {
+          } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length === 0) {
             info('elseif')
             info('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()))
 

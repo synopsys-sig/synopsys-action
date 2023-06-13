@@ -575,6 +575,8 @@ class SynopsysBridge {
                 try {
                     (0, core_1.info)('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
                     if (inputs.ENABLE_AIR_GAP) {
+                        const cont = new Boolean(inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length === 0).toString();
+                        (0, core_1.info)('inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length === 0:'.concat(cont));
                         if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
                             (0, core_1.info)('if');
                             (0, core_1.info)('bridgeExecutablePath---------------'.concat(this.bridgeExecutablePath));
@@ -588,7 +590,7 @@ class SynopsysBridge {
                                 throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'));
                             }
                         }
-                        else if (this.getBridgeDefaultPath().length !== 0) {
+                        else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length === 0) {
                             (0, core_1.info)('elseif');
                             (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()));
                             if (osName === 'win32') {

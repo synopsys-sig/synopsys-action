@@ -45,5 +45,5 @@ jobs:
           include_diagnostics: false
           diagnostics_retention_days: 90
           air_gap: true
-          synopsys_bridge_path: /Users/kirann/Downloads/synopsys-bridge-0.2.57-macosx
+          #synopsys_bridge_path: /Users/kirann/Downloads/synopsys-bridge-0.2.57-macosx
 
