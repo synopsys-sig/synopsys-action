@@ -45,5 +45,5 @@ jobs:
           include_diagnostics: true
           diagnostics_retention_days: 90
           air_gap: false
-          synopsys_bridge_path: /Users/kirann/synopsys-bridge
+          #synopsys_bridge_path: /Users/kirann/synopsys-bridge
 
