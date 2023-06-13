@@ -91,22 +91,24 @@ export class SynopsysBridge {
         cwd: workingDirectory
       }
       try {
-        info('inputs.ENABLE_AIR_GAP:12' + inputs.ENABLE_AIR_GAP)
+        info('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
 
         if (inputs.ENABLE_AIR_GAP) {
-          info('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
           if (inputs.SYNOPSYS_BRIDGE_PATH) {
+            info('if')
             this.bridgeExecutablePath = SYNOPSYS_BRIDGE_PATH
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
+            info('elseif')
             info('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()))
             this.bridgeExecutablePath = this.getBridgeDefaultPath()
             if (!fs.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else {
+            info('else')
             throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'))
           }
         }

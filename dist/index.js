@@ -114,10 +114,11 @@ function run() {
             // Prepare bridge command
             formattedCommand = yield sb.prepareCommand(tempDir);
             // Download bridge
-            (0, core_1.info)('inputs.ENABLE_AIR_GAP:' + inputs.ENABLE_AIR_GAP);
+            (0, core_1.info)('inputs.ENABLE_AIR_GAP:');
             if (!inputs.ENABLE_AIR_GAP) {
                 yield sb.downloadBridge(tempDir);
             }
+            (0, core_1.info)('inputs.ENABLE_AIR_GAP121:');
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
@@ -571,22 +572,25 @@ class SynopsysBridge {
                     cwd: workingDirectory
                 };
                 try {
+                    (0, core_1.info)('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
                     if (inputs.ENABLE_AIR_GAP) {
-                        (0, core_1.info)('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(inputs.SYNOPSYS_BRIDGE_PATH));
                         if (inputs.SYNOPSYS_BRIDGE_PATH) {
+                            (0, core_1.info)('if');
                             this.bridgeExecutablePath = inputs_1.SYNOPSYS_BRIDGE_PATH;
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
                                 throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'));
                             }
                         }
                         else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0) {
-                            (0, core_1.info)('inputs.SYNOPSYS_BRIDGE_PATH:'.concat(this.getBridgeDefaultPath()));
+                            (0, core_1.info)('elseif');
+                            (0, core_1.info)('inputs.getBridgeDefaultPath:'.concat(this.getBridgeDefaultPath()));
                             this.bridgeExecutablePath = this.getBridgeDefaultPath();
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath.concat('/synopsys-bridge'))) {
                                 throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
                             }
                         }
                         else {
+                            (0, core_1.info)('else');
                             throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'));
                         }
                     }
@@ -709,6 +713,9 @@ class SynopsysBridge {
                 }
                 if (inputs.INCLUDE_DIAGNOSTICS) {
                     formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION);
+                }
+                if (inputs.ENABLE_AIR_GAP) {
+                    formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION).concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.AIRGAP);
                 }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
@@ -1060,6 +1067,7 @@ class SynopsysToolsParameter {
 exports.SynopsysToolsParameter = SynopsysToolsParameter;
 SynopsysToolsParameter.STAGE_OPTION = '--stage';
 SynopsysToolsParameter.DIAGNOSTICS_OPTION = '--diagnostics';
+SynopsysToolsParameter.AIRGAP = '--airgap';
 SynopsysToolsParameter.INPUT_OPTION = '--input';
 SynopsysToolsParameter.POLARIS_STAGE = 'polaris';
 SynopsysToolsParameter.POLARIS_STATE_FILE_NAME = 'polaris_input.json';
