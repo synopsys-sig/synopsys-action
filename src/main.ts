@@ -16,7 +16,10 @@ export async function run() {
     // Prepare bridge command
     formattedCommand = await sb.prepareCommand(tempDir)
     // Download bridge
-    await sb.downloadBridge(tempDir)
+    info('inputs.ENABLE_AIR_GAP:' + inputs.ENABLE_AIR_GAP)
+    if (!inputs.ENABLE_AIR_GAP) {
+      await sb.downloadBridge(tempDir)
+    }
     // Execute bridge command
     return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error) {
