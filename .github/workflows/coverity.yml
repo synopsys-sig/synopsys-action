@@ -47,4 +47,5 @@ jobs:
           include_diagnostics: true
           coverity_automation_prcomment: true
           enable_air_gap: false
+
           github_token: ${{ secrets.GITHUB_TOKEN }}
