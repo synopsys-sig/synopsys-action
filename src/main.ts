@@ -16,7 +16,6 @@ export async function run() {
     // Prepare bridge command
     formattedCommand = await sb.prepareCommand(tempDir)
     // Download bridge
-    info('inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
     if (!inputs.ENABLE_AIR_GAP) {
       await sb.downloadBridge(tempDir)
     }

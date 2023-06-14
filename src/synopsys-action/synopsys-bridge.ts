@@ -85,15 +85,12 @@ export class SynopsysBridge {
   }
 
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
-    info('inputs.getBridgeDefaultPath:'.concat(this.bridgeExecutablePath))
     const osName: string = process.platform
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
       const exectOp: ExecOptions = {
         cwd: workingDirectory
       }
       try {
-        info('inputs.ENABLE_AIR_GAP:12'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
-
         if (inputs.ENABLE_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             if (osName === 'win32') {

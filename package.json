@@ -13,7 +13,7 @@
     "package": "ncc build --source-map",
     "test": "jest --config jest.config.js",
     "contract-test": "jest --config jest.config.e2e.js --forceExit --detectOpenHandles",
-    "all": "npm run format && npm run lint && npm run build && npm run package && npm run test",
+    "all": "npm run format && npm run lint && npm run build && npm run package && npm test",
     "postversion": "git add * && git commit -m 'updated CHANGELOG and version from semantic' && git push && git push origin && git push origin --tags"
   },
   "repository": {

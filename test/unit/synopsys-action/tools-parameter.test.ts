@@ -11,7 +11,7 @@ beforeAll(() => {
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
-  process.env['GITHUB_REF_NAME'] = 'branch-name'
+  process.env['GITHUB_REF_NAME'] = 'ref-name'
 
   createTempDir().then(path => (tempPath = path))
 })
