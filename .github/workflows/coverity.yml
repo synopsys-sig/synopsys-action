@@ -46,5 +46,5 @@ jobs:
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           include_diagnostics: true
           coverity_automation_prcomment: true
-
+          enable_air_gap: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
