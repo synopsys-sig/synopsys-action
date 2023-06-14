@@ -94,7 +94,7 @@ inputs:
     required: false
   enable_air_gap: 
    description: 'Enable air gap'
-    required: false
+   required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
