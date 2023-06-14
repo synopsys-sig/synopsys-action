@@ -44,6 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           include_diagnostics: false
           diagnostics_retention_days: 90
-          enable_air_gap: false
+          enable_air_gap: true
           synopsys_bridge_path: /Users/kirann/Downloads/synopsys-bridge-0.2.57-macosx
 
