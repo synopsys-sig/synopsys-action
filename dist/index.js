@@ -407,7 +407,7 @@ exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHU
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)('synopsys_bridge_path')) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_AIR_GAP = (0, core_1.getInput)('enable_air_gap') || true;
+exports.ENABLE_AIR_GAP = (0, core_1.getInput)('enable_air_gap') || false;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_b = (0, core_1.getInput)('bridge_download_url')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_c = (0, core_1.getInput)('bridge_download_version')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
@@ -1027,22 +1027,30 @@ class SynopsysToolsParameter {
         const githubToken = inputs.GITHUB_TOKEN;
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        const githubBranchName = 'process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]';
+        const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
-        const githubRepoOwner = 'process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]';
+        const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         (0, core_1.info)(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL));
         (0, core_1.info)(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
+        const b = githubRepoName != null;
+        const c = githubBranchName != null;
+        const d = githubRepoOwner != null;
+        (0, core_1.info)('zzzz'.concat(new Boolean(b).toString()));
+        (0, core_1.info)('zzzz'.concat(new Boolean(c).toString()));
+        (0, core_1.info)('zzzz'.concat(new Boolean(d).toString()));
         if (githubToken == null) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
         if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) && isNaN(Number(githubPrNumber))) {
             throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.');
         }
+        (0, core_1.info)('I came here0');
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
+            (0, core_1.info)('I came here');
             if (inputs.ENABLE_AIR_GAP) {
                 if (inputs.GITHUB_API_URL)
                     return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL);
