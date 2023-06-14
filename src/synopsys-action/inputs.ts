@@ -2,14 +2,14 @@ import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_PATH = getInput('synopsys_bridge_path')?.trim() || ''
-export const ENABLE_AIR_GAP = getInput('enable_air_gap') || false
+export const ENABLE_AIR_GAP = getInput('enable_air_gap') || true
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim() || ''
 
 //github api rul
-export const GITHUB_API_URL = getInput('github_api_url')?.trim() || ''
+export const GITHUB_API_URL = getInput('github_api_url')?.trim() || 'https://github.com'
 
 // Polaris related inputs
 export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''
@@ -31,14 +31,14 @@ export const COVERITY_BRANCH_NAME = getInput(constants.COVERITY_BRANCH_NAME_KEY)
 export const COVERITY_AUTOMATION_PRCOMMENT = getInput(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)?.trim() || ''
 
 // Blackduck related inputs
-export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''
-export const BLACKDUCK_API_TOKEN = getInput(constants.BLACKDUCK_API_TOKEN_KEY)?.trim() || ''
+export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || 'https://bd.com'
+export const BLACKDUCK_API_TOKEN = getInput(constants.BLACKDUCK_API_TOKEN_KEY)?.trim() || '1234'
 export const BLACKDUCK_INSTALL_DIRECTORY = getInput(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)?.trim() || ''
 export const BLACKDUCK_SCAN_FULL = getInput(constants.BLACKDUCK_SCAN_FULL_KEY)?.trim() || ''
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES = getInput(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)?.trim() || ''
-export const BLACKDUCK_AUTOMATION_FIXPR = getInput(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)?.trim() || ''
-export const BLACKDUCK_AUTOMATION_PRCOMMENT = getInput(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)?.trim() || ''
+export const BLACKDUCK_AUTOMATION_FIXPR = getInput(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)?.trim() || true
+export const BLACKDUCK_AUTOMATION_PRCOMMENT = getInput(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)?.trim() || true
 
-export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || ''
+export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || 'token'
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)?.trim() || ''
 export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)?.trim() || ''

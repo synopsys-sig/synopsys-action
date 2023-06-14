@@ -203,6 +203,8 @@ export class SynopsysToolsParameter {
     if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
       info('Blackduck Automation comment is enabled')
       blackduckData.data.github = this.getGithubRepoInfo()
+      const inputJson = JSON.stringify(blackduckData)
+      info('blackduckData.data.github:'.concat(inputJson))
       blackduckData.data.blackduck.automation.prcomment = true
     } else {
       blackduckData.data.blackduck.automation.prcomment = false
@@ -230,7 +232,15 @@ export class SynopsysToolsParameter {
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
+    info(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL))
+    info(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
+    const b = githubRepoName != null
+    const c = githubBranchName != null 
+    const d = githubRepoOwner != null;
 
+    info('zzzz'.concat(new Boolean(b).toString()))
+    info('zzzz'.concat(new Boolean(c).toString()))
+    info('zzzz'.concat(new Boolean(d).toString()))
     if (githubToken == null) {
       throw new Error('Missing required github token for fix pull request/automation comment')
     }
@@ -241,14 +251,16 @@ export class SynopsysToolsParameter {
 
     // This condition is required as per ts-lint as these fields may have undefined as well
     if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-      info(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL))
-      info(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
+     
       if (inputs.ENABLE_AIR_GAP) {
-        if (inputs.GITHUB_API_URL) return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL)
+        if (inputs.GITHUB_API_URL) 
+          return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL)
         else {
           throw new Error('Github api url is missing')
         }
       }
+      info(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL))
+      info(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
       return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, '')
     }
     return undefined
