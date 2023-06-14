@@ -117,7 +117,6 @@ test('Enable Test getFormattedCommandForCoverity Airgap: EXCEPTION', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
   Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: ''})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
@@ -264,7 +263,6 @@ test('Test getFormattedCommandForBlackduck', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
   Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
@@ -300,7 +298,6 @@ test('Enable Test getFormattedCommandForBlackduck Airgap: EXCEPTION', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
   Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: ''})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
