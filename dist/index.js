@@ -118,7 +118,6 @@ function run() {
             if (!inputs.ENABLE_AIR_GAP) {
                 yield sb.downloadBridge(tempDir);
             }
-            (0, core_1.info)('inputs.ENABLE_AIR_GAP121:');
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
@@ -1028,20 +1027,14 @@ class SynopsysToolsParameter {
         const githubToken = inputs.GITHUB_TOKEN;
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        const githubBranchName = '';
+        const githubBranchName = 'process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]';
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
-        const githubRepoOwner = '';
+        const githubRepoOwner = 'process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]';
         (0, core_1.info)(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL));
         (0, core_1.info)(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
-        const b = githubRepoName != null;
-        const c = githubBranchName != null;
-        const d = githubRepoOwner != null;
-        (0, core_1.info)('zzzz'.concat(new Boolean(b).toString()));
-        (0, core_1.info)('zzzz'.concat(new Boolean(c).toString()));
-        (0, core_1.info)('zzzz'.concat(new Boolean(d).toString()));
         if (githubToken == null) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
@@ -1054,7 +1047,7 @@ class SynopsysToolsParameter {
                 if (inputs.GITHUB_API_URL)
                     return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL);
                 else {
-                    throw new Error('Github api url is missing');
+                    throw new Error('Github API URL is missing');
                 }
             }
             (0, core_1.info)(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL));
