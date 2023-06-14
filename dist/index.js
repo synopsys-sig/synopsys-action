@@ -367,7 +367,8 @@ exports.FIXPR_ENVIRONMENT_VARIABLES = {
     GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
     GITHUB_REF: 'GITHUB_REF',
     GITHUB_REF_NAME: 'GITHUB_REF_NAME',
-    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
+    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
+    GITHUB_API_URL: 'GITHUB_API_URL'
 };
 
 
@@ -407,7 +408,7 @@ exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHU
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)('synopsys_bridge_path')) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_AIR_GAP = false;
+exports.ENABLE_AIR_GAP = (0, core_1.getInput)('enable_air_gap') || false;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_b = (0, core_1.getInput)('bridge_download_url')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_c = (0, core_1.getInput)('bridge_download_version')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
@@ -1029,6 +1030,7 @@ class SynopsysToolsParameter {
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
         const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
+        const githubAPIURL = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
@@ -1044,10 +1046,8 @@ class SynopsysToolsParameter {
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
             if (inputs.ENABLE_AIR_GAP) {
-                if (inputs.GITHUB_API_URL)
-                    return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL);
-                else {
-                    throw new Error('Github API URL is missing');
+                if (githubAPIURL) {
+                    return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL);
                 }
             }
             (0, core_1.info)(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL));
