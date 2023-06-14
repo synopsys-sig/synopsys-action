@@ -114,6 +114,7 @@ function run() {
             // Prepare bridge command
             formattedCommand = yield sb.prepareCommand(tempDir);
             // Download bridge
+            (0, core_1.info)('inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
             if (!inputs.ENABLE_AIR_GAP) {
                 yield sb.downloadBridge(tempDir);
             }
