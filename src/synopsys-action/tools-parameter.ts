@@ -57,9 +57,6 @@ export class SynopsysToolsParameter {
           application: {name: inputs.POLARIS_APPLICATION_NAME},
           project: {name: inputs.POLARIS_PROJECT_NAME},
           assessment: {types: assessmentTypeArray}
-        },
-        github: {
-          url: inputs.GITHUB_API_URL
         }
       }
     }
@@ -157,9 +154,6 @@ export class SynopsysToolsParameter {
           url: inputs.BLACKDUCK_URL,
           token: inputs.BLACKDUCK_API_TOKEN,
           automation: {}
-        },
-        githuburl: {
-          url: inputs.GITHUB_API_URL
         }
       }
     }
@@ -247,12 +241,20 @@ export class SynopsysToolsParameter {
 
     // This condition is required as per ts-lint as these fields may have undefined as well
     if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber)
+      info(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL))
+      info(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
+      if (inputs.ENABLE_AIR_GAP) {
+        if (inputs.GITHUB_API_URL) return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL)
+        else {
+          throw new Error('Github api url is missing')
+        }
+      }
+      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, '')
     }
     return undefined
   }
 
-  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string): GithubData {
+  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string, apiurl: string): GithubData {
     const githubData: GithubData = {
       user: {
         token: githubToken
@@ -266,6 +268,9 @@ export class SynopsysToolsParameter {
         branch: {
           name: githubBranchName
         }
+      },
+      api: {
+        url: apiurl
       }
     }
     if (githubPrNumber != null) {

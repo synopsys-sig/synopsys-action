@@ -13,7 +13,6 @@ export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
 export interface Blackduck {
   blackduck: BlackduckData
   github?: GithubData
-  githuburl: GithubApiURLData
 }
 
 export interface BlackduckData {
@@ -51,6 +50,7 @@ export interface AutomationData {
 export interface GithubData {
   user: User
   repository: Repository
+  api?: GithubURL
 }
 
 export const FIXPR_ENVIRONMENT_VARIABLES = {
@@ -62,6 +62,6 @@ export const FIXPR_ENVIRONMENT_VARIABLES = {
   GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
 }
 
-export interface GithubApiURLData {
+export interface GithubURL {
   url: string
 }

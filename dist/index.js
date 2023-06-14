@@ -875,9 +875,6 @@ class SynopsysToolsParameter {
                     application: { name: inputs.POLARIS_APPLICATION_NAME },
                     project: { name: inputs.POLARIS_PROJECT_NAME },
                     assessment: { types: assessmentTypeArray }
-                },
-                github: {
-                    url: inputs.GITHUB_API_URL
                 }
             }
         };
@@ -962,9 +959,6 @@ class SynopsysToolsParameter {
                     url: inputs.BLACKDUCK_URL,
                     token: inputs.BLACKDUCK_API_TOKEN,
                     automation: {}
-                },
-                githuburl: {
-                    url: inputs.GITHUB_API_URL
                 }
             }
         };
@@ -1044,11 +1038,20 @@ class SynopsysToolsParameter {
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-            return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber);
+            (0, core_1.info)(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL));
+            (0, core_1.info)(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
+            if (inputs.ENABLE_AIR_GAP) {
+                if (inputs.GITHUB_API_URL)
+                    return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL);
+                else {
+                    throw new Error('Github api url is missing');
+                }
+            }
+            return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, '');
         }
         return undefined;
     }
-    setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber) {
+    setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, apiurl) {
         const githubData = {
             user: {
                 token: githubToken
@@ -1062,6 +1065,9 @@ class SynopsysToolsParameter {
                 branch: {
                     name: githubBranchName
                 }
+            },
+            api: {
+                url: apiurl
             }
         };
         if (githubPrNumber != null) {

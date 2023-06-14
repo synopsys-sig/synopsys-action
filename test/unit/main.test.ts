@@ -81,6 +81,21 @@ test('Run polaris flow - run', async () => {
   jest.restoreAllMocks()
 })
 
+test('Enable airgap', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+  const response = await run()
+  expect(response).not.toBe(null)
+
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
+  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: false})
+})
+
 test('Run blackduck flow - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
