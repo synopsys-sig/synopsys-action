@@ -18,12 +18,12 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [kiran]
+    runs-on: [ubuntu-latest]
 
     env:
       MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-macosx.zip"
-      #LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-linux64.zip"
-      #WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-win64.zip"
+      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-win64.zip"
 
 #    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -43,7 +43,7 @@ jobs:
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
           #coverity_install_directory: "/root"
-          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           include_diagnostics: true
           coverity_automation_prcomment: true
           enable_air_gap: true
