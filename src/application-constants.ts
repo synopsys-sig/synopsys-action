@@ -4,6 +4,9 @@ export const SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge'
 
 export const APPLICATION_NAME = 'synopsys-action'
 
+export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_path'
+
+
 // Scan Types
 export const COVERITY_KEY = 'coverity'
 export const POLARIS_KEY = 'polaris'
@@ -39,7 +42,7 @@ export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcommen
 
 export const GITHUB_TOKEN_KEY = 'github_token'
 export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
-export const ENABLE_AIR_GAP = 'enable_air_gap'
+export const AIR_GAP_KEY = 'network_airgap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
 
 // Bridge Exit Codes

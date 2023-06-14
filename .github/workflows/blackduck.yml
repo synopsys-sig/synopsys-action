@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-   runs-on: [ubuntu-latest]
+   runs-on: [linux-us1a]
 #    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
@@ -44,6 +44,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           include_diagnostics: false
           diagnostics_retention_days: 90
-          enable_air_gap: true
+          enable_air_gap: false
           #synopsys_bridge_path: /Users/kirann/Downloads/synopsys-bridge-0.2.57-macosx
 
