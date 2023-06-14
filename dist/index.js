@@ -411,6 +411,7 @@ const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)('synopsys_bridge_path')) === null || _a === void 0 ? void 0 : _a.trim()) || '';
 (0, console_1.info)('getInput(enable_air_gap)'.concat((0, core_1.getInput)('enable_air_gap')));
 exports.ENABLE_AIR_GAP = (0, core_1.getInput)('enable_air_gap') || false;
+(0, console_1.info)('getInput(enable_air_gap)'.concat(exports.ENABLE_AIR_GAP || ''));
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_b = (0, core_1.getInput)('bridge_download_url')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_c = (0, core_1.getInput)('bridge_download_version')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
