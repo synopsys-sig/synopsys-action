@@ -240,13 +240,14 @@ export class SynopsysToolsParameter {
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
+    info('before here')
     if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
       if (inputs.ENABLE_AIR_GAP) {
+        info('after here')
         if (githubAPIURL) {
           return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL)
         }
       }
-      info(' inputs.GITHUB_API_URL:'.concat(githubAPIURL))
       return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, '')
     }
     return undefined

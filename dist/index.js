@@ -1034,13 +1034,14 @@ class SynopsysToolsParameter {
             throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.');
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
+        (0, core_1.info)('before here');
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
             if (inputs.ENABLE_AIR_GAP) {
+                (0, core_1.info)('after here');
                 if (githubAPIURL) {
                     return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL);
                 }
             }
-            (0, core_1.info)(' inputs.GITHUB_API_URL:'.concat(githubAPIURL));
             return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, '');
         }
         return undefined;
