@@ -1,0 +1,64 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI-All-Scans
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: [ubuntu-latest]
+
+    env:
+      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-macosx.zip"
+      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-win64.zip"
+
+    steps:
+      #      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      - name: Use synopsys unified-action - running all scans
+        # Use the action defined in this repository
+        uses: ./
+        with:
+
+          # Polaris
+          polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_application_name: "tb_app1"
+          polaris_project_name: "tb_proj"
+          polaris_assessment_types: "SAST"
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          # Blackduck
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+          blackduck_scan_full: true
+          #blackduck_install_directory: "/root"
+          blackduck_scan_failure_severities: 'BLOCKER, CRITICAL, TRIVIAL'
+          blackduck_automation_fixpr: false
+
+          #Coverity
+          coverity_url: ${{ secrets.COVERITY_URL }}
+          coverity_user: ${{ secrets.COVERITY_USER }}
+          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
+          coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
+          coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
+          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
+          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          # Mandatory for windows hosted environment
+          #coverity_install_directory: "/root"
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          include_diagnostics: true
