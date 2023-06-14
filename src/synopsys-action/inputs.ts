@@ -1,10 +1,8 @@
 import {getInput} from '@actions/core'
-import {info} from 'console'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_PATH = getInput('synopsys_bridge_path')?.trim() || ''
-info('airgap'.concat(getInput(constants.ENABLE_AIR_GAP)?.trim() || ''))
-export const ENABLE_AIR_GAP = getInput(constants.ENABLE_AIR_GAP)?.trim() || ''
+export const ENABLE_AIR_GAP = getInput(constants.ENABLE_AIR_GAP)?.trim() || false
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
