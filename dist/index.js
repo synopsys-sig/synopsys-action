@@ -412,7 +412,7 @@ exports.ENABLE_AIR_GAP = (0, core_1.getInput)('enable_air_gap') || false;
 exports.BRIDGE_DOWNLOAD_URL = ((_b = (0, core_1.getInput)('bridge_download_url')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_c = (0, core_1.getInput)('bridge_download_version')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 //github api rul
-exports.GITHUB_API_URL = ((_d = (0, core_1.getInput)('github_api_url')) === null || _d === void 0 ? void 0 : _d.trim()) || 'https://github.com';
+exports.GITHUB_API_URL = ((_d = (0, core_1.getInput)('github_api_url')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
 // Polaris related inputs
 exports.POLARIS_ACCESS_TOKEN = ((_e = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';
 exports.POLARIS_APPLICATION_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
@@ -431,14 +431,14 @@ exports.COVERITY_REPOSITORY_NAME = ((_s = (0, core_1.getInput)(constants.COVERIT
 exports.COVERITY_BRANCH_NAME = ((_t = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
 exports.COVERITY_AUTOMATION_PRCOMMENT = ((_u = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
 // Blackduck related inputs
-exports.BLACKDUCK_URL = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || 'https://bd.com';
-exports.BLACKDUCK_API_TOKEN = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '1234';
+exports.BLACKDUCK_URL = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
+exports.BLACKDUCK_API_TOKEN = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
 exports.BLACKDUCK_INSTALL_DIRECTORY = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
 exports.BLACKDUCK_SCAN_FULL = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
 exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
 exports.BLACKDUCK_AUTOMATION_FIXPR = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || true;
 exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || true;
-exports.GITHUB_TOKEN = ((_2 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || 'token';
+exports.GITHUB_TOKEN = ((_2 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
 exports.INCLUDE_DIAGNOSTICS = ((_3 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
 exports.DIAGNOSTICS_RETENTION_DAYS = ((_4 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
 
@@ -1035,22 +1035,14 @@ class SynopsysToolsParameter {
         const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         (0, core_1.info)(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL));
         (0, core_1.info)(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
-        const b = githubRepoName != null;
-        const c = githubBranchName != null;
-        const d = githubRepoOwner != null;
-        (0, core_1.info)('zzzz'.concat(new Boolean(b).toString()));
-        (0, core_1.info)('zzzz'.concat(new Boolean(c).toString()));
-        (0, core_1.info)('zzzz'.concat(new Boolean(d).toString()));
         if (githubToken == null) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
         if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) && isNaN(Number(githubPrNumber))) {
             throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.');
         }
-        (0, core_1.info)('I came here0');
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-            (0, core_1.info)('I came here');
             if (inputs.ENABLE_AIR_GAP) {
                 if (inputs.GITHUB_API_URL)
                     return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL);

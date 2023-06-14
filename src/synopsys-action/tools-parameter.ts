@@ -234,7 +234,7 @@ export class SynopsysToolsParameter {
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
     info(' inputs.GITHUB_API_URL:'.concat(inputs.GITHUB_API_URL))
     info(' inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()))
-  
+
     if (githubToken == null) {
       throw new Error('Missing required github token for fix pull request/automation comment')
     }
@@ -245,10 +245,8 @@ export class SynopsysToolsParameter {
 
     // This condition is required as per ts-lint as these fields may have undefined as well
     if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-     
       if (inputs.ENABLE_AIR_GAP) {
-        if (inputs.GITHUB_API_URL) 
-          return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL)
+        if (inputs.GITHUB_API_URL) return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, inputs.GITHUB_API_URL)
         else {
           throw new Error('Github API URL is missing')
         }

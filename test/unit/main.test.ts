@@ -85,6 +85,7 @@ test('Enable airgap', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
