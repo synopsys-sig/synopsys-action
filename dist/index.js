@@ -412,8 +412,8 @@ const core_1 = __nccwpck_require__(2186);
 const console_1 = __nccwpck_require__(7082);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_AIR_GAP = ((_b = (0, core_1.getInput)(constants.AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || '';
-(0, console_1.info)('ENABLE_AIR_GAP'.concat(exports.ENABLE_AIR_GAP));
+exports.ENABLE_AIR_GAP = ((_b = (0, core_1.getInput)(constants.AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || '';
+(0, console_1.info)('ENABLE_AIR_GAP'.concat(new Boolean(exports.ENABLE_AIR_GAP).toString()));
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)('bridge_download_version')) === null || _d === void 0 ? void 0 : _d.trim()) || '';

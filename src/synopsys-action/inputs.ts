@@ -3,8 +3,8 @@ import {info} from 'console'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_PATH = getInput(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)?.trim() || ''
-export const ENABLE_AIR_GAP = getInput(constants.AIR_GAP_KEY)?.trim() || ''
-info('ENABLE_AIR_GAP'.concat(ENABLE_AIR_GAP))
+export const ENABLE_AIR_GAP = getInput(constants.AIR_GAP_KEY)?.trim() === 'true' || ''
+info('ENABLE_AIR_GAP'.concat(new Boolean(ENABLE_AIR_GAP).toString()))
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
