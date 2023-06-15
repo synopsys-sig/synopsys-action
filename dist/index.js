@@ -111,13 +111,15 @@ function run() {
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
         try {
-            (0, core_1.info)('inputs.ENABLE_AIR_GAP:'.concat(new Boolean(inputs.ENABLE_AIR_GAP).toString()));
             const sb = new synopsys_bridge_1.SynopsysBridge();
             // Prepare bridge command
             formattedCommand = yield sb.prepareCommand(tempDir);
             // Download bridge
             if (!inputs.ENABLE_AIR_GAP) {
                 yield sb.downloadBridge(tempDir);
+            }
+            else {
+                (0, core_1.info)('airgap has been enabled so skipping download bridge');
             }
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
@@ -412,7 +414,6 @@ const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
 exports.ENABLE_AIR_GAP = ((_b = (0, core_1.getInput)(constants.AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || '';
 (0, console_1.info)('ENABLE_AIR_GAP'.concat(exports.ENABLE_AIR_GAP));
-(0, console_1.info)('inputs.ENABLE_AIR_GAP:'.concat(new Boolean(exports.ENABLE_AIR_GAP).toString()));
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)('bridge_download_version')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
@@ -1042,7 +1043,6 @@ class SynopsysToolsParameter {
             throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.');
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
-        (0, core_1.info)('before here');
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
             return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL);
         }
