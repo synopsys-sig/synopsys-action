@@ -1,9 +1,12 @@
 import {getInput} from '@actions/core'
+import {info} from 'console'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_PATH = getInput(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)?.trim() || ''
 export const ENABLE_AIR_GAP = getInput(constants.AIR_GAP_KEY)?.trim() || false
-
+export const booleanT = getInput(constants.AIR_GAP_KEY)?.trim() || false
+info('booleanTbooleanT1'.concat(getInput(constants.AIR_GAP_KEY)?.trim()))
+info('booleanTbooleanTbooleanTbooleanTbooleanT'.concat(new Boolean(booleanT).toString()))
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim() || ''
