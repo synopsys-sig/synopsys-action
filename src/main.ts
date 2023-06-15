@@ -20,7 +20,7 @@ export async function run() {
     if (!inputs.ENABLE_AIR_GAP) {
       await sb.downloadBridge(tempDir)
     } else {
-      info('airgap has been enabled so skipping download bridge')
+      info('airgap has been enabled so skipping download bridge.')
     }
     // Execute bridge command
     return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
