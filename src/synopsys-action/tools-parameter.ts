@@ -14,6 +14,7 @@ export class SynopsysToolsParameter {
   tempDir: string
   private static STAGE_OPTION = '--stage'
   static DIAGNOSTICS_OPTION = '--diagnostics'
+  static AIR_GAP = '--airgap'
   private static INPUT_OPTION = '--input'
   private static POLARIS_STAGE = 'polaris'
   private static POLARIS_STATE_FILE_NAME = 'polaris_input.json'

@@ -6,7 +6,6 @@ export const APPLICATION_NAME = 'synopsys-action'
 
 export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_path'
 
-
 // Scan Types
 export const COVERITY_KEY = 'coverity'
 export const POLARIS_KEY = 'polaris'
