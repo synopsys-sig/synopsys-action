@@ -119,7 +119,7 @@ function run() {
                 yield sb.downloadBridge(tempDir);
             }
             else {
-                (0, core_1.info)('airgap has been enabled so skipping download bridge');
+                (0, core_1.info)('airgap has been enabled so skipping download bridge.');
             }
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());

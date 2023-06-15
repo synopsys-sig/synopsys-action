@@ -44,5 +44,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           include_diagnostics: false
           diagnostics_retention_days: 90
-          network_airgap: true
+          network_airgap: false
          # synopsys_bridge_path: /home/kirann/synopsys-bridge

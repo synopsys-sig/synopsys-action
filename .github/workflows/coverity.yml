@@ -46,6 +46,6 @@ jobs:
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           include_diagnostics: true
           coverity_automation_prcomment: true
-          network_airgap: true
+          network_airgap: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
           #synopsys_bridge_path: /home/kirann/synopsys-bridge
