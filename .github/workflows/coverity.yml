@@ -48,4 +48,4 @@ jobs:
           coverity_automation_prcomment: true
           network_airgap: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          synopsys_bridge_path: /home/kirann/synopsys-bridge
+          #synopsys_bridge_path: /home/kirann/synopsys-bridge
