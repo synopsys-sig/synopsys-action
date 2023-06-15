@@ -591,6 +591,7 @@ class SynopsysBridge {
                         }
                         else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
                             this.bridgeExecutablePath = this.getBridgeDefaultPath();
+                            (0, core_1.info)('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath));
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
                                 throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
                             }
