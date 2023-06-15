@@ -18,11 +18,11 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [ubuntu-latest]
+    runs-on: [linux-us1a]
 
     env:
       MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-macosx.zip"
-      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.272/synopsys-bridge-0.1.272-linux64.zip"
+      LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/0.2.57/synopsys-bridge-0.2.57-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-win64.zip"
 
 #    # Steps represent a sequence of tasks that will be executed as part of the job
@@ -46,6 +46,6 @@ jobs:
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           include_diagnostics: true
           coverity_automation_prcomment: true
-          network_airgap: true
+          network_airgap: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          #synopsys_bridge_path: /home/kirann/bridge
+          synopsys_bridge_path: /home/kirann/bridge
