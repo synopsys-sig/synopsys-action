@@ -101,6 +101,7 @@ exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
+const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const diagnostics_1 = __nccwpck_require__(1721);
@@ -121,7 +122,7 @@ function run() {
                 (0, core_1.info)('airgap has been enabled so skipping download bridge');
             }
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, '/Users/kirann');
+            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
         }
         catch (error) {
             throw error;
@@ -726,9 +727,9 @@ class SynopsysBridge {
                 if (inputs.INCLUDE_DIAGNOSTICS) {
                     formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION);
                 }
-                if (inputs.ENABLE_AIR_GAP) {
-                    formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.AIR_GAP);
-                }
+                // if (inputs.ENABLE_AIR_GAP) {
+                //   formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.AIR_GAP)
+                // }
                 (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
             }
@@ -1083,7 +1084,7 @@ class SynopsysToolsParameter {
 exports.SynopsysToolsParameter = SynopsysToolsParameter;
 SynopsysToolsParameter.STAGE_OPTION = '--stage';
 SynopsysToolsParameter.DIAGNOSTICS_OPTION = '--diagnostics';
-SynopsysToolsParameter.AIR_GAP = '--airgap';
+//static AIR_GAP = '--airgap'
 SynopsysToolsParameter.INPUT_OPTION = '--input';
 SynopsysToolsParameter.POLARIS_STAGE = 'polaris';
 SynopsysToolsParameter.POLARIS_STATE_FILE_NAME = 'polaris_input.json';
