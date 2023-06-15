@@ -89,7 +89,7 @@ inputs:
   diagnostics_retention_days:
     description: 'Number of days to keep the diagnostics files downloadable'
     required: false
-  enable_air_gap: 
+  network_airgap:
    description: 'Enable air gap'
    required: false
 runs:
