@@ -14,7 +14,6 @@ export async function run() {
   try {
     const sb = new SynopsysBridge()
     // Prepare bridge command
-
     formattedCommand = await sb.prepareCommand(tempDir)
     // Download bridge
     if (!inputs.ENABLE_AIR_GAP) {
@@ -23,7 +22,7 @@ export async function run() {
       info('airgap has been enabled so skipping download bridge.')
     }
     // Execute bridge command
-    return await sb.executeBridgeCommand(formattedCommand, '/Users/kirann')
+    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error) {
     throw error
   } finally {

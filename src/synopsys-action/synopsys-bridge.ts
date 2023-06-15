@@ -90,7 +90,6 @@ export class SynopsysBridge {
       const exectOp: ExecOptions = {
         cwd: workingDirectory
       }
-
       try {
         if (inputs.ENABLE_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
