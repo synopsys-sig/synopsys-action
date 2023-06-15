@@ -73,6 +73,7 @@ test('Test getFormattedCommandForCoverity', () => {
   Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
   Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_LOCAL', {value: true})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   const resp = stp.getFormattedCommandForCoverity()

@@ -83,18 +83,21 @@ export class SynopsysToolsParameter {
             project: {name: inputs.COVERITY_PROJECT_NAME},
             stream: {name: inputs.COVERITY_STREAM_NAME}
           },
-          automation: {}
+          automation: {},
+          local: false
         },
         project: {}
       }
     }
 
+    if (inputs.COVERITY_LOCAL) {
+      covData.data.coverity.local = true
+    }
+
     if (inputs.COVERITY_INSTALL_DIRECTORY) {
-      const osName = process.platform
-      if (osName === 'win32') {
-        validateCoverityInstallDirectoryParam(inputs.COVERITY_INSTALL_DIRECTORY)
+      if (validateCoverityInstallDirectoryParam(inputs.COVERITY_INSTALL_DIRECTORY)) {
+        covData.data.coverity.install = {directory: inputs.COVERITY_INSTALL_DIRECTORY}
       }
-      covData.data.coverity.install = {directory: inputs.COVERITY_INSTALL_DIRECTORY}
     }
 
     if (inputs.COVERITY_POLICY_VIEW) {

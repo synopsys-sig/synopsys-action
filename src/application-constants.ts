@@ -1,3 +1,5 @@
+import {COVERITY_LOCAL} from './synopsys-action/inputs'
+
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge' //Path will be in home
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge'
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge'
@@ -20,6 +22,7 @@ export const COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view'
 export const COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name'
 export const COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name'
 export const COVERITY_AUTOMATION_PRCOMMENT_KEY = 'coverity_automation_prcomment'
+export const COVERITY_LOCAL_KEY = 'coverity_local'
 
 // Polaris
 export const POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken'

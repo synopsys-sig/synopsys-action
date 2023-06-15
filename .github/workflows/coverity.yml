@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [ubuntu-latest]
+    runs-on: [self-hosted, lokesh]
 
     env:
       MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-macosx.zip"
@@ -41,9 +41,11 @@ jobs:
           coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
           coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          coverity_local: true
           # Mandatory for windows hosted environment
-          #coverity_install_directory: "/root"
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          coverity_install_directory: "/Users/lokesha/coverity_path"
+          #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           include_diagnostics: true
-          coverity_automation_prcomment: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+          #coverity_automation_prcomment: true
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
