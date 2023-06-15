@@ -98,7 +98,6 @@ export class SynopsysBridge {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0 && fs.existsSync(this.getBridgeDefaultPath())) {
-            info('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath))
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
@@ -224,9 +223,9 @@ export class SynopsysBridge {
         formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
       }
 
-      // if (inputs.ENABLE_AIR_GAP) {
-      //   formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.AIR_GAP)
-      // }
+      if (inputs.ENABLE_AIR_GAP) {
+        formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.AIR_GAP)
+      }
 
       debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
