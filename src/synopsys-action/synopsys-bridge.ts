@@ -90,6 +90,7 @@ export class SynopsysBridge {
       const exectOp: ExecOptions = {
         cwd: workingDirectory
       }
+
       try {
         if (inputs.ENABLE_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
@@ -97,7 +98,7 @@ export class SynopsysBridge {
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
-          } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
+          } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0 && fs.existsSync(this.getBridgeDefaultPath())) {
             info('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath))
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
             if (!fs.existsSync(this.bridgeExecutablePath)) {
@@ -317,6 +318,7 @@ export class SynopsysBridge {
     } else {
       this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
     }
+    info('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath))
     return this.bridgeExecutablePath
   }
 }
