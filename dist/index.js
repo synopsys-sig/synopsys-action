@@ -101,7 +101,6 @@ exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
-const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const diagnostics_1 = __nccwpck_require__(1721);
@@ -122,7 +121,7 @@ function run() {
                 (0, core_1.info)('airgap has been enabled so skipping download bridge');
             }
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            return yield sb.executeBridgeCommand(formattedCommand, '/Users/kirann');
         }
         catch (error) {
             throw error;
@@ -412,7 +411,7 @@ const core_1 = __nccwpck_require__(2186);
 const console_1 = __nccwpck_require__(7082);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_AIR_GAP = ((_b = (0, core_1.getInput)(constants.AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || '';
+exports.ENABLE_AIR_GAP = ((_b = (0, core_1.getInput)(constants.AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || true;
 (0, console_1.info)('ENABLE_AIR_GAP'.concat(new Boolean(exports.ENABLE_AIR_GAP).toString()));
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
@@ -435,9 +434,9 @@ exports.COVERITY_REPOSITORY_NAME = ((_s = (0, core_1.getInput)(constants.COVERIT
 exports.COVERITY_BRANCH_NAME = ((_t = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
 exports.COVERITY_AUTOMATION_PRCOMMENT = ((_u = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
 // Blackduck related inputs
-exports.BLACKDUCK_URL = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
-exports.BLACKDUCK_API_TOKEN = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
-exports.BLACKDUCK_INSTALL_DIRECTORY = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
+exports.BLACKDUCK_URL = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '2dd';
+exports.BLACKDUCK_API_TOKEN = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '2dd';
+exports.BLACKDUCK_INSTALL_DIRECTORY = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || 'dd';
 exports.BLACKDUCK_SCAN_FULL = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
 exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
 exports.BLACKDUCK_AUTOMATION_FIXPR = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
@@ -579,13 +578,25 @@ class SynopsysBridge {
                 try {
                     if (inputs.ENABLE_AIR_GAP) {
                         if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
-                            this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH);
+                            if (osName === 'win32') {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(inputs.SYNOPSYS_BRIDGE_PATH.concat('\\synopsys-bridge'), ['.exe']);
+                            }
+                            else {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), []);
+                            }
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
-                                throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
+                                throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'));
                             }
                         }
                         else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
-                            this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath());
+                            this.bridgeExecutablePath = this.getBridgeDefaultPath();
+                            (0, core_1.info)('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath));
+                            if (osName === 'win32') {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.getBridgeDefaultPath().concat('\\synopsys-bridge'), ['.exe']);
+                            }
+                            else {
+                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.getBridgeDefaultPath().concat('/synopsys-bridge'), []);
+                            }
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
                                 throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
                             }
@@ -796,17 +807,6 @@ class SynopsysBridge {
                 (0, core_1.info)('Error reading version file content: '.concat(e.message));
             }
             return false;
-        });
-    }
-    setBridgeExecutablePath(osName, filePath) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (osName === 'win32') {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat('\\synopsys-bridge'), ['.exe']);
-            }
-            else {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat('/synopsys-bridge'), []);
-            }
-            (0, core_1.info)('this.bridgeExecutablePath:'.concat(this.bridgeExecutablePath));
         });
     }
 }

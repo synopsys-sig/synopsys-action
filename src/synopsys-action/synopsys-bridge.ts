@@ -84,6 +84,7 @@ export class SynopsysBridge {
     return false
   }
 
+  
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     const osName: string = process.platform
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
@@ -93,12 +94,22 @@ export class SynopsysBridge {
       try {
         if (inputs.ENABLE_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
-            this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
+            if (osName === 'win32') {
+              this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('\\synopsys-bridge'), ['.exe'])
+            } else {
+              this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), [])
+            }
             if (!fs.existsSync(this.bridgeExecutablePath)) {
-              throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
+              throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
-            this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
+            this.bridgeExecutablePath = this.getBridgeDefaultPath()
+            info('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath))
+            if (osName === 'win32') {
+              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('\\synopsys-bridge'), ['.exe'])
+            } else {
+              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('/synopsys-bridge'), [])
+            }
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
@@ -308,14 +319,5 @@ export class SynopsysBridge {
       info('Error reading version file content: '.concat((e as Error).message))
     }
     return false
-  }
-
-  async setBridgeExecutablePath(osName: string, filePath: string): Promise<void> {
-    if (osName === 'win32') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('\\synopsys-bridge'), ['.exe'])
-    } else {
-      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
-    }
-    info('this.bridgeExecutablePath:'.concat(this.bridgeExecutablePath))
   }
 }

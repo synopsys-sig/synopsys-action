@@ -23,7 +23,7 @@ export async function run() {
       info('airgap has been enabled so skipping download bridge')
     }
     // Execute bridge command
-    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    return await sb.executeBridgeCommand(formattedCommand, '/Users/kirann')
   } catch (error) {
     throw error
   } finally {
