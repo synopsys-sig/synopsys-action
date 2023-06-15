@@ -101,7 +101,6 @@ exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
-const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const diagnostics_1 = __nccwpck_require__(1721);
@@ -122,7 +121,7 @@ function run() {
                 (0, core_1.info)('airgap has been enabled so skipping download bridge');
             }
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            return yield sb.executeBridgeCommand(formattedCommand, '/Users/kirann');
         }
         catch (error) {
             throw error;
@@ -579,25 +578,14 @@ class SynopsysBridge {
                 try {
                     if (inputs.ENABLE_AIR_GAP) {
                         if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
-                            if (osName === 'win32') {
-                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(inputs.SYNOPSYS_BRIDGE_PATH.concat('\\synopsys-bridge'), ['.exe']);
-                            }
-                            else {
-                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), []);
-                            }
+                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH);
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
                                 throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'));
                             }
                         }
                         else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
-                            this.bridgeExecutablePath = this.getBridgeDefaultPath();
                             (0, core_1.info)('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath));
-                            if (osName === 'win32') {
-                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.getBridgeDefaultPath().concat('\\synopsys-bridge'), ['.exe']);
-                            }
-                            else {
-                                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.getBridgeDefaultPath().concat('/synopsys-bridge'), []);
-                            }
+                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath());
                             (0, core_1.info)('this.getBridgeDefaultPath():' + fs_1.default.existsSync(this.bridgeExecutablePath));
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
                                 throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'));
@@ -809,6 +797,17 @@ class SynopsysBridge {
                 (0, core_1.info)('Error reading version file content: '.concat(e.message));
             }
             return false;
+        });
+    }
+    setBridgeExecutablePath(osName, filePath) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (osName === 'win32') {
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat('\\synopsys-bridge'), ['.exe']);
+            }
+            else {
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat('/synopsys-bridge'), []);
+            }
+            return this.bridgeExecutablePath;
         });
     }
 }

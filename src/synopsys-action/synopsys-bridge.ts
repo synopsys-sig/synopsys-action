@@ -94,22 +94,13 @@ export class SynopsysBridge {
       try {
         if (inputs.ENABLE_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
-            if (osName === 'win32') {
-              this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('\\synopsys-bridge'), ['.exe'])
-            } else {
-              this.bridgeExecutablePath = await tryGetExecutablePath(inputs.SYNOPSYS_BRIDGE_PATH.concat('/synopsys-bridge'), [])
-            }
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName,inputs.SYNOPSYS_BRIDGE_PATH)
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
-            this.bridgeExecutablePath = this.getBridgeDefaultPath()
             info('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath))
-            if (osName === 'win32') {
-              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('\\synopsys-bridge'), ['.exe'])
-            } else {
-              this.bridgeExecutablePath = await tryGetExecutablePath(this.getBridgeDefaultPath().concat('/synopsys-bridge'), [])
-            }
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName,this.getBridgeDefaultPath())
             info('this.getBridgeDefaultPath():' + fs.existsSync(this.bridgeExecutablePath))
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
@@ -321,4 +312,15 @@ export class SynopsysBridge {
     }
     return false
   }
+
+  async setBridgeExecutablePath(osName: string, filePath: string): Promise<string> {
+    if (osName === 'win32') {
+      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('\\synopsys-bridge'), ['.exe'])
+    } else {
+      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
+    }
+    return this.bridgeExecutablePath
+
 }
+}
+
