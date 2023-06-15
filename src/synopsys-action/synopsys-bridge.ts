@@ -84,7 +84,6 @@ export class SynopsysBridge {
     return false
   }
 
-  
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     const osName: string = process.platform
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
@@ -94,14 +93,13 @@ export class SynopsysBridge {
       try {
         if (inputs.ENABLE_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
-            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName,inputs.SYNOPSYS_BRIDGE_PATH)
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0) {
             info('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath))
-            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName,this.getBridgeDefaultPath())
-            info('this.getBridgeDefaultPath():' + fs.existsSync(this.bridgeExecutablePath))
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
@@ -320,7 +318,5 @@ export class SynopsysBridge {
       this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
     }
     return this.bridgeExecutablePath
-
+  }
 }
-}
-
