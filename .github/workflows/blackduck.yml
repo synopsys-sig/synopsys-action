@@ -45,4 +45,4 @@ jobs:
           include_diagnostics: false
           diagnostics_retention_days: 90
           network_airgap: true
-         # synopsys_bridge_path: /home/kirann/synopsys-bridge
+          synopsys_bridge_path: /home/kirann/bridge
