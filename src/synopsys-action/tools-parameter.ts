@@ -83,8 +83,7 @@ export class SynopsysToolsParameter {
             project: {name: inputs.COVERITY_PROJECT_NAME},
             stream: {name: inputs.COVERITY_STREAM_NAME}
           },
-          automation: {},
-          local: false
+          automation: {}
         },
         project: {}
       }

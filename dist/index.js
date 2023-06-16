@@ -398,7 +398,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
 const core_1 = __nccwpck_require__(2186);
@@ -424,18 +424,18 @@ exports.COVERITY_POLICY_VIEW = ((_q = (0, core_1.getInput)(constants.COVERITY_PO
 exports.COVERITY_REPOSITORY_NAME = ((_r = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
 exports.COVERITY_BRANCH_NAME = ((_s = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
 exports.COVERITY_AUTOMATION_PRCOMMENT = ((_t = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
-exports.COVERITY_LOCAL = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY) || false;
+exports.COVERITY_LOCAL = ((_u = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) === 'true' || false;
 // Blackduck related inputs
-exports.BLACKDUCK_URL = ((_u = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
-exports.BLACKDUCK_API_TOKEN = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
-exports.BLACKDUCK_INSTALL_DIRECTORY = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
-exports.BLACKDUCK_SCAN_FULL = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_FIXPR = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
-exports.GITHUB_TOKEN = ((_1 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
-exports.INCLUDE_DIAGNOSTICS = ((_2 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
-exports.DIAGNOSTICS_RETENTION_DAYS = ((_3 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
+exports.BLACKDUCK_URL = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
+exports.BLACKDUCK_API_TOKEN = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
+exports.BLACKDUCK_INSTALL_DIRECTORY = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
+exports.BLACKDUCK_SCAN_FULL = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_FIXPR = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
+exports.GITHUB_TOKEN = ((_2 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
+exports.INCLUDE_DIAGNOSTICS = ((_3 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
+exports.DIAGNOSTICS_RETENTION_DAYS = ((_4 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
 
 
 /***/ }),
@@ -869,8 +869,7 @@ class SynopsysToolsParameter {
                         project: { name: inputs.COVERITY_PROJECT_NAME },
                         stream: { name: inputs.COVERITY_STREAM_NAME }
                     },
-                    automation: {},
-                    local: false
+                    automation: {}
                 },
                 project: {}
             }
