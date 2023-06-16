@@ -85,6 +85,9 @@ export class SynopsysToolsParameter {
           },
           automation: {}
         },
+        network: {
+          airGap: inputs.ENABLE_NETWORK_AIR_GAP
+        },
         project: {}
       }
     }

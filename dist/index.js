@@ -101,7 +101,6 @@ exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
-const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const diagnostics_1 = __nccwpck_require__(1721);
@@ -122,7 +121,7 @@ function run() {
                 (0, core_1.info)('Network air gap has been enabled so skipping download bridge.');
             }
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            return yield sb.executeBridgeCommand(formattedCommand, '/Users/kirann');
         }
         catch (error) {
             throw error;
@@ -411,7 +410,7 @@ exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHU
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || true;
+exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || false;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)('bridge_download_version')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
@@ -512,7 +511,7 @@ class SynopsysBridge {
         this.MAC_PLATFORM = 'macosx';
         this.bridgeExecutablePath = '';
         this.synopsysBridgePath = '';
-        this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/';
+        this.bridgeArtifactoryURL = 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/';
         this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ');
     }
     getBridgeDefaultPath() {
@@ -906,6 +905,9 @@ class SynopsysToolsParameter {
                         stream: { name: inputs.COVERITY_STREAM_NAME }
                     },
                     automation: {}
+                },
+                network: {
+                    airGap: inputs.ENABLE_NETWORK_AIR_GAP
                 },
                 project: {}
             }

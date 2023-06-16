@@ -94,7 +94,7 @@ test('Enable Test getFormattedCommandForCoverity Airgap: SUCCESS', () => {
   Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
@@ -116,7 +116,7 @@ test('Enable Test getFormattedCommandForCoverity Airgap: EXCEPTION', () => {
   Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
@@ -138,7 +138,7 @@ test('Disable Test getFormattedCommandForCoverity Airgap', () => {
   Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   const resp = stp.getFormattedCommandForCoverity()
@@ -262,7 +262,7 @@ test('Test getFormattedCommandForBlackduck', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
@@ -279,7 +279,7 @@ test('Enable Test getFormattedCommandForBlackduck Airgap: SUCCESS', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
@@ -297,7 +297,7 @@ test('Enable Test getFormattedCommandForBlackduck Airgap: EXCEPTION', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
@@ -315,7 +315,7 @@ test('Disable Test getFormattedCommandForBlackduck Airgap', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)

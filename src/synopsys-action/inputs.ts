@@ -2,7 +2,7 @@ import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_PATH = getInput(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)?.trim() || ''
-export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIR_GAP_KEY)?.trim() === 'true' || true
+export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIR_GAP_KEY)?.trim() === 'true' || false
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''

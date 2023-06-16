@@ -27,7 +27,7 @@ beforeEach(() => {
 
 test('Test executeBridgeCommand for MAC', () => {
   const sb = new SynopsysBridge()
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')

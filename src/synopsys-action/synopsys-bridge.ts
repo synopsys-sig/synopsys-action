@@ -27,7 +27,7 @@ export class SynopsysBridge {
   constructor() {
     this.bridgeExecutablePath = ''
     this.synopsysBridgePath = ''
-    this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
+    this.bridgeArtifactoryURL = 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/'
     this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ')
   }
 

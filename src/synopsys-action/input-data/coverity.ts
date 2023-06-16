@@ -4,6 +4,7 @@ export interface Coverity {
   coverity: CoverityConnect
   project: ProjectData
   github?: GithubData
+  network: NetworkAirGap
 }
 
 export interface ProjectData {
@@ -27,4 +28,8 @@ export interface CoverityData {
   project: {name: string}
   stream: {name: string}
   policy?: {view: string}
+}
+
+export interface NetworkAirGap {
+  airGap: boolean
 }

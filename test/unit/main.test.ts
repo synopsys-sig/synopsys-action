@@ -84,7 +84,7 @@ test('Run polaris flow - run', async () => {
 test('Enable airgap', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
@@ -94,7 +94,7 @@ test('Enable airgap', async () => {
 
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
-  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
 })
 
 test('Run blackduck flow - run', async () => {
