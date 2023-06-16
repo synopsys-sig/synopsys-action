@@ -91,7 +91,7 @@ export class SynopsysBridge {
         cwd: workingDirectory
       }
       try {
-        if (inputs.ENABLE_AIR_GAP) {
+        if (inputs.ENABLE_NETWORK_AIR_GAP) {
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
             if (!fs.existsSync(this.bridgeExecutablePath)) {
@@ -221,10 +221,6 @@ export class SynopsysBridge {
 
       if (inputs.INCLUDE_DIAGNOSTICS) {
         formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
-      }
-
-      if (inputs.ENABLE_AIR_GAP) {
-        formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.AIR_GAP)
       }
 
       debug('Formatted command is - '.concat(formattedCommand))

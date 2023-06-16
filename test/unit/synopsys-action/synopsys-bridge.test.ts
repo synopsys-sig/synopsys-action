@@ -7,6 +7,7 @@ import {Socket} from 'net'
 import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
 import * as inputs from '../../../src/synopsys-action/inputs'
 import {existsSync} from 'fs'
+import {info} from 'console'
 const fs = require('fs')
 
 const ioUtils = require('@actions/io/lib/io-util')
@@ -26,6 +27,7 @@ beforeEach(() => {
 
 test('Test executeBridgeCommand for MAC', () => {
   const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_AIR_GAP', {value: false})
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')

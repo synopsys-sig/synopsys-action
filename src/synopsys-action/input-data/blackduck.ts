@@ -13,6 +13,7 @@ export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
 export interface Blackduck {
   blackduck: BlackduckData
   github?: GithubData
+  network: NetworkAirGap
 }
 
 export interface BlackduckData {
@@ -65,4 +66,8 @@ export const FIXPR_ENVIRONMENT_VARIABLES = {
 
 export interface GithubURL {
   url: string
+}
+
+export interface NetworkAirGap {
+  airGap: boolean
 }
