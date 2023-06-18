@@ -69,9 +69,11 @@ versioning_job:
   before_script:
     - export EXT_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
     - export ARTIFACTORY_UPLOAD_REPO=1
-    - export PRODUCT=Altair
+    - export SBOM_ART_TOKEN_VAULT_PATH=sbom/integrations/github-actions
+    - export PRODUCT=Integrations
     - export GENERATE_CONFIGURATION_FILE=1
-    - export GENERATION_OPTIONS="--entry integrations/synopsys-action/synopsys-action-ci-cd:synopsys-action-ci-cd-0.1.0 --output-zipfile Synopsys-ci-cd-actions-.zip"
+    - export GENERATION_OPTIONS="--entry integrations/synopsys-action/synopsys-action-ci-cd:synopsys-action-ci-cd-$EXT_VERSION"
+    - export PRODUCT_ADDON_SBOM_OPTIONS="--output-zipfile synopsys-ci-cd-actions-$EXT_VERSION-.zip"
 
 generate_sbom:
   extends:
