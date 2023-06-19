@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-`   runs-on: [Linux]
+   runs-on: [Linux]
 #    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
@@ -45,4 +45,4 @@ jobs:
           include_diagnostics: false
           diagnostics_retention_days: 90
           network_airGap: false
-          #synopsys_bridge_path: /home/kirann/bridge
+          synopsys_bridge_path: /home/kirann/bridge
