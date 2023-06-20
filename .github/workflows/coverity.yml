@@ -20,7 +20,7 @@ jobs:
     runs-on: [kiran]
 
     env:
-      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-macosx.zip"
+      MAC_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/0.3.6/synopsys-bridge-0.3.6-macosx.zip"
       LINUX_BRIDGE_URL: "https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/0.3.6/synopsys-bridge-0.3.6-linux64.zip"
       WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.272/synopsys-bridge-0.1.272-win64.zip"
 
@@ -42,7 +42,7 @@ jobs:
           coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
           # Mandatory for windows hosted environment
           #coverity_install_directory: "/root"
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: ${{ env.MAC_BRIDGE_URL }}
           include_diagnostics: true
           coverity_automation_prcomment: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
