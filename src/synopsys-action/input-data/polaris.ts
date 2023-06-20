@@ -1,5 +1,3 @@
-import {GithubData} from './blackduck'
-
 export enum PolarisAssessmentType {
   SCA = 'SCA',
   SAST = 'SAST'
