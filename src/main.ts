@@ -22,7 +22,7 @@ export async function run() {
       info('Network air gap has been enabled so skipping download bridge.')
     }
     // Execute bridge command
-    return await sb.executeBridgeCommand(formattedCommand, '/Users/kirann')
+    return await sb.executeBridgeCommand(formattedCommand, '/home/kirann/')
   } catch (error) {
     throw error
   } finally {
