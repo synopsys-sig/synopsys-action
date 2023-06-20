@@ -47,3 +47,4 @@ jobs:
           include_diagnostics: true
           coverity_automation_prcomment: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          network_airGap: true
