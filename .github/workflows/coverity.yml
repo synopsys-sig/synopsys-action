@@ -49,4 +49,3 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           network_airGap: false
           synopsys_bridge_path: /Users/kirann/synopsys-bridge
-
