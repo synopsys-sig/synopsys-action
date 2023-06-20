@@ -121,7 +121,7 @@ function run() {
                 (0, core_1.info)('Network air gap has been enabled so skipping download bridge.');
             }
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, '/Users/kirann');
+            return yield sb.executeBridgeCommand(formattedCommand, '/home/kirann');
         }
         catch (error) {
             throw error;
