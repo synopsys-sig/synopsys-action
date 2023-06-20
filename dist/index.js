@@ -576,6 +576,7 @@ class SynopsysBridge {
                 };
                 try {
                     if (inputs.ENABLE_NETWORK_AIR_GAP) {
+                        (0, core_1.info)('this.getBridgeDefaultPath():'.concat(this.getBridgeDefaultPath()));
                         if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
                             this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH);
                             if (!fs_1.default.existsSync(this.bridgeExecutablePath)) {
