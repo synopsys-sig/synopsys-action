@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-   runs-on: [Windows]
+   runs-on: [Linux]
 #    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
@@ -36,12 +36,13 @@ jobs:
        # Use the action defined in this repository
         uses: ./
         with:
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          bridge_download_url: ${{ env.WINDOWS_BRIDGE_URL }}
-          blackduck_scan_failure_severities : "BLOCKER,CRITICAL,MAJOR"
-          #blackduck_automation_fixpr: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+          coverity_url: ${{ secrets.COVERITY_URL }}
+          coverity_user: ${{ secrets.COVERITY_USER }}
+          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
+          coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
+          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           include_diagnostics: true
-          diagnostics_retention_days: 90
+          coverity_automation_prcomment: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           network_airGap: true
