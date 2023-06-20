@@ -796,7 +796,7 @@ class SynopsysBridge {
     }
     setBridgeExecutablePath(osName, filePath) {
         return __awaiter(this, void 0, void 0, function* () {
-            (0, core_1.info)('osName:11'.concat(osName));
+            (0, core_1.info)('osName:11'.concat(filePath));
             if (osName === 'win32') {
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat('\\synopsys-bridge'), ['.exe']);
             }
