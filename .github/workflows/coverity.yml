@@ -9,7 +9,6 @@ on:
     branches: [ "SIGINT-840-airgap" ]
   pull_request:
     branches: [ "SIGINT-840-airgap" ]
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
