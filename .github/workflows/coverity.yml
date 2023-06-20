@@ -47,6 +47,6 @@ jobs:
           include_diagnostics: true
           coverity_automation_prcomment: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          network_airGap: true
+          network_airGap: false
           #synopsys_bridge_path: /Users/kirann/synopsys-bridge
           #synopsys_bridge_path: /home/kirann/synopsys-bridge
