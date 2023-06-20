@@ -47,6 +47,6 @@ jobs:
           include_diagnostics: true
           coverity_automation_prcomment: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          network_airGap: false
+          network_airGap: true
           synopsys_bridge_path: C:\WINDOWS\ServiceProfiles\NetworkService\synopsys-bridge
 
