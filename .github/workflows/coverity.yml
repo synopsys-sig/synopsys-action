@@ -42,5 +42,5 @@ jobs:
           #coverity_install_directory: "/root"
           bridge_download_url: ${{ env.WINDOWS_BRIDGE_URL }}
           include_diagnostics: true
-          coverity_automation_prcomment: true
+          coverity_automation_prcomment: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
