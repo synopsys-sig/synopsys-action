@@ -22,7 +22,7 @@ export async function run() {
       info('Network air gap has been enabled so skipping download bridge.')
     }
     // Execute bridge command
-    return await sb.executeBridgeCommand(formattedCommand, 'C:\\WINDOWS\\ServiceProfiles\\NetworkService\\synopsys-bridge')
+    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error) {
     throw error
   } finally {
