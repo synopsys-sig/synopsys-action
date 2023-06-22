@@ -6,9 +6,9 @@ name: CI-Coverity
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch.
   push:
-    branches: [ "SIGINT-840-airgap" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "SIGINT-840-airgap" ]
+    branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -42,6 +42,6 @@ jobs:
           #coverity_install_directory: "/root"
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
           include_diagnostics: true
-          coverity_automation_prcomment: false
+          coverity_automation_prcomment: yes
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          network_airGap: false
+          network_airGap: true
