@@ -911,7 +911,12 @@ class SynopsysToolsParameter {
                 network: {
                     airGap: inputs.ENABLE_NETWORK_AIR_GAP
                 },
-                project: {}
+                project: {},
+                environment: {
+                    scan: {
+                        pull: true
+                    }
+                }
             }
         };
         if (inputs.COVERITY_INSTALL_DIRECTORY) {
