@@ -44,3 +44,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           include_diagnostics: true
           diagnostics_retention_days: 90
+          blackduck_install_directory: '/home/kirann'
