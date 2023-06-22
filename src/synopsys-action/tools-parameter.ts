@@ -159,6 +159,11 @@ export class SynopsysToolsParameter {
         },
         network: {
           airGap: inputs.ENABLE_NETWORK_AIR_GAP
+        },
+        environment: {
+          scan: {
+            pull: true
+          }
         }
       }
     }
