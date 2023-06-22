@@ -45,4 +45,4 @@ jobs:
           include_diagnostics: true
           diagnostics_retention_days: 90
           blackduck_install_directory: '/home/kirann'
-          network_airGap: true
+          network_airGap: false
