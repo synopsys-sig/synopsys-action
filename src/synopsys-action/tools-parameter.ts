@@ -64,7 +64,6 @@ export class SynopsysToolsParameter {
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
-
     debug('Generated state json file at - '.concat(stateFilePath))
     debug('Generated state json file content is - '.concat(inputJson))
 
@@ -129,6 +128,7 @@ export class SynopsysToolsParameter {
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
+    debug('Generated state json file at - '.concat(JSON.stringify(inputJson)))
 
     debug('Generated state json file at - '.concat(stateFilePath))
     debug('Generated state json file content is - '.concat(inputJson))
