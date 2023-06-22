@@ -40,9 +40,9 @@ jobs:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
           bridge_download_url: ${{ env.WINDOWS_BRIDGE_URL }}
           blackduck_scan_failure_severities : "BLOCKER,CRITICAL,MAJOR"
-          blackduck_automation_prcomment: true
+          blackduck_automation_prcomment: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           include_diagnostics: true
           diagnostics_retention_days: 90
           #blackduck_install_directory: '/home/kirann'
-          network_airGap: true
+          network_airGap: false
