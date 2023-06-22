@@ -1029,6 +1029,7 @@ class SynopsysToolsParameter {
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
+        (0, core_1.debug)('json:'.concat(JSON.stringify(inputJson)));
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
         (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
