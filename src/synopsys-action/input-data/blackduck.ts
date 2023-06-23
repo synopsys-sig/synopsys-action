@@ -14,7 +14,6 @@ export interface Blackduck {
   blackduck: BlackduckData
   github?: GithubData
   network: NetworkAirGap
-  environment: EnvironmentSacn
 }
 
 export interface BlackduckData {
@@ -71,12 +70,4 @@ export interface GithubURL {
 
 export interface NetworkAirGap {
   airGap: boolean
-}
-
-export interface EnvironmentSacn {
-  scan: PullEnv
-}
-
-export interface PullEnv {
-  pull: boolean
 }

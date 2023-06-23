@@ -64,6 +64,7 @@ export class SynopsysToolsParameter {
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
+
     debug('Generated state json file at - '.concat(stateFilePath))
     debug('Generated state json file content is - '.concat(inputJson))
 
@@ -87,12 +88,7 @@ export class SynopsysToolsParameter {
         network: {
           airGap: inputs.ENABLE_NETWORK_AIR_GAP
         },
-        project: {},
-        environment: {
-          scan: {
-            pull: true
-          }
-        }
+        project: {}
       }
     }
 
@@ -128,7 +124,6 @@ export class SynopsysToolsParameter {
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
-    debug('Generated state json file at - '.concat(JSON.stringify(inputJson)))
 
     debug('Generated state json file at - '.concat(stateFilePath))
     debug('Generated state json file content is - '.concat(inputJson))
@@ -164,11 +159,6 @@ export class SynopsysToolsParameter {
         },
         network: {
           airGap: inputs.ENABLE_NETWORK_AIR_GAP
-        },
-        environment: {
-          scan: {
-            pull: true
-          }
         }
       }
     }
@@ -241,7 +231,8 @@ export class SynopsysToolsParameter {
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
     const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
     const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
-    const githubAPIURL = ''
+    const githubAPIURL = inputs.GITHUB_API_URL === '' ? process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL] : inputs.GITHUB_API_URL
+
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
@@ -256,7 +247,7 @@ export class SynopsysToolsParameter {
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
-    if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
+    if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null && githubAPIURL != null) {
       return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL)
     }
     return undefined

@@ -8,6 +8,8 @@ export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIR_GAP_KEY)?.t
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim() || ''
 
+export const GITHUB_API_URL = getInput('github_api_url')?.trim() || ''
+
 // Polaris related inputs
 export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''
 export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_NAME_KEY)?.trim() || ''

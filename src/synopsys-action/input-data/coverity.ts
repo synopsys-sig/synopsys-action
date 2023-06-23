@@ -5,7 +5,6 @@ export interface Coverity {
   project: ProjectData
   github?: GithubData
   network: NetworkAirGap
-  environment: EnvironmentSacn
 }
 
 export interface ProjectData {
@@ -33,12 +32,4 @@ export interface CoverityData {
 
 export interface NetworkAirGap {
   airGap: boolean
-}
-
-export interface EnvironmentSacn {
-  scan: PullEnv
-}
-
-export interface PullEnv {
-  pull: boolean
 }

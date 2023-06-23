@@ -27,7 +27,7 @@ export class SynopsysBridge {
   constructor() {
     this.bridgeExecutablePath = ''
     this.synopsysBridgePath = ''
-    this.bridgeArtifactoryURL = 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/'
+    this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
     this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ')
   }
 
@@ -120,18 +120,23 @@ export class SynopsysBridge {
       // Automatically configure bridge if Bridge download url is provided
       let bridgeUrl = ''
       let bridgeVersion = ''
-      if (inputs.BRIDGE_DOWNLOAD_VERSION) {
+      info('inputs.BRIDGE_DOWNLOAD_URL:'.concat(inputs.BRIDGE_DOWNLOAD_URL))
+      if (inputs.BRIDGE_DOWNLOAD_URL) {
+        bridgeUrl = BRIDGE_DOWNLOAD_URL
+        info('inputs.BRIDGE_DOWNLOAD_URL:'.concat(bridgeUrl))
+        const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
+        info('versionInfo:'.concat(new Boolean(versionInfo).toString()))
+        if (versionInfo != null) {
+          bridgeVersion = versionInfo[1]
+          info('inputs.BRIDGE_DOWNLOAD_URL:bridgeVersion'.concat(new Boolean(bridgeVersion).toString()))
+        }
+        info('inputs.BRIDGE_DOWNLOAD_URL:'.concat(inputs.BRIDGE_DOWNLOAD_URL))
+      } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
           bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION
         } else {
           return Promise.reject(new Error('Provided bridge version not found in artifactory'))
-        }
-      } else if (inputs.BRIDGE_DOWNLOAD_URL) {
-        bridgeUrl = BRIDGE_DOWNLOAD_URL
-        const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
-        if (versionInfo != null) {
-          bridgeVersion = versionInfo[1]
         }
       } else {
         info('Checking for latest version of Bridge to download and configure')
