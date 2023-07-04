@@ -9,6 +9,7 @@ import {UploadResponse} from '@actions/artifact'
 
 beforeEach(() => {
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
+  process.env['GITHUB_API_URL'] = 'https://api.github.com'
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
   process.env['GITHUB_REF_NAME'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
@@ -141,6 +142,7 @@ test('Run blackduck flow with Fix pull request - run', async () => {
   Object.defineProperty(process.env, 'GITHUB_REPOSITORY', {value: 'owner/repo1'})
   Object.defineProperty(process.env, 'GITHUB_REF_NAME', {value: 'ref'})
   Object.defineProperty(process.env, 'GITHUB_REPOSITORY_OWNER', {value: 'owner'})
+  Object.defineProperty(process.env, 'GITHUB_API_URL', {value: 'https://api.github.com'})
 
   jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}

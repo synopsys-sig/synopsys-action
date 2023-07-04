@@ -7,6 +7,7 @@ let tempPath = '/temp'
 
 beforeAll(() => {
   process.env['GITHUB_TOKEN'] = 'token'
+  process.env['GITHUB_API_URL'] = 'https://api.github.com'
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'

@@ -136,6 +136,20 @@ describe('Blackduck flow contract', () => {
     }
   })
 
+  it('With blackduck.automation.fixpr true and empty github api url', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBlackduckParamsExcept(['NONE'])
+    process.env['GITHUB_API_URL'] = ''
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 1')
+      error(err)
+    }
+  })
+
   it('With blackduck.automation.fixpr true and empty github owner name', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockBlackduckParamsExcept(['NONE'])
@@ -206,6 +220,7 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   process.env['GITHUB_REF_NAME'] = 'synopsys-sig'
+  process.env['GITHUB_API_URL'] = 'https://api.github.com'
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
 }

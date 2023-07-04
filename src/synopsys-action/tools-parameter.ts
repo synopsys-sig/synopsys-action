@@ -229,6 +229,11 @@ export class SynopsysToolsParameter {
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
+    const githubApiUrl = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL]
+
+    if (githubApiUrl == null) {
+      throw new Error('Missing required github api url for fix pull request/automation comment')
+    }
 
     if (githubToken == null) {
       throw new Error('Missing required github token for fix pull request/automation comment')
@@ -240,13 +245,16 @@ export class SynopsysToolsParameter {
 
     // This condition is required as per ts-lint as these fields may have undefined as well
     if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber)
+      return this.setGithubData(githubApiUrl, githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber)
     }
     return undefined
   }
 
-  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string): GithubData {
+  private setGithubData(githubApiUrl: string, githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string): GithubData {
     const githubData: GithubData = {
+      api: {
+        url: githubApiUrl
+      },
       user: {
         token: githubToken
       },

@@ -31,6 +31,10 @@ export interface Owner {
   name: string
 }
 
+export interface Api {
+  url: string
+}
+
 export interface User {
   token: string
 }
@@ -48,6 +52,7 @@ export interface AutomationData {
 }
 
 export interface GithubData {
+  api: Api
   user: User
   repository: Repository
 }
@@ -58,5 +63,6 @@ export const FIXPR_ENVIRONMENT_VARIABLES = {
   GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
   GITHUB_REF: 'GITHUB_REF',
   GITHUB_REF_NAME: 'GITHUB_REF_NAME',
-  GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
+  GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
+  GITHUB_API_URL: 'GITHUB_API_URL'
 }
