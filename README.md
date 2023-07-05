@@ -186,7 +186,7 @@ jobs:
 | `blackduck_apiToken` | API token for Black Duck | Mandatory     |
 | `blackduck_install_directory` | Directory path to install Black Duck  | Optional     |
 | `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. <br> Supported values: true or false </br>| Optional     |
-| `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values : ALL|NONE|BLOCKER|CRITICAL|MAJOR|MINOR|OK|TRIVIAL|UNSPECIFIED. <br> Example: blackduck_scan_failure_severities: "BLOCKER|CRITICAL" </br>| Optional |
+| `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>| Optional |
 | `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. <br> Supported values: true or false </br>| Optional    |
 | `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled <br> Supported values: true or false </br>| Optional    |
 | `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example: github_token: ${{ secrets.GITHUB_TOKEN }} </br>| Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true |
