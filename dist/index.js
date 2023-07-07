@@ -577,7 +577,8 @@ class SynopsysBridge {
                 };
                 try {
                     if (inputs.ENABLE_NETWORK_AIR_GAP) {
-                        (0, core_1.info)('this.getBridgeDefaultPath():'.concat(this.getBridgeDefaultPath()));
+                        (0, core_1.info)('bridge default path :'.concat(this.getBridgeDefaultPath()));
+                        (0, core_1.info)('synopsys_bridge_path  :'.concat(inputs.SYNOPSYS_BRIDGE_PATH));
                         //const bridgepath = inputs.SYNOPSYS_BRIDGE_PATH.length == 0 ? this.getBridgeDefaultPath() : inputs.SYNOPSYS_BRIDGE_PATH
                         if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
                             this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH);
@@ -610,17 +611,12 @@ class SynopsysBridge {
                 // Automatically configure bridge if Bridge download url is provided
                 let bridgeUrl = '';
                 let bridgeVersion = '';
-                (0, core_1.info)('inputs.BRIDGE_DOWNLOAD_URL:'.concat(inputs.BRIDGE_DOWNLOAD_URL));
                 if (inputs.BRIDGE_DOWNLOAD_URL) {
                     bridgeUrl = inputs_1.BRIDGE_DOWNLOAD_URL;
-                    (0, core_1.info)('inputs.BRIDGE_DOWNLOAD_URL:'.concat(bridgeUrl));
                     const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*');
-                    (0, core_1.info)('versionInfo:'.concat(new Boolean(versionInfo).toString()));
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
-                        (0, core_1.info)('inputs.BRIDGE_DOWNLOAD_URL:bridgeVersion'.concat(new Boolean(bridgeVersion).toString()));
                     }
-                    (0, core_1.info)('inputs.BRIDGE_DOWNLOAD_URL:'.concat(inputs.BRIDGE_DOWNLOAD_URL));
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
                     if (yield this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {

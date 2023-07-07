@@ -44,5 +44,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           include_diagnostics: true
           diagnostics_retention_days: 90
-          network_air_gap: true
-          blackduck_automation_fixpr: true
