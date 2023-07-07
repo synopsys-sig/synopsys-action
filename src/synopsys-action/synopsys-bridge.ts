@@ -93,6 +93,7 @@ export class SynopsysBridge {
       try {
         if (inputs.ENABLE_NETWORK_AIR_GAP) {
           info('this.getBridgeDefaultPath():'.concat(this.getBridgeDefaultPath()))
+          //const bridgepath = inputs.SYNOPSYS_BRIDGE_PATH.length == 0 ? this.getBridgeDefaultPath() : inputs.SYNOPSYS_BRIDGE_PATH
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
             if (!fs.existsSync(this.bridgeExecutablePath)) {
