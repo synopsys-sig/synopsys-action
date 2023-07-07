@@ -18,7 +18,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-   runs-on: [ubuntu-latest]
+   runs-on: [lokesh]
 #    runs-on: [self-hosted, Windows, kiran]
 #    runs-on: [self-hosted, Linux, kishor-linux]
 
@@ -45,3 +45,4 @@ jobs:
           include_diagnostics: true
           diagnostics_retention_days: 90
           network_air_gap: true
+          blackduck_automation_fixpr: true
