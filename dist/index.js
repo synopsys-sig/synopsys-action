@@ -117,7 +117,6 @@ function run() {
             // Download bridge
             if (!inputs.ENABLE_NETWORK_AIR_GAP) {
                 yield sb.downloadBridge(tempDir);
-                throw console.error();
             }
             else {
                 (0, core_1.info)('Network air gap has been enabled so skipping download bridge.');
