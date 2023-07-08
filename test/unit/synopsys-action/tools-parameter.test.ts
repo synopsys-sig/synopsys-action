@@ -281,6 +281,7 @@ test('Enable Test getFormattedCommandForBlackduck Airgap: SUCCESS', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
+  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 

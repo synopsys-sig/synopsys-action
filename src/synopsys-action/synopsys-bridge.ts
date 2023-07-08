@@ -93,10 +93,12 @@ export class SynopsysBridge {
       try {
         if (inputs.ENABLE_NETWORK_AIR_GAP) {
           info('bridge default path :'.concat(this.getBridgeDefaultPath()))
-          info('synopsys_bridge_path  :'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
+          info('synopsys_bridge_path:'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
           //const bridgepath = inputs.SYNOPSYS_BRIDGE_PATH.length == 0 ? this.getBridgeDefaultPath() : inputs.SYNOPSYS_BRIDGE_PATH
+          info('inputs.SYNOPSYS_BRIDGE_PATH.length::'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
+            console.log("fs.existsSync(this.bridgeExecutablePath:".concat(new Boolean(fs.existsSync(this.bridgeExecutablePath)).toString()))
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
@@ -106,11 +108,12 @@ export class SynopsysBridge {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else {
-            throw new Error('Path does not exists')
+            throw new Error('Could not locate either bridge_default_Path or synopsys_bridge_path')
           }
         }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
+        console.log("here")
         throw errorObject
       }
     }
@@ -137,7 +140,7 @@ export class SynopsysBridge {
         }
       } else {
         info('Checking for latest version of Bridge to download and configure')
-        const latestVersion = await this.getLatestVersion()
+        const latestVersion = await this.getVersionFromLatestURL()
         bridgeUrl = this.getVersionUrl(latestVersion).trim()
         bridgeVersion = latestVersion
       }
@@ -226,7 +229,7 @@ export class SynopsysBridge {
         formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
       }
 
-      debug('Formatted command is - '.concat(formattedCommand))
+      //debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {
       const errorObject = e as Error
@@ -234,21 +237,6 @@ export class SynopsysBridge {
       debug(errorObject.stack === undefined ? '' : errorObject.stack.toString())
       return Promise.reject(errorObject.message)
     }
-  }
-
-  async getLatestVersion(): Promise<string> {
-    const versionArray: string[] = await this.getAllAvailableBridgeVersions()
-    let latestVersion = '0.0.0'
-
-    for (const version of versionArray) {
-      if (version.localeCompare(latestVersion, undefined, {numeric: true, sensitivity: 'base'}) === 1) {
-        latestVersion = version
-      }
-    }
-
-    info('Available latest version is - '.concat(latestVersion))
-
-    return latestVersion
   }
 
   private async getAllAvailableBridgeVersions(): Promise<string[]> {
@@ -307,6 +295,40 @@ export class SynopsysBridge {
       info('Error reading version file content: '.concat((e as Error).message))
     }
     return false
+  }
+
+  async getSynopsysBridgePath(): Promise<string> {
+    let synopsysBridgePath = inputs.SYNOPSYS_BRIDGE_PATH
+
+    if (!synopsysBridgePath) {
+      synopsysBridgePath = this.getBridgeDefaultPath()
+    }
+    return synopsysBridgePath
+  }
+
+  async getVersionFromLatestURL(): Promise<string> {
+    try {
+      const latestVersionsUrl = constants.LATEST_GLOBAL_VERSION_URL
+      // //this.bridgeArtifactoryURL.concat('latest/versions.txt')
+      const httpClient = new HttpClient('')
+      const httpResponse = await httpClient.get(latestVersionsUrl, {Accept: 'text/html'})
+      if (httpResponse.message.statusCode === 200) {
+        const htmlResponse = (await httpResponse.readBody()).trim()
+        info('htmlResponse:'.concat(htmlResponse))
+        const lines = htmlResponse.split('\n')
+        for (const line of lines) {
+          if (line.includes('Synopsys Bridge Package')) {
+            const newerVersion = line.split(':')[1].trim()
+            return newerVersion
+          }
+        }
+      } else {
+        error('Unable to locate version url')
+      }
+    } catch (e) {
+      info('Error reading version file content: '.concat((e as Error).message))
+    }
+    return ''
   }
 
   async setBridgeExecutablePath(osName: string, filePath: string): Promise<string> {
