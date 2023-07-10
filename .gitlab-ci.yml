@@ -18,7 +18,6 @@ stages:
   - build
   - contract_test
   - coverage_report
-  - versioning
 #  - Check_dist
 #  - changelog
   - analysis
@@ -54,26 +53,15 @@ code_coverage_job:
 #    - .check_dist
 #  stage: Check_dist
 
-##### MASTER COMMIT PIPELINE #####
-versioning_job:
-  extends:
-    - .version # Triggers git semver, job details will be fetched from altair build common repository
-    - .retry
-  stage: versioning
-  tags:
-    - linux64-docker
-  dependencies:
-    - build_job
-
 .export_sbom_variables:
   before_script:
-    - export EXT_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+    - export PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
     - export ARTIFACTORY_UPLOAD_REPO=1
     - export SBOM_ART_TOKEN_VAULT_PATH=sbom/integrations/github-actions
     - export PRODUCT=Integrations
     - export GENERATE_CONFIGURATION_FILE=1
-    - export GENERATION_OPTIONS="--entry integrations/synopsys-action/synopsys-action-ci-cd:synopsys-action-ci-cd-$EXT_VERSION"
-    - export PRODUCT_ADDON_SBOM_OPTIONS="--output-zipfile synopsys-ci-cd-actions-$EXT_VERSION-.zip"
+    - export GENERATION_OPTIONS="--entry integrations/synopsys-action/synopsys-action-ci-cd:synopsys-action-ci-cd-$PACKAGE_VERSION"
+    - export PRODUCT_ADDON_SBOM_OPTIONS="--output-zipfile synopsys-action-ci-cd-$PACKAGE_VERSION.zip"
 
 generate_sbom:
   extends:
@@ -105,7 +93,7 @@ pop_blackduck:
       apt -y update
       apt -y install make python3 python3-pip
       pip install blackduck requests
-      export RELEASE_VERSION=$(cat version.txt)
+      export RELEASE_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
 
 #changelog_job:
 #  extends:
