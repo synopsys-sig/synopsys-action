@@ -49,7 +49,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
-          coverity_url: ${{ vars.COVERITY_URL }}
+          coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ github.event.repository.name }}

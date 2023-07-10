@@ -62,7 +62,7 @@ jobs:
       - name: Polaris Scan
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
-          polaris_serverUrl: ${{ vars.POLARIS_SERVERURL }}
+          polaris_serverUrl: ${{ vsecretsars.POLARIS_SERVERURL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESSTOKEN }}
           polaris_application_name: ${{ github.event.repository.name }}
           polaris_project_name: ${{ github.event.repository.name }}
@@ -144,7 +144,7 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
-          coverity_url: ${{ vars.COVERITY_URL }}
+          coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ github.event.repository.name }}
@@ -230,7 +230,7 @@ jobs:
         DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
         DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
-        blackduck_url: ${{ vars.BLACKDUCK_URL }}
+        blackduck_url: ${{ secrets.BLACKDUCK_URL }}
         blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
         blackduck_scan_full: true
         blackduck_scan_failure_severities: 'BLOCKER'
@@ -249,7 +249,7 @@ jobs:
         DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
         DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
-        blackduck_url: ${{ vars.BLACKDUCK_URL }}
+        blackduck_url: ${{ secrets.BLACKDUCK_URL }}
         blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
         blackduck_scan_full: false
         blackduck_scan_failure_severities: 'BLOCKER'
