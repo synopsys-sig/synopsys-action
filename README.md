@@ -30,35 +30,50 @@ applications, projects and entitlements are set in your Polaris environment.
 At this time, Polaris does not support the analysis of pull requests. We recommend running the Synopsys Action on
 pushes to main branches.
 
-We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets.
+We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
+
+Synopsys Action is the recommended solution for integrating Polaris into a GitHub workflow. Here's an example workflow for Polaris scan using the Synopsys Action:
 
 ```yaml
-name: Synopsys Security Testing
 
+name: CI-Polaris
 on:
   push:
-    # At this time, it is recommended to run Polaris only on pushes to main branches
-    # Pull request analysis will be supported by Polaris in the future
     branches: [ master, main ]
-
-  pull_request:
-    branches: [ master, main ]
-
+  workflow_dispatch:  
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [ ubuntu-latest ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Synopsys Action
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.x 
+
+      - name: Install Dependencies
+        run: nom ci
+
+      - name: Build Project
+        run: npm run build --if-present
+        
+      - name: Polaris Scan
+        if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
-          polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
-          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "testapp1"
-          polaris_project_name: "testproj1"
-          polaris_assessment_types: "SCA,SAST"
+          polaris_serverUrl: ${{ vars.POLARIS_SERVERURL }}
+          polaris_accessToken: ${{ secrets.POLARIS_ACCESSTOKEN }}
+          polaris_application_name: ${{ github.event.repository.name }}
+          polaris_project_name: ${{ github.event.repository.name }}
+          polaris_assessment_types: "SAST,SCA"
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true
+
 ```
+
+**Example Workflow:** https://github.com/synopsys-sig/synopsys-action/blob/v1.2.0/.github/workflows/polaris.yml
 
 |Input Parameter            |Description                                                       |Mandatory / Optional | 
 |----------------------------|-------------------------------------------------------------------|--------------------|
@@ -83,27 +98,39 @@ A future release of the action will provide code review feedback for newly intro
 Before you can run a pipeline using the Synopsys Action and Coverity, you must make sure the appropriate
 project and stream are set in your Coverity Connect server environment.
 
-We recommend configuring sensitive data like username and password, and even URL, using GitHub secrets.
+We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
+
+Synopsys Action is the recommended solution for integrating Coverity CNC into a GitHub workflow. Here's an example workflow for Coverity scan using the Synopsys Action:
 
 ```yaml
 
-name: Synopsys Security Testing
-
+name: CI-Coverity
 on:
   push:
     branches: [ master, main ]
-
   pull_request:
     branches: [ master, main ]
-
+  workflow_dispatch:  
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: [ ubuntu-latest ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.x 
+
+      - name: Install Dependencies
+        run: nom ci
+
+      - name: Build Project
+        run: npm run build --if-present
         
-      - name: Synopsys Action
+      - name: Coverity Full Scan
+        if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
           coverity_url: ${{ secrets.COVERITY_URL }}
@@ -111,16 +138,26 @@ jobs:
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ github.event.repository.name }}
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true  
           
-          #Optional- you may specify the ID number of a saved view to apply as a "break the build" policy.
-          #coverity_policy_view: 100001
-          
-          #Optional- To enable feedback from Coverity security testing as pull request comment
-          #coverity_automation_prcomment: true
-          #Mandatory if coverity_automation_prcomment is set to true
-          #github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Coverity PR Scan
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.2.0
+        with:
+          coverity_url: ${{ vars.COVERITY_URL }}
+          coverity_user: ${{ secrets.COVERITY_USER }}
+          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
+          coverity_project_name: ${{ github.event.repository.name }}
+          coverity_stream_name: ${{ github.event.repository.name }}-${{ github.base_ref }}
+          ### Below configuration is used to enable feedback from Coverity security testing as pull request comment
+          coverity_automation_prcomment: true
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when coverity_automation_prcomment is set to 'true'   
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true  
         
 ```
+**Example Workflow:** https://github.com/synopsys-sig/synopsys-action/blob/main/.github/workflows/coverity.yml
 
 |Input Parameter   |Description                           |Mandatory / Optional |
 |-------------------|---------------------------------------|----------|
@@ -136,49 +173,95 @@ jobs:
 
           
 ## Synopsys GitHub Action - Black Duck
-The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
+
+Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
 
 No preparation is typically needed before running the pipeline. In the default Black Duck Hub permission model,
 projects and project versions are created on the fly and as needed.
 
-On pushes, a full "intelligent" Black Duck scan will be run. On pull requests, a "rapid" ephemeral scan will be run.
+The action will download the Bridge and Detect CLIs, run a SCA scan, and optionally break the build.
+
+On pushes, a full **Intelligent** Black Duck scan will be run. On pull requests, a **Rapid** ephemeral scan will be run.
 A future release of the action will provide code review feedback for newly introduced findings to the pull request.
 
-We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets.
+We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
 
+Synopsys Action is the recommended solution for integrating Black Duck into a GitHub workflow. Here's an example workflow for Black Duck scan using the Synopsys Action:
 
 ```yaml
 
-name: Synopsys Security Testing
+name: CI-BlackDuck
 
 on:
   push:
     branches: [ master, main ]
-
   pull_request:
     branches: [ master, main ]
-
+  workflow_dispatch:  
 jobs:
   build:
-    runs-on: [self-hosted]
+    runs-on: [ ubuntu-latest ]
     steps:
-      - name: Checkout
+      - name: Checkout Source
         uses: actions/checkout@v3
-      - name: Synopsys Action
-        uses: synopsys-sig/synopsys-action@v1.2.0
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
         with:
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}  
-          
-          #Optional- To enable feedback from Black Duck security testing as pull request comment
-          #blackduck_automation_prcomment: true
-          #Optional- To enable autoamtic fix pull request creation if vulnerabilities are reported
-          #blackduck_automation_fixpr: true
-          #Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true
-          #github_token: ${{ secrets.GITHUB_TOKEN }}
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3.4.1
+        with:
+          node-version: 16.x 
+
+      - name: Install Dependencies
+        run: nom ci
+
+      - name: Build Project
+        run: npm run build --if-present
+
+      - name: Black Duck Full Scan
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.2.0
+        env:
+        DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+        DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+        DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+        DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
+        with:
+        blackduck_url: ${{ vars.BLACKDUCK_URL }}
+        blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+        blackduck_scan_full: true
+        blackduck_scan_failure_severities: 'BLOCKER'
+        ### Uncomment below configuration to enable autoamtic fix pull request creation if vulnerabilities are reported
+        # blackduck_automation_fixpr: true 
+        # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_fixpr is set to 'true'
+        ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+        # include_diagnostics: true  
+
+      - name: Black Duck PR Scan
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.2.0
+        env:
+        DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+        DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+        DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+        DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
+        with:
+        blackduck_url: ${{ vars.BLACKDUCK_URL }}
+        blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+        blackduck_scan_full: false
+        blackduck_scan_failure_severities: 'BLOCKER'
+        ### Uncomment below configuration to enable feedback from Black Duck security testing as pull request comment
+        # blackduck_automation_prcomment: true
+        # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
+        ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+        # include_diagnostics: true
 
 ```
-
+**Example Workflow:** https://github.com/synopsys-sig/synopsys-action/blob/v1.2.0/.github/workflows/blackduck.yml
 
 |Input Parameter |Description | Mandatory / Optional |
 |-----------------|-------------|---------------------|
@@ -192,7 +275,7 @@ jobs:
 | `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example: github_token: ${{ secrets.GITHUB_TOKEN }} </br>| Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true |
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
-can be passed through environment variables. This is a standard capability of Detect. For example, if you
+can be passed through environment variables. This is a standard capability of Detect. </br>For example, if you
 wanted to only report newly found policy violations on rapid scans, you would normally use the command line 
 `--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the 
 `DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
