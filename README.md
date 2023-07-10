@@ -60,7 +60,6 @@ jobs:
         run: npm run build --if-present
         
       - name: Polaris Scan
-        if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
           polaris_serverUrl: ${{ vars.POLARIS_SERVERURL }}
@@ -152,7 +151,7 @@ jobs:
           coverity_stream_name: ${{ github.event.repository.name }}-${{ github.base_ref }}
           ### Below configuration is used to enable feedback from Coverity security testing as pull request comment
           coverity_automation_prcomment: true
-          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when coverity_automation_prcomment is set to 'true'   
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when coverity_automation_prcomment is set to 'true'   
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true  
         
