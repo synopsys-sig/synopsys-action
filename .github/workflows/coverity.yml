@@ -44,7 +44,7 @@ jobs:
           coverity_local: true
           # Mandatory for windows hosted environment
           #coverity_install_directory: "/root"
-          #bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
+          bridge_download_url: 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/synopsys-bridge/0.3.39/synopsys-bridge-0.3.39-linux64.zip'
           include_diagnostics: true
 
           #coverity_automation_prcomment: true
