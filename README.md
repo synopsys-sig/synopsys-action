@@ -22,6 +22,16 @@ These workflows will:
 - Run corresponding Synopsys Bridge commands using the specified parameters
 - Synopsys solution functionality is invoked directly by the Synopsys Bridge, and indirectly by the Synopsys Action
 
+# Prerequisites
+
+Before configuring Synopsys Action into your workflow, note the following prerequisites:
+
+- GitHub Actions must be enabled for a repository in the organization's settings in order for required workflows to run. 
+- **github_token** is required as input when running Black Duck Fix PR, Black Duck/Coverity PR Comment. Token can be github specified **secrets.GITHUB_TOKEN** with required workflow read & write permissions. **(GitHub → Project → Settings → Actions → General → Workflow Permissions)** No need to set this in secret as it will be picked up by GitHub to use in your workflow.<br/>
+- If you need a token that requires permissions that aren't available in the **secrets.GITHUB_TOKEN**, you can create a GitHub App and generate an installation access token within your workflow or you can create a Personal Access Token(PAT) and store it as secret. For more information, refer [ Granting Additional Permissions ](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#granting-additional-permissions) 
+- Sensitive data such as access tokens, user names, passwords and even URLs must be configured using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
+
+
 ## Synopsys GitHub Action - Polaris
 
 Before you can run a pipeline using the Synopsys Action and Polaris, you must make sure the appropriate
@@ -29,8 +39,6 @@ applications, projects and entitlements are set in your Polaris environment.
 
 At this time, Polaris does not support the analysis of pull requests. We recommend running the Synopsys Action on
 pushes to main branches.
-
-We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
 
 Synopsys Action is the recommended solution for integrating Polaris into a GitHub workflow. Here's an example workflow for Polaris scan using the Synopsys Action:
 
@@ -54,7 +62,7 @@ jobs:
           node-version: 16.x 
 
       - name: Install Dependencies
-        run: nom ci
+        run: npm ci
 
       - name: Build Project
         run: npm run build --if-present
@@ -97,8 +105,6 @@ A future release of the action will provide code review feedback for newly intro
 Before you can run a pipeline using the Synopsys Action and Coverity, you must make sure the appropriate
 project and stream are set in your Coverity Connect server environment.
 
-We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
-
 Synopsys Action is the recommended solution for integrating Coverity CNC into a GitHub workflow. Here's an example workflow for Coverity scan using the Synopsys Action:
 
 ```yaml
@@ -123,7 +129,7 @@ jobs:
           node-version: 16.x 
 
       - name: Install Dependencies
-        run: nom ci
+        run: npm ci
 
       - name: Build Project
         run: npm run build --if-present
@@ -168,8 +174,6 @@ jobs:
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
-| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if  coverity_automation_prcomment is set true. |
-
           
 ## Synopsys GitHub Action - Black Duck
 
@@ -182,8 +186,6 @@ The action will download the Bridge and Detect CLIs, run a SCA scan, and optiona
 
 On pushes, a full **Intelligent** Black Duck scan will be run. On pull requests, a **Rapid** ephemeral scan will be run.
 A future release of the action will provide code review feedback for newly introduced findings to the pull request.
-
-We recommend configuring sensitive data like access tokens and even URLs, using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
 
 Synopsys Action is the recommended solution for integrating Black Duck into a GitHub workflow. Here's an example workflow for Black Duck scan using the Synopsys Action:
 
@@ -216,7 +218,7 @@ jobs:
           node-version: 16.x 
 
       - name: Install Dependencies
-        run: nom ci
+        run: npm ci
 
       - name: Build Project
         run: npm run build --if-present
@@ -224,6 +226,7 @@ jobs:
       - name: Black Duck Full Scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
+        ### Use below configurations to set specific detect environment varibales
         env:
         DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
         DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
@@ -243,6 +246,7 @@ jobs:
       - name: Black Duck PR Scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
+        ### Use below configurations to set specific detect environment varibales
         env:
         DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
         DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
@@ -254,8 +258,8 @@ jobs:
         blackduck_scan_full: false
         blackduck_scan_failure_severities: 'BLOCKER'
         ### Uncomment below configuration to enable feedback from Black Duck security testing as pull request comment
-        # blackduck_automation_prcomment: true
-        # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
+        blackduck_automation_prcomment: true
+        github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
         ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
         # include_diagnostics: true
 
@@ -270,8 +274,8 @@ jobs:
 | `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. <br> Supported values: true or false </br>| Optional     |
 | `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>| Optional |
 | `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. <br> Supported values: true or false </br>| Optional    |
-| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled <br> Supported values: true or false </br>| Optional    |
-| `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example: github_token: ${{ secrets.GITHUB_TOKEN }} </br>| Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true |
+| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled. <br> Black Duck automation fix pull request is currently supported for npm projects only. <br> Supported values: true or false </br>| Optional    |
+| `github_token` | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set true <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} |
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
 can be passed through environment variables. This is a standard capability of Detect. </br>For example, if you
@@ -279,14 +283,6 @@ wanted to only report newly found policy violations on rapid scans, you would no
 `--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the 
 `DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
 GitHub workflow.
-
-**Note about Fix Pull requests creation:** <br/>
-* **blackduck_automation_fixpr:**- By default fix pull request creation will be disabled (i.e. Create
-fix pull requests if vulnerabilities are reported). To enable this feature, set blackduck_automation_fixpr
-as true.<br/> 
-* **github_token:** It is mandatory to pass github_token parameter with required permissions. The token can be github
-specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
-  * Note - If blackduck_automation_fixpr is set to false, github_token is not required
   
 * **As per observation, due to rate limit restriction of github rest api calls, we may
 observe fewer pull requests to be created.**
