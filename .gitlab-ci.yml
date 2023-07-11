@@ -84,8 +84,6 @@ pop_blackduck:
   image: gcr.io/snps-polaris-ops-prod/altair-maven-build-jdk11:1.0.43
   variables:
     MAVEN_OPTS: -Dmaven.repo.local=${CI_PROJECT_DIR}/.m2
-  dependencies:
-    - versioning_job
   extends:
     - .new_pop_blackduck
   before_script:
