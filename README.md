@@ -28,7 +28,7 @@ Before configuring Synopsys Action into your workflow, note the following prereq
 
 - GitHub Actions must be enabled for a repository in the organization's settings in order for required workflows to run. 
 - **github_token** is required as input when running Black Duck Fix PR, Black Duck/Coverity PR Comment. Token can be github specified **secrets.GITHUB_TOKEN** with required workflow read & write permissions. **(GitHub → Project → Settings → Actions → General → Workflow Permissions)** No need to set this in secret as it will be picked up by GitHub to use in your workflow.<br/>
-- If you need a token that requires permissions that aren't available in the **secrets.GITHUB_TOKEN**, you can create a GitHub App and generate an installation access token within your workflow or you can create a Personal Access Token(PAT) and store it as secret. For more information, refer [ Granting Additional Permissions ](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#granting-additional-permissions) 
+- If you need a token that requires permissions that aren't available in the **secrets.GITHUB_TOKEN**, you can create a GitHub App and generate an installation access token within your workflow or you can create a Personal Access Token(PAT) and store it as secret. For more information, refer [ Granting Additional Permissions ](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#granting-additional-permissions) <br/> PAT must have **repo** scope to perform Black Duck Fix PR, Black Duck/Coverity PR Comment.
 - Sensitive data such as access tokens, user names, passwords and even URLs must be configured using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
 
 
