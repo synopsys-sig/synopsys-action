@@ -418,3 +418,69 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Windows', () 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: ''})
 })
+
+
+test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC invalid path,  SYNOPSYS_BRIDGE_PATH not empty ', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'darwin'
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('/user/somepath')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockReturnValueOnce(false)
+
+  util.checkIfPathExists = jest.fn()
+  util.checkIfPathExists.mockResolvedValueOnce(true)
+
+  const response = sb.executeBridgeCommand('command', '/Users')
+  expect(response).rejects.toThrowError()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: ''})
+})
+
+
+test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC invalid path,  SYNOPSYS_BRIDGE_PATH if empty ', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'darwin'
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockReturnValueOnce(true)
+
+  util.checkIfPathExists = jest.fn()
+  util.checkIfPathExists.mockResolvedValueOnce(true)
+
+  const response = sb.executeBridgeCommand('command', '/Users')
+  expect(response).rejects.toThrowError()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: ''})
+})
