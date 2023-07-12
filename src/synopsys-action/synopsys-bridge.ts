@@ -98,15 +98,15 @@ export class SynopsysBridge {
           info('inputs.SYNOPSYS_BRIDGE_PATH.length::'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
-            if (!fs.existsSync(this.bridgeExecutablePath)) {
+            if (!checkIfPathExists(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
           } else {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
-            if (!fs.existsSync(this.bridgeExecutablePath)) {
+            if (!checkIfPathExists(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
-          } 
+          }
         }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
@@ -304,13 +304,11 @@ export class SynopsysBridge {
 
   async getVersionFromLatestURL(): Promise<string> {
     try {
-      const latestVersionsUrl = constants.LATEST_GLOBAL_VERSION_URL
-      // //this.bridgeArtifactoryURL.concat('latest/versions.txt')
+      const latestVersionsUrl = this.bridgeArtifactoryURL.concat('latest/versions.txt')
       const httpClient = new HttpClient('')
       const httpResponse = await httpClient.get(latestVersionsUrl, {Accept: 'text/html'})
       if (httpResponse.message.statusCode === 200) {
         const htmlResponse = (await httpResponse.readBody()).trim()
-        info('htmlResponse:'.concat(htmlResponse))
         const lines = htmlResponse.split('\n')
         for (const line of lines) {
           if (line.includes('Synopsys Bridge Package')) {

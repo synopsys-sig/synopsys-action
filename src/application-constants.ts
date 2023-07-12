@@ -44,7 +44,6 @@ export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
 export const NETWORK_AIR_GAP_KEY = 'network_air_gap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
 
-export const LATEST_GLOBAL_VERSION_URL = 'https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/bridge/latest/version.txt'
 // Bridge Exit Codes
 export let EXIT_CODE_MAP = new Map<string, string>([
   ['0', 'Bridge execution successfully completed'],
