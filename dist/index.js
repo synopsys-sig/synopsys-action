@@ -627,6 +627,9 @@ class SynopsysBridge {
                 else {
                     (0, core_1.info)('Checking for latest version of Bridge to download and configure');
                     const latestVersion = yield this.getVersionFromLatestURL();
+                    if (latestVersion === '') {
+                        return Promise.reject(new Error('Unable to find the latest version'));
+                    }
                     bridgeUrl = this.getVersionUrl(latestVersion).trim();
                     bridgeVersion = latestVersion;
                 }
