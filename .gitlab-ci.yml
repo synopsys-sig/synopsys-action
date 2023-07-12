@@ -60,7 +60,7 @@ code_coverage_job:
     - export SBOM_ART_TOKEN_VAULT_PATH=sbom/integrations/github-actions
     - export PRODUCT=Integrations
     - export GENERATE_CONFIGURATION_FILE=1
-    - export GENERATION_OPTIONS="--entry integrations/synopsys-action/synopsys-action-ci-cd:synopsys-action-ci-cd-$PACKAGE_VERSION"
+    - export GENERATION_OPTIONS="--entry integrations/mirrored-repos/synopsys-action-ci-cd:synopsys-action-ci-cd-$PACKAGE_VERSION"
     - export PRODUCT_ADDON_SBOM_OPTIONS="--output-zipfile synopsys-action-ci-cd-$PACKAGE_VERSION.zip"
 
 generate_sbom:
