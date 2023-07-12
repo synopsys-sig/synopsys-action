@@ -151,7 +151,6 @@ test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_PATH if empty', () => {
   expect(resp).resolves.toContain('/Users/user')
 })
 
-
 test('Validate bridge URL Linux', () => {
   Object.defineProperty(process, 'platform', {
     value: 'linux'
@@ -286,8 +285,6 @@ test('Test version file not exist failure', () => {
   expect(response).resolves.toEqual(false)
 })
 
-
-
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
   const sb = new SynopsysBridge()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
@@ -320,8 +317,6 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: ''})
 })
-
-
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without url and version', () => {
   const sb = new SynopsysBridge()
@@ -357,8 +352,6 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without u
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: ''})
 })
-
-
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Linux', () => {
   const sb = new SynopsysBridge()
@@ -412,8 +405,6 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Windows', () 
 
   ex.exec = jest.fn()
   ex.exec.mockReturnValueOnce(0)
-
- 
 
   fs.existsSync = jest.fn()
   fs.existsSync.mockResolvedValue(true)

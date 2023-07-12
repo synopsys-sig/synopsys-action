@@ -98,18 +98,15 @@ export class SynopsysBridge {
           info('inputs.SYNOPSYS_BRIDGE_PATH.length::'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
           if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
-            console.log("fs.existsSync(this.bridgeExecutablePath:".concat(new Boolean(fs.existsSync(this.bridgeExecutablePath)).toString()))
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
-          } else if (inputs.SYNOPSYS_BRIDGE_PATH.length === 0 && this.getBridgeDefaultPath().length !== 0 && fs.existsSync(this.getBridgeDefaultPath())) {
+          } else {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
             if (!fs.existsSync(this.bridgeExecutablePath)) {
               throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
             }
-          } else {
-            throw new Error('Could not locate either bridge_default_Path or synopsys_bridge_path')
-          }
+          } 
         }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
@@ -336,7 +333,7 @@ export class SynopsysBridge {
     } else {
       this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
     }
-    info('this.bridgeExecutablePath'.concat(this.bridgeExecutablePath))
+    debug('bridgeExecutablePath'.concat(this.bridgeExecutablePath))
     return this.bridgeExecutablePath
   }
 }
