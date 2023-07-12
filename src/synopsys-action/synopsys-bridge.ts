@@ -113,7 +113,6 @@ export class SynopsysBridge {
         }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
-        console.log("here")
         throw errorObject
       }
     }

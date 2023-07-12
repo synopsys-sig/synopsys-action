@@ -128,6 +128,30 @@ test('Validate bridge URL MAC', () => {
   expect(resp).toBeTruthy()
 })
 
+test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_PATH not empty', () => {
+  let sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {
+    value: '/users'
+  })
+
+  const resp = sb.getSynopsysBridgePath()
+  expect(resp).resolves.toContain('users')
+})
+
+test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_PATH if empty', () => {
+  let sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {
+    value: ''
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/Users/user')
+
+  const resp = sb.getSynopsysBridgePath()
+  expect(resp).resolves.toContain('/Users/user')
+})
+
+
 test('Validate bridge URL Linux', () => {
   Object.defineProperty(process, 'platform', {
     value: 'linux'

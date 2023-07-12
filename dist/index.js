@@ -601,7 +601,6 @@ class SynopsysBridge {
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
                 catch (errorObject) {
-                    console.log("here");
                     throw errorObject;
                 }
             }
