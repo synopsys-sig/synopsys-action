@@ -102,7 +102,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Synopsys Action
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
@@ -111,15 +111,15 @@ jobs:
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ github.event.repository.name }}
-          
+
           #Optional- you may specify the ID number of a saved view to apply as a "break the build" policy.
           #coverity_policy_view: 100001
-          
+
           #Optional- To enable feedback from Coverity security testing as pull request comment
           #coverity_automation_prcomment: true
           #Mandatory if coverity_automation_prcomment is set to true
           #github_token: ${{ secrets.GITHUB_TOKEN }}
-        
+
 ```
 
 |Input Parameter   |Description                           |Mandatory / Optional |
@@ -134,7 +134,7 @@ jobs:
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
 | `github_token` | It is mandatory to pass github_token parameter with required permissions. The token can be github specified secrets.GITHUB_TOKEN with required permissions. <br> Example:  github_token: ${{ secrets.GITHUB_TOKEN }}   </br>      | Mandatory if  coverity_automation_prcomment is set true. |
 
-          
+
 ## Synopsys GitHub Action - Black Duck
 The Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
 
@@ -168,8 +168,8 @@ jobs:
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}  
-          
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+
           #Optional- To enable feedback from Black Duck security testing as pull request comment
           #blackduck_automation_prcomment: true
           #Optional- To enable autoamtic fix pull request creation if vulnerabilities are reported
@@ -193,21 +193,21 @@ jobs:
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
 can be passed through environment variables. This is a standard capability of Detect. For example, if you
-wanted to only report newly found policy violations on rapid scans, you would normally use the command line 
-`--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the 
+wanted to only report newly found policy violations on rapid scans, you would normally use the command line
+`--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the
 `DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
 GitHub workflow.
 
 **Note about Fix Pull requests creation:** <br/>
 * **blackduck_automation_fixpr:**- By default fix pull request creation will be disabled (i.e. Create
-fix pull requests if vulnerabilities are reported). To enable this feature, set blackduck_automation_fixpr
-as true.<br/> 
+  fix pull requests if vulnerabilities are reported). To enable this feature, set blackduck_automation_fixpr
+  as true.<br/>
 * **github_token:** It is mandatory to pass github_token parameter with required permissions. The token can be github
-specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
+  specified secrets.GITHUB_TOKEN with required permissions. For more information on Github token see [Github Doc](https://docs.github.com/en/actions/security-guides/automatic-token-authentication) <br/>
   * Note - If blackduck_automation_fixpr is set to false, github_token is not required
-  
+
 * **As per observation, due to rate limit restriction of github rest api calls, we may
-observe fewer pull requests to be created.**
+  observe fewer pull requests to be created.**
 
 
 ## Additional Parameters
@@ -219,7 +219,7 @@ observe fewer pull requests to be created.**
 | `include_diagnostics`      | All diagnostics files will be available to download when 'true' passed, Additionally **diagnostics_retention_days** can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).               |
 
 Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge
- 
+
 
 # Synopsys Bridge Setup
 
