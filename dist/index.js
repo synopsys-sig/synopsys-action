@@ -299,7 +299,7 @@ function getRemoteFile(destFilePath, url) {
         if (url == null || url.length === 0) {
             throw new Error('URL cannot be empty');
         }
-        if (!(0, validators_1.validateBridgeUrl)(url)) {
+        if (!url.includes('latest') && !(0, validators_1.validateBridgeUrl)(url)) {
             throw new Error('Invalid URL');
         }
         try {
@@ -513,7 +513,8 @@ class SynopsysBridge {
         this.bridgeExecutablePath = '';
         this.synopsysBridgePath = '';
         this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/';
-        this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ');
+        this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip ');
+        this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip ');
     }
     getBridgeDefaultPath() {
         let bridgeDefaultPath = '';
@@ -628,10 +629,13 @@ class SynopsysBridge {
                     (0, core_1.info)('Checking for latest version of Bridge to download and configure');
                     const latestVersion = yield this.getVersionFromLatestURL();
                     if (latestVersion === '') {
-                        return Promise.reject(new Error('Unable to find the latest version'));
+                        bridgeUrl = this.getLatestVersionUrl();
+                        bridgeVersion = 'latest';
                     }
-                    bridgeUrl = this.getVersionUrl(latestVersion).trim();
-                    bridgeVersion = latestVersion;
+                    else {
+                        bridgeUrl = this.getVersionUrl(latestVersion).trim();
+                        bridgeVersion = latestVersion;
+                    }
                 }
                 if ((yield this.checkIfSynopsysBridgeExists(bridgeVersion)) === false) {
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
@@ -761,6 +765,20 @@ class SynopsysBridge {
         const osName = process.platform;
         let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version);
         bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version);
+        if (osName === 'darwin') {
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM);
+        }
+        else if (osName === 'linux') {
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM);
+        }
+        else if (osName === 'win32') {
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.WINDOWS_PLATFORM);
+        }
+        return bridgeDownloadUrl;
+    }
+    getLatestVersionUrl() {
+        const osName = process.platform;
+        let bridgeDownloadUrl = this.bridgeUrlLatestPattern;
         if (osName === 'darwin') {
             bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM);
         }

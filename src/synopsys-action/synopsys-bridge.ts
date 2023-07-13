@@ -20,6 +20,7 @@ export class SynopsysBridge {
   synopsysBridgePath: string
   bridgeArtifactoryURL: string
   bridgeUrlPattern: string
+  bridgeUrlLatestPattern: string
   WINDOWS_PLATFORM = 'win64'
   LINUX_PLATFORM = 'linux64'
   MAC_PLATFORM = 'macosx'
@@ -28,7 +29,8 @@ export class SynopsysBridge {
     this.bridgeExecutablePath = ''
     this.synopsysBridgePath = ''
     this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
-    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ')
+    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip ')
+    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip ')
   }
 
   private getBridgeDefaultPath(): string {
@@ -138,10 +140,12 @@ export class SynopsysBridge {
         info('Checking for latest version of Bridge to download and configure')
         const latestVersion = await this.getVersionFromLatestURL()
         if (latestVersion === '') {
-          return Promise.reject(new Error('Unable to find the latest version'))
+          bridgeUrl = this.getLatestVersionUrl()
+          bridgeVersion = 'latest'
+        } else {
+          bridgeUrl = this.getVersionUrl(latestVersion).trim()
+          bridgeVersion = latestVersion
         }
-        bridgeUrl = this.getVersionUrl(latestVersion).trim()
-        bridgeVersion = latestVersion
       }
 
       if ((await this.checkIfSynopsysBridgeExists(bridgeVersion)) === false) {
@@ -275,6 +279,20 @@ export class SynopsysBridge {
 
     let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version)
     bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version)
+    if (osName === 'darwin') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM)
+    } else if (osName === 'linux') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
+    } else if (osName === 'win32') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.WINDOWS_PLATFORM)
+    }
+
+    return bridgeDownloadUrl
+  }
+
+  getLatestVersionUrl(): string {
+    const osName = process.platform
+    let bridgeDownloadUrl = this.bridgeUrlLatestPattern
     if (osName === 'darwin') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM)
     } else if (osName === 'linux') {
