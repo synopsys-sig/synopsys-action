@@ -1,5 +1,5 @@
 import {exec, ExecOptions} from '@actions/exec'
-import {BRIDGE_DOWNLOAD_URL, SYNOPSYS_BRIDGE_PATH} from './inputs'
+import {BRIDGE_DOWNLOAD_URL, SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY} from './inputs'
 import {debug, error, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
@@ -28,7 +28,7 @@ export class SynopsysBridge {
   constructor() {
     this.bridgeExecutablePath = ''
     this.synopsysBridgePath = ''
-    this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
+    this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL
     this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip ')
     this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip ')
   }
@@ -49,7 +49,7 @@ export class SynopsysBridge {
   }
 
   async checkIfSynopsysBridgeExists(bridgeVersion: string): Promise<boolean> {
-    this.synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
+    this.synopsysBridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
     const osName = process.platform
     let versionFilePath = ''
     let versionFileExists = false
@@ -94,19 +94,15 @@ export class SynopsysBridge {
       }
       try {
         if (inputs.ENABLE_NETWORK_AIR_GAP) {
-          info('bridge default path :'.concat(this.getBridgeDefaultPath()))
-          info('synopsys_bridge_path:'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
-          //const bridgepath = inputs.SYNOPSYS_BRIDGE_PATH.length == 0 ? this.getBridgeDefaultPath() : inputs.SYNOPSYS_BRIDGE_PATH
-          info('inputs.SYNOPSYS_BRIDGE_PATH.length::'.concat(inputs.SYNOPSYS_BRIDGE_PATH))
-          if (inputs.SYNOPSYS_BRIDGE_PATH.length !== 0) {
-            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_PATH)
+          if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY.length) {
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)
             if (!checkIfPathExists(this.bridgeExecutablePath)) {
-              throw new Error('synopsys_bridge_path '.concat(this.synopsysBridgePath, ' does not exists'))
+              throw new Error('Synopsys Bridge install directory does not exist')
             }
           } else {
             this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
             if (!checkIfPathExists(this.bridgeExecutablePath)) {
-              throw new Error('bridge_default_Path '.concat(this.synopsysBridgePath, ' does not exists'))
+              throw new Error('Synopsys Bridge default path exist')
             }
           }
         }
@@ -152,7 +148,7 @@ export class SynopsysBridge {
         info('Downloading and configuring Synopsys Bridge')
         info('Bridge URL is - '.concat(bridgeUrl))
         const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
-        const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
+        const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath()
 
         // Clear the existing bridge, if available
         if (fs.existsSync(extractZippedFilePath)) {
@@ -315,7 +311,7 @@ export class SynopsysBridge {
   }
 
   async getSynopsysBridgePath(): Promise<string> {
-    let synopsysBridgePath = inputs.SYNOPSYS_BRIDGE_PATH
+    let synopsysBridgePath = inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
 
     if (!synopsysBridgePath) {
       synopsysBridgePath = this.getBridgeDefaultPath()
@@ -338,10 +334,10 @@ export class SynopsysBridge {
           }
         }
       } else {
-        error('Unable to locate version url')
+        error('Unable to retrieve the most recent version from Artifactory URL')
       }
     } catch (e) {
-      info('Error reading version file content: '.concat((e as Error).message))
+      info('Error while reading version file content: '.concat((e as Error).message))
     }
     return ''
   }
