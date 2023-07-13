@@ -55,17 +55,6 @@ jobs:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3.4.1
-        with:
-          node-version: 16.x 
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build Project
-        run: npm run build --if-present
         
       - name: Polaris Scan
         uses: synopsys-sig/synopsys-action@v1.2.0
@@ -74,6 +63,7 @@ jobs:
           polaris_accessToken: ${{ secrets.POLARIS_ACCESSTOKEN }}
           polaris_application_name: ${{ github.event.repository.name }}
           polaris_project_name: ${{ github.event.repository.name }}
+          ### Accepts Multiple Values
           polaris_assessment_types: "SAST,SCA"
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
@@ -123,17 +113,6 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3.4.1
-        with:
-          node-version: 16.x 
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build Project
-        run: npm run build --if-present
-        
       - name: Coverity Full Scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
@@ -180,8 +159,7 @@ jobs:
 
 Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
 
-No preparation is typically needed before running the pipeline. In the default Black Duck Hub permission model,
-projects and project versions are created on the fly and as needed.
+In the default Black Duck Hub permission model, projects and project versions are created on the fly as needed.
 
 The action will download the Bridge and Detect CLIs, run a SCA scan, and optionally break the build.
 
@@ -207,23 +185,6 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3.4.1
-        with:
-          node-version: 16.x 
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Build Project
-        run: npm run build --if-present
-
       - name: Black Duck Full Scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
@@ -237,7 +198,8 @@ jobs:
         blackduck_url: ${{ secrets.BLACKDUCK_URL }}
         blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
         blackduck_scan_full: true
-        blackduck_scan_failure_severities: 'BLOCKER'
+        ### Accepts Multiple Values
+        blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
         ### Uncomment below configuration to enable autoamtic fix pull request creation if vulnerabilities are reported
         # blackduck_automation_fixpr: true 
         # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_fixpr is set to 'true'
@@ -257,8 +219,9 @@ jobs:
         blackduck_url: ${{ secrets.BLACKDUCK_URL }}
         blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
         blackduck_scan_full: false
-        blackduck_scan_failure_severities: 'BLOCKER'
-        ### Uncomment below configuration to enable feedback from Black Duck security testing as pull request comment
+        ### Accepts Multiple Values
+        blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
+        ### Below configuration is used to enable automatic pull request comment based on Black Duck scan result
         blackduck_automation_prcomment: true
         github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
         ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
