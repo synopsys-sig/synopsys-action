@@ -153,7 +153,7 @@ jobs:
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
-| `github_token` | Mandatory if coverity_automation_prcomment is set as true <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} |
+| `github_token` | GitHub Access Token <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} | Mandatory if coverity_automation_prcomment is set as true |
           
 ## Synopsys GitHub Action - Black Duck
 
@@ -239,7 +239,7 @@ jobs:
 | `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>| Optional |
 | `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. <br> Supported values: true or false </br>| Optional    |
 | `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled. <br> Black Duck automation fix pull request is currently supported for npm projects only. <br> Supported values: true or false </br>| Optional    |
-| `github_token` | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} |
+| `github_token` | GitHub Access Token <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true |
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
 can be passed through environment variables. This is a standard capability of Detect. </br>For example, if you
