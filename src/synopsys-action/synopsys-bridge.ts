@@ -94,16 +94,18 @@ export class SynopsysBridge {
       }
       try {
         if (inputs.ENABLE_NETWORK_AIR_GAP) {
-          if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY.length) {
-            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)
-            if (!checkIfPathExists(this.bridgeExecutablePath)) {
+          if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
+            if (!checkIfPathExists(inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) {
               throw new Error('Synopsys Bridge install directory does not exist')
             }
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)
+            this.checkIfValidExecutablePath(this.bridgeExecutablePath)
           } else {
-            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
-            if (!checkIfPathExists(this.bridgeExecutablePath)) {
-              throw new Error('Synopsys Bridge default path exist')
+            if (!checkIfPathExists(this.getBridgeDefaultPath())) {
+              throw new Error('Synopsys Bridge default path does not exist')
             }
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
+            this.checkIfValidExecutablePath(this.bridgeExecutablePath)
           }
         }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
@@ -112,6 +114,12 @@ export class SynopsysBridge {
       }
     }
     return -1
+  }
+
+  private checkIfValidExecutablePath(bridgeExecutablePath: string): void {
+    if (!checkIfPathExists(bridgeExecutablePath)) {
+      throw new Error('Bridge executable file could not be found at'.concat(bridgeExecutablePath))
+    }
   }
 
   async downloadBridge(tempDir: string): Promise<void> {
@@ -228,7 +236,7 @@ export class SynopsysBridge {
         formattedCommand = formattedCommand.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.DIAGNOSTICS_OPTION)
       }
 
-      //debug('Formatted command is - '.concat(formattedCommand))
+      debug('Formatted command is - '.concat(formattedCommand))
       return formattedCommand
     } catch (e) {
       const errorObject = e as Error

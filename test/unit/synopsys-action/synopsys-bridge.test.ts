@@ -307,7 +307,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
   fs.existsSync.mockResolvedValue(true)
 
   util.checkIfPathExists = jest.fn()
-  util.checkIfPathExists.mockResolvedValueOnce(false)
+  util.checkIfPathExists.mockResolvedValue(true)
 
   const response = sb.executeBridgeCommand('command', '/Users')
 
@@ -342,7 +342,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without u
   fs.existsSync.mockResolvedValue(true)
 
   util.checkIfPathExists = jest.fn()
-  util.checkIfPathExists.mockResolvedValueOnce(true)
+  util.checkIfPathExists.mockResolvedValue(true)
 
   const response = sb.executeBridgeCommand('command', '/users')
 
@@ -375,7 +375,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Linux', () =>
   fs.existsSync.mockResolvedValue(true)
 
   util.checkIfPathExists = jest.fn()
-  util.checkIfPathExists.mockResolvedValueOnce(false)
+  util.checkIfPathExists.mockResolvedValue(true)
 
   const response = sb.executeBridgeCommand('command', '/Users')
 
@@ -408,7 +408,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Windows', () 
   fs.existsSync.mockResolvedValue(true)
 
   util.checkIfPathExists = jest.fn()
-  util.checkIfPathExists.mockResolvedValueOnce(false)
+  util.checkIfPathExists.mockResolvedValue(true)
 
   const response = sb.executeBridgeCommand('command', '/Users')
 

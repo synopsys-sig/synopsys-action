@@ -578,17 +578,19 @@ class SynopsysBridge {
                 };
                 try {
                     if (inputs.ENABLE_NETWORK_AIR_GAP) {
-                        if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY.length) {
-                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY);
-                            if (!(0, utility_1.checkIfPathExists)(this.bridgeExecutablePath)) {
+                        if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
+                            if (!(0, utility_1.checkIfPathExists)(inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) {
                                 throw new Error('Synopsys Bridge install directory does not exist');
                             }
+                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY);
+                            this.checkIfValidExecutablePath(this.bridgeExecutablePath);
                         }
                         else {
-                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath());
-                            if (!(0, utility_1.checkIfPathExists)(this.bridgeExecutablePath)) {
-                                throw new Error('Synopsys Bridge default path exist');
+                            if (!(0, utility_1.checkIfPathExists)(this.getBridgeDefaultPath())) {
+                                throw new Error('Synopsys Bridge default path does not exist');
                             }
+                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath());
+                            this.checkIfValidExecutablePath(this.bridgeExecutablePath);
                         }
                     }
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
@@ -599,6 +601,11 @@ class SynopsysBridge {
             }
             return -1;
         });
+    }
+    checkIfValidExecutablePath(bridgeExecutablePath) {
+        if (!(0, utility_1.checkIfPathExists)(bridgeExecutablePath)) {
+            throw new Error('Bridge executable file could not be found at'.concat(bridgeExecutablePath));
+        }
     }
     downloadBridge(tempDir) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -717,7 +724,7 @@ class SynopsysBridge {
                 if (inputs.INCLUDE_DIAGNOSTICS) {
                     formattedCommand = formattedCommand.concat(tools_parameter_1.SynopsysToolsParameter.SPACE).concat(tools_parameter_1.SynopsysToolsParameter.DIAGNOSTICS_OPTION);
                 }
-                //debug('Formatted command is - '.concat(formattedCommand))
+                (0, core_1.debug)('Formatted command is - '.concat(formattedCommand));
                 return formattedCommand;
             }
             catch (e) {
