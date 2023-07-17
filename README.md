@@ -207,7 +207,7 @@ jobs:
         # include_diagnostics: true  
 
       - name: Black Duck PR Scan
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         ### Use below configurations to set specific detect environment varibales
         env:
