@@ -14,7 +14,7 @@ export async function getRemoteFile(destFilePath: string, url: string): Promise<
     throw new Error('URL cannot be empty')
   }
 
-  if (!url.includes('latest') && !validateBridgeUrl(url)) {
+  if (!validateBridgeUrl(url)) {
     throw new Error('Invalid URL')
   }
 

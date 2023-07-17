@@ -29,8 +29,8 @@ export class SynopsysBridge {
     this.bridgeExecutablePath = ''
     this.synopsysBridgePath = ''
     this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL
-    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip ')
-    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip ')
+    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip')
+    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip')
   }
 
   private getBridgeDefaultPath(): string {
@@ -145,6 +145,9 @@ export class SynopsysBridge {
         const latestVersion = await this.getVersionFromLatestURL()
         if (latestVersion === '') {
           bridgeUrl = this.getLatestVersionUrl()
+          if (!bridgeUrl.includes('latest')) {
+            throw new Error('Invalid artifactory latest url')
+          }
           bridgeVersion = 'latest'
         } else {
           bridgeUrl = this.getVersionUrl(latestVersion).trim()

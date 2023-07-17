@@ -301,7 +301,7 @@ function getRemoteFile(destFilePath, url) {
         if (url == null || url.length === 0) {
             throw new Error('URL cannot be empty');
         }
-        if (!url.includes('latest') && !(0, validators_1.validateBridgeUrl)(url)) {
+        if (!(0, validators_1.validateBridgeUrl)(url)) {
             throw new Error('Invalid URL');
         }
         try {
@@ -516,8 +516,8 @@ class SynopsysBridge {
         this.bridgeExecutablePath = '';
         this.synopsysBridgePath = '';
         this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL;
-        this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip ');
-        this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip ');
+        this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip');
+        this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip');
     }
     getBridgeDefaultPath() {
         let bridgeDefaultPath = '';
@@ -636,6 +636,9 @@ class SynopsysBridge {
                     const latestVersion = yield this.getVersionFromLatestURL();
                     if (latestVersion === '') {
                         bridgeUrl = this.getLatestVersionUrl();
+                        if (!bridgeUrl.includes('latest')) {
+                            throw new Error('Invalid artifactory latest url');
+                        }
                         bridgeVersion = 'latest';
                     }
                     else {
