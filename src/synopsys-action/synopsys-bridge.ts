@@ -9,7 +9,7 @@ import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs, {readFileSync} from 'fs'
 import {rmRF} from '@actions/io'
-import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
+import {validateBlackDuckInputs, validateBridgeUrl, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
@@ -147,6 +147,10 @@ export class SynopsysBridge {
           bridgeUrl = this.getLatestVersionUrl()
           if (!bridgeUrl.includes('latest')) {
             throw new Error('Invalid artifactory latest url')
+          } else {
+            if (!validateBridgeUrl(bridgeUrl)) {
+              throw new Error('Invalid artifactory latest url')
+            }
           }
           bridgeVersion = 'latest'
         } else {

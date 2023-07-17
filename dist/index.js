@@ -639,6 +639,11 @@ class SynopsysBridge {
                         if (!bridgeUrl.includes('latest')) {
                             throw new Error('Invalid artifactory latest url');
                         }
+                        else {
+                            if (!(0, validators_1.validateBridgeUrl)(bridgeUrl)) {
+                                throw new Error('Invalid artifactory latest url');
+                            }
+                        }
                         bridgeVersion = 'latest';
                     }
                     else {
