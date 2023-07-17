@@ -6,13 +6,18 @@ include:
   - project: releng/common-gitlab-ci
     ref: master
     file: sbom-generate.yml
+  - project: altair/altair-build-common
+    ref: master
+    file: gitlab/ci/altair_versioning.yml
+  - project: altair/altair-build-common
+    ref: master
+    file: gitlab/ci/altair_common.yml
 
 # List of job stages in their order of execution.
 stages:
   - build
   - contract_test
   - coverage_report
-  - versioning
 #  - Check_dist
 #  - changelog
   - analysis
@@ -24,6 +29,7 @@ variables:
   BUILD_TOOL: npm
   GIT_DEPTH: 10
   BD_PRODUCT_GROUP: PolarisNG Projects Group
+  BD_VERSION_PHASE: DEVELOPMENT
 
 ##### MERGE REQUEST PIPELINE #####
 
@@ -47,27 +53,25 @@ code_coverage_job:
 #    - .check_dist
 #  stage: Check_dist
 
-##### MASTER COMMIT PIPELINE #####
-versioning_job:
-  extends:
-    - .version
-    - .only
-  stage: versioning
-
+.export_sbom_variables:
+  before_script:
+    - export PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+    - export ARTIFACTORY_UPLOAD_REPO=1
+    - export SBOM_ART_TOKEN_VAULT_PATH=sbom/integrations/github-actions
+    - export PRODUCT=Integrations
+    - export GENERATE_CONFIGURATION_FILE=1
+    - export GENERATION_OPTIONS="--entry integrations/mirrored-repos/synopsys-action-ci-cd:synopsys-action-ci-cd-$PACKAGE_VERSION"
+    - export PRODUCT_ADDON_SBOM_OPTIONS="--output-zipfile synopsys-action-ci-cd-$PACKAGE_VERSION.zip"
 
 generate_sbom:
   extends:
+    - .export_sbom_variables
     - .run_sbom_generation
   stage: sbom
-  variables:
-    ARTIFACTORY_UPLOAD_REPO: 1
-    SBOM_ART_TOKEN_VAULT_PATH: sbom/integrations/github-actions
-    PRODUCT: synopsys-action-ci-cd
-    GENERATE_CONFIGURATION_FILE: 1
-    GENERATION_OPTIONS: "--entry integrations/synopsys-action/synopsys-action-ci-cd:synopsys-action-ci-cd-0.1.0 --provide-zip --output-zipfile Synopsys-CICD-actions.zip"
   only:
     refs:
       - main
+
 
 pop_polaris:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
@@ -76,12 +80,16 @@ polaris_bridge:
   stage: analysis
   extends: .polaris_bridge
 
-new_pop_blackduck:
-  stage: analysis
-  extends: .new_pop_blackduck_analysis
-  dependencies:
-    - versioning_job
-    - build_unit_test_job
+pop_blackduck:
+  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
+  extends:
+    - .new_pop_blackduck
+  before_script:
+    - |
+      apt-get update -y
+      apt-get install -y rsync make jq python3 python3-pip
+      pip3 install blackduck requests
+      export RELEASE_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
 
 #changelog_job:
 #  extends:
