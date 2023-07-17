@@ -81,6 +81,36 @@ test('Test getFormattedCommandForCoverity', () => {
   expect(resp).toContain('--stage connect')
 })
 
+test('Test getFormattedCommandForCoverity - when COVERITY_LOCAL is true', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_LOCAL', {value: true})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForCoverity()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
+test('Test getFormattedCommandForCoverity - when COVERITY_LOCAL is false', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_LOCAL', {value: false})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForCoverity()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
 test('Test getFormattedCommandForCoverity - pr comment', () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
   Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})

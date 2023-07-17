@@ -39,6 +39,11 @@ jobs:
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
           coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
           coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
+          coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
+          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
+          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
+          #coverity_local: true
+
           # Mandatory for windows hosted environment
           # coverity_install_directory: "/root"
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
