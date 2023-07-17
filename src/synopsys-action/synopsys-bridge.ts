@@ -353,7 +353,7 @@ export class SynopsysBridge {
   async setBridgeExecutablePath(osName: string, filePath: string): Promise<string> {
     if (osName === 'win32') {
       this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('\\synopsys-bridge'), ['.exe'])
-    } else {
+    } else if (osName === 'darwin' || osName === 'linux') {
       this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
     }
     debug('bridgeExecutablePath'.concat(this.bridgeExecutablePath))
