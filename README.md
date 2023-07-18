@@ -101,7 +101,6 @@ This removes the need for a large footprint (many GB) software installation in y
 
 On pushes, a full Coverity scan will be run and results committed to the Coverity Connect database.
 On pull requests, the scan will typically be incremental, and results will not be committed to the Coverity Connect database.
-A future release of the action will provide code review feedback for newly introduced findings to the pull request.
 
 Before you can run a pipeline using the Synopsys Action and Coverity, you must make sure the appropriate
 project and stream are set in your Coverity Connect server environment.
@@ -265,8 +264,8 @@ observe fewer pull requests to be created.**
 |Input Parameter |Description                              |
 |-----------------|------------------------------------------|
 |`synopsys_bridge_path`| Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]. If the configured Synopsys Bridge is not the latest one, latest Synopsys Bridge version will be downloaded          |
-| `bridge_download_url`      | Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path.               |
-|`bridge_download_version`| Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.              |
+| `bridge_download_url`      | Provide URL to bridge zip file. <br> If provided, Synopsys Bridge will be automatically downloaded and configured.               |
+|`bridge_download_version`| Provide bridge version.<br> If provided, the specified version of Synopsys Bridge will be automatically downloaded and configured.             |
 | `include_diagnostics`      | Synopsys Bridge diagnostics files will be available to download when it is set to `true`. Additionally **diagnostics_retention_days** can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).               |
 
 **Notes:**
