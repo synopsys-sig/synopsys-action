@@ -53,7 +53,7 @@ applications, projects and entitlements are set in your Polaris environment.
 At this time, Polaris does not support the analysis of pull requests. We recommend running the Synopsys Action on
 pushes to main branches.
 
-Synopsys Action is the recommended solution for integrating Polaris into a GitHub workflow. Here's an example workflow for Polaris scan using the Synopsys Action:
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Polaris into a GitHub workflow. Here's an example workflow for Polaris scan using the Synopsys Action:
 
 ```yaml
 
@@ -105,7 +105,7 @@ On pull requests, the scan will typically be incremental, and results will not b
 Before you can run a pipeline using the Synopsys Action and Coverity, you must make sure the appropriate
 project and stream are set in your Coverity Connect server environment.
 
-Synopsys Action is the recommended solution for integrating Coverity CNC into a GitHub workflow. Here's an example workflow for Coverity scan using the Synopsys Action:
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Coverity CNC into a GitHub workflow. Here's an example workflow for Coverity scan using the Synopsys Action:
 
 ```yaml
 
@@ -174,7 +174,7 @@ The action will download the Bridge and Detect CLIs, run a SCA scan, and optiona
 
 On pushes, a full **Intelligent** Black Duck scan will be run. On pull requests, a **Rapid** ephemeral scan will be run.
 
-Synopsys Action is the recommended solution for integrating Black Duck into a GitHub workflow. Here's an example workflow for Black Duck scan using the Synopsys Action:
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Black Duck into a GitHub workflow. Here's an example workflow for Black Duck scan using the Synopsys Action:
 
 ```yaml
 
