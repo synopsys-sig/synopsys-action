@@ -162,7 +162,7 @@ jobs:
 | `coverity_stream_name`        | Stream name in Coverity   | Mandatory     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
-| `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
+| `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. Merge Request must be created first from feature branch to main branch to run Coverity PR Comment. <br> Supported values: true or false </br> | Optional     |
 | `github_token` | GitHub Access Token <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} | Mandatory if coverity_automation_prcomment is set as true |
           
 ## Synopsys GitHub Action - Black Duck
@@ -246,7 +246,7 @@ jobs:
 | `blackduck_install_directory` | Directory path to install Black Duck  | Optional     |
 | `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. <br> Supported values: true or false </br>| Optional     |
 | `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>| Optional |
-| `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. <br> Supported values: true or false </br>| Optional    |
+| `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. Merge Request must be created first from feature branch to main branch to run Black Duck PR Comment. <br> Supported values: true or false </br>| Optional    |
 | `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled. <br> Black Duck automation fix pull request is currently supported for npm projects only. <br> Supported values: true or false </br>| Optional    |
 | `github_token` | GitHub Access Token <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true |
 
@@ -265,7 +265,7 @@ observe fewer pull requests to be created.**
 |Input Parameter |Description                              |
 |-----------------|------------------------------------------|
 |`synopsys_bridge_path`| Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]. If the configured Synopsys Bridge is not the latest one, latest Synopsys Bridge version will be downloaded          |
-| `bridge_download_url`      | Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path. [Note - As per current behavior, when this value is provided, the bridge_path or default path will be cleaned first then download and configured all the time]               |
+| `bridge_download_url`      | Provide URL to bridge zip file. If provided, Synopsys Bridge will be automatically downloaded and configured in the provided bridge- or default- path.               |
 |`bridge_download_version`| Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.              |
 | `include_diagnostics`      | Synopsys Bridge diagnostics files will be available to download when it is set to `true`. Additionally **diagnostics_retention_days** can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).               |
 
