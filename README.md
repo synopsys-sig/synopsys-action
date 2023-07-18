@@ -129,6 +129,7 @@ jobs:
 | `coverity_passphrase`        | Passphrase for Coverity    | Mandatory     |
 | `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>                     | Mandatory     |
 | `coverity_stream_name`        | Stream name in Coverity   | Mandatory     |
+| `coverity_local`                | If enabled, Synopsys Action will install the ‘Coverity Thick Client’ on the local system in order to execute the scan. 'coverity_install_directory' can also be given to keep the files for future scans.   | Optional     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
