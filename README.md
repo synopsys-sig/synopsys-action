@@ -173,7 +173,6 @@ In the default Black Duck Hub permission model, projects and project versions ar
 The action will download the Bridge and Detect CLIs, run a SCA scan, and optionally break the build.
 
 On pushes, a full **Intelligent** Black Duck scan will be run. On pull requests, a **Rapid** ephemeral scan will be run.
-A future release of the action will provide code review feedback for newly introduced findings to the pull request.
 
 Synopsys Action is the recommended solution for integrating Black Duck into a GitHub workflow. Here's an example workflow for Black Duck scan using the Synopsys Action:
 
