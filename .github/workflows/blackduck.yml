@@ -23,7 +23,7 @@ jobs:
     #  runs-on: [ ubuntu-latest ]
 
    # Steps represent a sequence of tasks that will be executed as part of the job
-   steps:
+    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Source
         uses: actions/checkout@v3
@@ -67,5 +67,3 @@ jobs:
           # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true  
-
-      
