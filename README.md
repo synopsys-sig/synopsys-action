@@ -18,7 +18,6 @@ In this Quick Start, we will provide individual examples for each Synopsys secur
 
 These workflows will:
 - Validate Scanning platform-related parameters like project and stream
-- Download the Synopsys Bridge and related adapters
 - Run corresponding Synopsys Bridge commands using the specified parameters
 - Synopsys solution functionality is invoked directly by the Synopsys Bridge, and indirectly by the Synopsys Action
 
@@ -26,11 +25,24 @@ These workflows will:
 
 Before configuring Synopsys Action into your workflow, note the following prerequisites:
 
-- GitHub Actions must be enabled for a repository in the organization's settings in order for required workflows to run. 
-- **github_token** is required as input when running Black Duck Fix PR, Black Duck/Coverity PR Comment. Token can be github specified **secrets.GITHUB_TOKEN** with required workflow read & write permissions. **(GitHub → Project → Settings → Actions → General → Workflow Permissions)** No need to set this in secret as it will be picked up by GitHub to use in your workflow.<br/>
-- If you need a token that requires permissions that aren't available in the **secrets.GITHUB_TOKEN**, you can create a GitHub App and generate an installation access token within your workflow or you can create a Personal Access Token(PAT) and store it as secret. For more information, refer [ Granting Additional Permissions ](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#granting-additional-permissions) <br/> PAT must have **repo** scope to perform Black Duck Fix PR, Black Duck/Coverity PR Comment.
-- Sensitive data such as access tokens, user names, passwords and even URLs must be configured using GitHub secrets **(GitHub → Project → Settings → Secrets and Variables → Actions)**
+**GitHub Runner Setup:**
 
+- Runners are the machines that execute jobs in a GitHub Actions workflow. To use GitHub runners in your project, GitHub Actions must be enabled for a repository/organization settings in order for required workflows to run (Repository Settings → SelectActions → General → Actions permissions)
+- GitHub runner can be Self-hosted or GitHub-hosted. For installing Self-hosted runners refer [Self-hosted runners](https://docs.github.com/en/actions/hosting-your-own-runners) and for installing GitHub-hosted runners refer [GitHub-hosted Runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners)
+
+**Configure GitHub Secrets:**
+- Sensitive data such as access tokens, user names, passwords and even URLs must be configured using GitHub secrets (GitHub → Project → Settings → Secrets and Variables → Actions).
+
+**Configure GitHub Token:** 
+
+- `github_token` is required as input when running Black Duck Fix PR, Black Duck/Coverity PR Comment. There are 2 different types of tokens that can be passed to `github_token`:
+
+  1. Token can be github specified `secrets.GITHUB_TOKEN` with required workflow read & write permissions(GitHub → Project → Settings → Actions → General → Workflow Permissions). It will be created by GitHub at start of each workflow run.
+  2. If you need a token that requires permissions that aren't available in the `secrets.GITHUB_TOKEN`, you can create a Personal Access Token(PAT) with required scopes (Select Profile Photo → Settings → Developer Settings → Personal access tokens). For more information, refer [ Granting Additional Permissions ](https://docs.github.com/en/actions/security-guides/automatic-token-authentication#granting-additional-permissions) <br/> PAT must have **repo** scope to perform Black Duck Fix PR, Black Duck/Coverity PR Comment.
+
+**Create workflow:**
+
+- Create a new workflow (GitHub → Project → Actions → New Workflow → Setup a workflow yourself)
 
 ## Synopsys GitHub Action - Polaris
 
@@ -69,8 +81,6 @@ jobs:
           # include_diagnostics: true
 
 ```
-
-**Example Workflow:** https://github.com/synopsys-sig/synopsys-action/blob/v1.2.0/.github/workflows/polaris.yml
 
 |Input Parameter            |Description                                                       |Mandatory / Optional | 
 |----------------------------|-------------------------------------------------------------------|--------------------|
@@ -141,7 +151,6 @@ jobs:
           # include_diagnostics: true  
         
 ```
-**Example Workflow:** https://github.com/synopsys-sig/synopsys-action/blob/main/.github/workflows/coverity.yml
 
 |Input Parameter   |Description                           |Mandatory / Optional |
 |-------------------|---------------------------------------|----------|
@@ -151,7 +160,7 @@ jobs:
 | `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>                     | Mandatory     |
 | `coverity_stream_name`        | Stream name in Coverity   | Mandatory     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
-| `coverity_policy_view`        | ID number of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
+| `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: coverity_policy_view: 100001 </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. <br> Supported values: true or false </br> | Optional     |
 | `github_token` | GitHub Access Token <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} | Mandatory if coverity_automation_prcomment is set as true |
           
@@ -190,45 +199,44 @@ jobs:
         uses: synopsys-sig/synopsys-action@v1.2.0
         ### Use below configurations to set specific detect environment varibales
         env:
-        DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
-        DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
-        DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
-        DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
+          DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+          DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+          DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
-        blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-        blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
-        blackduck_scan_full: true
-        ### Accepts Multiple Values
-        blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
-        ### Uncomment below configuration to enable autoamtic fix pull request creation if vulnerabilities are reported
-        # blackduck_automation_fixpr: true 
-        # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_fixpr is set to 'true'
-        ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
-        # include_diagnostics: true  
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_scan_full: true
+          ### Accepts Multiple Values
+          blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
+          ### Uncomment below configuration to enable autoamtic fix pull request creation if vulnerabilities are reported
+          # blackduck_automation_fixpr: true 
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_fixpr is set to 'true'
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true  
 
       - name: Black Duck PR Scan
         if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         ### Use below configurations to set specific detect environment varibales
         env:
-        DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
-        DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
-        DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
-        DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
+          DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+          DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+          DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
-        blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-        blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
-        blackduck_scan_full: false
-        ### Accepts Multiple Values
-        blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
-        ### Below configuration is used to enable automatic pull request comment based on Black Duck scan result
-        blackduck_automation_prcomment: true
-        github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
-        ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
-        # include_diagnostics: true
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_scan_full: false
+          ### Accepts Multiple Values
+          blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
+          ### Below configuration is used to enable automatic pull request comment based on Black Duck scan result
+          blackduck_automation_prcomment: true
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true
 
 ```
-**Example Workflow:** https://github.com/synopsys-sig/synopsys-action/blob/v1.2.0/.github/workflows/blackduck.yml
 
 |Input Parameter |Description | Mandatory / Optional |
 |-----------------|-------------|---------------------|
@@ -260,24 +268,7 @@ observe fewer pull requests to be created.**
 |`bridge_download_version`| Provide bridge version. If provided, the specified version of Synopsys Bridge will be downloaded and configured.              |
 | `include_diagnostics`      | All diagnostics files will be available to download when 'true' passed, Additionally **diagnostics_retention_days** can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).               |
 
-Note - If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge
- 
-
-# Synopsys Bridge Setup
-
-The latest version of the Synopsys Bridge is available at: [Synopsys Bridge](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/)
-
-The most common way to set up the Synopsys Bridge is to configure the action to download the small (~50 MB) CLI utility that is then automatically run at the right stage of your pipeline.
-
-The latest version of Synopsys Bridge will be downloaded by default.
-
-## Manual Synopsys Bridge
-
-If you are unable to download the Synopsys Bridge from our internet-hosted repository or have been directed by support or services to use a custom version of the Synopsys Bridge, you can either specify a custom URL or pre-configure your GitHub runner to include the Synopsys Bridge. In this latter case, you would specify the `synopsys_bridge_path` parameter to specify the location of the directory in which the Synopsys Bridge is pre-installed.
-
-# Future Enhancements
-
-- Provide comments on Pull Requests about code quality issues.
-- Prevent a merge if security issues are found during the pull request. Create a GitHub status check and report the policy as failed if new security issues are found.
-- Create GitHub Issues to track issues found by a full analysis. This action is currently focused on providing feedback on a pull request. No action is taken if run manually or on a push. A future enhancement is to create GitHub issues to track security weaknesses found during a push.
-- Allow developers to dismiss issues from the pull request. If an issue is deemed to be a false positive, a future enhancement could allow the developer to indicate this by replying to the comment, which would in turn report the status to the Coverity Connect instance so that future runs will recognize the issue as having been triaged as such.
+**Notes:**
+- Synopsys Bridge can be downloaded from [here](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/).
+- By default, Synopsys Bridge will be downloaded in $HOME/synopsys-bridge directory.
+- If **bridge_download_version** or **bridge_download_url** is not provided, Synopsys Action will download and configure the latest version of Bridge.
