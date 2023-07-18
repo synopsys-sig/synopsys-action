@@ -43,6 +43,7 @@ Before configuring Synopsys Action into your workflow, note the following prereq
 **Create workflow:**
 
 - Create a new workflow (GitHub → Project → Actions → New Workflow → Setup a workflow yourself) and configure required fields.
+- Push those changes and GitHub runner will initiate the workflow which can be seen on the `Actions` tab on main page of repository.
 
 ## Synopsys GitHub Action - Polaris
 
