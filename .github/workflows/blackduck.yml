@@ -1,14 +1,13 @@
 # This is a basic workflow to help you get started with Actions
-
-name: CI-Blackduck
+name: CI-BlackDuck
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -18,29 +17,53 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-   runs-on: [ubuntu-latest]
-#    runs-on: [self-hosted, Windows, kiran]
-#    runs-on: [self-hosted, Linux, kishor-linux]
+    #  runs-on: [ ubuntu-latest ]
+    runs-on: [ self-hosted ]
+    # Use ubuntu-latest to run workflow on github hosted runner
+    #  runs-on: [ ubuntu-latest ]
 
-   env:
-     MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.244/synopsys-bridge-0.1.244-macosx.zip"
-     LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.244/synopsys-bridge-0.1.244-linux64.zip"
-     WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.244/synopsys-bridge-0.1.244-win64.zip"
-     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
-   steps:
+   # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - name: Use synopsys unified-action - blackduck-detect
-       # Use the action defined in this repository
-        uses: ./
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Black Duck Full Scan
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.2.0
+        # Use below configuration to set detect environment variables for your project
+        # env:
+        #   DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+        #   DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+        #   DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+        #   DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
-          blackduck_scan_failure_severities : "BLOCKER,CRITICAL,MAJOR"
-          #blackduck_automation_fixpr: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
-          include_diagnostics: true
-          diagnostics_retention_days: 90
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_scan_full: true
+          blackduck_scan_failure_severities: 'ALL'
+          ### Uncomment below configuration to enable autoamtic fix pull request creation if vulnerabilities are reported
+          # blackduck_automation_fixpr: true 
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_fixpr is set to 'true'
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true  
+
+      - name: Black Duck PR Scan
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.2.0
+        # Use below configuration to set detect environment variables for your project
+        # env:
+        #   DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
+        #   DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
+        #   DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
+        #   DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
+        with:
+          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
+          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
+          blackduck_scan_full: false
+          blackduck_scan_failure_severities: 'ALL'
+          ### Uncomment below configuration to enable feedback from Black Duck security testing as pull request comment
+          # blackduck_automation_prcomment: true
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true  

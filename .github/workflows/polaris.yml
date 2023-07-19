@@ -5,10 +5,8 @@ name: CI-Polaris
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # push:
+  #   branches: [ "main" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -18,25 +16,25 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: [ubuntu-latest]
-
-    env:
-      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-macosx.zip"
-      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.229/synopsys-bridge-0.1.229-win64.zip"
+    #  runs-on: [ ubuntu-latest ]
+    runs-on: [ self-hosted ]
+    # Use ubuntu-latest to run workflow on github hosted runner
+    #  runs-on: [ ubuntu-latest ]
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-      - name: Use synopsys unified-action
+      - name: Checkout Source
+        uses: actions/checkout@v3
+
+      - name: Polaris Scan
         # Use the action defined in this repository
-        uses: ./
+        uses: synopsys-sig/synopsys-action@v1.2.0
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: "tb_app1"
-          polaris_project_name: "tb_proj"
-          polaris_assessment_types: "SCA"
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
-          include_diagnostics: true
+          polaris_application_name: ${{ github.event.repository.name }}
+          polaris_project_name: ${{ github.event.repository.name }}
+          polaris_assessment_types: "SAST,SCA"
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true
