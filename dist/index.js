@@ -121,7 +121,7 @@ function run() {
                 yield sb.downloadBridge(tempDir);
             }
             else {
-                (0, core_1.info)('Network air gap has been enabled so skipping download bridge.');
+                (0, core_1.info)('Network air gap is enabled, skipping synopsys-bridge download.');
             }
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
