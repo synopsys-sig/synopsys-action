@@ -72,7 +72,7 @@ jobs:
       - name: Polaris Scan
         uses: synopsys-sig/synopsys-action@v1.2.0
         with:
-          polaris_serverUrl: ${{ vsecretsars.POLARIS_SERVERURL }}
+          polaris_serverUrl: ${{ secrets.POLARIS_SERVERURL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESSTOKEN }}
           polaris_application_name: ${{ github.event.repository.name }}
           polaris_project_name: ${{ github.event.repository.name }}
