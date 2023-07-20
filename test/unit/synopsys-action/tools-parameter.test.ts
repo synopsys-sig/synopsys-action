@@ -11,6 +11,8 @@ beforeAll(() => {
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
+  process.env['GITHUB_REF_NAME'] = 'ref-name'
+
   createTempDir().then(path => (tempPath = path))
 })
 
@@ -77,6 +79,69 @@ test('Test getFormattedCommandForCoverity', () => {
 
   const resp = stp.getFormattedCommandForCoverity()
 
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
+test('Enable Test getFormattedCommandForCoverity Airgap: SUCCESS', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_INSTALL_DIRECTORY', {value: 'COVERITY_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
+  Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForCoverity()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
+test('Enable Test getFormattedCommandForCoverity Airgap: EXCEPTION', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_INSTALL_DIRECTORY', {value: 'COVERITY_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
+  Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  try {
+    stp.getFormattedCommandForCoverity()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Github API URL is missing')
+  }
+})
+
+test('Disable Test getFormattedCommandForCoverity Airgap', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_INSTALL_DIRECTORY', {value: 'COVERITY_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
+  Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForCoverity()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 })

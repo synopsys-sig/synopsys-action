@@ -1,5 +1,5 @@
 import {exec, ExecOptions} from '@actions/exec'
-import {BRIDGE_DOWNLOAD_URL, SYNOPSYS_BRIDGE_PATH} from './inputs'
+import {BRIDGE_DOWNLOAD_URL, SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY} from './inputs'
 import {debug, error, info} from '@actions/core'
 import {SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
@@ -9,7 +9,7 @@ import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs, {readFileSync} from 'fs'
 import {rmRF} from '@actions/io'
-import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
+import {validateBlackDuckInputs, validateBridgeUrl, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
@@ -20,6 +20,7 @@ export class SynopsysBridge {
   synopsysBridgePath: string
   bridgeArtifactoryURL: string
   bridgeUrlPattern: string
+  bridgeUrlLatestPattern: string
   WINDOWS_PLATFORM = 'win64'
   LINUX_PLATFORM = 'linux64'
   MAC_PLATFORM = 'macosx'
@@ -27,8 +28,9 @@ export class SynopsysBridge {
   constructor() {
     this.bridgeExecutablePath = ''
     this.synopsysBridgePath = ''
-    this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
-    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ')
+    this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL
+    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip')
+    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip')
   }
 
   private getBridgeDefaultPath(): string {
@@ -47,7 +49,7 @@ export class SynopsysBridge {
   }
 
   async checkIfSynopsysBridgeExists(bridgeVersion: string): Promise<boolean> {
-    this.synopsysBridgePath = SYNOPSYS_BRIDGE_PATH
+    this.synopsysBridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
     const osName = process.platform
     let versionFilePath = ''
     let versionFileExists = false
@@ -91,6 +93,21 @@ export class SynopsysBridge {
         cwd: workingDirectory
       }
       try {
+        if (inputs.ENABLE_NETWORK_AIR_GAP) {
+          if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
+            if (!checkIfPathExists(inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) {
+              throw new Error('Synopsys Bridge install directory does not exist')
+            }
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)
+            this.checkIfValidExecutablePath(this.bridgeExecutablePath)
+          } else {
+            if (!checkIfPathExists(this.getBridgeDefaultPath())) {
+              throw new Error('Synopsys Bridge default path does not exist')
+            }
+            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
+            this.checkIfValidExecutablePath(this.bridgeExecutablePath)
+          }
+        }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
         throw errorObject
@@ -99,36 +116,54 @@ export class SynopsysBridge {
     return -1
   }
 
+  private checkIfValidExecutablePath(bridgeExecutablePath: string): void {
+    if (!checkIfPathExists(bridgeExecutablePath)) {
+      throw new Error('Bridge executable file could not be found at'.concat(bridgeExecutablePath))
+    }
+  }
+
   async downloadBridge(tempDir: string): Promise<void> {
     try {
       // Automatically configure bridge if Bridge download url is provided
       let bridgeUrl = ''
       let bridgeVersion = ''
-      if (inputs.BRIDGE_DOWNLOAD_VERSION) {
+      if (inputs.BRIDGE_DOWNLOAD_URL) {
+        bridgeUrl = BRIDGE_DOWNLOAD_URL
+        const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
+        if (versionInfo != null) {
+          bridgeVersion = versionInfo[1]
+        }
+      } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
           bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION
         } else {
           return Promise.reject(new Error('Provided bridge version not found in artifactory'))
         }
-      } else if (inputs.BRIDGE_DOWNLOAD_URL) {
-        bridgeUrl = BRIDGE_DOWNLOAD_URL
-        const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
-        if (versionInfo != null) {
-          bridgeVersion = versionInfo[1]
-        }
       } else {
         info('Checking for latest version of Bridge to download and configure')
-        const latestVersion = await this.getLatestVersion()
-        bridgeUrl = this.getVersionUrl(latestVersion).trim()
-        bridgeVersion = latestVersion
+        const latestVersion = await this.getVersionFromLatestURL()
+        if (latestVersion === '') {
+          bridgeUrl = this.getLatestVersionUrl()
+          if (!bridgeUrl.includes('latest')) {
+            throw new Error('Invalid artifactory latest url')
+          } else {
+            if (!validateBridgeUrl(bridgeUrl)) {
+              throw new Error('Invalid artifactory latest url')
+            }
+          }
+          bridgeVersion = 'latest'
+        } else {
+          bridgeUrl = this.getVersionUrl(latestVersion).trim()
+          bridgeVersion = latestVersion
+        }
       }
 
       if ((await this.checkIfSynopsysBridgeExists(bridgeVersion)) === false) {
         info('Downloading and configuring Synopsys Bridge')
         info('Bridge URL is - '.concat(bridgeUrl))
         const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
-        const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath()
+        const extractZippedFilePath: string = inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath()
 
         // Clear the existing bridge, if available
         if (fs.existsSync(extractZippedFilePath)) {
@@ -218,21 +253,6 @@ export class SynopsysBridge {
     }
   }
 
-  async getLatestVersion(): Promise<string> {
-    const versionArray: string[] = await this.getAllAvailableBridgeVersions()
-    let latestVersion = '0.0.0'
-
-    for (const version of versionArray) {
-      if (version.localeCompare(latestVersion, undefined, {numeric: true, sensitivity: 'base'}) === 1) {
-        latestVersion = version
-      }
-    }
-
-    info('Available latest version is - '.concat(latestVersion))
-
-    return latestVersion
-  }
-
   private async getAllAvailableBridgeVersions(): Promise<string[]> {
     let htmlResponse = ''
 
@@ -281,6 +301,20 @@ export class SynopsysBridge {
     return bridgeDownloadUrl
   }
 
+  getLatestVersionUrl(): string {
+    const osName = process.platform
+    let bridgeDownloadUrl = this.bridgeUrlLatestPattern
+    if (osName === 'darwin') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM)
+    } else if (osName === 'linux') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
+    } else if (osName === 'win32') {
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.WINDOWS_PLATFORM)
+    }
+
+    return bridgeDownloadUrl
+  }
+
   async checkIfVersionExists(bridgeVersion: string, bridgeVersionFilePath: string): Promise<boolean> {
     try {
       const contents = readFileSync(bridgeVersionFilePath, 'utf-8')
@@ -289,5 +323,47 @@ export class SynopsysBridge {
       info('Error reading version file content: '.concat((e as Error).message))
     }
     return false
+  }
+
+  async getSynopsysBridgePath(): Promise<string> {
+    let synopsysBridgePath = inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
+
+    if (!synopsysBridgePath) {
+      synopsysBridgePath = this.getBridgeDefaultPath()
+    }
+    return synopsysBridgePath
+  }
+
+  async getVersionFromLatestURL(): Promise<string> {
+    try {
+      const latestVersionsUrl = this.bridgeArtifactoryURL.concat('latest/versions.txt')
+      const httpClient = new HttpClient('')
+      const httpResponse = await httpClient.get(latestVersionsUrl, {Accept: 'text/html'})
+      if (httpResponse.message.statusCode === 200) {
+        const htmlResponse = (await httpResponse.readBody()).trim()
+        const lines = htmlResponse.split('\n')
+        for (const line of lines) {
+          if (line.includes('Synopsys Bridge Package')) {
+            const newerVersion = line.split(':')[1].trim()
+            return newerVersion
+          }
+        }
+      } else {
+        error('Unable to retrieve the most recent version from Artifactory URL')
+      }
+    } catch (e) {
+      info('Error while reading version file content: '.concat((e as Error).message))
+    }
+    return ''
+  }
+
+  async setBridgeExecutablePath(osName: string, filePath: string): Promise<string> {
+    if (osName === 'win32') {
+      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('\\synopsys-bridge'), ['.exe'])
+    } else if (osName === 'darwin' || osName === 'linux') {
+      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
+    }
+    debug('bridgeExecutablePath'.concat(this.bridgeExecutablePath))
+    return this.bridgeExecutablePath
   }
 }

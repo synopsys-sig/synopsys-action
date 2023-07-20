@@ -27,7 +27,7 @@ test('Not supported flow error - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -45,7 +45,7 @@ test('Not supported flow error (empty strings) - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: ''})
   Object.defineProperty(inputs, 'COVERITY_URL', {value: ''})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -66,7 +66,7 @@ test('Run polaris flow - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
   Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,sast'})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -81,6 +81,22 @@ test('Run polaris flow - run', async () => {
   jest.restoreAllMocks()
 })
 
+test('Enable airgap', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
+
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+  const response = await run()
+  expect(response).not.toBe(null)
+
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+})
+
 test('Run blackduck flow - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
@@ -90,7 +106,7 @@ test('Run blackduck flow - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: true})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -113,7 +129,7 @@ test('Run blackduck flow - PR COMMENT - when MR details not found', async () => 
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: true})
   delete process.env['GITHUB_REF']
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -142,7 +158,7 @@ test('Run blackduck flow with Fix pull request - run', async () => {
   Object.defineProperty(process.env, 'GITHUB_REF_NAME', {value: 'ref'})
   Object.defineProperty(process.env, 'GITHUB_REPOSITORY_OWNER', {value: 'owner'})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -164,7 +180,7 @@ test('Run blackduck flow with Fix pull request, missing github token - run', asy
 
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: false})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -185,7 +201,7 @@ test('Run coverity flow - run - without optional fields', async () => {
   Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
   Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -209,7 +225,7 @@ test('Run coverity flow - run - with optional fields', async () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -234,7 +250,7 @@ test('Run coverity flow - run - with optional fields - when MR details not found
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
   delete process.env['GITHUB_REF']
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -255,7 +271,7 @@ test('Run blackduck flow with download and configure option - run without option
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://download-bridge-win.zip'})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -278,7 +294,7 @@ test('Run blackduck flow with download and configure option - run with optional 
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://download-bridge-win.zip'})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
@@ -301,7 +317,7 @@ test('Run Bridge download and configure option with wrong download url - run', a
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'http://wrong-url-mac.zip'})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   jest.spyOn(SynopsysBridge.prototype, 'checkIfSynopsysBridgeExists').mockResolvedValueOnce(false)
   jest.spyOn(downloadUtility, 'getRemoteFile').mockRejectedValueOnce(new Error('URL not found - 404'))
 
@@ -324,7 +340,7 @@ test('Run Bridge download and configure option with empty url - run', async () =
 
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: ''})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   jest.spyOn(downloadUtility, 'getRemoteFile').mockRejectedValueOnce(new Error('Bridge url cannot be empty'))
 
   try {
@@ -343,7 +359,7 @@ test('Run polaris flow for bridge command failure - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
   Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
 
-  jest.spyOn(SynopsysBridge.prototype, 'getLatestVersion').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)

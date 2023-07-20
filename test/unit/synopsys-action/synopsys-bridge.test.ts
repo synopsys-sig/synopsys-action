@@ -6,8 +6,8 @@ import {IncomingMessage} from 'http'
 import {Socket} from 'net'
 import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
 import * as inputs from '../../../src/synopsys-action/inputs'
-import {existsSync} from 'fs'
-const fs = require('fs')
+import * as constants from '../../../src/application-constants'
+const util = require('../../../src/synopsys-action/utility')
 
 const ioUtils = require('@actions/io/lib/io-util')
 mock('@actions/io/lib/io-util')
@@ -18,6 +18,9 @@ mock('path')
 const ex = require('@actions/exec')
 mock('@actions/exec')
 
+const fs = require('fs')
+mock('fs')
+
 beforeEach(() => {
   Object.defineProperty(process, 'platform', {
     value: process.platform
@@ -26,6 +29,7 @@ beforeEach(() => {
 
 test('Test executeBridgeCommand for MAC', () => {
   const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')
@@ -124,6 +128,29 @@ test('Validate bridge URL MAC', () => {
   expect(resp).toBeTruthy()
 })
 
+test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY not empty', () => {
+  let sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {
+    value: '/users'
+  })
+
+  const resp = sb.getSynopsysBridgePath()
+  expect(resp).resolves.toContain('users')
+})
+
+test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY if empty', () => {
+  let sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {
+    value: ''
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/Users/user')
+
+  const resp = sb.getSynopsysBridgePath()
+  expect(resp).resolves.toContain('/Users/user')
+})
+
 test('Validate bridge URL Linux', () => {
   Object.defineProperty(process, 'platform', {
     value: 'linux'
@@ -131,92 +158,6 @@ test('Validate bridge URL Linux', () => {
 
   const resp = validateBridgeUrl('http://download/bridge-linux.zip')
   expect(resp).toBeTruthy()
-})
-
-test('Test getLatestVersion - Patch version', async () => {
-  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
-
-  const httpResponse: Mocked<HttpClientResponse> = {
-    message: incomingMessage,
-    readBody: jest.fn()
-  }
-  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.114/">0.1.114/</a>  17-Oct-2022 19:46    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
-
-  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
-
-  const sb = new SynopsysBridge()
-  const response = await sb.getLatestVersion()
-
-  expect(response).toBe('0.1.114')
-})
-
-test('Test getLatestVersion - Minor version', async () => {
-  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
-
-  const httpResponse: Mocked<HttpClientResponse> = {
-    message: incomingMessage,
-    readBody: jest.fn()
-  }
-  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '<a href="0.2.1/">0.2.1/</a>  17-Oct-2022 19:58    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
-
-  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
-
-  const sb = new SynopsysBridge()
-  const response = await sb.getLatestVersion()
-
-  expect(response).toBe('0.2.1')
-})
-
-test('Test getLatestVersion - Minor version without sequence', async () => {
-  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
-
-  const httpResponse: Mocked<HttpClientResponse> = {
-    message: incomingMessage,
-    readBody: jest.fn()
-  }
-  httpResponse.readBody.mockResolvedValueOnce(
-    '\n' +
-      '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' +
-      '<html>\n' +
-      '<head><meta name="robots" content="noindex" />\n' +
-      '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' +
-      '</head>\n' +
-      '<body>\n' +
-      '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' +
-      '<pre>Name     Last modified      Size</pre><hr/>\n' +
-      '<pre><a href="../">../</a>\n' +
-      '<a href="0.1.114/">0.1.114/</a>  16-Dec-2022 16:45    -\n' +
-      '<a href="0.1.162/">0.1.162/</a>  24-Jan-2023 18:41    -\n' +
-      '<a href="0.1.61/">0.1.61/</a>   04-Oct-2022 23:05    -\n' +
-      '<a href="0.1.67/">0.1.67/</a>   07-Oct-2022 00:35    -\n' +
-      '<a href="0.1.72/">0.1.72/</a>   17-Oct-2022 19:46    -\n' +
-      '</pre>\n' +
-      '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address><script type="text/javascript" src="/_Incapsula_Resource?SWJIYLWA=719d34d31c8e3a6e6fffd425f7e032f3&ns=1&cb=1747967294" async></script></body></html>'
-  )
-
-  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
-
-  const sb = new SynopsysBridge()
-  const response = await sb.getLatestVersion()
-
-  expect(response).toBe('0.1.162')
-})
-
-test('Test getLatestVersion - Major version', async () => {
-  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
-
-  const httpResponse: Mocked<HttpClientResponse> = {
-    message: incomingMessage,
-    readBody: jest.fn()
-  }
-  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '<a href="0.2.1/">0.2.1/</a>  17-Oct-2022 19:58    -\n' + '<a href="1.0.0/">1.0.0/</a>  17-Oct-2022 19:58    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
-
-  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
-
-  const sb = new SynopsysBridge()
-  const response = await sb.getLatestVersion()
-
-  expect(response).toBe('1.0.0')
 })
 
 test('Test validateBridgeVersion', async () => {
@@ -269,6 +210,57 @@ test('Test getVersionUrl linux', () => {
   Object.defineProperty(process, 'platform', {value: null})
 })
 
+test('Latest URL Version success', async () => {
+  Object.defineProperty(constants, 'LATEST_GLOBAL_VERSION_URL', {value: 'https://artifact.com/latest/version.txt'})
+
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+  const sb = new SynopsysBridge()
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+  httpResponse.readBody.mockResolvedValue('Synopsys Bridge Package: 0.3.1')
+  httpResponse.message.statusCode = 200
+  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
+
+  const response = await sb.getVersionFromLatestURL()
+  expect(response).toContain('0.3.1')
+})
+
+test('Latest url version if not provided', async () => {
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+
+  const stub = jest.fn()
+  stub()
+
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+  httpResponse.readBody.mockResolvedValue('error')
+  jest.spyOn(HttpClient.prototype, 'get').mockRejectedValue(httpResponse)
+
+  const sb = new SynopsysBridge()
+  jest.spyOn(sb, 'getVersionFromLatestURL')
+  const response = await sb.getVersionFromLatestURL()
+  expect(response).toContain('')
+})
+
+test('Latest URL Version failure', async () => {
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+  httpResponse.message.statusCode = 400
+  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
+
+  const sb = new SynopsysBridge()
+  const response = await sb.getVersionFromLatestURL()
+  expect(response).toContain('')
+})
+
 test('Test fetch version details from BRIDGE_DOWNLOAD_URL', () => {
   const sb = new SynopsysBridge()
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: ''})
@@ -278,9 +270,9 @@ test('Test fetch version details from BRIDGE_DOWNLOAD_URL', () => {
   expect(response).rejects.toThrowError()
 })
 
-test('Test invalid path for SYNOPSYS_BRIDGE_PATH', () => {
+test('Test invalid path for SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', () => {
   const sb = new SynopsysBridge()
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: '/test-dir'})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test-dir'})
   const response = sb.downloadBridge('/working_directory')
   expect(response).rejects.toThrowError()
 })
@@ -291,20 +283,136 @@ test('Test version file not exist failure', () => {
   expect(response).resolves.toEqual(false)
 })
 
-test('Test invalid path for SYNOPSYS_BRIDGE_PATH windows', () => {
+test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
   const sb = new SynopsysBridge()
-  Object.defineProperty(process, 'platform', {value: 'win32'})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: 'c:\\working_directory'})
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'darwin'
+  })
 
   path.join = jest.fn()
-  path.join.mockReturnValueOnce('c:\\')
+  path.join.mockReturnValueOnce('/user')
 
   ioUtils.tryGetExecutablePath = jest.fn()
-  ioUtils.tryGetExecutablePath.mockReturnValueOnce('c:\\working_directory')
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('/user/somepath')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
 
   fs.existsSync = jest.fn()
-  fs.existsSync.mockReturnValueOnce(true)
+  fs.existsSync.mockResolvedValue(true)
 
-  const response = sb.checkIfSynopsysBridgeExists('0.1.1')
-  expect(response).resolves.toEqual(false)
+  util.checkIfPathExists = jest.fn()
+  util.checkIfPathExists.mockResolvedValue(true)
+
+  const response = sb.executeBridgeCommand('command', '/Users')
+
+  expect(response).resolves.toEqual(0)
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+})
+
+test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without url and version', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'darwin'
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('/user/somepath')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
+
+  Object.defineProperty(process, 'platform', {
+    value: 'darwin'
+  })
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockResolvedValue(true)
+
+  util.checkIfPathExists = jest.fn()
+  util.checkIfPathExists.mockResolvedValue(true)
+
+  const response = sb.executeBridgeCommand('command', '/users')
+
+  expect(response).resolves.toEqual(0)
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+})
+
+test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Linux', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'linux'
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('/user/somepath')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockResolvedValue(true)
+
+  util.checkIfPathExists = jest.fn()
+  util.checkIfPathExists.mockResolvedValue(true)
+
+  const response = sb.executeBridgeCommand('command', '/Users')
+
+  expect(response).resolves.toEqual(0)
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+})
+
+test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Windows', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'win32'
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('/user/somepath')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockResolvedValue(true)
+
+  util.checkIfPathExists = jest.fn()
+  util.checkIfPathExists.mockResolvedValue(true)
+
+  const response = sb.executeBridgeCommand('command', '/Users')
+
+  expect(response).resolves.toEqual(0)
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
 })
