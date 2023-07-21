@@ -53,14 +53,16 @@ applications, projects and entitlements are set in your Polaris environment.
 At this time, Polaris does not support the analysis of pull requests. We recommend running the Synopsys Action on
 pushes to main branches.
 
-Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Polaris into a GitHub workflow. Here's an example workflow for Polaris scan using the Synopsys Action:
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Polaris into a GitHub workflow. The action will download the Bridge, Coverity and Detect CLIs and break-the-build based on policies defined in the Polaris UI. 
+
+Here's an example workflow for Polaris scan using the Synopsys Action:
 
 ```yaml
 
-name: CI-Polaris
+name: polaris-sig-action
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main, master, develop, stage, release ]
   workflow_dispatch:  
 jobs:
   build:
@@ -105,16 +107,18 @@ On pull requests, the scan will typically be incremental, and results will not b
 Before you can run a pipeline using the Synopsys Action and Coverity, you must make sure the appropriate
 project and stream are set in your Coverity Connect server environment.
 
-Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Coverity CNC into a GitHub workflow. Here's an example workflow for Coverity scan using the Synopsys Action:
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Coverity CNC into a GitHub workflow. The action will download the Synopsys Bridge CLI, execute a scan, and offers post-scan features such as break-the-build quality gates and PR comments.
+
+Here's an example workflow for Coverity scan using the Synopsys Action:
 
 ```yaml
 
-name: CI-Coverity
+name: cnc-sig-action
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main, master, develop, stage, release ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ main, master, develop, stage, release ]
   workflow_dispatch:  
 jobs:
   build:
@@ -130,8 +134,9 @@ jobs:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
-          coverity_stream_name: ${{ github.event.repository.name }}
+          coverity_project_name: ${{ github.event.repository.name }}
+          coverity_stream_name: ${{ github.event.repository.name }}-${{ github.ref_name }}
+          coverity_policy_view: 'Outstanding Issues'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true  
           
@@ -174,17 +179,19 @@ The action will download the Bridge and Detect CLIs, run a SCA scan, and optiona
 
 On pushes, a full **Intelligent** Black Duck scan will be run. On pull requests, a **Rapid** ephemeral scan will be run.
 
-Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Black Duck into a GitHub workflow. Here's an example workflow for Black Duck scan using the Synopsys Action:
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Black Duck into a GitHub workflow. The action will download the Bridge CLI, execute a scan, and offers post-scan features such as break-the-build quality gates and PR comments.
+
+Here's an example workflow for Black Duck scan using the Synopsys Action:
 
 ```yaml
 
-name: CI-BlackDuck
+name: bd-sig-action
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ main, master, develop, stage, release ]
   pull_request:
-    branches: [ master, main ]
+    branches: [ main, master, develop, stage, release ]
   workflow_dispatch:  
 jobs:
   build:
@@ -201,7 +208,6 @@ jobs:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
           DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
           DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
-          DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
@@ -220,21 +226,17 @@ jobs:
         ### Use below configurations to set specific detect environment varibales
         env:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
-          DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
-          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
-          DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
+          DETECT_PROJECT_VERSION_NAME: ${{ github.base_ref }}
+          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.base_ref }}
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
           blackduck_scan_full: false
-          ### Accepts Multiple Values
-          blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
           ### Below configuration is used to enable automatic pull request comment based on Black Duck scan result
           blackduck_automation_prcomment: true
           github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_prcomment is set to 'true'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
-
 ```
 
 |Input Parameter |Description | Mandatory / Optional |
