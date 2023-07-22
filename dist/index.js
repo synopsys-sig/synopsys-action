@@ -121,7 +121,8 @@ function run() {
                 yield sb.downloadBridge(tempDir);
             }
             else {
-                (0, core_1.info)('Network air gap has been enabled so skipping download bridge.');
+              (0, core_1.info)("Network air gap is enabled, skipping synopsys-bridge download.");
+              yield sb.getExecutablePathForAirGap();
             }
             // Execute bridge command
             return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
@@ -579,22 +580,6 @@ class SynopsysBridge {
                     cwd: workingDirectory
                 };
                 try {
-                    if (inputs.ENABLE_NETWORK_AIR_GAP) {
-                        if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
-                            if (!(0, utility_1.checkIfPathExists)(inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) {
-                                throw new Error('Synopsys Bridge install directory does not exist');
-                            }
-                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY);
-                            this.checkIfValidExecutablePath(this.bridgeExecutablePath);
-                        }
-                        else {
-                            if (!(0, utility_1.checkIfPathExists)(this.getBridgeDefaultPath())) {
-                                throw new Error('Synopsys Bridge default path does not exist');
-                            }
-                            this.bridgeExecutablePath = yield this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath());
-                            this.checkIfValidExecutablePath(this.bridgeExecutablePath);
-                        }
-                    }
                     return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
                 }
                 catch (errorObject) {
@@ -603,11 +588,6 @@ class SynopsysBridge {
             }
             return -1;
         });
-    }
-    checkIfValidExecutablePath(bridgeExecutablePath) {
-        if (!(0, utility_1.checkIfPathExists)(bridgeExecutablePath)) {
-            throw new Error('Bridge executable file could not be found at'.concat(bridgeExecutablePath));
-        }
     }
     downloadBridge(tempDir) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -636,15 +616,6 @@ class SynopsysBridge {
                     const latestVersion = yield this.getVersionFromLatestURL();
                     if (latestVersion === '') {
                         bridgeUrl = this.getLatestVersionUrl();
-                        if (!bridgeUrl.includes('latest')) {
-                            throw new Error('Invalid artifactory latest url');
-                        }
-                        else {
-                            if (!(0, validators_1.validateBridgeUrl)(bridgeUrl)) {
-                                throw new Error('Invalid artifactory latest url');
-                            }
-                        }
-                        bridgeVersion = 'latest';
                     }
                     else {
                         bridgeUrl = this.getVersionUrl(latestVersion).trim();
@@ -663,14 +634,9 @@ class SynopsysBridge {
                             yield (0, io_1.rmRF)(file);
                         }
                     }
-                    yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
-                    if (process.platform === 'win32') {
-                        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
-                    }
-                    else {
-                        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
-                    }
-                    (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
+                  yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
+                  yield this.setBridgeExecutablePath(this.synopsysBridgePath);
+                  (0, core_1.info)("Download and configuration of Synopsys Bridge completed");
                 }
                 else {
                     (0, core_1.info)('Bridge already exists, download has been skipped');
@@ -840,29 +806,47 @@ class SynopsysBridge {
                             return newerVersion;
                         }
                     }
+                } else {
+                  (0, core_1.error)("Unable to retrieve the most recent version from Artifactory URL");
                 }
-                else {
-                    (0, core_1.error)('Unable to retrieve the most recent version from Artifactory URL');
-                }
+            } catch (e) {
+              (0, core_1.info)("Error while reading version file content: ".concat(e.message));
             }
-            catch (e) {
-                (0, core_1.info)('Error while reading version file content: '.concat(e.message));
-            }
-            return '';
+          return "";
         });
     }
-    setBridgeExecutablePath(osName, filePath) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (osName === 'win32') {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat('\\synopsys-bridge'), ['.exe']);
-            }
-            else if (osName === 'darwin' || osName === 'linux') {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat('/synopsys-bridge'), []);
-            }
-            (0, core_1.debug)('bridgeExecutablePath'.concat(this.bridgeExecutablePath));
-            return this.bridgeExecutablePath;
-        });
-    }
+
+  setBridgeExecutablePath(filePath) {
+    return __awaiter(this, void 0, void 0, function* () {
+      if (process.platform === "win32") {
+        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat("\\synopsys-bridge"), [".exe"]);
+      } else if (process.platform === "darwin" || process.platform === "linux") {
+        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(filePath.concat("/synopsys-bridge"), []);
+      }
+      (0, core_1.debug)("Synopsys bridge executable path:".concat(this.bridgeExecutablePath));
+    });
+  }
+
+  getExecutablePathForAirGap() {
+    return __awaiter(this, void 0, void 0, function* () {
+      let executableDirectoryPath;
+      let pathErrorMessage;
+      if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
+        executableDirectoryPath = inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;
+        pathErrorMessage = "Synopsys Bridge Install Directory does not exist";
+      } else {
+        executableDirectoryPath = this.getBridgeDefaultPath();
+        pathErrorMessage = "Synopsys Default Bridge path does not exist";
+      }
+      if (!(0, utility_1.checkIfPathExists)(executableDirectoryPath)) {
+        throw new Error(pathErrorMessage);
+      }
+      yield this.setBridgeExecutablePath(executableDirectoryPath);
+      if (this.bridgeExecutablePath === "") {
+        throw new Error("Synopsys Bridge executable file could not be found");
+      }
+    });
+  }
 }
 exports.SynopsysBridge = SynopsysBridge;
 

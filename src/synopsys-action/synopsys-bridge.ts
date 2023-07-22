@@ -8,9 +8,9 @@ import {checkIfPathExists, cleanupTempDir} from './utility'
 import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs, {readFileSync} from 'fs'
-import {rmRF} from '@actions/io'
-import {validateBlackDuckInputs, validateBridgeUrl, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
-import {SynopsysToolsParameter} from './tools-parameter'
+import { rmRF } from "@actions/io";
+import { validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes } from "./validators";
+import { SynopsysToolsParameter } from "./tools-parameter";
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import DomParser from 'dom-parser'
@@ -93,33 +93,12 @@ export class SynopsysBridge {
         cwd: workingDirectory
       }
       try {
-        if (inputs.ENABLE_NETWORK_AIR_GAP) {
-          if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
-            if (!checkIfPathExists(inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) {
-              throw new Error('Synopsys Bridge install directory does not exist')
-            }
-            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)
-            this.checkIfValidExecutablePath(this.bridgeExecutablePath)
-          } else {
-            if (!checkIfPathExists(this.getBridgeDefaultPath())) {
-              throw new Error('Synopsys Bridge default path does not exist')
-            }
-            this.bridgeExecutablePath = await this.setBridgeExecutablePath(osName, this.getBridgeDefaultPath())
-            this.checkIfValidExecutablePath(this.bridgeExecutablePath)
-          }
-        }
         return await exec(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp)
       } catch (errorObject) {
         throw errorObject
       }
     }
     return -1
-  }
-
-  private checkIfValidExecutablePath(bridgeExecutablePath: string): void {
-    if (!checkIfPathExists(bridgeExecutablePath)) {
-      throw new Error('Bridge executable file could not be found at'.concat(bridgeExecutablePath))
-    }
   }
 
   async downloadBridge(tempDir: string): Promise<void> {
@@ -145,14 +124,6 @@ export class SynopsysBridge {
         const latestVersion = await this.getVersionFromLatestURL()
         if (latestVersion === '') {
           bridgeUrl = this.getLatestVersionUrl()
-          if (!bridgeUrl.includes('latest')) {
-            throw new Error('Invalid artifactory latest url')
-          } else {
-            if (!validateBridgeUrl(bridgeUrl)) {
-              throw new Error('Invalid artifactory latest url')
-            }
-          }
-          bridgeVersion = 'latest'
         } else {
           bridgeUrl = this.getVersionUrl(latestVersion).trim()
           bridgeVersion = latestVersion
@@ -173,13 +144,9 @@ export class SynopsysBridge {
           }
         }
 
-        await extractZipped(downloadResponse.filePath, extractZippedFilePath)
-        if (process.platform === 'win32') {
-          this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe'])
-        } else {
-          this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('/synopsys-bridge'), [])
-        }
-        info('Download and configuration of Synopsys Bridge completed')
+        await extractZipped(downloadResponse.filePath, extractZippedFilePath);
+        await this.setBridgeExecutablePath(this.synopsysBridgePath);
+        info("Download and configuration of Synopsys Bridge completed");
       } else {
         info('Bridge already exists, download has been skipped')
       }
@@ -349,21 +316,41 @@ export class SynopsysBridge {
           }
         }
       } else {
-        error('Unable to retrieve the most recent version from Artifactory URL')
+        error("Unable to retrieve the most recent version from Artifactory URL");
       }
     } catch (e) {
-      info('Error while reading version file content: '.concat((e as Error).message))
+      info("Error while reading version file content: ".concat((e as Error).message));
     }
-    return ''
+    return "";
   }
 
-  async setBridgeExecutablePath(osName: string, filePath: string): Promise<string> {
-    if (osName === 'win32') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('\\synopsys-bridge'), ['.exe'])
-    } else if (osName === 'darwin' || osName === 'linux') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat('/synopsys-bridge'), [])
+  async setBridgeExecutablePath(filePath: string): Promise<void> {
+    if (process.platform === "win32") {
+      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat("\\synopsys-bridge"), [".exe"]);
+    } else if (process.platform === "darwin" || process.platform === "linux") {
+      this.bridgeExecutablePath = await tryGetExecutablePath(filePath.concat("/synopsys-bridge"), []);
     }
-    debug('bridgeExecutablePath'.concat(this.bridgeExecutablePath))
-    return this.bridgeExecutablePath
+    debug("Synopsys bridge executable path:".concat(this.bridgeExecutablePath));
+  }
+
+  async getExecutablePathForAirGap(): Promise<void> {
+    let executableDirectoryPath: string;
+    let pathErrorMessage: string;
+    if (inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
+      executableDirectoryPath = inputs.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;
+      pathErrorMessage = "Synopsys Bridge Install Directory does not exist";
+    } else {
+      executableDirectoryPath = this.getBridgeDefaultPath();
+      pathErrorMessage = "Synopsys Default Bridge path does not exist";
+    }
+    if (!checkIfPathExists(executableDirectoryPath)) {
+      throw new Error(pathErrorMessage);
+    }
+
+    await this.setBridgeExecutablePath(executableDirectoryPath);
+
+    if (this.bridgeExecutablePath === "") {
+      throw new Error("Synopsys Bridge executable file could not be found");
+    }
   }
 }

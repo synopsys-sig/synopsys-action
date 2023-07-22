@@ -89,6 +89,7 @@ test('Enable airgap', async () => {
 
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+
   const response = await run()
   expect(response).not.toBe(null)
 
@@ -416,7 +417,32 @@ test('Run polaris flow with wrong bridge version - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
 })
 
-test('Test error messages with bridge exit codes', () => {
-  var errorMessage = 'Error: The process failed with exit code 2'
-  expect(logBridgeExitCodes(errorMessage)).toEqual('Exit Code: 2 Error from adapter end')
-})
+test("Run polaris flow - diagnostics", async () => {
+  Object.defineProperty(inputs, "POLARIS_SERVER_URL", { value: "server_url" });
+  Object.defineProperty(inputs, "POLARIS_ACCESS_TOKEN", { value: "access_token" });
+  Object.defineProperty(inputs, "POLARIS_APPLICATION_NAME", { value: "POLARIS_APPLICATION_NAME" });
+  Object.defineProperty(inputs, "POLARIS_PROJECT_NAME", { value: "POLARIS_PROJECT_NAME" });
+  Object.defineProperty(inputs, "POLARIS_ASSESSMENT_TYPES", { value: "SCA" });
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_VERSION", { value: "0.7.0" });
+  Object.defineProperty(inputs, "INCLUDE_DIAGNOSTICS", { value: "server_url" });
+
+  jest.spyOn(SynopsysBridge.prototype, "validateBridgeVersion").mockResolvedValueOnce(true);
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: "C://user/temp/download/",
+    fileName: "C://user/temp/download/bridge-win.zip"
+  };
+  jest.spyOn(downloadUtility, "getRemoteFile").mockResolvedValueOnce(downloadFileResp);
+  jest.spyOn(downloadUtility, "extractZipped").mockResolvedValueOnce(true);
+  jest.spyOn(configVariables, "getWorkSpaceDirectory").mockReturnValueOnce("/home/bridge");
+  jest.spyOn(SynopsysBridge.prototype, "executeBridgeCommand").mockResolvedValueOnce(1);
+  jest.spyOn(SynopsysBridge.prototype, "validateBridgeVersion").mockResolvedValueOnce(true);
+
+  let response = await run();
+  expect(response).not.toBe(null);
+
+  Object.defineProperty(inputs, "POLARIS_SERVER_URL", { value: null });
+});
+test("Test error messages with bridge exit codes", () => {
+  var errorMessage = "Error: The process failed with exit code 2";
+  expect(logBridgeExitCodes(errorMessage)).toEqual("Exit Code: 2 Error from adapter end");
+});

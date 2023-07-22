@@ -1,22 +1,25 @@
-import {SynopsysBridge} from '../../../src/synopsys-action/synopsys-bridge'
-import mock = jest.mock
-import Mocked = jest.Mocked
-import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
-import {IncomingMessage} from 'http'
-import {Socket} from 'net'
-import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
-import * as inputs from '../../../src/synopsys-action/inputs'
-import * as constants from '../../../src/application-constants'
-const util = require('../../../src/synopsys-action/utility')
+import { SynopsysBridge } from "../../../src/synopsys-action/synopsys-bridge";
+import mock = jest.mock;
+import Mocked = jest.Mocked;
+import { HttpClientResponse, HttpClient } from "typed-rest-client/HttpClient";
+import { IncomingMessage } from "http";
+import { Socket } from "net";
+import { validateBridgeUrl } from "../../../src/synopsys-action/validators";
+import * as inputs from "../../../src/synopsys-action/inputs";
+import * as constants from "../../../src/application-constants";
+import { run } from "../../../src/main";
+import { error } from "@actions/core";
 
-const ioUtils = require('@actions/io/lib/io-util')
-mock('@actions/io/lib/io-util')
+const util = require("../../../src/synopsys-action/utility");
 
-const path = require('path')
-mock('path')
+const ioUtils = require("@actions/io/lib/io-util");
+mock("@actions/io/lib/io-util");
 
-const ex = require('@actions/exec')
-mock('@actions/exec')
+const path = require("path");
+mock("path");
+
+const ex = require("@actions/exec");
+mock("@actions/exec");
 
 const fs = require('fs')
 mock('fs')
@@ -29,7 +32,6 @@ beforeEach(() => {
 
 test('Test executeBridgeCommand for MAC', () => {
   const sb = new SynopsysBridge()
-  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')
@@ -219,19 +221,34 @@ test('Latest URL Version success', async () => {
     message: incomingMessage,
     readBody: jest.fn()
   }
-  httpResponse.readBody.mockResolvedValue('Synopsys Bridge Package: 0.3.1')
-  httpResponse.message.statusCode = 200
-  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
+  httpResponse.readBody.mockResolvedValue("Synopsys Bridge Package: 0.3.1");
+  httpResponse.message.statusCode = 200;
+  jest.spyOn(HttpClient.prototype, "get").mockResolvedValueOnce(httpResponse);
 
-  const response = await sb.getVersionFromLatestURL()
-  expect(response).toContain('0.3.1')
+  const response = await sb.getVersionFromLatestURL();
+  expect(response).toContain("0.3.1");
 })
 
-test('Latest url version if not provided', async () => {
-  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+test("Latest URL Version success", async () => {
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket());
+  const sb = new SynopsysBridge();
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  };
+  httpResponse.readBody.mockResolvedValue("Synopsys Bridge Package: 0.3.1");
+  httpResponse.message.statusCode = 200;
+  jest.spyOn(HttpClient.prototype, "get").mockResolvedValueOnce(httpResponse);
 
-  const stub = jest.fn()
-  stub()
+  const response = sb.getLatestVersionUrl();
+  expect(response).toContain("latest/synopsys-bridge");
+});
+
+test("Latest url version if not provided", async () => {
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket());
+
+  const stub = jest.fn();
+  stub();
 
   const httpResponse: Mocked<HttpClientResponse> = {
     message: incomingMessage,
@@ -306,24 +323,118 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
   fs.existsSync = jest.fn()
   fs.existsSync.mockResolvedValue(true)
 
-  util.checkIfPathExists = jest.fn()
-  util.checkIfPathExists.mockResolvedValue(true)
+  util.checkIfPathExists = jest.fn();
+  util.checkIfPathExists.mockResolvedValue(true);
 
-  const response = sb.executeBridgeCommand('command', '/Users')
+  const response = sb.executeBridgeCommand("command", "/Users");
 
-  expect(response).resolves.toEqual(0)
-  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  expect(response).resolves.toEqual(0);
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: false });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: "" });
 })
 
-test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without url and version', () => {
-  const sb = new SynopsysBridge()
-  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
+test("ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY empty", () => {
+  const sb = new SynopsysBridge();
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: true });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: "" });
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_URL", { value: "https://test.com" });
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_VERSION", { value: "0.0.0" });
 
-  Object.defineProperty(process, 'platform', {
-    value: 'darwin'
-  })
+  Object.defineProperty(process, "platform", {
+    value: "darwin"
+  });
+
+  path.join = jest.fn();
+  path.join.mockReturnValueOnce("/user");
+
+  ioUtils.tryGetExecutablePath = jest.fn();
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce("/user/somepath");
+
+  ex.exec = jest.fn();
+  ex.exec.mockReturnValueOnce(0);
+
+  fs.existsSync = jest.fn();
+  fs.existsSync.mockResolvedValue(true);
+
+  util.checkIfPathExists = jest.fn();
+  util.checkIfPathExists.mockResolvedValue(true);
+
+  expect(sb.getExecutablePathForAirGap()).resolves.not.toThrow();
+
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: false });
+});
+
+test("ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not  empty", () => {
+  const sb = new SynopsysBridge();
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: true });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: "/test" });
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_URL", { value: "https://test.com" });
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_VERSION", { value: "0.0.0" });
+
+  Object.defineProperty(process, "platform", {
+    value: "darwin"
+  });
+
+  path.join = jest.fn();
+  path.join.mockReturnValueOnce("/user");
+
+  ioUtils.tryGetExecutablePath = jest.fn();
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce("/user/somepath");
+
+  ex.exec = jest.fn();
+  ex.exec.mockReturnValueOnce(0);
+
+  fs.existsSync = jest.fn();
+  fs.existsSync.mockResolvedValue(true);
+
+  util.checkIfPathExists = jest.fn();
+  util.checkIfPathExists.mockResolvedValue(true);
+  expect(sb.getExecutablePathForAirGap()).resolves.not.toThrow();
+
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: false });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: "" });
+});
+
+test("ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not empty: failure", async () => {
+  const sb = new SynopsysBridge();
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: true });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: "/test" });
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_URL", { value: "https://test.com" });
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_VERSION", { value: "0.0.0" });
+
+  Object.defineProperty(process, "platform", {
+    value: "darwin"
+  });
+
+  path.join = jest.fn();
+  path.join.mockReturnValueOnce("/user");
+
+  ioUtils.tryGetExecutablePath = jest.fn();
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce("/user/somepath");
+
+  ex.exec = jest.fn();
+  ex.exec.mockReturnValueOnce(0);
+
+  fs.existsSync = jest.fn();
+  fs.existsSync.mockReturnValueOnce(false);
+  try {
+    await sb.getExecutablePathForAirGap();
+  } catch (error: any) {
+    expect(error.message).toContain("Synopsys Bridge Install Directory does not exist");
+  }
+
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: false });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: "" });
+});
+
+test("ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without url and version", () => {
+  const sb = new SynopsysBridge();
+  Object.defineProperty(inputs, "ENABLE_NETWORK_AIR_GAP", { value: true });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: "/test" });
+
+  Object.defineProperty(process, "platform", {
+    value: "darwin"
+  });
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')
