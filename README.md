@@ -84,6 +84,7 @@ jobs:
           # include_diagnostics: true
 
 ```
+**Please find the following mandatory and optional parameters for Polaris below:**
 
 |Input Parameter            |Description                                                       |Mandatory / Optional | 
 |----------------------------|-------------------------------------------------------------------|--------------------|
@@ -148,6 +149,7 @@ jobs:
           # include_diagnostics: true  
         
 ```
+**Please find the following mandatory and optional parameters for Coverity below:**
 
 |Input Parameter   |Description                           |Mandatory / Optional |
 |-------------------|---------------------------------------|----------|
@@ -226,6 +228,7 @@ jobs:
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
 ```
+**Please find the following mandatory and optional parameters for Black Duck below:**
 
 |Input Parameter |Description | Mandatory / Optional |
 |-----------------|-------------|---------------------|
@@ -235,7 +238,7 @@ jobs:
 | `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. <br> Supported values: true or false </br>| Optional     |
 | `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>| Optional |
 | `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. Merge Request must be created first from feature branch to main branch to run Black Duck PR Comment. <br> Supported values: true or false </br>| Optional    |
-| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled. <br> **Black Duck automation fix pull request is currently supported for NPM projects only.** <br> Supported values: true or false </br>| Optional    |
+| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vulnerabilities reported. <br> By default fix pull request creation will be disabled. <br> **Black Duck automation fix pull request is currently supported for NPM projects only.** <br> Supported values: true or false </br>| Optional    |
 | `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true |
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
