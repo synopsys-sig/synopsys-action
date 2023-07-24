@@ -203,7 +203,7 @@ jobs:
       - name: Black Duck Full Scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
-        ### Use below configurations to set specific detect environment varibales
+        ### Use below configurations to set specific detect environment variables
         env:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
           DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
@@ -214,7 +214,7 @@ jobs:
           blackduck_scan_full: true
           ### Accepts Multiple Values
           blackduck_scan_failure_severities: 'BLOCKER,CRITICAL'
-          ### Uncomment below configuration to enable autoamtic fix pull request creation if vulnerabilities are reported
+          ### Uncomment below configuration to enable automatic fix pull request creation if vulnerabilities are reported
           # blackduck_automation_fixpr: true 
           # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_fixpr is set to 'true'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
@@ -223,7 +223,7 @@ jobs:
       - name: Black Duck PR Scan
         if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
-        ### Use below configurations to set specific detect environment varibales
+        ### Use below configurations to set specific detect environment variables
         env:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
           DETECT_PROJECT_VERSION_NAME: ${{ github.base_ref }}
