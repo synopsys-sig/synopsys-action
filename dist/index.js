@@ -121,7 +121,7 @@ function run() {
                 yield sb.downloadBridge(tempDir);
             }
             else {
-                (0, core_1.info)("Network air gap is enabled, skipping synopsys-bridge download.");
+                (0, core_1.info)('Network air gap is enabled, skipping synopsys-bridge download.');
                 yield sb.validateSynopsysBridgePath();
             }
             // Execute bridge command
@@ -538,22 +538,24 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.validateSynopsysBridgePath();
             const osName = process.platform;
-            let versionFilePath = "";
+            let versionFilePath = '';
             let versionFileExists = false;
-            if (osName === "win32") {
-                versionFilePath = this.synopsysBridgePath.concat("\\versions.txt");
+            if (osName === 'win32') {
+                versionFilePath = this.synopsysBridgePath.concat('\\versions.txt');
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
-            } else {
-                versionFilePath = this.synopsysBridgePath.concat("/versions.txt");
+            }
+            else {
+                versionFilePath = this.synopsysBridgePath.concat('/versions.txt');
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
             }
             if (versionFileExists) {
-                (0, core_1.debug)("Version file found at ".concat(this.synopsysBridgePath));
+                (0, core_1.debug)('Version file found at '.concat(this.synopsysBridgePath));
                 if (yield this.checkIfVersionExists(bridgeVersion, versionFilePath)) {
                     return true;
                 }
-            } else {
-                (0, core_1.info)("Bridge version file could not be found at ".concat(this.synopsysBridgePath));
+            }
+            else {
+                (0, core_1.info)('Bridge version file could not be found at '.concat(this.synopsysBridgePath));
             }
             return false;
         });
@@ -596,19 +598,21 @@ class SynopsysBridge {
                     else {
                         return Promise.reject(new Error('Provided bridge version not found in artifactory'));
                     }
-                } else {
-                    (0, core_1.info)("Checking for latest version of Bridge to download and configure");
+                }
+                else {
+                    (0, core_1.info)('Checking for latest version of Bridge to download and configure');
                     const latestVersion = yield this.getVersionFromLatestURL();
-                    if (latestVersion === "") {
+                    if (latestVersion === '') {
                         bridgeUrl = this.getLatestVersionUrl();
-                    } else {
+                    }
+                    else {
                         bridgeUrl = this.getVersionUrl(latestVersion).trim();
                         bridgeVersion = latestVersion;
                     }
                 }
                 if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
-                    (0, core_1.info)("Downloading and configuring Synopsys Bridge");
-                    (0, core_1.info)("Bridge URL is - ".concat(bridgeUrl));
+                    (0, core_1.info)('Downloading and configuring Synopsys Bridge');
+                    (0, core_1.info)('Bridge URL is - '.concat(bridgeUrl));
                     const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, bridgeUrl);
                     const extractZippedFilePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath();
                     // Clear the existing bridge, if available
@@ -619,9 +623,10 @@ class SynopsysBridge {
                         }
                     }
                     yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
-                    (0, core_1.info)("Download and configuration of Synopsys Bridge completed");
-                } else {
-                    (0, core_1.info)("Bridge already exists, download has been skipped");
+                    (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
+                }
+                else {
+                    (0, core_1.info)('Bridge already exists, download has been skipped');
                 }
             }
             catch (e) {
@@ -776,51 +781,52 @@ class SynopsysBridge {
     getVersionFromLatestURL() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const latestVersionsUrl = this.bridgeArtifactoryURL.concat("latest/versions.txt");
-                const httpClient = new HttpClient_1.HttpClient("");
-                const httpResponse = yield httpClient.get(latestVersionsUrl, { Accept: "text/html" });
+                const latestVersionsUrl = this.bridgeArtifactoryURL.concat('latest/versions.txt');
+                const httpClient = new HttpClient_1.HttpClient('');
+                const httpResponse = yield httpClient.get(latestVersionsUrl, { Accept: 'text/html' });
                 if (httpResponse.message.statusCode === 200) {
                     const htmlResponse = (yield httpResponse.readBody()).trim();
-                    const lines = htmlResponse.split("\n");
+                    const lines = htmlResponse.split('\n');
                     for (const line of lines) {
-                        if (line.includes("Synopsys Bridge Package")) {
-                            const newerVersion = line.split(":")[1].trim();
+                        if (line.includes('Synopsys Bridge Package')) {
+                            const newerVersion = line.split(':')[1].trim();
                             return newerVersion;
                         }
                     }
-                } else {
-                    (0, core_1.error)("Unable to retrieve the most recent version from Artifactory URL");
                 }
-            } catch (e) {
-                (0, core_1.info)("Error while reading version file content: ".concat(e.message));
+                else {
+                    (0, core_1.error)('Unable to retrieve the most recent version from Artifactory URL');
+                }
             }
-            return "";
+            catch (e) {
+                (0, core_1.info)('Error while reading version file content: '.concat(e.message));
+            }
+            return '';
         });
     }
-
     validateSynopsysBridgePath() {
         return __awaiter(this, void 0, void 0, function* () {
             this.synopsysBridgePath = this.getBridgeDefaultPath();
             if (inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
                 this.synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;
                 if (!(0, utility_1.checkIfPathExists)(this.synopsysBridgePath)) {
-                    throw new Error("Synopsys Bridge Install Directory does not exist");
+                    throw new Error('Synopsys Bridge Install Directory does not exist');
                 }
             }
             yield this.setSynopsysBridgeExecutablePath();
-            (0, core_1.debug)("Synopsys bridge executable path:".concat(this.bridgeExecutablePath));
+            (0, core_1.debug)('Synopsys bridge executable path:'.concat(this.bridgeExecutablePath));
             if (!this.bridgeExecutablePath) {
-                (0, core_1.error)("Synopsys Bridge executable could not be found at ".concat(this.synopsysBridgePath));
+                (0, core_1.error)('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath));
             }
         });
     }
-
     setSynopsysBridgeExecutablePath() {
         return __awaiter(this, void 0, void 0, function* () {
-            if (process.platform === "win32") {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat("\\synopsys-bridge"), [".exe"]);
-            } else if (process.platform === "darwin" || process.platform === "linux") {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat("/synopsys-bridge"), []);
+            if (process.platform === 'win32') {
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
+            }
+            else if (process.platform === 'darwin' || process.platform === 'linux') {
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
             }
         });
     }
