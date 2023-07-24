@@ -53,7 +53,7 @@ applications, projects and entitlements are set in your Polaris environment.
 At this time, Polaris does not support the analysis of pull requests. We recommend running the Synopsys Action on
 pushes to main branches.
 
-Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Polaris into a GitHub workflow. The action will download the Synopsys Bridge CLI, execute a scan, and offers post-scan features such as break-the-build quality gates.
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Polaris into a GitHub workflow. The action will download the Synopsys Bridge CLI, execute a scan, and offer post-scan features such as break-the-build quality gates.
 
 Here's an example workflow for Polaris scan using the Synopsys Action:
 
@@ -95,19 +95,11 @@ jobs:
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
 
-Please note that the Synopsys Action at this time supports only the Coverity cloud deployment model (Kubernetes-based)
-which uses a small footprint thin client to capture the source code, and then submit an analysis job that runs on the server.
-This removes the need for a large footprint (many GB) software installation in your GitHub Runner.
+At this time, Synopsys Security Scan only supports the Coverity thin client/cloud deployment model, which removes the need for a large footprint installation in your agent.
 
-**If you are using a regular (non-Kubernetes) deployment of Coverity** please see the [Coverity json-output-v7 Report Action](https://github.com/marketplace/actions/coverity-json-output-v7-report).
+Before running Coverity using the Synopsys Security Scan, ensure the appropriate `project` and `stream` are set in your Coverity Connect server environment.
 
-On pushes, a full Coverity scan will be run and results committed to the Coverity Connect database.
-On pull requests, the scan will typically be incremental, and results will not be committed to the Coverity Connect database.
-
-Before you can run a pipeline using the Synopsys Action and Coverity, you must make sure the appropriate
-project and stream are set in your Coverity Connect server environment.
-
-Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Coverity CNC into a GitHub workflow. The action will download the Synopsys Bridge CLI, execute a scan, and offers post-scan features such as break-the-build quality gates and PR comments.
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Coverity CNC into a GitHub workflow. The action will download the Synopsys Bridge CLI, execute a scan, and offer post-scan features such as break-the-build quality gates and PR comments.
 
 Here's an example workflow for Coverity scan using the Synopsys Action:
 
@@ -179,7 +171,7 @@ The action will download the Bridge and Detect CLIs, run a SCA scan, and optiona
 
 On pushes, a full **Intelligent** Black Duck scan will be run. On pull requests, a **Rapid** ephemeral scan will be run.
 
-Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Black Duck into a GitHub workflow. The action will download the Synopsys Bridge CLI, execute a scan, and offers post-scan features such as break-the-build quality gates, Fix PR and PR comments.
+Synopsys Action available in the GitHub Marketplace is the recommended solution for integrating Black Duck into a GitHub workflow. The action will download the Synopsys Bridge CLI, execute a scan, and offer post-scan features such as break-the-build quality gates, Fix PR and PR comments.
 
 Here's an example workflow for Black Duck scan using the Synopsys Action:
 
@@ -203,11 +195,9 @@ jobs:
       - name: Black Duck Full Scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
-        ### Use below configurations to set specific detect environment variables
+        ### Use below configuration to set specific detect environment variables
         env:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
-          DETECT_PROJECT_VERSION_NAME: ${{ github.ref_name }}
-          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
@@ -223,11 +213,9 @@ jobs:
       - name: Black Duck PR Scan
         if: ${{ github.event_name == 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
-        ### Use below configurations to set specific detect environment variables
+        ### Use below configuration to set specific detect environment variables
         env:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
-          DETECT_PROJECT_VERSION_NAME: ${{ github.base_ref }}
-          DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.base_ref }}
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_URL }}
           blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN }}
