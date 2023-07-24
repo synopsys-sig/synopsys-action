@@ -165,9 +165,9 @@ jobs:
 | `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>                     | Mandatory     |
 | `coverity_stream_name`        | Stream name in Coverity   | Mandatory     |
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
-| `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> **Example:** coverity_policy_view: '100001' **or** coverity_policy_view: 'Outstanding Issues'  </br>       | Optional    |
+| `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: `coverity_policy_view: '100001'` or `coverity_policy_view: 'Outstanding Issues'`  </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. Merge Request must be created first from feature branch to main branch to run Coverity PR Comment. <br> Supported values: true or false </br> | Optional     |
-| `github_token` | GitHub Access Token <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} | Mandatory if coverity_automation_prcomment is set as true |
+| `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if coverity_automation_prcomment is set as true |
           
 ## Synopsys GitHub Action - Black Duck
 
@@ -248,7 +248,7 @@ jobs:
 | `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>| Optional |
 | `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. Merge Request must be created first from feature branch to main branch to run Black Duck PR Comment. <br> Supported values: true or false </br>| Optional    |
 | `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vunerabilities reported. <br> By default fix pull request creation will be disabled. <br> **Black Duck automation fix pull request is currently supported for NPM projects only.** <br> Supported values: true or false </br>| Optional    |
-| `github_token` | GitHub Access Token <br> **Example:** github_token: ${{ secrets.GITHUB_TOKEN }} | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true |
+| `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true |
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
 can be passed through environment variables. This is a standard capability of Detect. </br>For example, if you
@@ -270,5 +270,5 @@ GitHub workflow.
 
 **Notes:**
 - Synopsys Bridge can be downloaded from [here](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/).
-- By default, Synopsys Bridge will be downloaded in $HOME/synopsys-bridge directory.
+- By default, Synopsys Bridge will be downloaded in `$HOME/synopsys-bridge` directory.
 - If `bridge_download_version` or `bridge_download_url` is not provided, Synopsys Action will download and configure the latest version of Bridge.
