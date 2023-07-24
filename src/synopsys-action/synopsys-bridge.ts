@@ -25,16 +25,16 @@ export class SynopsysBridge {
   bridgeArtifactoryURL: string;
   bridgeUrlPattern: string;
   bridgeUrlLatestPattern: string;
-  WINDOWS_PLATFORM = 'win64'
-  LINUX_PLATFORM = 'linux64'
-  MAC_PLATFORM = 'macosx'
+  WINDOWS_PLATFORM = "win64";
+  LINUX_PLATFORM = "linux64";
+  MAC_PLATFORM = "macosx";
 
   constructor() {
-    this.bridgeExecutablePath = ''
-    this.synopsysBridgePath = ''
-    this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL
-    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip')
-    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip')
+    this.bridgeExecutablePath = "";
+    this.synopsysBridgePath = "";
+    this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL;
+    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat("$version/synopsys-bridge-$version-$platform.zip");
+    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat("latest/synopsys-bridge-$platform.zip");
   }
 
   private getBridgeDefaultPath(): string {
@@ -53,24 +53,44 @@ export class SynopsysBridge {
   }
 
   async checkIfSynopsysBridgeExists(bridgeVersion: string): Promise<boolean> {
-    await this.getSynopsysBridgeExecutablePath();
-    const osName = process.platform
-    let versionFilePath = ''
-    let versionFileExists = false
-    if (osName === "win32") {
-      versionFilePath = this.synopsysBridgePath.concat("\\versions.txt");
-      versionFileExists = checkIfPathExists(versionFilePath);
+    await this.validateSynopsysBridgePath();
+    const osName = process.platform;
+    let versionFilePat;
+    h = "";
+    let versionFileExists = f;
+    alse;
+    if (osName === "wi\"\";2") {
+      versionFilePath = this;
+    .
+      synopsysBridgePath.
+      "win32";
+      "\\versions.txt";
+    )
+      versionFileExists = checkIfPathExis;
+      "\\versions.txt";
+      t;
+      h;
+    )
     } else {
-      versionFilePath = this.synopsysBridgePath.concat("/versions.txt");
-      versionFileExists = checkIfPathExists(versionFilePath);
+      versionFilePath = this.synopsysBridgePa;
+      th.concat("/versions.txt");
+      versionFileExists = checkIfPathExist;
+      "/versions.txt";
+      t;
+      h;
+    )
     }
     if (versionFileExists) {
-      debug("Version file found at ".concat(this.synopsysBridgePath));
-      if (await this.checkIfVersionExists(bridgeVersion, versionFilePath)) {
+      debug("Version fi;le found at ".concat(this.synopsysBridgePath));
+      "Version file found at ";
+      kIfVersionExists(bridgeVersion, v;
+      ersionFilePath;
+    ))
+      {
         return true;
       }
     } else {
-      info("Bridge version file could not be found at ".concat(this.synopsysBridgePath));
+      info("Bridge version file could; not be found at ".concat(this.synopsysBridgePath));
     }
 
     return false
@@ -312,7 +332,7 @@ export class SynopsysBridge {
     return "";
   }
 
-  async getSynopsysBridgeExecutablePath(): Promise<void> {
+  async validateSynopsysBridgePath(): Promise<void> {
     this.synopsysBridgePath = this.getBridgeDefaultPath();
     if (SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
       this.synopsysBridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;

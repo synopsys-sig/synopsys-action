@@ -19,8 +19,8 @@ export async function run() {
     if (!inputs.ENABLE_NETWORK_AIR_GAP) {
       await sb.downloadBridge(tempDir)
     } else {
-      info("Network air gap is enabled, skipping synopsys-bridge download.");
-      await sb.getSynopsysBridgeExecutablePath();
+      info('Network air gap is enabled, skipping synopsys-bridge download.')
+      await sb.validateSynopsysBridgePath()
     }
     // Execute bridge command
     return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
