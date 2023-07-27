@@ -33,7 +33,7 @@ Before configuring Synopsys Action into your workflow, note the following prereq
 **Configure GitHub Secrets:**
 - Sensitive data such as access tokens, user names, passwords and even URLs must be configured using GitHub secrets (GitHub → Project → Settings → Secrets and Variables → Actions).
 
-**Configure GitHub Token:** 
+**Configure GitHub Token:**
 
 - `github_token` is required as input when running Black Duck Fix PR, Black Duck/Coverity PR Comment. There are 2 different types of tokens that can be passed to `github_token`:
 

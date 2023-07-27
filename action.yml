@@ -94,7 +94,7 @@ inputs:
     required: false
   network_air_gap:
     description: 'If provided, Synospys Action will be using local network to download and execute bridge .'
-   required: false
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

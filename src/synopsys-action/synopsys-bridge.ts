@@ -135,8 +135,8 @@ export class SynopsysBridge {
         await extractZipped(downloadResponse.filePath, extractZippedFilePath)
         info('Download and configuration of Synopsys Bridge completed')
       } else {
-        info('"Synopsys Bridge already exists, download has been skipped"
-;      }
+        info('Synopsys Bridge already exists, download has been skipped')
+      }
     } catch (e) {
       const errorObject = (e as Error).message
       await cleanupTempDir(tempDir)

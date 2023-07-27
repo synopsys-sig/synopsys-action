@@ -628,7 +628,7 @@ class SynopsysBridge {
                     (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
                 }
                 else {
-                    (0, core_1.info)('Bridge already exists, download has been skipped');
+                    (0, core_1.info)("Synopsys Bridge already exists, download has been skipped");
                 }
             }
             catch (e) {
@@ -639,10 +639,10 @@ class SynopsysBridge {
                     if (process.env['RUNNER_OS']) {
                         os = process.env['RUNNER_OS'];
                     }
-                    return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')));
+                    return Promise.reject(new Error("Provided Synopsys Bridge url is not valid for the configured ".concat(os, " runner")));
                 }
                 else if (errorObject.toLowerCase().includes('empty')) {
-                    return Promise.reject(new Error('Provided Bridge URL cannot be empty'));
+                    return Promise.reject(new Error("Provided Synopsys Bridge URL cannot be empty"));
                 }
                 else {
                     return Promise.reject(new Error(errorObject));
