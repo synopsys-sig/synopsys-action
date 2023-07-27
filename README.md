@@ -162,7 +162,7 @@ jobs:
 | `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: `coverity_policy_view: '100001'` or `coverity_policy_view: 'Outstanding Issues'`  </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. Merge Request must be created first from feature branch to main branch to run Coverity PR Comment. <br> Supported values: true or false </br> | Optional     |
 | `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if coverity_automation_prcomment is set as true |
-          
+
 ## Synopsys GitHub Action - Black Duck
 
 Synopsys Action supports both self-hosted (e.g. on-prem) and Synopsys-hosted Black Duck Hub instances.
@@ -230,36 +230,40 @@ jobs:
 ```
 **Please find the following mandatory and optional parameters for Black Duck below:**
 
-|Input Parameter |Description | Mandatory / Optional |
-|-----------------|-------------|---------------------|
-|`blackduck_url`  | URL for Black Duck server  | Mandatory     |
-| `blackduck_apiToken` | API token for Black Duck | Mandatory     |
-| `blackduck_install_directory` | Directory path to install Black Duck  | Optional     |
-| `blackduck_scan_full` | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. <br> Supported values: true or false </br>| Optional     |
-| `blackduck_scan_failure_severities`      | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>| Optional |
-| `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. Merge Request must be created first from feature branch to main branch to run Black Duck PR Comment. <br> Supported values: true or false </br>| Optional    |
-| `blackduck_automation_fixpr`      | Flag to enable automatic creation for fix pull request when Black Duck vulnerabilities reported. <br> By default fix pull request creation will be disabled. <br> **Black Duck automation fix pull request is currently supported for NPM projects only.** <br> Supported values: true or false </br>| Optional    |
-| `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true |
+| Input Parameter                     | Description                                                                                                                                                                                                                                                                                           | Mandatory / Optional                                                                     |
+|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|
+| `blackduck_url`                     | URL for Black Duck server                                                                                                                                                                                                                                                                             | Mandatory                                                                                |
+| `blackduck_apiToken`                | API token for Black Duck                                                                                                                                                                                                                                                                              | Mandatory                                                                                |
+| `blackduck_install_directory`       | Directory path to install Black Duck                                                                                                                                                                                                                                                                  | Optional                                                                                 |
+| `blackduck_scan_full`               | Specifies whether full scan is required or not. By default, pushes will initiate a full "intelligent" scan and pull requests will initiate a rapid scan. <br> Supported values: true or false </br>                                                                                                   | Optional                                                                                 |
+| `blackduck_scan_failure_severities` | Scan failure severities of Black Duck. <br> Supported values: ALL, NONE, BLOCKER, CRITICAL, MAJOR, MINOR, OK, TRIVIAL, UNSPECIFIED </br>                                                                                                                                                              | Optional                                                                                 |
+| `blackduck_automation_prcomment`    | Flag to enable automatic pull request comment based on Black Duck scan result. Merge Request must be created first from feature branch to main branch to run Black Duck PR Comment. <br> Supported values: true or false </br>                                                                        | Optional                                                                                 |
+| `blackduck_automation_fixpr`        | Flag to enable automatic creation for fix pull request when Black Duck vulnerabilities reported. <br> By default fix pull request creation will be disabled. <br> **Black Duck automation fix pull request is currently supported for NPM projects only.** <br> Supported values: true or false </br> | Optional                                                                                 |
+| `github_token`                      | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}`                                                                                                                                                                                                                         | Mandatory if blackduck_automation_fixpr or blackduck_automation_prcomment is set as true |
 
 **Note about Detect command line parameters:** Any command line parameters that you need to pass to detect
 can be passed through environment variables. This is a standard capability of Detect. </br>For example, if you
-wanted to only report newly found policy violations on rapid scans, you would normally use the command line 
-`--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the 
+wanted to only report newly found policy violations on rapid scans, you would normally use the command line
+`--detect.blackduck.rapid.compare.mode=BOM_COMPARE_STRICT`. You can replace this by setting the
 `DETECT_BLACKDUCK_RAPID_COMPARE_MODE` environment variable to `BOM_COMPARE_STRICT` and configure this in your
 GitHub workflow.
-  
-**GitHub Rate Limit:** As per observation, due to rate limit restriction of GitHub REST API calls, we may observe fewer pull requests to be created.
+
+**GitHub Rate Limit:** As per observation, due to rate limit restriction of GitHub REST API calls, we may observe fewer
+pull requests to be created.
 
 ## Additional Parameters
-| Input Parameter                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `synopsys_bridge_install_directory` | Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]. If the configured Synopsys Bridge is not the latest one, latest Synopsys Bridge version will be downloaded                                                                                                                                           |
-| `bridge_download_url`               | Provide URL to bridge zip file. <br> If provided, Synopsys Bridge will be automatically downloaded and configured.                                                                                                                                                                                                                                                                                                                                                |
-| `bridge_download_version`           | Provide bridge version.<br> If provided, the specified version of Synopsys Bridge will be automatically downloaded and configured.                                                                                                                                                                                                                                                                                                                                |
-| `include_diagnostics`               | Synopsys Bridge diagnostics files will be available to download when it is set to `true`. Additionally `diagnostics_retention_days` can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).                                                                                                                                                                                                                |
-| `network_air_gap`                   | If the `network_air_gap` is set to true, Synopsys Action will not download the Synopsys Bridge but instead uses the pre-configured Synopsys Bridge. If the Synopsys Bridge is configured at a specific location, provide the path through `synopsys_bridge_install_directory`, <br/><br/>The Synopsys Action will look for the Synopsys Bridge from `synopsys_bridge_install_directory` path otherwise it will look for the Synopsys Bridge in the default path. |
+
+| Input Parameter           | Description                                                                                                                                                                                                                                                                                                             |
+|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `synopsys_bridge_path`    | Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]. If the configured Synopsys Bridge is not the latest one, latest Synopsys Bridge version will be downloaded |
+| `bridge_download_url`     | Provide URL to bridge zip file. <br> If provided, Synopsys Bridge will be automatically downloaded and configured.                                                                                                                                                                                                      |
+| `bridge_download_version` | Provide bridge version.<br> If provided, the specified version of Synopsys Bridge will be automatically downloaded and configured.                                                                                                                                                                                      |
+| `include_diagnostics`     | Synopsys Bridge diagnostics files will be available to download when it is set to `true`. Additionally `diagnostics_retention_days` can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).                                                                      |
 
 **Notes:**
-- Synopsys Bridge can be downloaded from [here](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/).
+
+- Synopsys Bridge can be downloaded
+  from [here](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/).
 - By default, Synopsys Bridge will be downloaded in `$HOME/synopsys-bridge` directory.
-- If `bridge_download_version` or `bridge_download_url` is not provided, Synopsys Action will download and configure the latest version of Bridge.
+- If `bridge_download_version` or `bridge_download_url` is not provided, Synopsys Action will download and configure the
+  latest version of Bridge.

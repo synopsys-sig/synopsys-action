@@ -74,6 +74,9 @@ export class SynopsysBridge {
 
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     const osName: string = process.platform
+    if (!this.bridgeExecutablePath) {
+      new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath))
+    }
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
       const exectOp: ExecOptions = {
         cwd: workingDirectory
@@ -106,7 +109,7 @@ export class SynopsysBridge {
           return Promise.reject(new Error('Provided bridge version not found in artifactory'))
         }
       } else {
-        info('Checking for latest version of Bridge to download and configure')
+        info('Checking for latest version of Synopsys Bridge to download and configure')
         const latestVersion = await this.getVersionFromLatestURL()
         if (latestVersion === '') {
           bridgeUrl = this.getLatestVersionUrl()
@@ -318,9 +321,6 @@ export class SynopsysBridge {
     }
     await this.setSynopsysBridgeExecutablePath()
     debug('Synopsys bridge executable path:'.concat(this.bridgeExecutablePath))
-    if (!this.bridgeExecutablePath) {
-      error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath))
-    }
   }
 
   private async setSynopsysBridgeExecutablePath(): Promise<void> {
