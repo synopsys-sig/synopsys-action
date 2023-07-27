@@ -563,6 +563,7 @@ class SynopsysBridge {
     executeBridgeCommand(bridgeCommand, workingDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
             const osName = process.platform;
+            yield this.setSynopsysBridgeExecutablePath();
             if (!this.bridgeExecutablePath) {
                 new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath));
             }
@@ -816,7 +817,6 @@ class SynopsysBridge {
                     throw new Error('Synopsys Bridge Install Directory does not exist');
                 }
             }
-            yield this.setSynopsysBridgeExecutablePath();
             (0, core_1.debug)('Synopsys bridge executable path:'.concat(this.bridgeExecutablePath));
         });
     }

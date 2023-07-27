@@ -74,6 +74,7 @@ export class SynopsysBridge {
 
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     const osName: string = process.platform
+    await this.setSynopsysBridgeExecutablePath()
     if (!this.bridgeExecutablePath) {
       new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath))
     }
@@ -320,7 +321,7 @@ export class SynopsysBridge {
         throw new Error('Synopsys Bridge Install Directory does not exist')
       }
     }
-    await this.setSynopsysBridgeExecutablePath()
+
     debug('Synopsys bridge executable path:'.concat(this.bridgeExecutablePath))
   }
 
