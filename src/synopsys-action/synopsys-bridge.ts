@@ -66,7 +66,7 @@ export class SynopsysBridge {
         return true
       }
     } else {
-      info('Bridge version file could not be found at '.concat(this.synopsysBridgePath))
+      info('Synopsys Bridge version file could not be found at '.concat(this.synopsysBridgePath))
     }
 
     return false
@@ -75,8 +75,9 @@ export class SynopsysBridge {
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     const osName: string = process.platform
     await this.setSynopsysBridgeExecutablePath()
-    if (!this.bridgeExecutablePath) {
-      new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath))
+;    debug('"Synopsys bridge executable path:"concat(this.synopsysBridgePath))
+;    if (!this.bridgeExecutablePath) {
+      throw new Error("Synopsys Bridge executable could not be found at ".concat(this.synopsysBridgePath));
     }
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
       const exectOp: ExecOptions = {
@@ -102,6 +103,9 @@ export class SynopsysBridge {
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
         }
+        if (bridgeUrl.includes('latest')) {
+          bridgeVersion = await this.getVersionFromLatestURL()
+        }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
@@ -121,8 +125,8 @@ export class SynopsysBridge {
       }
 
       if (!(await this.checkIfSynopsysBridgeExists(bridgeVersion))) {
-        info('Downloading and configuring Synopsys Bridge')
-        info('Bridge URL is - '.concat(bridgeUrl))
+        info("Downloading and configuring Synopsys Bridge");
+        info("Synopsys Bridge URL is - ".concat(bridgeUrl));
         const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
         const extractZippedFilePath: string = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath()
 
@@ -321,8 +325,6 @@ export class SynopsysBridge {
         throw new Error('Synopsys Bridge Install Directory does not exist')
       }
     }
-
-    debug('Synopsys bridge executable path:'.concat(this.bridgeExecutablePath))
   }
 
   private async setSynopsysBridgeExecutablePath(): Promise<void> {

@@ -50,8 +50,8 @@ inputs:
   polaris_serverUrl:
     description: 'Polaris Server URL'
     required: false
-  synopsys_bridge_path:
-    description: 'Synopsys bridge path'
+  synopsys_bridge_install_directory:
+    description: 'Synopsys Bridge Install Directory'
     required: false
   bridge_download_url:
     description: 'URL to download bridge from'
