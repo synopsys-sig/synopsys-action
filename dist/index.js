@@ -563,14 +563,16 @@ class SynopsysBridge {
     executeBridgeCommand(bridgeCommand, workingDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
             const osName = process.platform;
-            if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
+            if (!this.bridgeExecutablePath) {
+                new Error("Synopsys Bridge executable could not be found at ".concat(this.synopsysBridgePath));
+            }
+            if (osName === "darwin" || osName === "linux" || osName === "win32") {
                 const exectOp = {
                     cwd: workingDirectory
                 };
                 try {
-                    return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
-                }
-                catch (errorObject) {
+                    return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(" ", bridgeCommand), [], exectOp);
+                } catch (errorObject) {
                     throw errorObject;
                 }
             }
@@ -600,7 +602,7 @@ class SynopsysBridge {
                     }
                 }
                 else {
-                    (0, core_1.info)('Checking for latest version of Bridge to download and configure');
+                    (0, core_1.info)("Checking for latest version of Synopsys Bridge to download and configure");
                     const latestVersion = yield this.getVersionFromLatestURL();
                     if (latestVersion === '') {
                         bridgeUrl = this.getLatestVersionUrl();
@@ -815,9 +817,6 @@ class SynopsysBridge {
             }
             yield this.setSynopsysBridgeExecutablePath();
             (0, core_1.debug)('Synopsys bridge executable path:'.concat(this.bridgeExecutablePath));
-            if (!this.bridgeExecutablePath) {
-                (0, core_1.error)('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath));
-            }
         });
     }
     setSynopsysBridgeExecutablePath() {
