@@ -109,7 +109,7 @@ export class SynopsysBridge {
           return Promise.reject(new Error('Provided bridge version not found in artifactory'))
         }
       } else {
-        info('Checking for latest version of Synopsys Bridge to download and configure')
+        info('Checking for latest version of Bridge to download and configure')
         const latestVersion = await this.getVersionFromLatestURL()
         if (latestVersion === '') {
           bridgeUrl = this.getLatestVersionUrl()
