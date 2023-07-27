@@ -101,9 +101,6 @@ export class SynopsysBridge {
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
         }
-        if (bridgeUrl.includes('latest')) {
-          bridgeVersion = await this.getVersionFromLatestURL()
-        }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
@@ -136,7 +133,7 @@ export class SynopsysBridge {
           }
         }
         await extractZipped(downloadResponse.filePath, extractZippedFilePath)
-        this.bridgeExecutablePath = extractZippedFilePath
+
         info('Download and configuration of Synopsys Bridge completed')
       } else {
         info('Synopsys Bridge already exists, download has been skipped')
