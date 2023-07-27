@@ -145,9 +145,9 @@ export class SynopsysBridge {
         if (process.env['RUNNER_OS']) {
           os = process.env['RUNNER_OS']
         }
-        return Promise.reject(new Error("Provided Synopsys Bridge url is not valid for the configured ".concat(os, " runner")));
+        return Promise.reject(new Error('Provided Synopsys Bridge url is not valid for the configured '.concat(os, ' runner')))
       } else if (errorObject.toLowerCase().includes('empty')) {
-        return Promise.reject(new Error("Provided Synopsys Bridge URL cannot be empty"));
+        return Promise.reject(new Error('Provided Synopsys Bridge URL cannot be empty'))
       } else {
         return Promise.reject(new Error(errorObject))
       }

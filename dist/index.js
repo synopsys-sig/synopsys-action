@@ -564,15 +564,16 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             const osName = process.platform;
             if (!this.bridgeExecutablePath) {
-                new Error("Synopsys Bridge executable could not be found at ".concat(this.synopsysBridgePath));
+                new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath));
             }
-            if (osName === "darwin" || osName === "linux" || osName === "win32") {
+            if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
                 const exectOp = {
                     cwd: workingDirectory
                 };
                 try {
-                    return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(" ", bridgeCommand), [], exectOp);
-                } catch (errorObject) {
+                    return yield (0, exec_1.exec)(this.bridgeExecutablePath.concat(' ', bridgeCommand), [], exectOp);
+                }
+                catch (errorObject) {
                     throw errorObject;
                 }
             }
@@ -602,7 +603,7 @@ class SynopsysBridge {
                     }
                 }
                 else {
-                    (0, core_1.info)("Checking for latest version of Synopsys Bridge to download and configure");
+                    (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
                     const latestVersion = yield this.getVersionFromLatestURL();
                     if (latestVersion === '') {
                         bridgeUrl = this.getLatestVersionUrl();
@@ -628,7 +629,7 @@ class SynopsysBridge {
                     (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
                 }
                 else {
-                    (0, core_1.info)("Synopsys Bridge already exists, download has been skipped");
+                    (0, core_1.info)('Synopsys Bridge already exists, download has been skipped');
                 }
             }
             catch (e) {
@@ -639,10 +640,10 @@ class SynopsysBridge {
                     if (process.env['RUNNER_OS']) {
                         os = process.env['RUNNER_OS'];
                     }
-                    return Promise.reject(new Error("Provided Synopsys Bridge url is not valid for the configured ".concat(os, " runner")));
+                    return Promise.reject(new Error('Provided Synopsys Bridge url is not valid for the configured '.concat(os, ' runner')));
                 }
                 else if (errorObject.toLowerCase().includes('empty')) {
-                    return Promise.reject(new Error("Provided Synopsys Bridge URL cannot be empty"));
+                    return Promise.reject(new Error('Provided Synopsys Bridge URL cannot be empty'));
                 }
                 else {
                     return Promise.reject(new Error(errorObject));
