@@ -75,9 +75,9 @@ export class SynopsysBridge {
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     const osName: string = process.platform
     await this.setSynopsysBridgeExecutablePath()
-;    debug('"Synopsys bridge executable path:"concat(this.synopsysBridgePath))
-;    if (!this.bridgeExecutablePath) {
-      throw new Error("Synopsys Bridge executable could not be found at ".concat(this.synopsysBridgePath));
+    debug('Synopsys bridge executable path:'.concat(this.synopsysBridgePath))
+    if (!this.bridgeExecutablePath) {
+      throw new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath))
     }
     if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
       const exectOp: ExecOptions = {
@@ -125,8 +125,8 @@ export class SynopsysBridge {
       }
 
       if (!(await this.checkIfSynopsysBridgeExists(bridgeVersion))) {
-        info("Downloading and configuring Synopsys Bridge");
-        info("Synopsys Bridge URL is - ".concat(bridgeUrl));
+        info('Downloading and configuring Synopsys Bridge')
+        info('Synopsys Bridge URL is - '.concat(bridgeUrl))
         const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
         const extractZippedFilePath: string = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath()
 
