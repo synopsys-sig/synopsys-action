@@ -593,6 +593,9 @@ class SynopsysBridge {
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
                     }
+                    if (bridgeUrl.includes('latest')) {
+                        bridgeVersion = yield this.getVersionFromLatestURL();
+                    }
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
                     if (yield this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {

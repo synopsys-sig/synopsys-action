@@ -102,6 +102,9 @@ export class SynopsysBridge {
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
         }
+        if (bridgeUrl.includes('latest')) {
+          bridgeVersion = await this.getVersionFromLatestURL()
+        }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
