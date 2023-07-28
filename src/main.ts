@@ -23,7 +23,7 @@ export async function run() {
       await sb.validateSynopsysBridgePath()
     }
     // Execute bridge command
-    const exitCode = await sb.executeBridgeCommand(formattedCommand, '/Users/kirann/IdeaProjects/synopsys-action')
+    const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
     if (exitCode === 0) {
       info('Synopsys Action workflow execution completed')
     }
