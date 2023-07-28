@@ -125,7 +125,11 @@ function run() {
                 yield sb.validateSynopsysBridgePath();
             }
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            const exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            if (exitCode === 0) {
+                (0, core_1.info)('Synopsys Action workflow execution completed');
+            }
+            return exitCode;
         }
         catch (error) {
             throw error;
@@ -136,7 +140,6 @@ function run() {
             }
             yield (0, utility_1.cleanupTempDir)(tempDir);
         }
-        (0, core_1.info)('Synopsys Action workflow execution completed');
     });
 }
 exports.run = run;

@@ -81,6 +81,29 @@ test('Run polaris flow - run', async () => {
   jest.restoreAllMocks()
 })
 
+test('Run polaris flow - run: success', async () => {
+  jest.setTimeout(25000)
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,sast'})
+
+  jest.spyOn(SynopsysBridge.prototype, 'getVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
+  const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
+  const response = await run()
+
+  expect(response).toEqual(0)
+
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+
+  jest.restoreAllMocks()
+})
+
 test('Enable airgap', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
