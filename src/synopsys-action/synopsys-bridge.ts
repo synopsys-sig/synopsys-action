@@ -66,7 +66,7 @@ export class SynopsysBridge {
         return true
       }
     } else {
-      info('Synopsys Bridge version file could not be found at '.concat(this.synopsysBridgePath))
+      debug('Synopsys Bridge version file could not be found at '.concat(this.synopsysBridgePath))
     }
 
     return false

@@ -555,7 +555,7 @@ class SynopsysBridge {
                 }
             }
             else {
-                (0, core_1.info)('Synopsys Bridge version file could not be found at '.concat(this.synopsysBridgePath));
+                (0, core_1.debug)('Synopsys Bridge version file could not be found at '.concat(this.synopsysBridgePath));
             }
             return false;
         });
