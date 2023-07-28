@@ -7,7 +7,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIR_GAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -46,7 +46,7 @@ exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr';
 exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment';
 exports.GITHUB_TOKEN_KEY = 'github_token';
 exports.INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics';
-exports.NETWORK_AIR_GAP_KEY = 'network_air_gap';
+exports.NETWORK_AIRGAP_KEY = 'bridge_network_airgap';
 exports.DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days';
 // Bridge Exit Codes
 exports.EXIT_CODE_MAP = new Map([
@@ -414,7 +414,7 @@ exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHU
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIR_GAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || false;
+exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || false;
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)('bridge_download_version')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
@@ -564,7 +564,7 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             const osName = process.platform;
             yield this.setSynopsysBridgeExecutablePath();
-            (0, core_1.debug)('Synopsys bridge executable path:'.concat(this.synopsysBridgePath));
+            (0, core_1.debug)('Synopsys Bridge executable path:'.concat(this.synopsysBridgePath));
             if (!this.bridgeExecutablePath) {
                 throw new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath));
             }
@@ -604,7 +604,7 @@ class SynopsysBridge {
                         bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION;
                     }
                     else {
-                        return Promise.reject(new Error('Provided bridge version not found in artifactory'));
+                        return Promise.reject(new Error('Provided Synopsys Bridge version not found in artifactory'));
                     }
                 }
                 else {
@@ -816,7 +816,7 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             this.synopsysBridgePath = this.getBridgeDefaultPath();
             if (inputs_1.ENABLE_NETWORK_AIR_GAP && !(0, utility_1.checkIfPathExists)(this.getBridgeDefaultPath())) {
-                throw new Error('Synopsys bridge default directory does not exist');
+                throw new Error('Synopsys Bridge default directory does not exist');
             }
             if (inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
                 this.synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;

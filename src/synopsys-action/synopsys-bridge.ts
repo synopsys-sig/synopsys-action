@@ -75,7 +75,7 @@ export class SynopsysBridge {
   async executeBridgeCommand(bridgeCommand: string, workingDirectory: string): Promise<number> {
     const osName: string = process.platform
     await this.setSynopsysBridgeExecutablePath()
-    debug('Synopsys bridge executable path:'.concat(this.synopsysBridgePath))
+    debug('Synopsys Bridge executable path:'.concat(this.synopsysBridgePath))
     if (!this.bridgeExecutablePath) {
       throw new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath))
     }
@@ -111,7 +111,7 @@ export class SynopsysBridge {
           bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
           bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION
         } else {
-          return Promise.reject(new Error('Provided bridge version not found in artifactory'))
+          return Promise.reject(new Error('Provided Synopsys Bridge version not found in artifactory'))
         }
       } else {
         info('Checking for latest version of Synopsys Bridge to download and configure')
@@ -320,7 +320,7 @@ export class SynopsysBridge {
   async validateSynopsysBridgePath(): Promise<void> {
     this.synopsysBridgePath = this.getBridgeDefaultPath()
     if (ENABLE_NETWORK_AIR_GAP && !checkIfPathExists(this.getBridgeDefaultPath())) {
-      throw new Error('Synopsys bridge default directory does not exist')
+      throw new Error('Synopsys Bridge default directory does not exist')
     }
     if (SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
       this.synopsysBridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY

@@ -87,6 +87,11 @@ test('Enable airgap', async () => {
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
 
+  const defaultDir = jest.spyOn(SynopsysBridge.prototype as any, 'getBridgeDefaultPath')
+  defaultDir.mockImplementation(() => {
+    return '/home'
+  })
+
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
 
@@ -411,9 +416,8 @@ test('Run polaris flow with wrong bridge version - run', async () => {
   try {
     await run()
   } catch (error: any) {
-    expect(error.message).toContain('bridge version not found in artifactory')
+    expect(error.message).toContain('Provided Synopsys Bridge version not found in artifactory')
   }
-
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
 })
 
