@@ -21,6 +21,7 @@ export interface CoverityConnect {
   install?: {directory: string}
   automation: AutomationData
   local?: boolean
+  version?: string
 }
 
 export interface CoverityData {

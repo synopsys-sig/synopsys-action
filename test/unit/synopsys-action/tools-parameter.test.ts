@@ -2,6 +2,7 @@ import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utilit
 import {SynopsysToolsParameter} from '../../../src/synopsys-action/tools-parameter'
 import mock = jest.mock
 import * as inputs from '../../../src/synopsys-action/inputs'
+import { info } from 'console'
 
 let tempPath = '/temp'
 
@@ -172,6 +173,21 @@ test('Test getFormattedCommandForCoverity - when COVERITY_LOCAL is false', () =>
 
   const resp = stp.getFormattedCommandForCoverity()
 
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
+test('Test getFormattedCommandForCoverity - when COVERITY_VERSION is provided', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+  Object.defineProperty(inputs, 'COVERITY_LOCAL', {value: false})
+  Object.defineProperty(inputs, 'COVERITY_VERSION', {value: '2023.6'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForCoverity()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 })
