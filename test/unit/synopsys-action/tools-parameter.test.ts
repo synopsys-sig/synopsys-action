@@ -2,7 +2,6 @@ import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utilit
 import {SynopsysToolsParameter} from '../../../src/synopsys-action/tools-parameter'
 import mock = jest.mock
 import * as inputs from '../../../src/synopsys-action/inputs'
-import { info } from 'console'
 
 let tempPath = '/temp'
 
