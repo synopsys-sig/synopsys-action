@@ -319,9 +319,6 @@ export class SynopsysBridge {
 
   async validateSynopsysBridgePath(): Promise<void> {
     this.synopsysBridgePath = this.getBridgeDefaultPath()
-    debug('SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY: '.concat(SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY))
-    debug('Bridge Default Path: '.concat(this.getBridgeDefaultPath()))
-
     if (SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
       this.synopsysBridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
       if (!checkIfPathExists(this.synopsysBridgePath)) {

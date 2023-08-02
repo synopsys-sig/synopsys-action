@@ -818,8 +818,6 @@ class SynopsysBridge {
     validateSynopsysBridgePath() {
         return __awaiter(this, void 0, void 0, function* () {
             this.synopsysBridgePath = this.getBridgeDefaultPath();
-            (0, core_1.debug)('SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY: '.concat(inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY));
-            (0, core_1.debug)('Bridge Default Path: '.concat(this.getBridgeDefaultPath()));
             if (inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
                 this.synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;
                 if (!(0, utility_1.checkIfPathExists)(this.synopsysBridgePath)) {
