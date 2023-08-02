@@ -818,13 +818,15 @@ class SynopsysBridge {
     validateSynopsysBridgePath() {
         return __awaiter(this, void 0, void 0, function* () {
             this.synopsysBridgePath = this.getBridgeDefaultPath();
-            if (inputs_1.ENABLE_NETWORK_AIR_GAP && !(0, utility_1.checkIfPathExists)(this.getBridgeDefaultPath())) {
-                throw new Error('Synopsys Bridge default directory does not exist');
-            }
             if (inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
                 this.synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;
                 if (!(0, utility_1.checkIfPathExists)(this.synopsysBridgePath)) {
                     throw new Error('Synopsys Bridge Install Directory does not exist');
+                }
+            }
+            else {
+                if (inputs_1.ENABLE_NETWORK_AIR_GAP && !(0, utility_1.checkIfPathExists)(this.getBridgeDefaultPath())) {
+                    throw new Error('Synopsys Bridge default directory does not exist');
                 }
             }
         });
