@@ -319,15 +319,15 @@ export class SynopsysBridge {
 
   async validateSynopsysBridgePath(): Promise<void> {
     this.synopsysBridgePath = this.getBridgeDefaultPath()
-    info('SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY: '.concat(SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY))
+    debug('SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY: '.concat(SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY))
+    debug('Bridge Default Path: '.concat(this.getBridgeDefaultPath()))
+
     if (SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
-      info('SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY is not empty')
       this.synopsysBridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
       if (!checkIfPathExists(this.synopsysBridgePath)) {
         throw new Error('Synopsys Bridge Install Directory does not exist')
       }
     } else {
-      info('SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY is empty')
       if (ENABLE_NETWORK_AIR_GAP && !checkIfPathExists(this.getBridgeDefaultPath())) {
         throw new Error('Synopsys Bridge default directory does not exist')
       }
