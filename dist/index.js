@@ -599,7 +599,7 @@ class SynopsysBridge {
                     }
                     if (bridgeUrl.includes('latest')) {
                         const regex = /\w*(latest\/synopsys-bridge-(win64|linux64|macosx).zip)/;
-                        bridgeVersion = yield this.getLatestVersionFromURL(bridgeUrl.replace(regex, 'latest/versions.txt'));
+                        bridgeVersion = yield this.getLatestVersionWithURL(bridgeUrl.replace(regex, 'latest/versions.txt'));
                     }
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
@@ -613,7 +613,7 @@ class SynopsysBridge {
                 }
                 else {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
-                    const latestVersion = yield this.getLatestVersionFromURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
+                    const latestVersion = yield this.getLatestVersionWithURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
                     if (latestVersion === '') {
                         bridgeUrl = this.getLatestVersionUrl();
                     }
@@ -790,7 +790,7 @@ class SynopsysBridge {
             return synopsysBridgePath;
         });
     }
-    getLatestVersionFromURL(latestVersionsUrl) {
+    getLatestVersionWithURL(latestVersionsUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const httpClient = new HttpClient_1.HttpClient('');
