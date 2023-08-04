@@ -104,8 +104,8 @@ export class SynopsysBridge {
           bridgeVersion = versionInfo[1]
         }
         if (bridgeUrl.includes('latest')) {
-          const regex = /\w*(latest\/synopsys-bridge-(win64|linux64|macosx).zip)/
-          bridgeVersion = await this.getLatestVersionWithURL(bridgeUrl.replace(regex, 'latest/versions.txt'))
+          const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/
+          bridgeVersion = await this.getLatestVersionFromURL(bridgeUrl.replace(regex, 'versions.txt'))
         }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
@@ -116,7 +116,7 @@ export class SynopsysBridge {
         }
       } else {
         info('Checking for latest version of Synopsys Bridge to download and configure')
-        const latestVersion = await this.getLatestVersionWithURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
+        const latestVersion = await this.getLatestVersionFromURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
         if (latestVersion === '') {
           bridgeUrl = this.getLatestVersionUrl()
         } else {
@@ -295,7 +295,7 @@ export class SynopsysBridge {
     return synopsysBridgePath
   }
 
-  async getLatestVersionWithURL(latestVersionsUrl: string): Promise<string> {
+  async getLatestVersionFromURL(latestVersionsUrl: string): Promise<string> {
     try {
       const httpClient = new HttpClient('')
       const httpResponse = await httpClient.get(latestVersionsUrl, {Accept: 'text/html'})
