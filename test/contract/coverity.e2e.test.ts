@@ -104,9 +104,10 @@ describe('Coverity flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('f"failed with exit code 1" ;     error(err)
- ;   }
-  })
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
+  });
 
   it('With coverity.automation.prcomment true and empty github token', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
