@@ -104,7 +104,7 @@ describe('Coverity flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
+      expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
   });
@@ -203,6 +203,7 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, "include_diagnostics", { value: true });
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
+  Object.defineProperty(inputs, 'BRIDGE_NETWORK_AIRGAP', {value: true})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
