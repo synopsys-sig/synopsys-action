@@ -116,13 +116,8 @@ export class SynopsysBridge {
         }
       } else {
         info('Checking for latest version of Synopsys Bridge to download and configure')
-        const latestVersion = await this.getBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
-        if (latestVersion === '') {
-          bridgeUrl = this.getLatestVersionUrl()
-        } else {
-          bridgeUrl = this.getVersionUrl(latestVersion).trim()
-          bridgeVersion = latestVersion
-        }
+        bridgeVersion = await this.getBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
+        bridgeUrl = this.getLatestVersionUrl()
       }
 
       if (!(await this.checkIfSynopsysBridgeExists(bridgeVersion))) {

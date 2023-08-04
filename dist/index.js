@@ -615,14 +615,8 @@ class SynopsysBridge {
                 }
                 else {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
-                    const latestVersion = yield this.getBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
-                    if (latestVersion === '') {
-                        bridgeUrl = this.getLatestVersionUrl();
-                    }
-                    else {
-                        bridgeUrl = this.getVersionUrl(latestVersion).trim();
-                        bridgeVersion = latestVersion;
-                    }
+                    bridgeVersion = yield this.getBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
+                    bridgeUrl = this.getLatestVersionUrl();
                 }
                 if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
