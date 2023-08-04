@@ -161,7 +161,7 @@ jobs:
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: `coverity_policy_view: '100001'` or `coverity_policy_view: 'Outstanding Issues'`  </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. Merge Request must be created first from feature branch to main branch to run Coverity PR Comment. <br> Supported values: true or false </br> | Optional     |
-| `bridge_coverity_version`        | The version of Coverity Thin Client to use   | Optional     |
+| `bridge_coverity_version`        | The version of Coverity Thin Client to use <br> Example: `bridge_coverity_version: '2022.12.0'`  | Optional     |
 | `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if coverity_automation_prcomment is set as true |
 
 ## Synopsys GitHub Action - Black Duck
