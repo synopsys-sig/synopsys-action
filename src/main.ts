@@ -9,26 +9,26 @@ import * as core from '@actions/core'
 
 export async function run() {
   info('Synopsys Action started...')
-  // const tempDir = await createTempDir()
+  const tempDir = await createTempDir()
   let formattedCommand = ''
-  const multilineInput = core.getMultilineInput('multiline_input')
-  console.log(multilineInput)
+  // const multilineInput = core.getMultilineInput('multiline_input')
+  // console.log(multilineInput)
 
   try {
-    /*const sb = new SynopsysBridge()
+    const sb = new SynopsysBridge()
     // Prepare bridge command
     formattedCommand = await sb.prepareCommand(tempDir)
     // Download bridge
     await sb.downloadBridge(tempDir)
     // Execute bridge command
-    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())*/
+    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
   } catch (error) {
     throw error
   } finally {
     if (inputs.INCLUDE_DIAGNOSTICS) {
       await uploadDiagnostics()
     }
-    // await cleanupTempDir(tempDir)
+    await cleanupTempDir(tempDir)
   }
   info('Synopsys Action workflow execution completed')
 }

@@ -30,7 +30,8 @@ export const POLARIS_SERVER_URL_KEY = 'polaris_serverUrl'
 
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'
-export const BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken'
+export const BLACKDUCK_APITOKEN_KEY = 'blackduck_apiToken'
+export const BLACKDUCK_API_TOKEN_KEY = 'blackduck_api_token'
 export const BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory'
 export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'

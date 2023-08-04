@@ -56,7 +56,7 @@ inputs:
   blackduck_url:
     description: 'URL for blackduck hub'
     required: false
-  blackduck_apiToken:
+  blackduck_api_token:
     description: 'API token to access blackduck'
     required: false
   blackduck_install_directory:

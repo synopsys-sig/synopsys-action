@@ -28,7 +28,7 @@ export const COVERITY_AUTOMATION_PRCOMMENT = getInput(constants.COVERITY_AUTOMAT
 
 // Blackduck related inputs
 export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''
-export const BLACKDUCK_API_TOKEN = getInput(constants.BLACKDUCK_API_TOKEN_KEY)?.trim() || ''
+export const BLACKDUCK_API_TOKEN = getInput(constants.BLACKDUCK_API_TOKEN_KEY)?.trim() || getInput(constants.BLACKDUCK_APITOKEN_KEY)?.trim() || ''
 export const BLACKDUCK_INSTALL_DIRECTORY = getInput(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)?.trim() || ''
 export const BLACKDUCK_SCAN_FULL = getInput(constants.BLACKDUCK_SCAN_FULL_KEY)?.trim() || ''
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES = getInput(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)?.trim() || ''
