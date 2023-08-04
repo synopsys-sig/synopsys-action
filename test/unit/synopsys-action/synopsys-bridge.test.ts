@@ -225,7 +225,7 @@ test('Latest URL Version success', async () => {
   httpResponse.message.statusCode = 200
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-  const response = await sb.getVersionFromLatestURL()
+  const response = await sb.getLatestVersionFromURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('0.3.1')
 })
 
@@ -258,8 +258,8 @@ test('Latest url version if not provided', async () => {
   jest.spyOn(HttpClient.prototype, 'get').mockRejectedValue(httpResponse)
 
   const sb = new SynopsysBridge()
-  jest.spyOn(sb, 'getVersionFromLatestURL')
-  const response = await sb.getVersionFromLatestURL()
+  jest.spyOn(sb, 'getLatestVersionFromURL')
+  const response = await sb.getLatestVersionFromURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('')
 })
 
@@ -274,7 +274,7 @@ test('Latest URL Version failure', async () => {
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
   const sb = new SynopsysBridge()
-  const response = await sb.getVersionFromLatestURL()
+  const response = await sb.getLatestVersionFromURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('')
 })
 
