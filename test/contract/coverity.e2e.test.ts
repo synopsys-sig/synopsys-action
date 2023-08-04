@@ -104,7 +104,7 @@ describe('Coverity flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
+      expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
   });
