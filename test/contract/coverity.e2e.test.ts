@@ -107,7 +107,7 @@ describe('Coverity flow contract', () => {
       expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
-  });
+  })
 
   it('With coverity.automation.prcomment true and empty github token', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
@@ -198,9 +198,9 @@ export function getBridgeDownloadUrl(): string {
 }
 
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
-  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_URL", { value: getBridgeDownloadUrl() });
-  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: __dirname });
-  Object.defineProperty(inputs, "include_diagnostics", { value: true });
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: __dirname})
+  Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   Object.defineProperty(inputs, 'BRIDGE_NETWORK_AIRGAP', {value: true})
