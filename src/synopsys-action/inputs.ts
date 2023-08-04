@@ -27,6 +27,7 @@ export const COVERITY_REPOSITORY_NAME = getInput(constants.COVERITY_REPOSITORY_N
 export const COVERITY_BRANCH_NAME = getInput(constants.COVERITY_BRANCH_NAME_KEY)?.trim() || ''
 export const COVERITY_AUTOMATION_PRCOMMENT = getInput(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)?.trim() || ''
 export const COVERITY_LOCAL = getInput(constants.COVERITY_LOCAL_KEY)?.trim() === 'true' || false
+export const COVERITY_VERSION = getInput(constants.COVERITY_VERSION_KEY)?.trim() || ''
 
 // Blackduck related inputs
 export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''

@@ -95,6 +95,9 @@ inputs:
   bridge_network_airgap:
     description: 'If provided, Synopsys Action will be using local network to download and execute bridge .'
     required: false
+  bridge_coverity_version:
+    description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
+    required: false  
 runs:
   using: 'node16'
   main: 'dist/index.js'

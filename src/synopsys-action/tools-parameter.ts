@@ -114,6 +114,10 @@ export class SynopsysToolsParameter {
       covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
     }
 
+    if (inputs.COVERITY_VERSION) {
+      covData.data.coverity.version = inputs.COVERITY_VERSION
+    }
+
     if (parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
       info('Coverity Automation comment is enabled')
       covData.data.github = this.getGithubRepoInfo()
