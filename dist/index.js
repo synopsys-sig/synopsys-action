@@ -600,8 +600,8 @@ class SynopsysBridge {
                         bridgeVersion = versionInfo[1];
                     }
                     if (bridgeUrl.includes('latest')) {
-                        const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/;
-                        bridgeVersion = yield this.getBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'));
+                        const regex = /\w*(latest\/synopsys-bridge-(win64|linux64|macosx).zip)/;
+                        bridgeVersion = yield this.getBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'latest/versions.txt'));
                     }
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
