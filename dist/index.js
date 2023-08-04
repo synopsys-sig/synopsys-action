@@ -589,7 +589,6 @@ class SynopsysBridge {
     }
     downloadBridge(tempDir) {
         return __awaiter(this, void 0, void 0, function* () {
-            const LATEST = 'latest';
             try {
                 // Automatically configure bridge if Bridge download url is provided
                 let bridgeUrl = '';
@@ -600,8 +599,9 @@ class SynopsysBridge {
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
                     }
-                    if (bridgeUrl.includes(LATEST)) {
-                        bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.substring(0, bridgeUrl.lastIndexOf(LATEST) + LATEST.length).concat('/versions.txt'));
+                    if (bridgeUrl.includes('latest')) {
+                        const regex = /\w*(latest\/synopsys-bridge-(win64|linux64|macosx).zip)/;
+                        bridgeVersion = yield this.getLatestVersionFromURL(bridgeUrl.replace(regex, 'latest/versions.txt'));
                     }
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
@@ -615,8 +615,14 @@ class SynopsysBridge {
                 }
                 else {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
-                    bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
-                    bridgeUrl = this.getLatestVersionUrl();
+                    const latestVersion = yield this.getLatestVersionFromURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
+                    if (latestVersion === '') {
+                        bridgeUrl = this.getLatestVersionUrl();
+                    }
+                    else {
+                        bridgeUrl = this.getVersionUrl(latestVersion).trim();
+                        bridgeVersion = latestVersion;
+                    }
                 }
                 if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
@@ -786,7 +792,7 @@ class SynopsysBridge {
             return synopsysBridgePath;
         });
     }
-    getSynopsysBridgeVersionFromLatestURL(latestVersionsUrl) {
+    getLatestVersionFromURL(latestVersionsUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const httpClient = new HttpClient_1.HttpClient('');

@@ -93,7 +93,6 @@ export class SynopsysBridge {
   }
 
   async downloadBridge(tempDir: string): Promise<void> {
-    const LATEST = 'latest'
     try {
       // Automatically configure bridge if Bridge download url is provided
       let bridgeUrl = ''
@@ -104,8 +103,9 @@ export class SynopsysBridge {
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
         }
-        if (bridgeUrl.includes(LATEST)) {
-          bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.substring(0, bridgeUrl.lastIndexOf(LATEST) + LATEST.length).concat('/versions.txt'))
+        if (bridgeUrl.includes('latest')) {
+          const regex = /\w*(latest\/synopsys-bridge-(win64|linux64|macosx).zip)/
+          bridgeVersion = await this.getLatestVersionFromURL(bridgeUrl.replace(regex, 'latest/versions.txt'))
         }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
@@ -116,8 +116,13 @@ export class SynopsysBridge {
         }
       } else {
         info('Checking for latest version of Synopsys Bridge to download and configure')
-        bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
-        bridgeUrl = this.getLatestVersionUrl()
+        const latestVersion = await this.getLatestVersionFromURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
+        if (latestVersion === '') {
+          bridgeUrl = this.getLatestVersionUrl()
+        } else {
+          bridgeUrl = this.getVersionUrl(latestVersion).trim()
+          bridgeVersion = latestVersion
+        }
       }
 
       if (!(await this.checkIfSynopsysBridgeExists(bridgeVersion))) {
@@ -290,7 +295,7 @@ export class SynopsysBridge {
     return synopsysBridgePath
   }
 
-  async getSynopsysBridgeVersionFromLatestURL(latestVersionsUrl: string): Promise<string> {
+  async getLatestVersionFromURL(latestVersionsUrl: string): Promise<string> {
     try {
       const httpClient = new HttpClient('')
       const httpResponse = await httpClient.get(latestVersionsUrl, {Accept: 'text/html'})
