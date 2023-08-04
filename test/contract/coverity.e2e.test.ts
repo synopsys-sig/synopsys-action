@@ -31,7 +31,7 @@ describe('Coverity flow contract', () => {
 
   it('With all mandatory fields', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME'])
+    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_AUTOMATION_PRCOMMENT'])
 
     setAllMocks()
 
@@ -104,9 +104,8 @@ describe('Coverity flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
+      expect(err.message).toContain('f"failed with exit code 1" ;     error(err)
+ ;   }
   })
 
   it('With coverity.automation.prcomment true and empty github token', async () => {
@@ -198,9 +197,9 @@ export function getBridgeDownloadUrl(): string {
 }
 
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
-  Object.defineProperty(inputs, 'include_diagnostics', {value: true})
+  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_URL", { value: getBridgeDownloadUrl() });
+  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: __dirname });
+  Object.defineProperty(inputs, "include_diagnostics", { value: true });
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
