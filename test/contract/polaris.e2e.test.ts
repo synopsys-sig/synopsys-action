@@ -140,7 +140,6 @@ export function getBridgeDownloadUrl(): string {
   const LINUX_PLATFORM = 'linux64'
   const MAC_PLATFORM = 'macosx'
   const osName = process.platform
-
   let platform = ''
   if (osName === 'darwin') {
     platform = MAC_PLATFORM
