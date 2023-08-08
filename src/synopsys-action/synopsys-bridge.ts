@@ -93,7 +93,6 @@ export class SynopsysBridge {
   }
 
   async downloadBridge(tempDir: string): Promise<void> {
-    const LATEST = 'latest'
     try {
       // Automatically configure bridge if Bridge download url is provided
       let bridgeUrl = ''
@@ -103,9 +102,10 @@ export class SynopsysBridge {
         const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
-        }
-        if (bridgeUrl.includes(LATEST)) {
-          bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.substring(0, bridgeUrl.lastIndexOf(LATEST) + LATEST.length).concat('/versions.txt'))
+          if (!bridgeVersion) {
+            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/
+            bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'))
+          }
         }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {

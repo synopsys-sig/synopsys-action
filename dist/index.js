@@ -589,19 +589,19 @@ class SynopsysBridge {
     }
     downloadBridge(tempDir) {
         return __awaiter(this, void 0, void 0, function* () {
-            const LATEST = 'latest';
             try {
                 // Automatically configure bridge if Bridge download url is provided
                 let bridgeUrl = '';
                 let bridgeVersion = '';
                 if (inputs.BRIDGE_DOWNLOAD_URL) {
                     bridgeUrl = inputs_1.BRIDGE_DOWNLOAD_URL;
-                    const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*');
+                    const versionInfo = bridgeUrl.match(".*synopsys-bridge-([0-9.]*).*");
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
-                    }
-                    if (bridgeUrl.includes(LATEST)) {
-                        bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.substring(0, bridgeUrl.lastIndexOf(LATEST) + LATEST.length).concat('/versions.txt'));
+                        if (!bridgeVersion) {
+                            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/;
+                            bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, "versions.txt"));
+                        }
                     }
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
