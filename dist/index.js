@@ -595,12 +595,12 @@ class SynopsysBridge {
                 let bridgeVersion = '';
                 if (inputs.BRIDGE_DOWNLOAD_URL) {
                     bridgeUrl = inputs_1.BRIDGE_DOWNLOAD_URL;
-                    const versionInfo = bridgeUrl.match(".*synopsys-bridge-([0-9.]*).*");
+                    const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*');
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
                         if (!bridgeVersion) {
                             const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/;
-                            bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, "versions.txt"));
+                            bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'));
                         }
                     }
                 }
