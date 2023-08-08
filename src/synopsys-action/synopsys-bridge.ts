@@ -100,12 +100,13 @@ export class SynopsysBridge {
       let bridgeVersion = ''
       if (inputs.BRIDGE_DOWNLOAD_URL) {
         bridgeUrl = BRIDGE_DOWNLOAD_URL
-        const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
-        if (versionInfo != null) {
-          bridgeVersion = versionInfo[1]
-        }
         if (bridgeUrl.includes(LATEST)) {
           bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.substring(0, bridgeUrl.lastIndexOf(LATEST) + LATEST.length).concat('/versions.txt'))
+        } else {
+          const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
+          if (versionInfo != null) {
+            bridgeVersion = versionInfo[1]
+          }
         }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
