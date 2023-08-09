@@ -598,9 +598,10 @@ class SynopsysBridge {
                     const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*');
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
-                    }
-                    if (bridgeUrl.includes('latest')) {
-                        bridgeVersion = yield this.getVersionFromLatestURL();
+                        if (!bridgeVersion) {
+                            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/;
+                            bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'));
+                        }
                     }
                 }
                 else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
@@ -614,14 +615,8 @@ class SynopsysBridge {
                 }
                 else {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
-                    const latestVersion = yield this.getVersionFromLatestURL();
-                    if (latestVersion === '') {
-                        bridgeUrl = this.getLatestVersionUrl();
-                    }
-                    else {
-                        bridgeUrl = this.getVersionUrl(latestVersion).trim();
-                        bridgeVersion = latestVersion;
-                    }
+                    bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
+                    bridgeUrl = this.getLatestVersionUrl();
                 }
                 if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
@@ -791,10 +786,9 @@ class SynopsysBridge {
             return synopsysBridgePath;
         });
     }
-    getVersionFromLatestURL() {
+    getSynopsysBridgeVersionFromLatestURL(latestVersionsUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const latestVersionsUrl = this.bridgeArtifactoryURL.concat('latest/versions.txt');
                 const httpClient = new HttpClient_1.HttpClient('');
                 const httpResponse = yield httpClient.get(latestVersionsUrl, { Accept: 'text/html' });
                 if (httpResponse.message.statusCode === 200) {

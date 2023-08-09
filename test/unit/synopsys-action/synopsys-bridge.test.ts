@@ -225,7 +225,7 @@ test('Latest URL Version success', async () => {
   httpResponse.message.statusCode = 200
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-  const response = await sb.getVersionFromLatestURL()
+  const response = await sb.getSynopsysBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('0.3.1')
 })
 
@@ -258,8 +258,8 @@ test('Latest url version if not provided', async () => {
   jest.spyOn(HttpClient.prototype, 'get').mockRejectedValue(httpResponse)
 
   const sb = new SynopsysBridge()
-  jest.spyOn(sb, 'getVersionFromLatestURL')
-  const response = await sb.getVersionFromLatestURL()
+  jest.spyOn(sb, 'getSynopsysBridgeVersionFromLatestURL')
+  const response = await sb.getSynopsysBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('')
 })
 
@@ -274,7 +274,7 @@ test('Latest URL Version failure', async () => {
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
   const sb = new SynopsysBridge()
-  const response = await sb.getVersionFromLatestURL()
+  const response = await sb.getSynopsysBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('')
 })
 
@@ -395,6 +395,39 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not 
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 
+test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY is empty ', async () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+
+  Object.defineProperty(process, 'platform', {
+    value: 'darwin'
+  })
+
+  path.join = jest.fn()
+  path.join.mockReturnValueOnce('/user')
+
+  ioUtils.tryGetExecutablePath = jest.fn()
+  ioUtils.tryGetExecutablePath.mockReturnValueOnce('/user/somepath')
+
+  ex.exec = jest.fn()
+  ex.exec.mockReturnValueOnce(0)
+
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockReturnValueOnce(false)
+
+  util.checkIfPathExists = jest.fn()
+  util.checkIfPathExists.mockReturnValueOnce(false)
+  try {
+    await sb.validateSynopsysBridgePath()
+  } catch (error: any) {
+    expect(error.message).toContain('Synopsys Bridge default directory does not exist')
+  }
+
+  Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+})
 test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not empty: failure', async () => {
   const sb = new SynopsysBridge()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})

@@ -104,10 +104,10 @@ describe('Coverity flow contract', () => {
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
+      expect(err.message).toContain('failed with exit code 1')
       error(err)
     }
-  });
+  })
 
   it('With coverity.automation.prcomment true and empty github token', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
@@ -194,15 +194,28 @@ export function setAllMocks() {
 }
 
 export function getBridgeDownloadUrl(): string {
-  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-macosx.zip'
+  const WINDOWS_PLATFORM = 'win64'
+  const LINUX_PLATFORM = 'linux64'
+  const MAC_PLATFORM = 'macosx'
+  const osName = process.platform
+  let platform = ''
+  if (osName === 'darwin') {
+    platform = MAC_PLATFORM
+  } else if (osName === 'linux') {
+    platform = LINUX_PLATFORM
+  } else if (osName === 'win32') {
+    platform = WINDOWS_PLATFORM
+  }
+  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest/synopsys-bridge-'.concat(platform).concat('.zip')
 }
 
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
-  Object.defineProperty(inputs, "BRIDGE_DOWNLOAD_URL", { value: getBridgeDownloadUrl() });
-  Object.defineProperty(inputs, "SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY", { value: __dirname });
-  Object.defineProperty(inputs, "include_diagnostics", { value: true });
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: __dirname})
+  Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
+  Object.defineProperty(inputs, 'BRIDGE_NETWORK_AIRGAP', {value: true})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
