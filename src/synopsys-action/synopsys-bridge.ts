@@ -103,10 +103,9 @@ export class SynopsysBridge {
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
           if (!bridgeVersion) {
-            bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.substring(0, bridgeUrl.lastIndexOf('/') + 1).concat('versions.txt'))
+            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/
+            bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'))
           }
-        } else {
-          bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.substring(0, bridgeUrl.lastIndexOf('/') + 1).concat('versions.txt'))
         }
       } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
         if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
