@@ -93,6 +93,7 @@ jobs:
 | `polaris_application_name` | Application name in Polaris                                       | Mandatory          |
 | `polaris_project_name`     | Project name in Polaris                                           | Mandatory          |
 | `polaris_assessment_types` | Polaris assessment types. <br> Example: SCA,SAST  </br>           | Mandatory          |
+| `polaris_triage`           | Polaris triage values <br> Example: REQUIRED, NOT_REQUIRE , NOT_ENTITLED| Optional          |
 
 # Synopsys GitHub Action - Coverity Cloud Deployment with Thin Client
 
