@@ -6,7 +6,7 @@ import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
 import * as io from '@actions/io'
 import * as utility from '../../src/synopsys-action/utility'
-import {BRIDGE_DOWNLOAD_URL, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from '../../src/synopsys-action/inputs'
+import {BRIDGE_DOWNLOAD_URL, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, POLARIS_TRIAGE} from '../../src/synopsys-action/inputs'
 
 const polarisParamsMap: Map<string, string> = new Map<string, string>()
 polarisParamsMap.set('POLARIS_SERVER_URL', 'POLARIS_SERVER_URL')
@@ -14,6 +14,7 @@ polarisParamsMap.set('POLARIS_ACCESS_TOKEN', 'POLARIS_ACCESS_TOKEN')
 polarisParamsMap.set('POLARIS_APPLICATION_NAME', 'POLARIS_APPLICATION_NAME')
 polarisParamsMap.set('POLARIS_PROJECT_NAME', 'POLARIS_PROJECT_NAME')
 polarisParamsMap.set('POLARIS_ASSESSMENT_TYPES', 'SCA,SAST')
+polarisParamsMap.set('POLARIS_TRIAGE', 'NOT_ENTITLED')
 
 describe('Polaris flow contract', () => {
   afterAll(() => {
@@ -33,6 +34,20 @@ describe('Polaris flow contract', () => {
 
     const resp = await run()
     expect(resp).toBe(0)
+  })
+
+  it('With all mandatory fields without Triage', async () => {
+    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockPolarisParamsExcept('POLARIS_TRIAGE')
+
+    setAllMocks()
+
+    try {
+      const resp = await run()
+    } catch (err: any) {
+      expect(err.message).toContain('failed with exit code 2')
+      error(err)
+    }
   })
 
   it('With missing mandatory field polaris.access.token', async () => {

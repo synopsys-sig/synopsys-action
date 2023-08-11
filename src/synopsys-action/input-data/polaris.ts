@@ -1,4 +1,3 @@
-
 export interface Polaris {
   polaris: PolarisData
 }
