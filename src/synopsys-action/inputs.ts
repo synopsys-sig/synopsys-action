@@ -14,6 +14,7 @@ export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_N
 export const POLARIS_PROJECT_NAME = getInput(constants.POLARIS_PROJECT_NAME_KEY)?.trim() || ''
 export const POLARIS_ASSESSMENT_TYPES = getInput(constants.POLARIS_ASSESSMENT_TYPES_KEY)?.trim() || ''
 export const POLARIS_SERVER_URL = getInput(constants.POLARIS_SERVER_URL_KEY)?.trim() || ''
+export const POLARIS_TRIAGE = getInput(constants.POLARIS_SERVER_URL_KEY)?.trim() || ''
 
 // Coverity related inputs
 export const COVERITY_URL = getInput(constants.COVERITY_URL_KEY)?.trim() || ''

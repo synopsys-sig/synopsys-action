@@ -32,19 +32,16 @@ export class SynopsysToolsParameter {
   getFormattedCommandForPolaris(): string {
     let command = ''
     const assessmentTypeArray: string[] = []
-    const assessmentTypesInput = inputs.POLARIS_ASSESSMENT_TYPES
-    if (assessmentTypesInput != null && assessmentTypesInput.length > 0) {
-      try {
-        // converting provided assessmentTypes to uppercase
-        const assessmentTypes = assessmentTypesInput.toUpperCase().split(',')
-        for (const assessmentType of assessmentTypes) {
-          const regEx = new RegExp('^[a-zA-Z]+$')
-          if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
-            assessmentTypeArray.push(assessmentType.trim())
-          }
+    if (inputs.POLARIS_ASSESSMENT_TYPES) {
+      // converting provided assessmentTypes to uppercase
+      const assessmentTypes = inputs.POLARIS_ASSESSMENT_TYPES.toUpperCase().split(',')
+      for (const assessmentType of assessmentTypes) {
+        const regEx = new RegExp('^[a-zA-Z]+$')
+        if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
+          assessmentTypeArray.push(assessmentType.trim())
+        } else {
+          throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
         }
-      } catch (error) {
-        throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
       }
     }
 
@@ -60,6 +57,9 @@ export class SynopsysToolsParameter {
       }
     }
 
+    if (inputs.POLARIS_TRIAGE) {
+      polData.data.polaris.triage = inputs.POLARIS_TRIAGE
+    }
     const inputJson = JSON.stringify(polData)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
