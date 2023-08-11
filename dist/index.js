@@ -7503,29 +7503,29 @@ if (typeof process === 'object' &&
 
 // Note: this is the semver.org version of the spec that it implements
 // Not necessarily the package version of this code.
-exports.SEMVER_SPEC_VERSION = '2.0.0'
+            exports.SEMVER_SPEC_VERSION = "2.0.0";
 
-var MAX_LENGTH = 256
-var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
-  /* istanbul ignore next */ 9007199254740991
+            var MAX_LENGTH = 256;
+            var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
+              /* istanbul ignore next */ 9007199254740991;
 
 // Max safe segment length for coercion.
-var MAX_SAFE_COMPONENT_LENGTH = 16
+            var MAX_SAFE_COMPONENT_LENGTH = 16;
 
-var MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6
+            var MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6;
 
 // The actual regexps go on exports.re
-var re = exports.re = []
-var safeRe = exports.safeRe = []
-var src = exports.src = []
-var t = exports.tokens = {}
-var R = 0
+            var re = exports.re = [];
+            var safeRe = exports.safeRe = [];
+            var src = exports.src = [];
+            var t = exports.tokens = {};
+            var R = 0;
 
-function tok (n) {
-  t[n] = R++
-}
+            function tok(n) {
+                t[n] = R++;
+            }
 
-var LETTERDASHNUMBER = '[a-zA-Z0-9-]'
+            var LETTERDASHNUMBER = "[a-zA-Z0-9-]";
 
 // Replace some greedy regex tokens to prevent regex dos issues. These regex are
 // used internally via the safeRe object since all inputs in this library get
@@ -7533,22 +7533,22 @@ var LETTERDASHNUMBER = '[a-zA-Z0-9-]'
 // regexes are exported for userland consumption and lower level usage. A
 // future breaking change could export the safer regex only with a note that
 // all input should have extra whitespace removed.
-var safeRegexReplacements = [
-  ['\\s', 1],
-  ['\\d', MAX_LENGTH],
-  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
-]
+            var safeRegexReplacements = [
+                ["\\s", 1],
+                ["\\d", MAX_LENGTH],
+                [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH]
+            ];
 
-function makeSafeRe (value) {
-  for (var i = 0; i < safeRegexReplacements.length; i++) {
-    var token = safeRegexReplacements[i][0]
-    var max = safeRegexReplacements[i][1]
-    value = value
-      .split(token + '*').join(token + '{0,' + max + '}')
-      .split(token + '+').join(token + '{1,' + max + '}')
-  }
-  return value
-}
+            function makeSafeRe(value) {
+                for (var i = 0; i < safeRegexReplacements.length; i++) {
+                    var token = safeRegexReplacements[i][0];
+                    var max = safeRegexReplacements[i][1];
+                    value = value
+                      .split(token + "*").join(token + "{0," + max + "}")
+                      .split(token + "+").join(token + "{1," + max + "}");
+                }
+                return value;
+            }
 
 // The following Regular Expressions can be used for tokenizing,
 // validating, and parsing SemVer version strings.
@@ -7556,17 +7556,17 @@ function makeSafeRe (value) {
 // ## Numeric Identifier
 // A single `0`, or a non-zero digit followed by zero or more digits.
 
-tok('NUMERICIDENTIFIER')
-src[t.NUMERICIDENTIFIER] = '0|[1-9]\\d*'
-tok('NUMERICIDENTIFIERLOOSE')
-src[t.NUMERICIDENTIFIERLOOSE] = '\\d+'
+            tok("NUMERICIDENTIFIER");
+            src[t.NUMERICIDENTIFIER] = "0|[1-9]\\d*";
+            tok("NUMERICIDENTIFIERLOOSE");
+            src[t.NUMERICIDENTIFIERLOOSE] = "\\d+";
 
 // ## Non-numeric Identifier
 // Zero or more digits, followed by a letter or hyphen, and then zero or
 // more letters, digits, or hyphens.
 
-tok('NONNUMERICIDENTIFIER')
-src[t.NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-]' + LETTERDASHNUMBER + '*'
+            tok("NONNUMERICIDENTIFIER");
+            src[t.NONNUMERICIDENTIFIER] = "\\d*[a-zA-Z-]" + LETTERDASHNUMBER + "*";
 
 // ## Main Version
 // Three dot-separated numeric identifiers.
@@ -7607,8 +7607,8 @@ src[t.PRERELEASELOOSE] = '(?:-?(' + src[t.PRERELEASEIDENTIFIERLOOSE] +
 // ## Build Metadata Identifier
 // Any combination of digits, letters, or hyphens.
 
-tok('BUILDIDENTIFIER')
-src[t.BUILDIDENTIFIER] = LETTERDASHNUMBER + '+'
+            tok("BUILDIDENTIFIER");
+            src[t.BUILDIDENTIFIER] = LETTERDASHNUMBER + "+";
 
 // ## Build Metadata
 // Plus sign, followed by one or more period-separated build metadata
@@ -7687,8 +7687,8 @@ src[t.COERCE] = '(^|[^\\d])' +
               '(?:\\.(\\d{1,' + MAX_SAFE_COMPONENT_LENGTH + '}))?' +
               '(?:$|[^\\d])'
 tok('COERCERTL')
-re[t.COERCERTL] = new RegExp(src[t.COERCE], 'g')
-safeRe[t.COERCERTL] = new RegExp(makeSafeRe(src[t.COERCE]), 'g')
+            re[t.COERCERTL] = new RegExp(src[t.COERCE], "g");
+            safeRe[t.COERCERTL] = new RegExp(makeSafeRe(src[t.COERCE]), "g");
 
 // Tilde ranges.
 // Meaning is "reasonably at or greater than"
@@ -7697,8 +7697,8 @@ src[t.LONETILDE] = '(?:~>?)'
 
 tok('TILDETRIM')
 src[t.TILDETRIM] = '(\\s*)' + src[t.LONETILDE] + '\\s+'
-re[t.TILDETRIM] = new RegExp(src[t.TILDETRIM], 'g')
-safeRe[t.TILDETRIM] = new RegExp(makeSafeRe(src[t.TILDETRIM]), 'g')
+            re[t.TILDETRIM] = new RegExp(src[t.TILDETRIM], "g");
+            safeRe[t.TILDETRIM] = new RegExp(makeSafeRe(src[t.TILDETRIM]), "g");
 var tildeTrimReplace = '$1~'
 
 tok('TILDE')
@@ -7713,8 +7713,8 @@ src[t.LONECARET] = '(?:\\^)'
 
 tok('CARETTRIM')
 src[t.CARETTRIM] = '(\\s*)' + src[t.LONECARET] + '\\s+'
-re[t.CARETTRIM] = new RegExp(src[t.CARETTRIM], 'g')
-safeRe[t.CARETTRIM] = new RegExp(makeSafeRe(src[t.CARETTRIM]), 'g')
+            re[t.CARETTRIM] = new RegExp(src[t.CARETTRIM], "g");
+            safeRe[t.CARETTRIM] = new RegExp(makeSafeRe(src[t.CARETTRIM]), "g");
 var caretTrimReplace = '$1^'
 
 tok('CARET')
@@ -7735,8 +7735,8 @@ src[t.COMPARATORTRIM] = '(\\s*)' + src[t.GTLT] +
                       '\\s*(' + src[t.LOOSEPLAIN] + '|' + src[t.XRANGEPLAIN] + ')'
 
 // this one has to use the /g flag
-re[t.COMPARATORTRIM] = new RegExp(src[t.COMPARATORTRIM], 'g')
-safeRe[t.COMPARATORTRIM] = new RegExp(makeSafeRe(src[t.COMPARATORTRIM]), 'g')
+            re[t.COMPARATORTRIM] = new RegExp(src[t.COMPARATORTRIM], "g");
+            safeRe[t.COMPARATORTRIM] = new RegExp(makeSafeRe(src[t.COMPARATORTRIM]), "g");
 var comparatorTrimReplace = '$1$2$3'
 
 // Something like `1.2.3 - 1.2.4`
@@ -7764,15 +7764,15 @@ src[t.STAR] = '(<|>)?=?\\s*\\*'
 for (var i = 0; i < R; i++) {
   debug(i, src[i])
   if (!re[i]) {
-    re[i] = new RegExp(src[i])
+      re[i] = new RegExp(src[i]);
 
-    // Replace all greedy whitespace to prevent regex dos issues. These regex are
-    // used internally via the safeRe object since all inputs in this library get
-    // normalized first to trim and collapse all extra whitespace. The original
-    // regexes are exported for userland consumption and lower level usage. A
-    // future breaking change could export the safer regex only with a note that
-    // all input should have extra whitespace removed.
-    safeRe[i] = new RegExp(makeSafeRe(src[i]))
+      // Replace all greedy whitespace to prevent regex dos issues. These regex are
+      // used internally via the safeRe object since all inputs in this library get
+      // normalized first to trim and collapse all extra whitespace. The original
+      // regexes are exported for userland consumption and lower level usage. A
+      // future breaking change could export the safer regex only with a note that
+      // all input should have extra whitespace removed.
+      safeRe[i] = new RegExp(makeSafeRe(src[i]));
   }
 }
 
@@ -7797,7 +7797,7 @@ function parse (version, options) {
     return null
   }
 
-  var r = options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL]
+    var r = options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL];
   if (!r.test(version)) {
     return null
   }
@@ -7852,7 +7852,7 @@ function SemVer (version, options) {
   this.options = options
   this.loose = !!options.loose
 
-  var m = version.trim().match(options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL])
+    var m = version.trim().match(options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL]);
 
   if (!m) {
     throw new TypeError('Invalid Version: ' + version)
@@ -8297,8 +8297,8 @@ function Comparator (comp, options) {
     return new Comparator(comp, options)
   }
 
-  comp = comp.trim().split(/\s+/).join(' ')
-  debug('comparator', comp, options)
+    comp = comp.trim().split(/\s+/).join(" ");
+    debug("comparator", comp, options);
   this.options = options
   this.loose = !!options.loose
   this.parse(comp)
@@ -8314,8 +8314,8 @@ function Comparator (comp, options) {
 
 var ANY = {}
 Comparator.prototype.parse = function (comp) {
-  var r = this.options.loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR]
-  var m = comp.match(r)
+    var r = this.options.loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR];
+    var m = comp.match(r);
 
   if (!m) {
     throw new TypeError('Invalid comparator: ' + comp)
@@ -8430,33 +8430,33 @@ function Range (range, options) {
     return new Range(range.value, options)
   }
 
-  if (!(this instanceof Range)) {
-    return new Range(range, options)
-  }
+    if (!(this instanceof Range)) {
+        return new Range(range, options);
+    }
 
-  this.options = options
-  this.loose = !!options.loose
-  this.includePrerelease = !!options.includePrerelease
+    this.options = options;
+    this.loose = !!options.loose;
+    this.includePrerelease = !!options.includePrerelease;
 
-  // First reduce all whitespace as much as possible so we do not have to rely
-  // on potentially slow regexes like \s*. This is then stored and used for
-  // future error messages as well.
-  this.raw = range
-    .trim()
-    .split(/\s+/)
-    .join(' ')
+    // First reduce all whitespace as much as possible so we do not have to rely
+    // on potentially slow regexes like \s*. This is then stored and used for
+    // future error messages as well.
+    this.raw = range
+      .trim()
+      .split(/\s+/)
+      .join(" ");
 
-  // First, split based on boolean or ||
-  this.set = this.raw.split('||').map(function (range) {
-    return this.parseRange(range.trim())
-  }, this).filter(function (c) {
-    // throw out any that are not relevant for whatever reason
-    return c.length
-  })
+    // First, split based on boolean or ||
+    this.set = this.raw.split("||").map(function(range) {
+        return this.parseRange(range.trim());
+    }, this).filter(function(c) {
+        // throw out any that are not relevant for whatever reason
+        return c.length;
+    });
 
-  if (!this.set.length) {
-    throw new TypeError('Invalid SemVer Range: ' + this.raw)
-  }
+    if (!this.set.length) {
+        throw new TypeError("Invalid SemVer Range: " + this.raw);
+    }
 
   this.format()
 }
@@ -8473,31 +8473,31 @@ Range.prototype.toString = function () {
 }
 
 Range.prototype.parseRange = function (range) {
-  var loose = this.options.loose
-  // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-  var hr = loose ? safeRe[t.HYPHENRANGELOOSE] : safeRe[t.HYPHENRANGE]
-  range = range.replace(hr, hyphenReplace)
-  debug('hyphen replace', range)
-  // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-  range = range.replace(safeRe[t.COMPARATORTRIM], comparatorTrimReplace)
-  debug('comparator trim', range, safeRe[t.COMPARATORTRIM])
+    var loose = this.options.loose;
+    // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
+    var hr = loose ? safeRe[t.HYPHENRANGELOOSE] : safeRe[t.HYPHENRANGE];
+    range = range.replace(hr, hyphenReplace);
+    debug("hyphen replace", range);
+    // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
+    range = range.replace(safeRe[t.COMPARATORTRIM], comparatorTrimReplace);
+    debug("comparator trim", range, safeRe[t.COMPARATORTRIM]);
 
-  // `~ 1.2.3` => `~1.2.3`
-  range = range.replace(safeRe[t.TILDETRIM], tildeTrimReplace)
+    // `~ 1.2.3` => `~1.2.3`
+    range = range.replace(safeRe[t.TILDETRIM], tildeTrimReplace);
 
-  // `^ 1.2.3` => `^1.2.3`
-  range = range.replace(safeRe[t.CARETTRIM], caretTrimReplace)
+    // `^ 1.2.3` => `^1.2.3`
+    range = range.replace(safeRe[t.CARETTRIM], caretTrimReplace);
 
-  // normalize spaces
-  range = range.split(/\s+/).join(' ')
+    // normalize spaces
+    range = range.split(/\s+/).join(" ");
 
   // At this point, the range is completely trimmed and
   // ready to be split into comparators.
 
-  var compRe = loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR]
-  var set = range.split(' ').map(function (comp) {
-    return parseComparator(comp, this.options)
-  }, this).join(' ').split(/\s+/)
+    var compRe = loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR];
+    var set = range.split(" ").map(function(comp) {
+        return parseComparator(comp, this.options);
+    }, this).join(" ").split(/\s+/);
   if (this.options.loose) {
     // in loose mode, throw out any that are not valid comparators
     set = set.filter(function (comp) {
@@ -8594,7 +8594,7 @@ function replaceTildes (comp, options) {
 }
 
 function replaceTilde (comp, options) {
-  var r = options.loose ? safeRe[t.TILDELOOSE] : safeRe[t.TILDE]
+    var r = options.loose ? safeRe[t.TILDELOOSE] : safeRe[t.TILDE];
   return comp.replace(r, function (_, M, m, p, pr) {
     debug('tilde', comp, _, M, m, p, pr)
     var ret
@@ -8635,7 +8635,7 @@ function replaceCarets (comp, options) {
 
 function replaceCaret (comp, options) {
   debug('caret', comp, options)
-  var r = options.loose ? safeRe[t.CARETLOOSE] : safeRe[t.CARET]
+    var r = options.loose ? safeRe[t.CARETLOOSE] : safeRe[t.CARET];
   return comp.replace(r, function (_, M, m, p, pr) {
     debug('caret', comp, _, M, m, p, pr)
     var ret
@@ -8694,7 +8694,7 @@ function replaceXRanges (comp, options) {
 
 function replaceXRange (comp, options) {
   comp = comp.trim()
-  var r = options.loose ? safeRe[t.XRANGELOOSE] : safeRe[t.XRANGE]
+    var r = options.loose ? safeRe[t.XRANGELOOSE] : safeRe[t.XRANGE];
   return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
     debug('xRange', comp, ret, gtlt, M, m, p, pr)
     var xM = isX(M)
@@ -8769,7 +8769,7 @@ function replaceXRange (comp, options) {
 function replaceStars (comp, options) {
   debug('replaceStars', comp, options)
   // Looseness is ignored here.  star is always as loose as it gets!
-  return comp.trim().replace(safeRe[t.STAR], '')
+    return comp.trim().replace(safeRe[t.STAR], "");
 }
 
 // This function is passed to string.replace(re[t.HYPHENRANGE])
@@ -9095,7 +9095,7 @@ function coerce (version, options) {
 
   var match = null
   if (!options.rtl) {
-    match = version.match(safeRe[t.COERCE])
+      match = version.match(safeRe[t.COERCE]);
   } else {
     // Find the right-most coercible string that does not share
     // a terminus with a more left-ward coercible string.
@@ -9106,17 +9106,17 @@ function coerce (version, options) {
     // Stop when we get a match that ends at the string end, since no
     // coercible string can be more right-ward without the same terminus.
     var next
-    while ((next = safeRe[t.COERCERTL].exec(version)) &&
-      (!match || match.index + match[0].length !== version.length)
-    ) {
-      if (!match ||
-          next.index + next[0].length !== match.index + match[0].length) {
-        match = next
+      while ((next = safeRe[t.COERCERTL].exec(version)) &&
+        (!match || match.index + match[0].length !== version.length)
+        ) {
+          if (!match ||
+            next.index + next[0].length !== match.index + match[0].length) {
+              match = next;
+          }
+          safeRe[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length;
       }
-      safeRe[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
-    }
     // leave it in a clean state
-    safeRe[t.COERCERTL].lastIndex = -1
+      safeRe[t.COERCERTL].lastIndex = -1;
   }
 
   if (match === null) {
