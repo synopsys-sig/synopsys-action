@@ -1,16 +1,12 @@
 import {GithubData} from './blackduck'
 
-export enum PolarisAssessmentType {
-  SCA = 'SCA',
-  SAST = 'SAST'
-}
-
 export interface Polaris {
   polaris: PolarisData
   github?: GithubData
 }
 
 export interface PolarisData {
+  triage?: string
   accesstoken: string
   serverUrl: string
   application: {name: string}
