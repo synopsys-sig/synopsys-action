@@ -37,7 +37,7 @@ export class SynopsysToolsParameter {
       const assessmentTypes = inputs.POLARIS_ASSESSMENT_TYPES.toUpperCase().split(',')
       for (const assessmentType of assessmentTypes) {
         const regEx = new RegExp('^[a-zA-Z]+$')
-        if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
+        if (assessmentType.trim() && regEx.test(assessmentType.trim())) {
           assessmentTypeArray.push(assessmentType.trim())
         } else {
           throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
@@ -82,7 +82,6 @@ export class SynopsysToolsParameter {
     }
 
     const inputJson = JSON.stringify(polData)
-
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
