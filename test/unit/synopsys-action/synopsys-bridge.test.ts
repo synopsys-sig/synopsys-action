@@ -7,6 +7,10 @@ import {Socket} from 'net'
 import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
 import * as inputs from '../../../src/synopsys-action/inputs'
 import * as constants from '../../../src/application-constants'
+import {run} from '../../../src/main'
+import {error} from '@actions/core'
+import * as downloadUtility from '../../../src/synopsys-action/download-utility'
+import {DownloadFileResponse, extractZipped} from '../../../src/synopsys-action/download-utility'
 
 const util = require('../../../src/synopsys-action/utility')
 
