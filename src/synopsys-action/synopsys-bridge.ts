@@ -304,7 +304,7 @@ export class SynopsysBridge {
           }
         }
       } else {
-        error('Unable to retrieve the most recent version from Artifactory URL')
+        info('Unable to retrieve the most recent version from Artifactory URL')
       }
     } catch (e) {
       info('Error while reading version file content: '.concat((e as Error).message))

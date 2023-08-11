@@ -804,7 +804,7 @@ class SynopsysBridge {
                     }
                 }
                 else {
-                    (0, core_1.error)('Unable to retrieve the most recent version from Artifactory URL');
+                    (0, core_1.info)('Unable to retrieve the most recent version from Artifactory URL');
                 }
             }
             catch (e) {
