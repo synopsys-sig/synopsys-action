@@ -56,10 +56,11 @@ export class SynopsysToolsParameter {
         }
       }
     }
-
+    info('triage'.concat(inputs.POLARIS_TRIAGE))
     if (inputs.POLARIS_TRIAGE) {
       polData.data.polaris.triage = inputs.POLARIS_TRIAGE
     }
+    info('triage'.concat(inputs.POLARIS_TRIAGE))
     if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
       info('Polaris PR comment is enabled')
       const prCommentSeverities: string[] = []
