@@ -79,6 +79,9 @@ pop_polaris:
 polaris_bridge:
   stage: analysis
   extends: .polaris_bridge
+  only:
+    refs:
+      - vulnerability-fix-action
 
 pop_blackduck:
   image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
@@ -90,6 +93,10 @@ pop_blackduck:
       apt-get install -y rsync make jq python3 python3-pip
       pip3 install blackduck requests
       export RELEASE_VERSION=$(cat package.json | grep version | head -1 | awk -F= "{ print $2 }" | sed 's/[version:,\",]//g' | tr -d '[[:space:]]')
+  only:
+    refs:
+      - vulnerability-fix-action
+
 
 #changelog_job:
 #  extends:
