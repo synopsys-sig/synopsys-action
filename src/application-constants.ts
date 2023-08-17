@@ -47,12 +47,19 @@ export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'
 export const BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr'
 export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment'
+export const BLACKDUCK_FIXPR_ENABLED_KEY = 'bridge_blackduck_fixpr_enabled'
+export const BLACKDUCK_FIXPR_MAXCOUNT_KEY = 'bridge_blackduck_fixpr_maxCount'
+export const BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = 'bridge_blackduck_fixpr_createSinglePR'
+export const BLACKDUCK_FIXPR_FILTER_BY_KEY = 'bridge_blackduck_fixpr_filter_by'
+export const BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = 'bridge_blackduck_fixpr_filter_severities'
+export const BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE_KEY = 'bridge_blackduck_fixpr_useLongTermUpgradeGuidance'
 
 export const GITHUB_TOKEN_KEY = 'github_token'
 export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
 export const BRIDGE_NETWORK_AIRGAP_KEY = 'bridge_network_airgap'
 export const NETWORK_AIRGAP_KEY = 'network_airgap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
+export const SEVERITIES = 'SEVERITIES'
 
 // Bridge Exit Codes
 export let EXIT_CODE_MAP = new Map<string, string>([

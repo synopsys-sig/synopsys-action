@@ -6,7 +6,7 @@ import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
-import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData} from './input-data/blackduck'
+import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
 import {parseToBoolean} from './utility'
 
@@ -229,21 +229,21 @@ export class SynopsysToolsParameter {
     }
 
     // Check and put environment variable for fix pull request
-    if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
-      info('Blackduck Automation Fix PR is enabled')
+    if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+      info('Black Duck Fix PR is enabled')
+      blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
       blackduckData.data.github = this.getGithubRepoInfo()
-      blackduckData.data.blackduck.automation.fixpr = true
     } else {
       // Disable fix pull request for adapters
-      blackduckData.data.blackduck.automation.fixpr = false
+      blackduckData.data.blackduck.fixpr = {enabled: false}
     }
 
     if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
       info('Blackduck Automation comment is enabled')
       blackduckData.data.github = this.getGithubRepoInfo()
-      blackduckData.data.blackduck.automation.prcomment = true
+      blackduckData.data.blackduck.automation = {prcomment: true}
     } else {
-      blackduckData.data.blackduck.automation.prcomment = false
+      blackduckData.data.blackduck.automation = {prcomment: false}
     }
 
     const inputJson = JSON.stringify(blackduckData)
@@ -256,6 +256,50 @@ export class SynopsysToolsParameter {
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
+  }
+
+  private setBlackDuckFixPrInputs(): BlackDuckFixPrData | undefined {
+    if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && isNaN(Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT))) {
+      throw new Error('Invalid value for '.concat(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY))
+    }
+    const createSinglePr = parseToBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)
+    if (createSinglePr && inputs.BLACKDUCK_FIXPR_MAXCOUNT) {
+      throw new Error(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY.concat(' is not applicable with ').concat(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY))
+    }
+    const blackDuckFixPrData: BlackDuckFixPrData = {}
+    blackDuckFixPrData.enabled = true
+    blackDuckFixPrData.createSinglePR = createSinglePr === true
+    if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
+      blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT)
+    }
+    if (inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE) {
+      blackDuckFixPrData.useLongTermUpgradeGuidance = parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)
+    }
+    blackDuckFixPrData.filter = {}
+    if (inputs.BLACKDUCK_FIXPR_FILTER_BY) {
+      blackDuckFixPrData.filter = {
+        by: inputs.BLACKDUCK_FIXPR_FILTER_BY
+      }
+    }
+    if (inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES) {
+      const fixPRFilterSeverities: string[] = []
+      const fixPRFilterSeveritiesInput = inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES
+      if (fixPRFilterSeveritiesInput != null && fixPRFilterSeveritiesInput.length > 0) {
+        // converting provided assessmentTypes to uppercase
+        const assessmentTypes = fixPRFilterSeveritiesInput.toUpperCase().split(',')
+        for (const assessmentType of assessmentTypes) {
+          const regEx = new RegExp('^[a-zA-Z]+$')
+          if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
+            fixPRFilterSeverities.push(assessmentType.trim())
+          }
+        }
+      }
+      blackDuckFixPrData.filter = {
+        by: inputs.BLACKDUCK_FIXPR_FILTER_BY,
+        severities: fixPRFilterSeverities
+      }
+    }
+    return blackDuckFixPrData
   }
 
   private getGithubRepoInfo(): GithubData | undefined {

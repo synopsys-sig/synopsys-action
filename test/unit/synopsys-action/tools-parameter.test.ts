@@ -115,7 +115,6 @@ test('Enable Test getFormattedCommandForCoverity Airgap: SUCCESS', () => {
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
-  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
@@ -325,7 +324,7 @@ test('Test getFormattedCommandForBlackduck', () => {
   expect(resp).toContain('--stage blackduck')
 })
 
-test('Test getFormattedCommandForBlackduck - fix pr test cases', () => {
+test('Test getFormattedCommandForBlackduck - fix pr enabled with createSinglePR false', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
@@ -340,53 +339,101 @@ test('Test getFormattedCommandForBlackduck - fix pr test cases', () => {
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: false})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: false})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'false'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'false'})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: ' '})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: ' '})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'TRUE'})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'FALSE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'FALSE'})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'TRUEEE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'TRUEEE'})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: 'FALSEEEE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'FALSEEEE'})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: ' '})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: ' '})
   stp = new SynopsysToolsParameter(tempPath)
   resp = stp.getFormattedCommandForBlackduck()
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
+
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_CREATE_SINGLE_PR', {value: 'true'})
+  stp = new SynopsysToolsParameter(tempPath)
+  resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+})
+
+test('Test getFormattedCommandForBlackduck - fix pr enabled with createSinglePR true', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_CREATE_SINGLE_PR', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_MAXCOUNT', {value: ''})
+  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  let resp = stp.getFormattedCommandForBlackduck()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+})
+
+test('Test getFormattedCommandForBlackduck - fix pr enabled with createSinglePR true failure', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_CREATE_SINGLE_PR', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_MAXCOUNT', {value: '1'})
+  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  try {
+    stp.getFormattedCommandForBlackduck()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('bridge_blackduck_fixpr_maxCount is not applicable with bridge_blackduck_fixpr_createSinglePR')
+  }
+})
+
+test('Test getFormattedCommandForBlackduck - fix pr enabled with createSinglePR true failure', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_CREATE_SINGLE_PR', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_MAXCOUNT', {value: 'invalid-val'})
+  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  try {
+    stp.getFormattedCommandForBlackduck()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Invalid value for bridge_blackduck_fixpr_maxCount')
+  }
 })
 
 test('Test getFormattedCommandForBlackduck - pr comment test cases', () => {
@@ -396,6 +443,7 @@ test('Test getFormattedCommandForBlackduck - pr comment test cases', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'false'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
@@ -451,7 +499,7 @@ test('Test missing data error in getFormattedCommandForBlackduck', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: '   BLOCKER    , CRITICAL, MAJOR'})
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: false})
+  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: false})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
