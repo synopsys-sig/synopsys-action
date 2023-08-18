@@ -1115,6 +1115,9 @@ class SynopsysToolsParameter {
                     if (filterSeverity.trim().length > 0 && regEx.test(filterSeverity.trim())) {
                         fixPRFilterSeverities.push(filterSeverity.trim());
                     }
+                    else {
+                        throw new Error('Invalid value for '.concat(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY));
+                    }
                 }
             }
             blackDuckFixPrData.filter = {
