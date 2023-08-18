@@ -291,6 +291,8 @@ export class SynopsysToolsParameter {
           const regEx = new RegExp('^[a-zA-Z]+$')
           if (filterSeverity.trim().length > 0 && regEx.test(filterSeverity.trim())) {
             fixPRFilterSeverities.push(filterSeverity.trim())
+          } else {
+            throw new Error('Invalid value for '.concat(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY))
           }
         }
       }
