@@ -259,11 +259,11 @@ export class SynopsysToolsParameter {
       const fixPRFilterSeveritiesInput = inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES
       if (fixPRFilterSeveritiesInput != null && fixPRFilterSeveritiesInput.length > 0) {
         // converting provided assessmentTypes to uppercase
-        const assessmentTypes = fixPRFilterSeveritiesInput.toUpperCase().split(',')
-        for (const assessmentType of assessmentTypes) {
+        const filterSeverities = fixPRFilterSeveritiesInput.toUpperCase().split(',')
+        for (const filterSeverity of filterSeverities) {
           const regEx = new RegExp('^[a-zA-Z]+$')
-          if (assessmentType.trim().length > 0 && regEx.test(assessmentType.trim())) {
-            fixPRFilterSeverities.push(assessmentType.trim())
+          if (filterSeverity.trim().length > 0 && regEx.test(filterSeverity.trim())) {
+            fixPRFilterSeverities.push(filterSeverity.trim())
           }
         }
       }
