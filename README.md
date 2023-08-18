@@ -267,4 +267,4 @@ pull requests to be created.
 - By default, Synopsys Bridge will be downloaded in `$HOME/synopsys-bridge` directory.
 - If `bridge_download_version` or `bridge_download_url` is not provided, Synopsys Action will download and configure the
   latest version of Bridge.
-- If `bridge_network_airgap` is enabled, `bridge_download_version` or `bridge_download_url` will be ignored.
+- If `bridge_network_airgap` is enabled, `bridge_download_version` and `bridge_download_url` will be ignored.
