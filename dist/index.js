@@ -1111,13 +1111,7 @@ class SynopsysToolsParameter {
                 // converting provided assessmentTypes to uppercase
                 const filterSeverities = fixPRFilterSeveritiesInput.toUpperCase().split(',');
                 for (const filterSeverity of filterSeverities) {
-                    const regEx = new RegExp('^[a-zA-Z]+$');
-                    if (filterSeverity.trim().length > 0 && regEx.test(filterSeverity.trim())) {
-                        fixPRFilterSeverities.push(filterSeverity.trim());
-                    }
-                    else {
-                        throw new Error('Invalid value for '.concat(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY));
-                    }
+                    fixPRFilterSeverities.push(filterSeverity.trim());
                 }
             }
             blackDuckFixPrData.filter = {
