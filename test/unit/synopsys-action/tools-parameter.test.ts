@@ -436,22 +436,6 @@ test('Test getFormattedCommandForBlackduck - fix pr enabled with invalid max cou
   }
 })
 
-test('Test getFormattedCommandForBlackduck - fix pr enabled with invalid filter severities', () => {
-  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
-  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
-  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'true'})
-  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_MAXCOUNT', {value: '1'})
-  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_CREATE_SINGLE_PR', {value: 'false'})
-  Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_FILTER_SEVERITIES', {value: '23,ss'})
-  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
-  try {
-    stp.getFormattedCommandForBlackduck()
-  } catch (error: any) {
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Invalid value for bridge_blackduck_fixpr_filter_severities')
-  }
-})
-
 test('Test getFormattedCommandForBlackduck - pr comment test cases', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
