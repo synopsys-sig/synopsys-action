@@ -1098,27 +1098,16 @@ class SynopsysToolsParameter {
         if (inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE) {
             blackDuckFixPrData.useLongTermUpgradeGuidance = (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_FIXPR_ENABLED);
         }
-        blackDuckFixPrData.filter = {};
-        if (inputs.BLACKDUCK_FIXPR_FILTER_BY) {
-            blackDuckFixPrData.filter = {
-                by: inputs.BLACKDUCK_FIXPR_FILTER_BY
-            };
-        }
-        if (inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES) {
-            const fixPRFilterSeverities = [];
-            const fixPRFilterSeveritiesInput = inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES;
-            if (fixPRFilterSeveritiesInput != null && fixPRFilterSeveritiesInput.length > 0) {
-                // converting provided assessmentTypes to uppercase
-                const filterSeverities = fixPRFilterSeveritiesInput.toUpperCase().split(',');
-                for (const filterSeverity of filterSeverities) {
-                    fixPRFilterSeverities.push(filterSeverity.trim());
+        const fixPRFilterSeverities = [];
+        if (inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES && inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES != null && inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES.length > 0) {
+            const filterSeverities = inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES.split(',');
+            for (const fixPrSeverity of filterSeverities) {
+                if (fixPrSeverity != null && fixPrSeverity !== '') {
+                    fixPRFilterSeverities.push(fixPrSeverity.trim());
                 }
             }
-            blackDuckFixPrData.filter = {
-                by: inputs.BLACKDUCK_FIXPR_FILTER_BY,
-                severities: fixPRFilterSeverities
-            };
         }
+        blackDuckFixPrData.filter = Object.assign(Object.assign({}, (inputs.BLACKDUCK_FIXPR_FILTER_BY ? { by: inputs.BLACKDUCK_FIXPR_FILTER_BY } : {})), (fixPRFilterSeverities.length > 0 ? { severities: fixPRFilterSeverities } : {}));
         return blackDuckFixPrData;
     }
     getGithubRepoInfo() {
