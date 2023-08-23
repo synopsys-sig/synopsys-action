@@ -89,9 +89,9 @@ describe('retry-helper tests', () => {
     } catch (err) {
       error = err as Error
     }
-    expect((error as Error).message).toBe('some error 3')
-    expect(attempts).toBe(3)
-    expect(info).toHaveLength(4)
+    expect((error as Error).message).toBe('some error 4')
+    expect(attempts).toBe(4)
+    expect(info).toHaveLength(6)
     expect(info[0]).toBe('some error 1')
     expect(info[1]).toMatch(/Synopsys bridge download has been failed, retries left: .+/)
     expect(info[2]).toBe('some error 2')

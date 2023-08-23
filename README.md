@@ -72,7 +72,7 @@ jobs:
         uses: actions/checkout@v3
         
       - name: Polaris Scan
-        uses: synopsys-sig/synopsys-action@v1.2.0
+        uses: synopsys-sig/synopsys-action@v1.3.0
         with:
           polaris_serverUrl: ${{ secrets.POLARIS_SERVERURL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESSTOKEN }}
@@ -122,7 +122,7 @@ jobs:
 
       - name: Coverity Full Scan
         if: ${{ github.event_name != 'pull_request' }}
-        uses: synopsys-sig/synopsys-action@v1.2.0
+        uses: synopsys-sig/synopsys-action@v1.3.0
         with:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
@@ -135,7 +135,7 @@ jobs:
           
       - name: Coverity PR Scan
         if: ${{ github.event_name == 'pull_request' }}
-        uses: synopsys-sig/synopsys-action@v1.2.0
+        uses: synopsys-sig/synopsys-action@v1.3.0
         with:
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
@@ -161,6 +161,7 @@ jobs:
 | `coverity_install_directory`        | Directory path to install Coverity | Optional    |
 | `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: `coverity_policy_view: '100001'` or `coverity_policy_view: 'Outstanding Issues'`  </br>       | Optional    |
 | `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. Merge Request must be created first from feature branch to main branch to run Coverity PR Comment. <br> Supported values: true or false </br> | Optional     |
+| `bridge_coverity_version`        | The version of Coverity Thin Client to use <br> Example: `bridge_coverity_version: '2023.6.0'`  | Optional     |
 | `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if coverity_automation_prcomment is set as true |
 
 ## Synopsys GitHub Action - Black Duck
@@ -196,7 +197,7 @@ jobs:
 
       - name: Black Duck Full Scan
         if: ${{ github.event_name != 'pull_request' }}
-        uses: synopsys-sig/synopsys-action@v1.2.0
+        uses: synopsys-sig/synopsys-action@v1.3.0
         ### Use below configuration to set specific detect environment variables
         env:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
@@ -214,7 +215,7 @@ jobs:
 
       - name: Black Duck PR Scan
         if: ${{ github.event_name == 'pull_request' }}
-        uses: synopsys-sig/synopsys-action@v1.2.0
+        uses: synopsys-sig/synopsys-action@v1.3.0
         ### Use below configuration to set specific detect environment variables
         env:
           DETECT_PROJECT_NAME: ${{ github.event.repository.name }}
@@ -253,17 +254,20 @@ pull requests to be created.
 
 ## Additional Parameters
 
-| Input Parameter           | Description                                                                                                                                                                                                                                                                                                             |
-|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `synopsys_bridge_path`    | Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge]. If the configured Synopsys Bridge is not the latest one, latest Synopsys Bridge version will be downloaded |
-| `bridge_download_url`     | Provide URL to bridge zip file. <br> If provided, Synopsys Bridge will be automatically downloaded and configured.                                                                                                                                                                                                      |
-| `bridge_download_version` | Provide bridge version.<br> If provided, the specified version of Synopsys Bridge will be automatically downloaded and configured.                                                                                                                                                                                      |
-| `include_diagnostics`     | Synopsys Bridge diagnostics files will be available to download when it is set to `true`. Additionally `diagnostics_retention_days` can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).                                                                      |
+| Input Parameter                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+|-------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `synopsys_bridge_install_directory` | Provide a path, where you want to configure or already configured Synopsys Bridge. [Note - If you don't provide any path, then by default configuration path will be considered as - $HOME/synopsys-bridge].                                                                                                                                                                                                                                                                                  |
+| `bridge_download_url`               | Provide URL to bridge zip file. <br> If provided, Synopsys Bridge will be automatically downloaded and configured. <br/> Example : https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/1.0.0/synopsys-bridge-1.0.0-win64.zip or https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest/synopsys-bridge-win64.zip                                                            |
+| `bridge_download_version`           | Provide bridge version.<br> If provided, the specified version of Synopsys Bridge will be automatically downloaded from [Synopsys Artifactory](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge) and configured. <br/> Example: bridge_download_version: "1.0.0"                                                                                                                                                                  |
+| `include_diagnostics`               | Synopsys Bridge diagnostics files will be available to download when it is set to `true`. Additionally `diagnostics_retention_days` can be passed as integer value between 1 to 90 to retain the files (Be default file be available for 90 days).                                                                                                                                                                                                                                            |
+| `bridge_network_airgap`             |If bridge_network_airgap is set to true, Synopsys Action will not download Synopsys Bridge.  You are expected to download and setup Synopsys Bridge.  Default bridge installation directory is $HOME/synopsys-bridge. If you want to install Synopsys Bridge in a custom location, set synopsys_bridge_install_directory in your GitHub workflow to point to your custom Bridge installation directory.<br/>**Note:** If you are a Black Duck user, you are expected to download and setup airgapped version of Detect under $HOME/.bridge/blackduck. To use a custom location, set blackduck_install_directory to point to Detect installation directory|
 
 **Notes:**
 
 - Synopsys Bridge can be downloaded
-  from [here](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/).
+  from [here](https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest).
 - By default, Synopsys Bridge will be downloaded in `$HOME/synopsys-bridge` directory.
 - If `bridge_download_version` or `bridge_download_url` is not provided, Synopsys Action will download and configure the
   latest version of Bridge.
+- If both `bridge_download_version` and `bridge_download_url` are provided, `bridge_download_url` takes precedence. 
+- If `bridge_network_airgap` is enabled, `bridge_download_version` and `bridge_download_url` will be ignored.

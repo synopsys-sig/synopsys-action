@@ -183,7 +183,7 @@ describe('@actions/tool-cache', function () {
   })
 
   it('retries 429s', async function () {
-    nock('http://example.com').get('/too-many-requests-429').times(2).reply(429, undefined)
+    nock('http://example.com').get('/too-many-requests-429').times(3).reply(429, undefined)
     nock('http://example.com').get('/too-many-requests-429').reply(500, undefined)
 
     try {

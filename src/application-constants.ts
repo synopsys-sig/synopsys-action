@@ -59,4 +59,4 @@ export let EXIT_CODE_MAP = new Map<string, string>([
 
 export const RETRY_DELAY = 10000
 export const RETRY_COUNT = 3
-export const NON_RETRY_HTTP_CODES = '200,201,216,401,403,416'
+export const NON_RETRY_HTTP_CODES = '200,201,401,403,416'

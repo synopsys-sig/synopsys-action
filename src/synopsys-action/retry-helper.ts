@@ -17,7 +17,7 @@ export class RetryHelper {
 
   async execute<T>(action: () => Promise<T>, isRetryable?: (e: Error) => boolean): Promise<T> {
     let attempt = 1
-    while (attempt < this.maxAttempts) {
+    while (attempt <= this.maxAttempts) {
       // Try
       try {
         return await action()
@@ -29,7 +29,7 @@ export class RetryHelper {
       }
 
       // Sleep
-      core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt)))
+      core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt + 1)))
       await sleep(RETRY_DELAY)
       attempt++
     }
