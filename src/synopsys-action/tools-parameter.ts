@@ -60,6 +60,14 @@ export class SynopsysToolsParameter {
       }
     }
 
+    if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+      info('Polaris PR comment is enabled')
+      polData.data.polaris.prComment = {enabled: true}
+      polData.data.github = this.getGithubRepoInfo()
+    } else {
+      polData.data.polaris.prComment = {enabled: false}
+    }
+
     const inputJson = JSON.stringify(polData)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
@@ -248,8 +256,8 @@ export class SynopsysToolsParameter {
       throw new Error('Missing required github token for fix pull request/automation comment')
     }
 
-    if ((parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)) && isNaN(Number(githubPrNumber))) {
-      throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.')
+    if ((parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT) || parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
+      throw new Error('Polaris/Coverity/Blackduck PR comment can only be triggered on a pull request.')
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
