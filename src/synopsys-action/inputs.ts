@@ -9,11 +9,12 @@ export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim() || ''
 
 // Polaris related inputs
-export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''
-export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_NAME_KEY)?.trim() || ''
-export const POLARIS_PROJECT_NAME = getInput(constants.POLARIS_PROJECT_NAME_KEY)?.trim() || ''
-export const POLARIS_ASSESSMENT_TYPES = getInput(constants.POLARIS_ASSESSMENT_TYPES_KEY)?.trim() || ''
-export const POLARIS_SERVER_URL = getInput(constants.POLARIS_SERVER_URL_KEY)?.trim() || ''
+export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || 'ss'
+export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_NAME_KEY)?.trim() || 'ss'
+export const POLARIS_PROJECT_NAME = getInput(constants.POLARIS_PROJECT_NAME_KEY)?.trim() || 'ss'
+export const POLARIS_ASSESSMENT_TYPES = getInput(constants.POLARIS_ASSESSMENT_TYPES_KEY)?.trim() || 'ss'
+export const POLARIS_SERVER_URL = getInput(constants.POLARIS_SERVER_URL_KEY)?.trim() || 'ss'
+export const POLARIS_PRCOMMENT_ENABLED = getInput(constants.POLARIS_PRCOMMENT_ENABLED_KEY)?.trim() || 'true'
 
 // Coverity related inputs
 export const COVERITY_URL = getInput(constants.COVERITY_URL_KEY)?.trim() || ''

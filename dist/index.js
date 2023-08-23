@@ -7,7 +7,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -37,6 +37,7 @@ exports.POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name';
 exports.POLARIS_PROJECT_NAME_KEY = 'polaris_project_name';
 exports.POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types';
 exports.POLARIS_SERVER_URL_KEY = 'polaris_serverUrl';
+exports.POLARIS_PRCOMMENT_ENABLED_KEY = 'bridge_polaris_prComment_enabled';
 // Blackduck
 exports.BLACKDUCK_URL_KEY = 'blackduck_url';
 exports.BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken';
@@ -412,9 +413,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
+exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
@@ -423,35 +424,36 @@ exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_A
 exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)('bridge_download_version')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
 // Polaris related inputs
-exports.POLARIS_ACCESS_TOKEN = ((_e = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';
-exports.POLARIS_APPLICATION_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
-exports.POLARIS_PROJECT_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
-exports.POLARIS_ASSESSMENT_TYPES = ((_h = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
-exports.POLARIS_SERVER_URL = ((_j = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
+exports.POLARIS_ACCESS_TOKEN = ((_e = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || 'ss';
+exports.POLARIS_APPLICATION_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || 'ss';
+exports.POLARIS_PROJECT_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || 'ss';
+exports.POLARIS_ASSESSMENT_TYPES = ((_h = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || 'ss';
+exports.POLARIS_SERVER_URL = ((_j = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || 'ss';
+exports.POLARIS_PRCOMMENT_ENABLED = ((_k = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_ENABLED_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || 'true';
 // Coverity related inputs
-exports.COVERITY_URL = ((_k = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
-exports.COVERITY_USER = ((_l = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
-exports.COVERITY_PASSPHRASE = ((_m = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || '';
-exports.COVERITY_PROJECT_NAME = ((_o = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _o === void 0 ? void 0 : _o.trim()) || '';
-exports.COVERITY_STREAM_NAME = ((_p = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _p === void 0 ? void 0 : _p.trim()) || '';
-exports.COVERITY_INSTALL_DIRECTORY = ((_q = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _q === void 0 ? void 0 : _q.trim()) || '';
-exports.COVERITY_POLICY_VIEW = ((_r = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
-exports.COVERITY_REPOSITORY_NAME = ((_s = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
-exports.COVERITY_BRANCH_NAME = ((_t = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
-exports.COVERITY_AUTOMATION_PRCOMMENT = ((_u = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
-exports.COVERITY_LOCAL = ((_v = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) === 'true' || false;
-exports.COVERITY_VERSION = ((_w = (0, core_1.getInput)(constants.COVERITY_VERSION_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
+exports.COVERITY_URL = ((_l = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
+exports.COVERITY_USER = ((_m = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || '';
+exports.COVERITY_PASSPHRASE = ((_o = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _o === void 0 ? void 0 : _o.trim()) || '';
+exports.COVERITY_PROJECT_NAME = ((_p = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _p === void 0 ? void 0 : _p.trim()) || '';
+exports.COVERITY_STREAM_NAME = ((_q = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _q === void 0 ? void 0 : _q.trim()) || '';
+exports.COVERITY_INSTALL_DIRECTORY = ((_r = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
+exports.COVERITY_POLICY_VIEW = ((_s = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
+exports.COVERITY_REPOSITORY_NAME = ((_t = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
+exports.COVERITY_BRANCH_NAME = ((_u = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
+exports.COVERITY_AUTOMATION_PRCOMMENT = ((_v = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
+exports.COVERITY_LOCAL = ((_w = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) === 'true' || false;
+exports.COVERITY_VERSION = ((_x = (0, core_1.getInput)(constants.COVERITY_VERSION_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
 // Blackduck related inputs
-exports.BLACKDUCK_URL = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
-exports.BLACKDUCK_API_TOKEN = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
-exports.BLACKDUCK_INSTALL_DIRECTORY = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
-exports.BLACKDUCK_SCAN_FULL = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_FIXPR = ((_2 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_3 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
-exports.GITHUB_TOKEN = ((_4 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
-exports.INCLUDE_DIAGNOSTICS = ((_5 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || '';
-exports.DIAGNOSTICS_RETENTION_DAYS = ((_6 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || '';
+exports.BLACKDUCK_URL = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
+exports.BLACKDUCK_API_TOKEN = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
+exports.BLACKDUCK_INSTALL_DIRECTORY = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
+exports.BLACKDUCK_SCAN_FULL = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_2 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_FIXPR = ((_3 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_4 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
+exports.GITHUB_TOKEN = ((_5 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || '';
+exports.INCLUDE_DIAGNOSTICS = ((_6 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || '';
+exports.DIAGNOSTICS_RETENTION_DAYS = ((_7 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _7 === void 0 ? void 0 : _7.trim()) || '';
 
 
 /***/ }),
@@ -918,6 +920,14 @@ class SynopsysToolsParameter {
                 }
             }
         };
+        if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+            (0, core_1.info)('Polaris PR comment is enabled');
+            polData.data.polaris.prComment = { enabled: true };
+            polData.data.github = this.getGithubRepoInfo();
+        }
+        else {
+            polData.data.polaris.prComment = { enabled: false };
+        }
         const inputJson = JSON.stringify(polData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
@@ -1083,8 +1093,8 @@ class SynopsysToolsParameter {
         if (githubToken == null) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
-        if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) && isNaN(Number(githubPrNumber))) {
-            throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.');
+        if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
+            throw new Error('Polaris/Coverity/Blackduck PR comment can only be triggered on a pull request.');
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null && githubAPIURL != null) {
@@ -7510,42 +7520,14 @@ var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
 // Max safe segment length for coercion.
 var MAX_SAFE_COMPONENT_LENGTH = 16
 
-var MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6
-
 // The actual regexps go on exports.re
 var re = exports.re = []
-var safeRe = exports.safeRe = []
 var src = exports.src = []
 var t = exports.tokens = {}
 var R = 0
 
 function tok (n) {
   t[n] = R++
-}
-
-var LETTERDASHNUMBER = '[a-zA-Z0-9-]'
-
-// Replace some greedy regex tokens to prevent regex dos issues. These regex are
-// used internally via the safeRe object since all inputs in this library get
-// normalized first to trim and collapse all extra whitespace. The original
-// regexes are exported for userland consumption and lower level usage. A
-// future breaking change could export the safer regex only with a note that
-// all input should have extra whitespace removed.
-var safeRegexReplacements = [
-  ['\\s', 1],
-  ['\\d', MAX_LENGTH],
-  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
-]
-
-function makeSafeRe (value) {
-  for (var i = 0; i < safeRegexReplacements.length; i++) {
-    var token = safeRegexReplacements[i][0]
-    var max = safeRegexReplacements[i][1]
-    value = value
-      .split(token + '*').join(token + '{0,' + max + '}')
-      .split(token + '+').join(token + '{1,' + max + '}')
-  }
-  return value
 }
 
 // The following Regular Expressions can be used for tokenizing,
@@ -7557,14 +7539,14 @@ function makeSafeRe (value) {
 tok('NUMERICIDENTIFIER')
 src[t.NUMERICIDENTIFIER] = '0|[1-9]\\d*'
 tok('NUMERICIDENTIFIERLOOSE')
-src[t.NUMERICIDENTIFIERLOOSE] = '\\d+'
+src[t.NUMERICIDENTIFIERLOOSE] = '[0-9]+'
 
 // ## Non-numeric Identifier
 // Zero or more digits, followed by a letter or hyphen, and then zero or
 // more letters, digits, or hyphens.
 
 tok('NONNUMERICIDENTIFIER')
-src[t.NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-]' + LETTERDASHNUMBER + '*'
+src[t.NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*'
 
 // ## Main Version
 // Three dot-separated numeric identifiers.
@@ -7606,7 +7588,7 @@ src[t.PRERELEASELOOSE] = '(?:-?(' + src[t.PRERELEASEIDENTIFIERLOOSE] +
 // Any combination of digits, letters, or hyphens.
 
 tok('BUILDIDENTIFIER')
-src[t.BUILDIDENTIFIER] = LETTERDASHNUMBER + '+'
+src[t.BUILDIDENTIFIER] = '[0-9A-Za-z-]+'
 
 // ## Build Metadata
 // Plus sign, followed by one or more period-separated build metadata
@@ -7686,7 +7668,6 @@ src[t.COERCE] = '(^|[^\\d])' +
               '(?:$|[^\\d])'
 tok('COERCERTL')
 re[t.COERCERTL] = new RegExp(src[t.COERCE], 'g')
-safeRe[t.COERCERTL] = new RegExp(makeSafeRe(src[t.COERCE]), 'g')
 
 // Tilde ranges.
 // Meaning is "reasonably at or greater than"
@@ -7696,7 +7677,6 @@ src[t.LONETILDE] = '(?:~>?)'
 tok('TILDETRIM')
 src[t.TILDETRIM] = '(\\s*)' + src[t.LONETILDE] + '\\s+'
 re[t.TILDETRIM] = new RegExp(src[t.TILDETRIM], 'g')
-safeRe[t.TILDETRIM] = new RegExp(makeSafeRe(src[t.TILDETRIM]), 'g')
 var tildeTrimReplace = '$1~'
 
 tok('TILDE')
@@ -7712,7 +7692,6 @@ src[t.LONECARET] = '(?:\\^)'
 tok('CARETTRIM')
 src[t.CARETTRIM] = '(\\s*)' + src[t.LONECARET] + '\\s+'
 re[t.CARETTRIM] = new RegExp(src[t.CARETTRIM], 'g')
-safeRe[t.CARETTRIM] = new RegExp(makeSafeRe(src[t.CARETTRIM]), 'g')
 var caretTrimReplace = '$1^'
 
 tok('CARET')
@@ -7734,7 +7713,6 @@ src[t.COMPARATORTRIM] = '(\\s*)' + src[t.GTLT] +
 
 // this one has to use the /g flag
 re[t.COMPARATORTRIM] = new RegExp(src[t.COMPARATORTRIM], 'g')
-safeRe[t.COMPARATORTRIM] = new RegExp(makeSafeRe(src[t.COMPARATORTRIM]), 'g')
 var comparatorTrimReplace = '$1$2$3'
 
 // Something like `1.2.3 - 1.2.4`
@@ -7763,14 +7741,6 @@ for (var i = 0; i < R; i++) {
   debug(i, src[i])
   if (!re[i]) {
     re[i] = new RegExp(src[i])
-
-    // Replace all greedy whitespace to prevent regex dos issues. These regex are
-    // used internally via the safeRe object since all inputs in this library get
-    // normalized first to trim and collapse all extra whitespace. The original
-    // regexes are exported for userland consumption and lower level usage. A
-    // future breaking change could export the safer regex only with a note that
-    // all input should have extra whitespace removed.
-    safeRe[i] = new RegExp(makeSafeRe(src[i]))
   }
 }
 
@@ -7795,7 +7765,7 @@ function parse (version, options) {
     return null
   }
 
-  var r = options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL]
+  var r = options.loose ? re[t.LOOSE] : re[t.FULL]
   if (!r.test(version)) {
     return null
   }
@@ -7850,7 +7820,7 @@ function SemVer (version, options) {
   this.options = options
   this.loose = !!options.loose
 
-  var m = version.trim().match(options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL])
+  var m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
 
   if (!m) {
     throw new TypeError('Invalid Version: ' + version)
@@ -8295,7 +8265,6 @@ function Comparator (comp, options) {
     return new Comparator(comp, options)
   }
 
-  comp = comp.trim().split(/\s+/).join(' ')
   debug('comparator', comp, options)
   this.options = options
   this.loose = !!options.loose
@@ -8312,7 +8281,7 @@ function Comparator (comp, options) {
 
 var ANY = {}
 Comparator.prototype.parse = function (comp) {
-  var r = this.options.loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR]
+  var r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
   var m = comp.match(r)
 
   if (!m) {
@@ -8436,16 +8405,9 @@ function Range (range, options) {
   this.loose = !!options.loose
   this.includePrerelease = !!options.includePrerelease
 
-  // First reduce all whitespace as much as possible so we do not have to rely
-  // on potentially slow regexes like \s*. This is then stored and used for
-  // future error messages as well.
-  this.raw = range
-    .trim()
-    .split(/\s+/)
-    .join(' ')
-
   // First, split based on boolean or ||
-  this.set = this.raw.split('||').map(function (range) {
+  this.raw = range
+  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
     return this.parseRange(range.trim())
   }, this).filter(function (c) {
     // throw out any that are not relevant for whatever reason
@@ -8453,7 +8415,7 @@ function Range (range, options) {
   })
 
   if (!this.set.length) {
-    throw new TypeError('Invalid SemVer Range: ' + this.raw)
+    throw new TypeError('Invalid SemVer Range: ' + range)
   }
 
   this.format()
@@ -8472,19 +8434,20 @@ Range.prototype.toString = function () {
 
 Range.prototype.parseRange = function (range) {
   var loose = this.options.loose
+  range = range.trim()
   // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-  var hr = loose ? safeRe[t.HYPHENRANGELOOSE] : safeRe[t.HYPHENRANGE]
+  var hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]
   range = range.replace(hr, hyphenReplace)
   debug('hyphen replace', range)
   // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-  range = range.replace(safeRe[t.COMPARATORTRIM], comparatorTrimReplace)
-  debug('comparator trim', range, safeRe[t.COMPARATORTRIM])
+  range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)
+  debug('comparator trim', range, re[t.COMPARATORTRIM])
 
   // `~ 1.2.3` => `~1.2.3`
-  range = range.replace(safeRe[t.TILDETRIM], tildeTrimReplace)
+  range = range.replace(re[t.TILDETRIM], tildeTrimReplace)
 
   // `^ 1.2.3` => `^1.2.3`
-  range = range.replace(safeRe[t.CARETTRIM], caretTrimReplace)
+  range = range.replace(re[t.CARETTRIM], caretTrimReplace)
 
   // normalize spaces
   range = range.split(/\s+/).join(' ')
@@ -8492,7 +8455,7 @@ Range.prototype.parseRange = function (range) {
   // At this point, the range is completely trimmed and
   // ready to be split into comparators.
 
-  var compRe = loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR]
+  var compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
   var set = range.split(' ').map(function (comp) {
     return parseComparator(comp, this.options)
   }, this).join(' ').split(/\s+/)
@@ -8592,7 +8555,7 @@ function replaceTildes (comp, options) {
 }
 
 function replaceTilde (comp, options) {
-  var r = options.loose ? safeRe[t.TILDELOOSE] : safeRe[t.TILDE]
+  var r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]
   return comp.replace(r, function (_, M, m, p, pr) {
     debug('tilde', comp, _, M, m, p, pr)
     var ret
@@ -8633,7 +8596,7 @@ function replaceCarets (comp, options) {
 
 function replaceCaret (comp, options) {
   debug('caret', comp, options)
-  var r = options.loose ? safeRe[t.CARETLOOSE] : safeRe[t.CARET]
+  var r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]
   return comp.replace(r, function (_, M, m, p, pr) {
     debug('caret', comp, _, M, m, p, pr)
     var ret
@@ -8692,7 +8655,7 @@ function replaceXRanges (comp, options) {
 
 function replaceXRange (comp, options) {
   comp = comp.trim()
-  var r = options.loose ? safeRe[t.XRANGELOOSE] : safeRe[t.XRANGE]
+  var r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]
   return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
     debug('xRange', comp, ret, gtlt, M, m, p, pr)
     var xM = isX(M)
@@ -8767,7 +8730,7 @@ function replaceXRange (comp, options) {
 function replaceStars (comp, options) {
   debug('replaceStars', comp, options)
   // Looseness is ignored here.  star is always as loose as it gets!
-  return comp.trim().replace(safeRe[t.STAR], '')
+  return comp.trim().replace(re[t.STAR], '')
 }
 
 // This function is passed to string.replace(re[t.HYPHENRANGE])
@@ -9093,7 +9056,7 @@ function coerce (version, options) {
 
   var match = null
   if (!options.rtl) {
-    match = version.match(safeRe[t.COERCE])
+    match = version.match(re[t.COERCE])
   } else {
     // Find the right-most coercible string that does not share
     // a terminus with a more left-ward coercible string.
@@ -9104,17 +9067,17 @@ function coerce (version, options) {
     // Stop when we get a match that ends at the string end, since no
     // coercible string can be more right-ward without the same terminus.
     var next
-    while ((next = safeRe[t.COERCERTL].exec(version)) &&
+    while ((next = re[t.COERCERTL].exec(version)) &&
       (!match || match.index + match[0].length !== version.length)
     ) {
       if (!match ||
           next.index + next[0].length !== match.index + match[0].length) {
         match = next
       }
-      safeRe[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
+      re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
     }
     // leave it in a clean state
-    safeRe[t.COERCERTL].lastIndex = -1
+    re[t.COERCERTL].lastIndex = -1
   }
 
   if (match === null) {
