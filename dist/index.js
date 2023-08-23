@@ -7,7 +7,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -58,6 +58,9 @@ exports.EXIT_CODE_MAP = new Map([
     ['8', 'The config option bridge.break has been set to true'],
     ['9', 'Bridge initialization failed']
 ]);
+exports.RETRY_DELAY = 10000;
+exports.RETRY_COUNT = 3;
+exports.NON_RETRY_HTTP_CODES = '200,201,216,401,403,416';
 
 
 /***/ }),
@@ -299,6 +302,7 @@ exports.extractZipped = exports.getRemoteFile = void 0;
 const core_1 = __nccwpck_require__(2186);
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const tool_cache_1 = __nccwpck_require__(7784);
+const tool_cache_local_1 = __nccwpck_require__(5212);
 const fs = __importStar(__nccwpck_require__(5747));
 const validators_1 = __nccwpck_require__(8401);
 function getRemoteFile(destFilePath, url) {
@@ -315,7 +319,7 @@ function getRemoteFile(destFilePath, url) {
                 fileNameFromUrl = url.substring(url.lastIndexOf('/') + 1);
                 destFilePath = path_1.default.join(destFilePath, fileNameFromUrl || 'bridge.zip');
             }
-            const toolPath = yield (0, tool_cache_1.downloadTool)(url, destFilePath);
+            const toolPath = yield (0, tool_cache_local_1.downloadTool)(url, destFilePath);
             const downloadFileResp = {
                 filePath: toolPath,
                 fileName: fileNameFromUrl
@@ -452,6 +456,87 @@ exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_3 = (0, core_1.getInput)(constants.B
 exports.GITHUB_TOKEN = ((_4 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
 exports.INCLUDE_DIAGNOSTICS = ((_5 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || '';
 exports.DIAGNOSTICS_RETENTION_DAYS = ((_6 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || '';
+
+
+/***/ }),
+
+/***/ 8793:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RetryHelper = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const application_constants_1 = __nccwpck_require__(9717);
+const utility_1 = __nccwpck_require__(7643);
+/**
+ * Internal class for retries
+ */
+class RetryHelper {
+    constructor(maxAttempts) {
+        if (maxAttempts < 1) {
+            throw new Error('max attempts should be greater than or equal to 1');
+        }
+        this.maxAttempts = maxAttempts;
+    }
+    execute(action, isRetryable) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let attempt = 1;
+            while (attempt < this.maxAttempts) {
+                // Try
+                try {
+                    return yield action();
+                }
+                catch (err) {
+                    if (isRetryable && !isRetryable(err)) {
+                        throw err;
+                    }
+                    core.info(err.message);
+                }
+                // Sleep
+                core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt)));
+                yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY);
+                attempt++;
+            }
+            // Last attempt
+            return yield action();
+        });
+    }
+}
+exports.RetryHelper = RetryHelper;
 
 
 /***/ }),
@@ -843,6 +928,156 @@ exports.SynopsysBridge = SynopsysBridge;
 
 /***/ }),
 
+/***/ 5212:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.downloadTool = exports.HTTPError = void 0;
+const retry_helper_1 = __nccwpck_require__(8793);
+const core = __importStar(__nccwpck_require__(2186));
+const io = __importStar(__nccwpck_require__(7436));
+const fs = __importStar(__nccwpck_require__(5747));
+const path = __importStar(__nccwpck_require__(5622));
+const httpm = __importStar(__nccwpck_require__(6255));
+const stream = __importStar(__nccwpck_require__(2413));
+const util = __importStar(__nccwpck_require__(1669));
+const uuid_1 = __nccwpck_require__(5840);
+const os_1 = __importDefault(__nccwpck_require__(2087));
+const application_constants_1 = __nccwpck_require__(9717);
+class HTTPError extends Error {
+    constructor(httpStatusCode) {
+        super(`Unexpected HTTP response: ${httpStatusCode}`);
+        this.httpStatusCode = httpStatusCode;
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+exports.HTTPError = HTTPError;
+const userAgent = 'actions/tool-cache';
+/**
+ * Download a tool from an url and stream it into a file
+ *
+ * @param url       url of tool to download
+ * @param dest      path to download tool
+ * @param auth      authorization header
+ * @param headers   other headers
+ * @returns         path to downloaded tool
+ */
+function downloadTool(url, dest, auth, headers) {
+    return __awaiter(this, void 0, void 0, function* () {
+        dest = dest || path.join(os_1.default.tmpdir(), (0, uuid_1.v4)());
+        yield io.mkdirP(path.dirname(dest));
+        core.debug(`Downloading ${url}`);
+        core.debug(`Destination ${dest}`);
+        const retryHelper = new retry_helper_1.RetryHelper(application_constants_1.RETRY_COUNT);
+        return yield retryHelper.execute(() => __awaiter(this, void 0, void 0, function* () {
+            return yield downloadToolAttempt(url, dest || '', auth, headers);
+        }), (err) => {
+            if (err instanceof HTTPError && err.httpStatusCode) {
+                const retryHttpCodes = application_constants_1.NON_RETRY_HTTP_CODES.split(',');
+                if (err.httpStatusCode !== undefined && retryHttpCodes.find(e => e === String(err.httpStatusCode)) === undefined) {
+                    return true;
+                }
+            }
+            // Otherwise retry
+            return false;
+        });
+    });
+}
+exports.downloadTool = downloadTool;
+function downloadToolAttempt(url, dest, auth, headers) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (fs.existsSync(dest)) {
+            throw new Error(`Destination file path ${dest} already exists`);
+        }
+        // Get the response headers
+        const http = new httpm.HttpClient(userAgent, [], {
+            allowRetries: false
+        });
+        if (auth) {
+            core.debug('set auth');
+            if (headers === undefined) {
+                headers = {};
+            }
+            headers.authorization = auth;
+        }
+        const response = yield http.get(url, headers);
+        if (response.message.statusCode !== 200) {
+            const err = new HTTPError(response.message.statusCode);
+            core.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
+            throw err;
+        }
+        // Download the response body
+        const pipeline = util.promisify(stream.pipeline);
+        const responseMessageFactory = _getGlobal('TEST_DOWNLOAD_TOOL_RESPONSE_MESSAGE_FACTORY', () => response.message);
+        const readStream = responseMessageFactory();
+        let succeeded = false;
+        try {
+            yield pipeline(readStream, fs.createWriteStream(dest));
+            core.debug('download complete');
+            succeeded = true;
+            return dest;
+        }
+        finally {
+            // Error, delete dest before retry
+            if (!succeeded) {
+                core.debug('download failed');
+                try {
+                    yield io.rmRF(dest);
+                }
+                catch (err) {
+                    core.debug(`Failed to delete '${dest}'. ${err}`);
+                }
+            }
+        }
+    });
+}
+function _getGlobal(key, defaultValue) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const value = global[key];
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+    return value !== undefined ? value : defaultValue;
+}
+
+
+/***/ }),
+
 /***/ 7080:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -1175,7 +1410,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.sleep = exports.checkRetry = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -1222,6 +1457,24 @@ function checkIfPathExists(fileOrDirectoryPath) {
     return false;
 }
 exports.checkIfPathExists = checkIfPathExists;
+function checkRetry(httpStatusCode) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const retryHttpCodes = application_constants_1.NON_RETRY_HTTP_CODES.split(',');
+        if (httpStatusCode !== undefined && retryHttpCodes.find(e => e === String(httpStatusCode)) === undefined) {
+            return true;
+        }
+        return false;
+    });
+}
+exports.checkRetry = checkRetry;
+function sleep(duration) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise(resolve => {
+            setTimeout(resolve, duration);
+        });
+    });
+}
+exports.sleep = sleep;
 
 
 /***/ }),
