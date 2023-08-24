@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {RETRY_DELAY} from '../application-constants'
+import {RETRY_DELAY_IN_MILLISECONDS} from '../application-constants'
 import {sleep} from './utility'
 
 /**
@@ -30,7 +30,7 @@ export class RetryHelper {
 
       // Sleep
       core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt + 1)))
-      await sleep(RETRY_DELAY)
+      await sleep(RETRY_DELAY_IN_MILLISECONDS)
       attempt++
     }
 

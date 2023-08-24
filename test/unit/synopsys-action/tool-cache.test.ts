@@ -24,20 +24,10 @@ describe('@actions/tool-cache', function () {
       username: 'abc',
       password: 'def'
     })
-    setGlobal('TEST_DOWNLOAD_TOOL_RETRY_MIN_SECONDS', 0)
-    setGlobal('TEST_DOWNLOAD_TOOL_RETRY_MAX_SECONDS', 0)
 
-    Object.defineProperty(constants, 'RETRY_DELAY', {
-      value: 100
-    })
-
-    Object.defineProperty(constants, 'NON_RETRY_HTTP_CODES', {
-      value: '200,201,216,401,403,416'
-    })
-
-    Object.defineProperty(constants, 'RETRY_COUNT', {
-      value: 3
-    })
+    Object.defineProperty(constants, 'RETRY_COUNT', {value: 3})
+    Object.defineProperty(constants, 'RETRY_DELAY_IN_MILLISECONDS', {value: 100})
+    Object.defineProperty(constants, 'NON_RETRY_HTTP_CODES', {value: new Set([200, 201, 401, 403, 416]), configurable: true})
   })
 
   beforeEach(async function () {

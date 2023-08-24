@@ -1,10 +1,10 @@
 import {exec, ExecOptions} from '@actions/exec'
 import {BRIDGE_DOWNLOAD_URL, ENABLE_NETWORK_AIR_GAP, SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY} from './inputs'
 import {debug, error, info, warning} from '@actions/core'
-import {RETRY_COUNT, RETRY_DELAY, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
+import {NON_RETRY_HTTP_CODES, RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
-import {checkIfPathExists, checkRetry, cleanupTempDir, sleep} from './utility'
+import {checkIfPathExists, cleanupTempDir, sleep} from './utility'
 import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs, {readFileSync} from 'fs'
@@ -221,9 +221,8 @@ export class SynopsysBridge {
         Accept: 'text/html'
       })
 
-      const retry: boolean = await checkRetry(httpResponse.message.statusCode)
-      if (retry) {
-        await sleep(RETRY_DELAY)
+      if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
+        await sleep(RETRY_DELAY_IN_MILLISECONDS)
         retryCount--
         info('Getting all available bridge versions has been failed, retries left: '.concat(String(retryCount + 1)))
       } else {
@@ -320,9 +319,8 @@ export class SynopsysBridge {
           Accept: 'text/html'
         })
 
-        const retry: boolean = await checkRetry(httpResponse.message.statusCode)
-        if (retry) {
-          await sleep(RETRY_DELAY)
+        if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
+          await sleep(RETRY_DELAY_IN_MILLISECONDS)
           retryCount--
           info('Getting latest Synopsys Bridge versions has been failed, retries left: '.concat(String(retryCount + 1)))
         } else if (httpResponse.message.statusCode === 200) {

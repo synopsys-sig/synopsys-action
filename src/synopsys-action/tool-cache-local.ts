@@ -44,8 +44,7 @@ export async function downloadTool(url: string, dest?: string, auth?: string, he
     },
     (err: Error) => {
       if (err instanceof HTTPError && err.httpStatusCode) {
-        const retryHttpCodes: string[] = NON_RETRY_HTTP_CODES.split(',')
-        if (err.httpStatusCode !== undefined && retryHttpCodes.find(e => e === String(err.httpStatusCode)) === undefined) {
+        if (!NON_RETRY_HTTP_CODES.has(Number(err.httpStatusCode))) {
           return true
         }
       }

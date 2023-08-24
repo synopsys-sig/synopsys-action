@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as os from 'os'
 import path from 'path'
-import {APPLICATION_NAME, NON_RETRY_HTTP_CODES} from '../application-constants'
+import {APPLICATION_NAME} from '../application-constants'
 import {rmRF} from '@actions/io'
 
 export function cleanUrl(url: string): string {
@@ -37,14 +37,6 @@ export function parseToBoolean(value: string | boolean): boolean {
 
 export function checkIfPathExists(fileOrDirectoryPath: string): boolean {
   if (fileOrDirectoryPath && fs.existsSync(fileOrDirectoryPath.trim())) {
-    return true
-  }
-  return false
-}
-
-export async function checkRetry(httpStatusCode: number | undefined): Promise<boolean> {
-  const retryHttpCodes: string[] = NON_RETRY_HTTP_CODES.split(',')
-  if (httpStatusCode !== undefined && retryHttpCodes.find(e => e === String(httpStatusCode)) === undefined) {
     return true
   }
   return false

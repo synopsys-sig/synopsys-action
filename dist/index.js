@@ -7,7 +7,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -58,9 +58,9 @@ exports.EXIT_CODE_MAP = new Map([
     ['8', 'The config option bridge.break has been set to true'],
     ['9', 'Bridge initialization failed']
 ]);
-exports.RETRY_DELAY = 10000;
+exports.RETRY_DELAY_IN_MILLISECONDS = 10000;
 exports.RETRY_COUNT = 3;
-exports.NON_RETRY_HTTP_CODES = '200,201,401,403,416';
+exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
 
 
 /***/ }),
@@ -528,7 +528,7 @@ class RetryHelper {
                 }
                 // Sleep
                 core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt + 1)));
-                yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY);
+                yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
                 attempt++;
             }
             // Last attempt
@@ -802,9 +802,8 @@ class SynopsysBridge {
                 httpResponse = yield httpClient.get(this.bridgeArtifactoryURL, {
                     Accept: 'text/html'
                 });
-                const retry = yield (0, utility_1.checkRetry)(httpResponse.message.statusCode);
-                if (retry) {
-                    yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY);
+                if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
+                    yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
                     retryCount--;
                     (0, core_1.info)('Getting all available bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
                 }
@@ -899,9 +898,8 @@ class SynopsysBridge {
                     httpResponse = yield httpClient.get(latestVersionsUrl, {
                         Accept: 'text/html'
                     });
-                    const retry = yield (0, utility_1.checkRetry)(httpResponse.message.statusCode);
-                    if (retry) {
-                        yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY);
+                    if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
+                        yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
                         retryCount--;
                         (0, core_1.info)('Getting latest Synopsys Bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
                     }
@@ -1040,8 +1038,7 @@ function downloadTool(url, dest, auth, headers) {
             return yield downloadToolAttempt(url, dest || '', auth, headers);
         }), (err) => {
             if (err instanceof HTTPError && err.httpStatusCode) {
-                const retryHttpCodes = application_constants_1.NON_RETRY_HTTP_CODES.split(',');
-                if (err.httpStatusCode !== undefined && retryHttpCodes.find(e => e === String(err.httpStatusCode)) === undefined) {
+                if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(err.httpStatusCode))) {
                     return true;
                 }
             }
@@ -1440,7 +1437,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sleep = exports.checkRetry = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.sleep = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -1487,16 +1484,6 @@ function checkIfPathExists(fileOrDirectoryPath) {
     return false;
 }
 exports.checkIfPathExists = checkIfPathExists;
-function checkRetry(httpStatusCode) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const retryHttpCodes = application_constants_1.NON_RETRY_HTTP_CODES.split(',');
-        if (httpStatusCode !== undefined && retryHttpCodes.find(e => e === String(httpStatusCode)) === undefined) {
-            return true;
-        }
-        return false;
-    });
-}
-exports.checkRetry = checkRetry;
 function sleep(duration) {
     return __awaiter(this, void 0, void 0, function* () {
         return new Promise(resolve => {
