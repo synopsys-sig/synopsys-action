@@ -4,6 +4,7 @@ import * as inputs from '../../src/synopsys-action/inputs'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
 import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
+import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
 import * as io from '@actions/io'
 import * as utility from '../../src/synopsys-action/utility'
 import {BRIDGE_DOWNLOAD_URL, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL} from '../../src/synopsys-action/inputs'
@@ -127,7 +128,7 @@ export function setAllMocks() {
   let polaris: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
   jest.spyOn(validator, 'validatePolarisInputs').mockReturnValueOnce(polaris)
-  jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
+  jest.spyOn(toolCacheLocal, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')
   jest.spyOn(validator, 'validateBridgeUrl').mockReturnValue(true)
