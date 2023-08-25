@@ -1,6 +1,7 @@
 import {info} from '@actions/core'
 import path from 'path'
-import {downloadTool, extractZip} from '@actions/tool-cache'
+import {extractZip} from '@actions/tool-cache'
+import {downloadTool} from './tool-cache-local'
 import * as fs from 'fs'
 import {validateBridgeUrl} from './validators'
 
@@ -30,7 +31,6 @@ export async function getRemoteFile(destFilePath: string, url: string): Promise<
       filePath: toolPath,
       fileName: fileNameFromUrl
     }
-
     return Promise.resolve(downloadFileResp)
   } catch (error) {
     throw error
