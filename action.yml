@@ -32,7 +32,7 @@ inputs:
   coverity_branch_name:
     description: 'Branch name'
     required: false
-  coverity_local:
+  bridge_coverity_local:
     description: 'Flag to enable/disable to run coverity scan locally.'
     required: false
   polaris_accessToken:
