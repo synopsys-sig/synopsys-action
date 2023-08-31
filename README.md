@@ -151,19 +151,19 @@ jobs:
 ```
 **Please find the following mandatory and optional parameters for Coverity below:**
 
-|Input Parameter   |Description                           |Mandatory / Optional |
-|-------------------|---------------------------------------|----------|
-| `coverity_url`    | URL for Coverity server               | Mandatory     |
-| `coverity_user`        | Username for Coverity            | Mandatory     |
-| `coverity_passphrase`        | Passphrase for Coverity    | Mandatory     |
-| `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>                     | Mandatory     |
-| `coverity_stream_name`        | Stream name in Coverity   | Mandatory     |
-| `bridge_coverity_local`                | If enabled, Synopsys Action will install the ‘Coverity Thick Client’ on the local system in order to execute the scan. 'coverity_install_directory' can also be given to keep the files for future scans.   | Optional     |
-| `coverity_install_directory`        | Directory path to install Coverity | Optional    |
-| `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: `coverity_policy_view: '100001'` or `coverity_policy_view: 'Outstanding Issues'`  </br>       | Optional    |
-| `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. Merge Request must be created first from feature branch to main branch to run Coverity PR Comment. <br> Supported values: true or false </br> | Optional     |
-| `bridge_coverity_version`        | The version of Coverity Thin Client to use <br> Example: `bridge_coverity_version: '2023.6.0'`  | Optional     |
-| `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}` | Mandatory if coverity_automation_prcomment is set as true |
+|Input Parameter   | Description                                                                                                                                                                                                                                                                                     |Mandatory / Optional |
+|-------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------|
+| `coverity_url`    | URL for Coverity server                                                                                                                                                                                                                                                                         | Mandatory     |
+| `coverity_user`        | Username for Coverity                                                                                                                                                                                                                                                                           | Mandatory     |
+| `coverity_passphrase`        | Passphrase for Coverity                                                                                                                                                                                                                                                                         | Mandatory     |
+| `coverity_project_name`        | Project name in Coverity. <br> Many customers prefer to set their Coverity project and stream names to match the GitHub repository name  </br>                                                                                                                                                  | Mandatory     |
+| `coverity_stream_name`        | Stream name in Coverity                                                                                                                                                                                                                                                                         | Mandatory     |
+| `bridge_coverity_local`                | If enabled, Synopsys Action will install the ‘Coverity Thick Client’ on the local system in order to execute the scan. The ‘coverity_install_directory’ can be specified to retain the files for future scans as well. Example: `bridge_coverity_local: true` | Optional     |
+| `coverity_install_directory`        | Directory path to install Coverity                                                                                                                                                                                                                                                              | Optional    |
+| `coverity_policy_view`        | ID number/Name of a saved view to apply as a "break the build" policy. If any defects are found within this view when applied to the project, the build will be failed with an exit code. <br> Example: `coverity_policy_view: '100001'` or `coverity_policy_view: 'Outstanding Issues'`  </br> | Optional    |
+| `coverity_automation_prcomment`        | To enable feedback from Coverity security testing as pull request comment. Merge Request must be created first from feature branch to main branch to run Coverity PR Comment. <br> Supported values: true or false </br>                                                                        | Optional     |
+| `bridge_coverity_version`        | The version of Coverity Thin Client to use <br> Example: `bridge_coverity_version: '2023.6.0'`                                                                                                                                                                                                  | Optional     |
+| `github_token` | GitHub Access Token <br> Example: `github_token: ${{ secrets.GITHUB_TOKEN }}`                                                                                                                                                                                                                   | Mandatory if coverity_automation_prcomment is set as true |
 
 ## Synopsys GitHub Action - Black Duck
 
