@@ -7,11 +7,13 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
+exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/';
 exports.APPLICATION_NAME = 'synopsys-action';
+exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_install_directory';
 // Scan Types
 exports.COVERITY_KEY = 'coverity';
 exports.POLARIS_KEY = 'polaris';
@@ -27,7 +29,8 @@ exports.COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view';
 exports.COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name';
 exports.COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name';
 exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = 'coverity_automation_prcomment';
-exports.COVERITY_LOCAL_KEY = 'coverity_local';
+exports.COVERITY_LOCAL_KEY = 'bridge_coverity_local';
+exports.COVERITY_VERSION_KEY = 'bridge_coverity_version';
 // Polaris
 exports.POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken';
 exports.POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name';
@@ -44,6 +47,7 @@ exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr';
 exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment';
 exports.GITHUB_TOKEN_KEY = 'github_token';
 exports.INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics';
+exports.NETWORK_AIRGAP_KEY = 'bridge_network_airgap';
 exports.DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days';
 // Bridge Exit Codes
 exports.EXIT_CODE_MAP = new Map([
@@ -54,6 +58,9 @@ exports.EXIT_CODE_MAP = new Map([
     ['8', 'The config option bridge.break has been set to true'],
     ['9', 'Bridge initialization failed']
 ]);
+exports.RETRY_DELAY_IN_MILLISECONDS = 10000;
+exports.RETRY_COUNT = 3;
+exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
 
 
 /***/ }),
@@ -114,9 +121,19 @@ function run() {
             // Prepare bridge command
             formattedCommand = yield sb.prepareCommand(tempDir);
             // Download bridge
-            yield sb.downloadBridge(tempDir);
+            if (!inputs.ENABLE_NETWORK_AIR_GAP) {
+                yield sb.downloadBridge(tempDir);
+            }
+            else {
+                (0, core_1.info)('Network air gap is enabled, skipping synopsys-bridge download.');
+                yield sb.validateSynopsysBridgePath();
+            }
             // Execute bridge command
-            return yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            const exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            if (exitCode === 0) {
+                (0, core_1.info)('Synopsys Action workflow execution completed');
+            }
+            return exitCode;
         }
         catch (error) {
             throw error;
@@ -127,7 +144,6 @@ function run() {
             }
             yield (0, utility_1.cleanupTempDir)(tempDir);
         }
-        (0, core_1.info)('Synopsys Action workflow execution completed');
     });
 }
 exports.run = run;
@@ -286,6 +302,7 @@ exports.extractZipped = exports.getRemoteFile = void 0;
 const core_1 = __nccwpck_require__(2186);
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const tool_cache_1 = __nccwpck_require__(7784);
+const tool_cache_local_1 = __nccwpck_require__(5212);
 const fs = __importStar(__nccwpck_require__(5747));
 const validators_1 = __nccwpck_require__(8401);
 function getRemoteFile(destFilePath, url) {
@@ -302,7 +319,7 @@ function getRemoteFile(destFilePath, url) {
                 fileNameFromUrl = url.substring(url.lastIndexOf('/') + 1);
                 destFilePath = path_1.default.join(destFilePath, fileNameFromUrl || 'bridge.zip');
             }
-            const toolPath = yield (0, tool_cache_1.downloadTool)(url, destFilePath);
+            const toolPath = yield (0, tool_cache_local_1.downloadTool)(url, destFilePath);
             const downloadFileResp = {
                 filePath: toolPath,
                 fileName: fileNameFromUrl
@@ -364,7 +381,8 @@ exports.FIXPR_ENVIRONMENT_VARIABLES = {
     GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
     GITHUB_REF: 'GITHUB_REF',
     GITHUB_REF_NAME: 'GITHUB_REF_NAME',
-    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
+    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
+    GITHUB_API_URL: 'GITHUB_API_URL'
 };
 
 
@@ -398,44 +416,127 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.SYNOPSYS_BRIDGE_PATH = void 0;
+exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
-exports.SYNOPSYS_BRIDGE_PATH = ((_a = (0, core_1.getInput)('synopsys_bridge_path')) === null || _a === void 0 ? void 0 : _a.trim()) || '';
+exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
+exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || false;
 //Bridge download url
-exports.BRIDGE_DOWNLOAD_URL = ((_b = (0, core_1.getInput)('bridge_download_url')) === null || _b === void 0 ? void 0 : _b.trim()) || '';
-exports.BRIDGE_DOWNLOAD_VERSION = ((_c = (0, core_1.getInput)('bridge_download_version')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
+exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
+exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)('bridge_download_version')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
 // Polaris related inputs
-exports.POLARIS_ACCESS_TOKEN = ((_d = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _d === void 0 ? void 0 : _d.trim()) || '';
-exports.POLARIS_APPLICATION_NAME = ((_e = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';
-exports.POLARIS_PROJECT_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
-exports.POLARIS_ASSESSMENT_TYPES = ((_g = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
-exports.POLARIS_SERVER_URL = ((_h = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
+exports.POLARIS_ACCESS_TOKEN = ((_e = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';
+exports.POLARIS_APPLICATION_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
+exports.POLARIS_PROJECT_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
+exports.POLARIS_ASSESSMENT_TYPES = ((_h = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
+exports.POLARIS_SERVER_URL = ((_j = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
 // Coverity related inputs
-exports.COVERITY_URL = ((_j = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
-exports.COVERITY_USER = ((_k = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
-exports.COVERITY_PASSPHRASE = ((_l = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
-exports.COVERITY_PROJECT_NAME = ((_m = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || '';
-exports.COVERITY_STREAM_NAME = ((_o = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _o === void 0 ? void 0 : _o.trim()) || '';
-exports.COVERITY_INSTALL_DIRECTORY = ((_p = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _p === void 0 ? void 0 : _p.trim()) || '';
-exports.COVERITY_POLICY_VIEW = ((_q = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _q === void 0 ? void 0 : _q.trim()) || '';
-exports.COVERITY_REPOSITORY_NAME = ((_r = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
-exports.COVERITY_BRANCH_NAME = ((_s = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
-exports.COVERITY_AUTOMATION_PRCOMMENT = ((_t = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
-exports.COVERITY_LOCAL = ((_u = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) === 'true' || false;
+exports.COVERITY_URL = ((_k = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
+exports.COVERITY_USER = ((_l = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
+exports.COVERITY_PASSPHRASE = ((_m = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || '';
+exports.COVERITY_PROJECT_NAME = ((_o = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _o === void 0 ? void 0 : _o.trim()) || '';
+exports.COVERITY_STREAM_NAME = ((_p = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _p === void 0 ? void 0 : _p.trim()) || '';
+exports.COVERITY_INSTALL_DIRECTORY = ((_q = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _q === void 0 ? void 0 : _q.trim()) || '';
+exports.COVERITY_POLICY_VIEW = ((_r = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
+exports.COVERITY_REPOSITORY_NAME = ((_s = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
+exports.COVERITY_BRANCH_NAME = ((_t = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
+exports.COVERITY_AUTOMATION_PRCOMMENT = ((_u = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
+exports.COVERITY_LOCAL = ((_v = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) === 'true' || false;
+exports.COVERITY_VERSION = ((_w = (0, core_1.getInput)(constants.COVERITY_VERSION_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
 // Blackduck related inputs
-exports.BLACKDUCK_URL = ((_v = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
-exports.BLACKDUCK_API_TOKEN = ((_w = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
-exports.BLACKDUCK_INSTALL_DIRECTORY = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
-exports.BLACKDUCK_SCAN_FULL = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_FIXPR = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
-exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
-exports.GITHUB_TOKEN = ((_2 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
-exports.INCLUDE_DIAGNOSTICS = ((_3 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
-exports.DIAGNOSTICS_RETENTION_DAYS = ((_4 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
+exports.BLACKDUCK_URL = ((_x = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
+exports.BLACKDUCK_API_TOKEN = ((_y = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
+exports.BLACKDUCK_INSTALL_DIRECTORY = ((_z = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
+exports.BLACKDUCK_SCAN_FULL = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_FIXPR = ((_2 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_3 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
+exports.GITHUB_TOKEN = ((_4 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
+exports.INCLUDE_DIAGNOSTICS = ((_5 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || '';
+exports.DIAGNOSTICS_RETENTION_DAYS = ((_6 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || '';
+
+
+/***/ }),
+
+/***/ 8793:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RetryHelper = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const application_constants_1 = __nccwpck_require__(9717);
+const utility_1 = __nccwpck_require__(7643);
+/**
+ * Internal class for retries
+ */
+class RetryHelper {
+    constructor(maxAttempts) {
+        if (maxAttempts < 1) {
+            throw new Error('max attempts should be greater than or equal to 1');
+        }
+        this.maxAttempts = maxAttempts;
+    }
+    execute(action, isRetryable) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let attempt = 1;
+            while (attempt <= this.maxAttempts) {
+                // Try
+                try {
+                    return yield action();
+                }
+                catch (err) {
+                    if (isRetryable && !isRetryable(err)) {
+                        throw err;
+                    }
+                    core.info(err.message);
+                }
+                // Sleep
+                core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt + 1)));
+                yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
+                attempt++;
+            }
+            // Last attempt
+            return yield action();
+        });
+    }
+}
+exports.RetryHelper = RetryHelper;
 
 
 /***/ }),
@@ -505,8 +606,9 @@ class SynopsysBridge {
         this.MAC_PLATFORM = 'macosx';
         this.bridgeExecutablePath = '';
         this.synopsysBridgePath = '';
-        this.bridgeArtifactoryURL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/';
-        this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('/$version/synopsys-bridge-$version-$platform.zip ');
+        this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL;
+        this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip');
+        this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip');
     }
     getBridgeDefaultPath() {
         let bridgeDefaultPath = '';
@@ -524,38 +626,26 @@ class SynopsysBridge {
     }
     checkIfSynopsysBridgeExists(bridgeVersion) {
         return __awaiter(this, void 0, void 0, function* () {
-            this.synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_PATH;
+            yield this.validateSynopsysBridgePath();
             const osName = process.platform;
             let versionFilePath = '';
             let versionFileExists = false;
-            if (!this.synopsysBridgePath) {
-                (0, core_1.info)('Looking for synopsys bridge in default path');
-                this.synopsysBridgePath = this.getBridgeDefaultPath();
-            }
-            else {
-                if (!(0, utility_1.checkIfPathExists)(this.synopsysBridgePath)) {
-                    throw new Error('Path '.concat(this.synopsysBridgePath, ' does not exists'));
-                }
-            }
             if (osName === 'win32') {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
                 versionFilePath = this.synopsysBridgePath.concat('\\versions.txt');
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
             }
             else {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
                 versionFilePath = this.synopsysBridgePath.concat('/versions.txt');
                 versionFileExists = (0, utility_1.checkIfPathExists)(versionFilePath);
             }
-            if (versionFileExists && this.bridgeExecutablePath) {
-                (0, core_1.debug)('Bridge executable found at '.concat(this.synopsysBridgePath));
+            if (versionFileExists) {
                 (0, core_1.debug)('Version file found at '.concat(this.synopsysBridgePath));
                 if (yield this.checkIfVersionExists(bridgeVersion, versionFilePath)) {
                     return true;
                 }
             }
             else {
-                (0, core_1.info)('Bridge executable and version file could not be found at '.concat(this.synopsysBridgePath));
+                (0, core_1.debug)('Synopsys Bridge version file could not be found at '.concat(this.synopsysBridgePath));
             }
             return false;
         });
@@ -563,6 +653,11 @@ class SynopsysBridge {
     executeBridgeCommand(bridgeCommand, workingDirectory) {
         return __awaiter(this, void 0, void 0, function* () {
             const osName = process.platform;
+            yield this.setSynopsysBridgeExecutablePath();
+            (0, core_1.debug)('Synopsys Bridge executable path:'.concat(this.synopsysBridgePath));
+            if (!this.bridgeExecutablePath) {
+                throw new Error('Synopsys Bridge executable could not be found at '.concat(this.synopsysBridgePath));
+            }
             if (osName === 'darwin' || osName === 'linux' || osName === 'win32') {
                 const exectOp = {
                     cwd: workingDirectory
@@ -583,33 +678,36 @@ class SynopsysBridge {
                 // Automatically configure bridge if Bridge download url is provided
                 let bridgeUrl = '';
                 let bridgeVersion = '';
-                if (inputs.BRIDGE_DOWNLOAD_VERSION) {
+                if (inputs.BRIDGE_DOWNLOAD_URL) {
+                    bridgeUrl = inputs_1.BRIDGE_DOWNLOAD_URL;
+                    const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*');
+                    if (versionInfo != null) {
+                        bridgeVersion = versionInfo[1];
+                        if (!bridgeVersion) {
+                            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/;
+                            bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'));
+                        }
+                    }
+                }
+                else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
                     if (yield this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
                         bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim();
                         bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION;
                     }
                     else {
-                        return Promise.reject(new Error('Provided bridge version not found in artifactory'));
-                    }
-                }
-                else if (inputs.BRIDGE_DOWNLOAD_URL) {
-                    bridgeUrl = inputs_1.BRIDGE_DOWNLOAD_URL;
-                    const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*');
-                    if (versionInfo != null) {
-                        bridgeVersion = versionInfo[1];
+                        return Promise.reject(new Error('Provided Synopsys Bridge version not found in artifactory'));
                     }
                 }
                 else {
-                    (0, core_1.info)('Checking for latest version of Bridge to download and configure');
-                    const latestVersion = yield this.getLatestVersion();
-                    bridgeUrl = this.getVersionUrl(latestVersion).trim();
-                    bridgeVersion = latestVersion;
+                    (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
+                    bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
+                    bridgeUrl = this.getLatestVersionUrl();
                 }
-                if ((yield this.checkIfSynopsysBridgeExists(bridgeVersion)) === false) {
+                if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
-                    (0, core_1.info)('Bridge URL is - '.concat(bridgeUrl));
+                    (0, core_1.info)('Synopsys Bridge URL is - '.concat(bridgeUrl));
                     const downloadResponse = yield (0, download_utility_1.getRemoteFile)(tempDir, bridgeUrl);
-                    const extractZippedFilePath = inputs.SYNOPSYS_BRIDGE_PATH || this.getBridgeDefaultPath();
+                    const extractZippedFilePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath();
                     // Clear the existing bridge, if available
                     if (fs_1.default.existsSync(extractZippedFilePath)) {
                         const files = fs_1.default.readdirSync(extractZippedFilePath);
@@ -618,16 +716,10 @@ class SynopsysBridge {
                         }
                     }
                     yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
-                    if (process.platform === 'win32') {
-                        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
-                    }
-                    else {
-                        this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
-                    }
                     (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
                 }
                 else {
-                    (0, core_1.info)('Bridge already exists, download has been skipped');
+                    (0, core_1.info)('Synopsys Bridge already exists, download has been skipped');
                 }
             }
             catch (e) {
@@ -638,10 +730,10 @@ class SynopsysBridge {
                     if (process.env['RUNNER_OS']) {
                         os = process.env['RUNNER_OS'];
                     }
-                    return Promise.reject(new Error('Provided Bridge url is not valid for the configured '.concat(os, ' runner')));
+                    return Promise.reject(new Error('Provided Synopsys Bridge url is not valid for the configured '.concat(os, ' runner')));
                 }
                 else if (errorObject.toLowerCase().includes('empty')) {
-                    return Promise.reject(new Error('Provided Bridge URL cannot be empty'));
+                    return Promise.reject(new Error('Provided Synopsys Bridge URL cannot be empty'));
                 }
                 else {
                     return Promise.reject(new Error(errorObject));
@@ -699,40 +791,44 @@ class SynopsysBridge {
             }
         });
     }
-    getLatestVersion() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const versionArray = yield this.getAllAvailableBridgeVersions();
-            let latestVersion = '0.0.0';
-            for (const version of versionArray) {
-                if (version.localeCompare(latestVersion, undefined, { numeric: true, sensitivity: 'base' }) === 1) {
-                    latestVersion = version;
-                }
-            }
-            (0, core_1.info)('Available latest version is - '.concat(latestVersion));
-            return latestVersion;
-        });
-    }
     getAllAvailableBridgeVersions() {
         return __awaiter(this, void 0, void 0, function* () {
             let htmlResponse = '';
-            const httpClient = new HttpClient_1.HttpClient('synopsys-action');
-            const httpResponse = yield httpClient.get(this.bridgeArtifactoryURL, { Accept: 'text/html' });
-            htmlResponse = yield httpResponse.readBody();
-            const domParser = new dom_parser_1.default();
-            const doms = domParser.parseFromString(htmlResponse);
-            const elems = doms.getElementsByTagName('a'); //querySelectorAll('a')
+            const httpClient = new HttpClient_1.HttpClient('synopsys-task');
+            let retryCount = application_constants_1.RETRY_COUNT;
+            let httpResponse;
             const versionArray = [];
-            if (elems != null) {
-                for (const el of elems) {
-                    const content = el.textContent;
-                    if (content != null) {
-                        const v = content.match('^[0-9]+.[0-9]+.[0-9]+');
-                        if (v != null && v.length === 1) {
-                            versionArray.push(v[0]);
+            do {
+                httpResponse = yield httpClient.get(this.bridgeArtifactoryURL, {
+                    Accept: 'text/html'
+                });
+                if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
+                    yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
+                    retryCount--;
+                    (0, core_1.info)('Getting all available bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
+                }
+                else {
+                    retryCount = 0;
+                    htmlResponse = yield httpResponse.readBody();
+                    const domParser = new dom_parser_1.default();
+                    const doms = domParser.parseFromString(htmlResponse);
+                    const elems = doms.getElementsByTagName('a'); //querySelectorAll('a')
+                    if (elems != null) {
+                        for (const el of elems) {
+                            const content = el.textContent;
+                            if (content != null) {
+                                const v = content.match('^[0-9]+.[0-9]+.[0-9]+');
+                                if (v != null && v.length === 1) {
+                                    versionArray.push(v[0]);
+                                }
+                            }
                         }
                     }
                 }
-            }
+                if (retryCount === 0) {
+                    (0, core_1.warning)('Unable to retrieve the Synopsys Bridge Versions from Artifactory');
+                }
+            } while (retryCount > 0);
             return versionArray;
         });
     }
@@ -757,6 +853,20 @@ class SynopsysBridge {
         }
         return bridgeDownloadUrl;
     }
+    getLatestVersionUrl() {
+        const osName = process.platform;
+        let bridgeDownloadUrl = this.bridgeUrlLatestPattern;
+        if (osName === 'darwin') {
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM);
+        }
+        else if (osName === 'linux') {
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM);
+        }
+        else if (osName === 'win32') {
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.WINDOWS_PLATFORM);
+        }
+        return bridgeDownloadUrl;
+    }
     checkIfVersionExists(bridgeVersion, bridgeVersionFilePath) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -769,8 +879,228 @@ class SynopsysBridge {
             return false;
         });
     }
+    getSynopsysBridgePath() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;
+            if (!synopsysBridgePath) {
+                synopsysBridgePath = this.getBridgeDefaultPath();
+            }
+            return synopsysBridgePath;
+        });
+    }
+    getSynopsysBridgeVersionFromLatestURL(latestVersionsUrl) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const httpClient = new HttpClient_1.HttpClient('');
+                let retryCount = application_constants_1.RETRY_COUNT;
+                let httpResponse;
+                do {
+                    httpResponse = yield httpClient.get(latestVersionsUrl, {
+                        Accept: 'text/html'
+                    });
+                    if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
+                        yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
+                        retryCount--;
+                        (0, core_1.info)('Getting latest Synopsys Bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
+                    }
+                    else if (httpResponse.message.statusCode === 200) {
+                        retryCount = 0;
+                        const htmlResponse = (yield httpResponse.readBody()).trim();
+                        const lines = htmlResponse.split('\n');
+                        for (const line of lines) {
+                            if (line.includes('Synopsys Bridge Package')) {
+                                return line.split(':')[1].trim();
+                            }
+                        }
+                    }
+                    if (retryCount === 0) {
+                        (0, core_1.warning)('Unable to retrieve the most recent version from Artifactory URL');
+                    }
+                } while (retryCount > 0);
+            }
+            catch (e) {
+                (0, core_1.debug)('Error reading version file content: '.concat(e.message));
+            }
+            return '';
+        });
+    }
+    validateSynopsysBridgePath() {
+        return __awaiter(this, void 0, void 0, function* () {
+            this.synopsysBridgePath = this.getBridgeDefaultPath();
+            if (inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
+                this.synopsysBridgePath = inputs_1.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY;
+                if (!(0, utility_1.checkIfPathExists)(this.synopsysBridgePath)) {
+                    throw new Error('Synopsys Bridge Install Directory does not exist');
+                }
+            }
+            else {
+                if (inputs_1.ENABLE_NETWORK_AIR_GAP && !(0, utility_1.checkIfPathExists)(this.getBridgeDefaultPath())) {
+                    throw new Error('Synopsys Bridge default directory does not exist');
+                }
+            }
+        });
+    }
+    setSynopsysBridgeExecutablePath() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (process.platform === 'win32') {
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
+            }
+            else if (process.platform === 'darwin' || process.platform === 'linux') {
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
+            }
+        });
+    }
 }
 exports.SynopsysBridge = SynopsysBridge;
+
+
+/***/ }),
+
+/***/ 5212:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.downloadTool = exports.HTTPError = void 0;
+const retry_helper_1 = __nccwpck_require__(8793);
+const core = __importStar(__nccwpck_require__(2186));
+const io = __importStar(__nccwpck_require__(7436));
+const fs = __importStar(__nccwpck_require__(5747));
+const path = __importStar(__nccwpck_require__(5622));
+const httpm = __importStar(__nccwpck_require__(6255));
+const stream = __importStar(__nccwpck_require__(2413));
+const util = __importStar(__nccwpck_require__(1669));
+const uuid_1 = __nccwpck_require__(5840);
+const os_1 = __importDefault(__nccwpck_require__(2087));
+const application_constants_1 = __nccwpck_require__(9717);
+class HTTPError extends Error {
+    constructor(httpStatusCode) {
+        super(`Unexpected HTTP response: ${httpStatusCode}`);
+        this.httpStatusCode = httpStatusCode;
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+exports.HTTPError = HTTPError;
+const userAgent = 'actions/tool-cache';
+/**
+ * Download a tool from an url and stream it into a file
+ *
+ * @param url       url of tool to download
+ * @param dest      path to download tool
+ * @param auth      authorization header
+ * @param headers   other headers
+ * @returns         path to downloaded tool
+ */
+function downloadTool(url, dest, auth, headers) {
+    return __awaiter(this, void 0, void 0, function* () {
+        dest = dest || path.join(os_1.default.tmpdir(), (0, uuid_1.v4)());
+        yield io.mkdirP(path.dirname(dest));
+        core.debug(`Downloading ${url}`);
+        core.debug(`Destination ${dest}`);
+        const retryHelper = new retry_helper_1.RetryHelper(application_constants_1.RETRY_COUNT);
+        return yield retryHelper.execute(() => __awaiter(this, void 0, void 0, function* () {
+            return yield downloadToolAttempt(url, dest || '', auth, headers);
+        }), (err) => {
+            if (err instanceof HTTPError && err.httpStatusCode) {
+                if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(err.httpStatusCode))) {
+                    return true;
+                }
+            }
+            // Otherwise retry
+            return false;
+        });
+    });
+}
+exports.downloadTool = downloadTool;
+function downloadToolAttempt(url, dest, auth, headers) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (fs.existsSync(dest)) {
+            throw new Error(`Destination file path ${dest} already exists`);
+        }
+        // Get the response headers
+        const http = new httpm.HttpClient(userAgent, [], {
+            allowRetries: false
+        });
+        if (auth) {
+            core.debug('set auth');
+            if (headers === undefined) {
+                headers = {};
+            }
+            headers.authorization = auth;
+        }
+        const response = yield http.get(url, headers);
+        if (response.message.statusCode !== 200) {
+            const err = new HTTPError(response.message.statusCode);
+            core.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
+            throw err;
+        }
+        // Download the response body
+        const pipeline = util.promisify(stream.pipeline);
+        const responseMessageFactory = _getGlobal('TEST_DOWNLOAD_TOOL_RESPONSE_MESSAGE_FACTORY', () => response.message);
+        const readStream = responseMessageFactory();
+        let succeeded = false;
+        try {
+            yield pipeline(readStream, fs.createWriteStream(dest));
+            core.debug('download complete');
+            succeeded = true;
+            return dest;
+        }
+        finally {
+            // Error, delete dest before retry
+            if (!succeeded) {
+                core.debug('download failed');
+                try {
+                    yield io.rmRF(dest);
+                }
+                catch (err) {
+                    core.debug(`Failed to delete '${dest}'. ${err}`);
+                }
+            }
+        }
+    });
+}
+function _getGlobal(key, defaultValue) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const value = global[key];
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+    return value !== undefined ? value : defaultValue;
+}
 
 
 /***/ }),
@@ -871,6 +1201,9 @@ class SynopsysToolsParameter {
                     },
                     automation: {}
                 },
+                network: {
+                    airGap: inputs.ENABLE_NETWORK_AIR_GAP
+                },
                 project: {}
             }
         };
@@ -890,6 +1223,9 @@ class SynopsysToolsParameter {
         }
         if (inputs.COVERITY_BRANCH_NAME) {
             covData.data.project.branch = { name: inputs.COVERITY_BRANCH_NAME };
+        }
+        if (inputs.COVERITY_VERSION) {
+            covData.data.coverity.version = inputs.COVERITY_VERSION;
         }
         if ((0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
             (0, core_1.info)('Coverity Automation comment is enabled');
@@ -932,6 +1268,9 @@ class SynopsysToolsParameter {
                     url: inputs.BLACKDUCK_URL,
                     token: inputs.BLACKDUCK_API_TOKEN,
                     automation: {}
+                },
+                network: {
+                    airGap: inputs.ENABLE_NETWORK_AIR_GAP
                 }
             }
         };
@@ -998,6 +1337,7 @@ class SynopsysToolsParameter {
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
         const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
+        const githubAPIURL = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
@@ -1009,12 +1349,12 @@ class SynopsysToolsParameter {
             throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.');
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
-        if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-            return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber);
+        if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null && githubAPIURL != null) {
+            return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL);
         }
         return undefined;
     }
-    setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber) {
+    setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, apiurl) {
         const githubData = {
             user: {
                 token: githubToken
@@ -1028,6 +1368,9 @@ class SynopsysToolsParameter {
                 branch: {
                     name: githubBranchName
                 }
+            },
+            api: {
+                url: apiurl
             }
         };
         if (githubPrNumber != null) {
@@ -1094,7 +1437,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.sleep = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -1141,6 +1484,14 @@ function checkIfPathExists(fileOrDirectoryPath) {
     return false;
 }
 exports.checkIfPathExists = checkIfPathExists;
+function sleep(duration) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise(resolve => {
+            setTimeout(resolve, duration);
+        });
+    });
+}
+exports.sleep = sleep;
 
 
 /***/ }),
@@ -7429,14 +7780,42 @@ var MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER ||
 // Max safe segment length for coercion.
 var MAX_SAFE_COMPONENT_LENGTH = 16
 
+var MAX_SAFE_BUILD_LENGTH = MAX_LENGTH - 6
+
 // The actual regexps go on exports.re
 var re = exports.re = []
+var safeRe = exports.safeRe = []
 var src = exports.src = []
 var t = exports.tokens = {}
 var R = 0
 
 function tok (n) {
   t[n] = R++
+}
+
+var LETTERDASHNUMBER = '[a-zA-Z0-9-]'
+
+// Replace some greedy regex tokens to prevent regex dos issues. These regex are
+// used internally via the safeRe object since all inputs in this library get
+// normalized first to trim and collapse all extra whitespace. The original
+// regexes are exported for userland consumption and lower level usage. A
+// future breaking change could export the safer regex only with a note that
+// all input should have extra whitespace removed.
+var safeRegexReplacements = [
+  ['\\s', 1],
+  ['\\d', MAX_LENGTH],
+  [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
+]
+
+function makeSafeRe (value) {
+  for (var i = 0; i < safeRegexReplacements.length; i++) {
+    var token = safeRegexReplacements[i][0]
+    var max = safeRegexReplacements[i][1]
+    value = value
+      .split(token + '*').join(token + '{0,' + max + '}')
+      .split(token + '+').join(token + '{1,' + max + '}')
+  }
+  return value
 }
 
 // The following Regular Expressions can be used for tokenizing,
@@ -7448,14 +7827,14 @@ function tok (n) {
 tok('NUMERICIDENTIFIER')
 src[t.NUMERICIDENTIFIER] = '0|[1-9]\\d*'
 tok('NUMERICIDENTIFIERLOOSE')
-src[t.NUMERICIDENTIFIERLOOSE] = '[0-9]+'
+src[t.NUMERICIDENTIFIERLOOSE] = '\\d+'
 
 // ## Non-numeric Identifier
 // Zero or more digits, followed by a letter or hyphen, and then zero or
 // more letters, digits, or hyphens.
 
 tok('NONNUMERICIDENTIFIER')
-src[t.NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-][a-zA-Z0-9-]*'
+src[t.NONNUMERICIDENTIFIER] = '\\d*[a-zA-Z-]' + LETTERDASHNUMBER + '*'
 
 // ## Main Version
 // Three dot-separated numeric identifiers.
@@ -7497,7 +7876,7 @@ src[t.PRERELEASELOOSE] = '(?:-?(' + src[t.PRERELEASEIDENTIFIERLOOSE] +
 // Any combination of digits, letters, or hyphens.
 
 tok('BUILDIDENTIFIER')
-src[t.BUILDIDENTIFIER] = '[0-9A-Za-z-]+'
+src[t.BUILDIDENTIFIER] = LETTERDASHNUMBER + '+'
 
 // ## Build Metadata
 // Plus sign, followed by one or more period-separated build metadata
@@ -7577,6 +7956,7 @@ src[t.COERCE] = '(^|[^\\d])' +
               '(?:$|[^\\d])'
 tok('COERCERTL')
 re[t.COERCERTL] = new RegExp(src[t.COERCE], 'g')
+safeRe[t.COERCERTL] = new RegExp(makeSafeRe(src[t.COERCE]), 'g')
 
 // Tilde ranges.
 // Meaning is "reasonably at or greater than"
@@ -7586,6 +7966,7 @@ src[t.LONETILDE] = '(?:~>?)'
 tok('TILDETRIM')
 src[t.TILDETRIM] = '(\\s*)' + src[t.LONETILDE] + '\\s+'
 re[t.TILDETRIM] = new RegExp(src[t.TILDETRIM], 'g')
+safeRe[t.TILDETRIM] = new RegExp(makeSafeRe(src[t.TILDETRIM]), 'g')
 var tildeTrimReplace = '$1~'
 
 tok('TILDE')
@@ -7601,6 +7982,7 @@ src[t.LONECARET] = '(?:\\^)'
 tok('CARETTRIM')
 src[t.CARETTRIM] = '(\\s*)' + src[t.LONECARET] + '\\s+'
 re[t.CARETTRIM] = new RegExp(src[t.CARETTRIM], 'g')
+safeRe[t.CARETTRIM] = new RegExp(makeSafeRe(src[t.CARETTRIM]), 'g')
 var caretTrimReplace = '$1^'
 
 tok('CARET')
@@ -7622,6 +8004,7 @@ src[t.COMPARATORTRIM] = '(\\s*)' + src[t.GTLT] +
 
 // this one has to use the /g flag
 re[t.COMPARATORTRIM] = new RegExp(src[t.COMPARATORTRIM], 'g')
+safeRe[t.COMPARATORTRIM] = new RegExp(makeSafeRe(src[t.COMPARATORTRIM]), 'g')
 var comparatorTrimReplace = '$1$2$3'
 
 // Something like `1.2.3 - 1.2.4`
@@ -7650,6 +8033,14 @@ for (var i = 0; i < R; i++) {
   debug(i, src[i])
   if (!re[i]) {
     re[i] = new RegExp(src[i])
+
+    // Replace all greedy whitespace to prevent regex dos issues. These regex are
+    // used internally via the safeRe object since all inputs in this library get
+    // normalized first to trim and collapse all extra whitespace. The original
+    // regexes are exported for userland consumption and lower level usage. A
+    // future breaking change could export the safer regex only with a note that
+    // all input should have extra whitespace removed.
+    safeRe[i] = new RegExp(makeSafeRe(src[i]))
   }
 }
 
@@ -7674,7 +8065,7 @@ function parse (version, options) {
     return null
   }
 
-  var r = options.loose ? re[t.LOOSE] : re[t.FULL]
+  var r = options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL]
   if (!r.test(version)) {
     return null
   }
@@ -7729,7 +8120,7 @@ function SemVer (version, options) {
   this.options = options
   this.loose = !!options.loose
 
-  var m = version.trim().match(options.loose ? re[t.LOOSE] : re[t.FULL])
+  var m = version.trim().match(options.loose ? safeRe[t.LOOSE] : safeRe[t.FULL])
 
   if (!m) {
     throw new TypeError('Invalid Version: ' + version)
@@ -8174,6 +8565,7 @@ function Comparator (comp, options) {
     return new Comparator(comp, options)
   }
 
+  comp = comp.trim().split(/\s+/).join(' ')
   debug('comparator', comp, options)
   this.options = options
   this.loose = !!options.loose
@@ -8190,7 +8582,7 @@ function Comparator (comp, options) {
 
 var ANY = {}
 Comparator.prototype.parse = function (comp) {
-  var r = this.options.loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
+  var r = this.options.loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR]
   var m = comp.match(r)
 
   if (!m) {
@@ -8314,9 +8706,16 @@ function Range (range, options) {
   this.loose = !!options.loose
   this.includePrerelease = !!options.includePrerelease
 
-  // First, split based on boolean or ||
+  // First reduce all whitespace as much as possible so we do not have to rely
+  // on potentially slow regexes like \s*. This is then stored and used for
+  // future error messages as well.
   this.raw = range
-  this.set = range.split(/\s*\|\|\s*/).map(function (range) {
+    .trim()
+    .split(/\s+/)
+    .join(' ')
+
+  // First, split based on boolean or ||
+  this.set = this.raw.split('||').map(function (range) {
     return this.parseRange(range.trim())
   }, this).filter(function (c) {
     // throw out any that are not relevant for whatever reason
@@ -8324,7 +8723,7 @@ function Range (range, options) {
   })
 
   if (!this.set.length) {
-    throw new TypeError('Invalid SemVer Range: ' + range)
+    throw new TypeError('Invalid SemVer Range: ' + this.raw)
   }
 
   this.format()
@@ -8343,20 +8742,19 @@ Range.prototype.toString = function () {
 
 Range.prototype.parseRange = function (range) {
   var loose = this.options.loose
-  range = range.trim()
   // `1.2.3 - 1.2.4` => `>=1.2.3 <=1.2.4`
-  var hr = loose ? re[t.HYPHENRANGELOOSE] : re[t.HYPHENRANGE]
+  var hr = loose ? safeRe[t.HYPHENRANGELOOSE] : safeRe[t.HYPHENRANGE]
   range = range.replace(hr, hyphenReplace)
   debug('hyphen replace', range)
   // `> 1.2.3 < 1.2.5` => `>1.2.3 <1.2.5`
-  range = range.replace(re[t.COMPARATORTRIM], comparatorTrimReplace)
-  debug('comparator trim', range, re[t.COMPARATORTRIM])
+  range = range.replace(safeRe[t.COMPARATORTRIM], comparatorTrimReplace)
+  debug('comparator trim', range, safeRe[t.COMPARATORTRIM])
 
   // `~ 1.2.3` => `~1.2.3`
-  range = range.replace(re[t.TILDETRIM], tildeTrimReplace)
+  range = range.replace(safeRe[t.TILDETRIM], tildeTrimReplace)
 
   // `^ 1.2.3` => `^1.2.3`
-  range = range.replace(re[t.CARETTRIM], caretTrimReplace)
+  range = range.replace(safeRe[t.CARETTRIM], caretTrimReplace)
 
   // normalize spaces
   range = range.split(/\s+/).join(' ')
@@ -8364,7 +8762,7 @@ Range.prototype.parseRange = function (range) {
   // At this point, the range is completely trimmed and
   // ready to be split into comparators.
 
-  var compRe = loose ? re[t.COMPARATORLOOSE] : re[t.COMPARATOR]
+  var compRe = loose ? safeRe[t.COMPARATORLOOSE] : safeRe[t.COMPARATOR]
   var set = range.split(' ').map(function (comp) {
     return parseComparator(comp, this.options)
   }, this).join(' ').split(/\s+/)
@@ -8464,7 +8862,7 @@ function replaceTildes (comp, options) {
 }
 
 function replaceTilde (comp, options) {
-  var r = options.loose ? re[t.TILDELOOSE] : re[t.TILDE]
+  var r = options.loose ? safeRe[t.TILDELOOSE] : safeRe[t.TILDE]
   return comp.replace(r, function (_, M, m, p, pr) {
     debug('tilde', comp, _, M, m, p, pr)
     var ret
@@ -8505,7 +8903,7 @@ function replaceCarets (comp, options) {
 
 function replaceCaret (comp, options) {
   debug('caret', comp, options)
-  var r = options.loose ? re[t.CARETLOOSE] : re[t.CARET]
+  var r = options.loose ? safeRe[t.CARETLOOSE] : safeRe[t.CARET]
   return comp.replace(r, function (_, M, m, p, pr) {
     debug('caret', comp, _, M, m, p, pr)
     var ret
@@ -8564,7 +8962,7 @@ function replaceXRanges (comp, options) {
 
 function replaceXRange (comp, options) {
   comp = comp.trim()
-  var r = options.loose ? re[t.XRANGELOOSE] : re[t.XRANGE]
+  var r = options.loose ? safeRe[t.XRANGELOOSE] : safeRe[t.XRANGE]
   return comp.replace(r, function (ret, gtlt, M, m, p, pr) {
     debug('xRange', comp, ret, gtlt, M, m, p, pr)
     var xM = isX(M)
@@ -8639,7 +9037,7 @@ function replaceXRange (comp, options) {
 function replaceStars (comp, options) {
   debug('replaceStars', comp, options)
   // Looseness is ignored here.  star is always as loose as it gets!
-  return comp.trim().replace(re[t.STAR], '')
+  return comp.trim().replace(safeRe[t.STAR], '')
 }
 
 // This function is passed to string.replace(re[t.HYPHENRANGE])
@@ -8965,7 +9363,7 @@ function coerce (version, options) {
 
   var match = null
   if (!options.rtl) {
-    match = version.match(re[t.COERCE])
+    match = version.match(safeRe[t.COERCE])
   } else {
     // Find the right-most coercible string that does not share
     // a terminus with a more left-ward coercible string.
@@ -8976,17 +9374,17 @@ function coerce (version, options) {
     // Stop when we get a match that ends at the string end, since no
     // coercible string can be more right-ward without the same terminus.
     var next
-    while ((next = re[t.COERCERTL].exec(version)) &&
+    while ((next = safeRe[t.COERCERTL].exec(version)) &&
       (!match || match.index + match[0].length !== version.length)
     ) {
       if (!match ||
           next.index + next[0].length !== match.index + match[0].length) {
         match = next
       }
-      re[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
+      safeRe[t.COERCERTL].lastIndex = next.index + next[1].length + next[2].length
     }
     // leave it in a clean state
-    re[t.COERCERTL].lastIndex = -1
+    safeRe[t.COERCERTL].lastIndex = -1
   }
 
   if (match === null) {

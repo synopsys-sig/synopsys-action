@@ -16,9 +16,18 @@ export async function run() {
     // Prepare bridge command
     formattedCommand = await sb.prepareCommand(tempDir)
     // Download bridge
-    await sb.downloadBridge(tempDir)
+    if (!inputs.ENABLE_NETWORK_AIR_GAP) {
+      await sb.downloadBridge(tempDir)
+    } else {
+      info('Network air gap is enabled, skipping synopsys-bridge download.')
+      await sb.validateSynopsysBridgePath()
+    }
     // Execute bridge command
-    return await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    if (exitCode === 0) {
+      info('Synopsys Action workflow execution completed')
+    }
+    return exitCode
   } catch (error) {
     throw error
   } finally {
@@ -27,7 +36,6 @@ export async function run() {
     }
     await cleanupTempDir(tempDir)
   }
-  info('Synopsys Action workflow execution completed')
 }
 
 export function logBridgeExitCodes(message: string): string {

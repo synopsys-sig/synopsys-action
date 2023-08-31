@@ -85,6 +85,9 @@ export class SynopsysToolsParameter {
           },
           automation: {}
         },
+        network: {
+          airGap: inputs.ENABLE_NETWORK_AIR_GAP
+        },
         project: {}
       }
     }
@@ -109,6 +112,10 @@ export class SynopsysToolsParameter {
 
     if (inputs.COVERITY_BRANCH_NAME) {
       covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
+    }
+
+    if (inputs.COVERITY_VERSION) {
+      covData.data.coverity.version = inputs.COVERITY_VERSION
     }
 
     if (parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)) {
@@ -155,6 +162,9 @@ export class SynopsysToolsParameter {
           url: inputs.BLACKDUCK_URL,
           token: inputs.BLACKDUCK_API_TOKEN,
           automation: {}
+        },
+        network: {
+          airGap: inputs.ENABLE_NETWORK_AIR_GAP
         }
       }
     }
@@ -227,6 +237,8 @@ export class SynopsysToolsParameter {
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
     const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
     const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
+    const githubAPIURL = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL]
+
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
@@ -241,13 +253,13 @@ export class SynopsysToolsParameter {
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
-    if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
-      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber)
+    if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null && githubAPIURL != null) {
+      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL)
     }
     return undefined
   }
 
-  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string): GithubData {
+  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string, apiurl: string): GithubData {
     const githubData: GithubData = {
       user: {
         token: githubToken
@@ -261,6 +273,9 @@ export class SynopsysToolsParameter {
         branch: {
           name: githubBranchName
         }
+      },
+      api: {
+        url: apiurl
       }
     }
     if (githubPrNumber != null) {

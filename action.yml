@@ -32,7 +32,7 @@ inputs:
   coverity_branch_name:
     description: 'Branch name'
     required: false
-  coverity_local:
+  bridge_coverity_local:
     description: 'Flag to enable/disable to run coverity scan locally.'
     required: false
   polaris_accessToken:
@@ -50,8 +50,8 @@ inputs:
   polaris_serverUrl:
     description: 'Polaris Server URL'
     required: false
-  synopsys_bridge_path:
-    description: 'Synopsys bridge path'
+  synopsys_bridge_install_directory:
+    description: 'Synopsys Bridge Install Directory'
     required: false
   bridge_download_url:
     description: 'URL to download bridge from'
@@ -92,6 +92,12 @@ inputs:
   diagnostics_retention_days:
     description: 'Number of days to keep the diagnostics files downloadable'
     required: false
+  bridge_network_airgap:
+    description: 'If provided, Synopsys Action will be using local network to download and execute bridge .'
+    required: false
+  bridge_coverity_version:
+    description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
+    required: false  
 runs:
   using: 'node16'
   main: 'dist/index.js'

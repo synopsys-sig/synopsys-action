@@ -13,6 +13,7 @@ export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
 export interface Blackduck {
   blackduck: BlackduckData
   github?: GithubData
+  network: NetworkAirGap
 }
 
 export interface BlackduckData {
@@ -50,6 +51,7 @@ export interface AutomationData {
 export interface GithubData {
   user: User
   repository: Repository
+  api?: GithubURL
 }
 
 export const FIXPR_ENVIRONMENT_VARIABLES = {
@@ -58,5 +60,14 @@ export const FIXPR_ENVIRONMENT_VARIABLES = {
   GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
   GITHUB_REF: 'GITHUB_REF',
   GITHUB_REF_NAME: 'GITHUB_REF_NAME',
-  GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER'
+  GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
+  GITHUB_API_URL: 'GITHUB_API_URL'
+}
+
+export interface GithubURL {
+  url: string
+}
+
+export interface NetworkAirGap {
+  airGap: boolean
 }

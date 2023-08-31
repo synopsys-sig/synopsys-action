@@ -4,6 +4,7 @@ export interface Coverity {
   coverity: CoverityConnect
   project: ProjectData
   github?: GithubData
+  network: NetworkAirGap
 }
 
 export interface ProjectData {
@@ -20,6 +21,7 @@ export interface CoverityConnect {
   install?: {directory: string}
   automation: AutomationData
   local?: boolean
+  version?: string
 }
 
 export interface CoverityData {
@@ -28,4 +30,8 @@ export interface CoverityData {
   project: {name: string}
   stream: {name: string}
   policy?: {view: string}
+}
+
+export interface NetworkAirGap {
+  airGap: boolean
 }

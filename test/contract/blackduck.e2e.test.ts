@@ -4,9 +4,9 @@ import {error, info} from '@actions/core'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
 import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
+import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
 import * as io from '@actions/io'
 import * as utility from '../../src/synopsys-action/utility'
-import {format} from 'path'
 
 const blackduckParamMap: Map<string, string> = new Map<string, string>()
 blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
@@ -185,7 +185,7 @@ export function setAllMocks() {
   let blackduck: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
   jest.spyOn(validator, 'validateBlackDuckInputs').mockReturnValueOnce(blackduck)
-  jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
+  jest.spyOn(toolCacheLocal, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')
   jest.spyOn(validator, 'validateBridgeUrl').mockReturnValue(true)
@@ -194,18 +194,31 @@ export function setAllMocks() {
 }
 
 export function getBridgeDownloadUrl(): string {
-  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-macosx.zip'
+  const WINDOWS_PLATFORM = 'win64'
+  const LINUX_PLATFORM = 'linux64'
+  const MAC_PLATFORM = 'macosx'
+  const osName = process.platform
+  let platform = ''
+  if (osName === 'darwin') {
+    platform = MAC_PLATFORM
+  } else if (osName === 'linux') {
+    platform = LINUX_PLATFORM
+  } else if (osName === 'win32') {
+    platform = WINDOWS_PLATFORM
+  }
+  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest/synopsys-bridge-'.concat(platform).concat('.zip')
 }
 
 export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_PATH', {value: __dirname})
+  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: __dirname})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   process.env['GITHUB_REF_NAME'] = 'synopsys-sig'
+  process.env['GITHUB_API_URL'] = 'https://github.com'
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
 }

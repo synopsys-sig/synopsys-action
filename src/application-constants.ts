@@ -1,8 +1,11 @@
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge' //Path will be in home
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge'
 export const SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge'
+export const SYNOPSYS_BRIDGE_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
 
 export const APPLICATION_NAME = 'synopsys-action'
+
+export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_install_directory'
 
 // Scan Types
 export const COVERITY_KEY = 'coverity'
@@ -20,7 +23,8 @@ export const COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view'
 export const COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name'
 export const COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name'
 export const COVERITY_AUTOMATION_PRCOMMENT_KEY = 'coverity_automation_prcomment'
-export const COVERITY_LOCAL_KEY = 'coverity_local'
+export const COVERITY_LOCAL_KEY = 'bridge_coverity_local'
+export const COVERITY_VERSION_KEY = 'bridge_coverity_version'
 
 // Polaris
 export const POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken'
@@ -40,6 +44,7 @@ export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcommen
 
 export const GITHUB_TOKEN_KEY = 'github_token'
 export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
+export const NETWORK_AIRGAP_KEY = 'bridge_network_airgap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
 
 // Bridge Exit Codes
@@ -51,3 +56,7 @@ export let EXIT_CODE_MAP = new Map<string, string>([
   ['8', 'The config option bridge.break has been set to true'],
   ['9', 'Bridge initialization failed']
 ])
+
+export const RETRY_DELAY_IN_MILLISECONDS = 10000
+export const RETRY_COUNT = 3
+export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
