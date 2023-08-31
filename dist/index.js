@@ -29,7 +29,7 @@ exports.COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view';
 exports.COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name';
 exports.COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name';
 exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = 'coverity_automation_prcomment';
-exports.COVERITY_LOCAL_KEY = 'coverity_local';
+exports.COVERITY_LOCAL_KEY = 'bridge_coverity_local';
 exports.COVERITY_VERSION_KEY = 'bridge_coverity_version';
 // Polaris
 exports.POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken';
