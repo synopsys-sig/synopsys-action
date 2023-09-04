@@ -1191,7 +1191,7 @@ class SynopsysToolsParameter {
             if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
                 const severityValues = inputPrCommentSeverities.split(',');
                 for (const severity of severityValues) {
-                    if (severity.trim().length > 0) {
+                    if (severity.trim()) {
                         prCommentSeverities.push(severity.trim());
                     }
                 }
