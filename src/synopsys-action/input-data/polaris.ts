@@ -21,4 +21,5 @@ export interface PolarisData {
 
 export interface PrComment {
   enabled?: boolean
+  severities?: string[]
 }
