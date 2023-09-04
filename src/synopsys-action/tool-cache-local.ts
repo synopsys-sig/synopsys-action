@@ -11,7 +11,7 @@ import * as util from 'util'
 import {OutgoingHttpHeaders} from 'http'
 import {v4 as uuidv4} from 'uuid'
 import os from 'os'
-import {NON_RETRY_HTTP_CODES, RETRY_COUNT} from '../application-constants'
+import {NON_RETRY_HTTP_CODES, RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS} from '../application-constants'
 
 export class HTTPError extends Error {
   constructor(readonly httpStatusCode: number | undefined) {
@@ -37,7 +37,7 @@ export async function downloadTool(url: string, dest?: string, auth?: string, he
   core.debug(`Downloading ${url}`)
   core.debug(`Destination ${dest}`)
 
-  const retryHelper = new RetryHelper(RETRY_COUNT)
+  const retryHelper = new RetryHelper(RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS)
   return await retryHelper.execute(
     async () => {
       return await downloadToolAttempt(url, dest || '', auth, headers)
@@ -47,6 +47,8 @@ export async function downloadTool(url: string, dest?: string, auth?: string, he
         if (!NON_RETRY_HTTP_CODES.has(Number(err.httpStatusCode))) {
           return true
         }
+      } else if (!err.message.includes('Destination file path')) {
+        return true
       }
       // Otherwise retry
       return false

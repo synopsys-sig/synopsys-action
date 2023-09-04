@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import {RETRY_DELAY_IN_MILLISECONDS} from '../application-constants'
 import {sleep} from './utility'
 
 /**
@@ -7,12 +6,14 @@ import {sleep} from './utility'
  */
 export class RetryHelper {
   private readonly maxAttempts: number
+  private retryDelay: number
 
-  constructor(maxAttempts: number) {
+  constructor(maxAttempts: number, retryDelay: number) {
     if (maxAttempts < 1) {
       throw new Error('max attempts should be greater than or equal to 1')
     }
     this.maxAttempts = maxAttempts
+    this.retryDelay = retryDelay
   }
 
   async execute<T>(action: () => Promise<T>, isRetryable?: (e: Error) => boolean): Promise<T> {
@@ -28,9 +29,16 @@ export class RetryHelper {
         core.info((err as Error).message)
       }
 
+      core.info(
+        'Synopsys bridge download has been failed, retries left: '
+          .concat(String(this.maxAttempts - attempt + 1))
+          .concat(', Waiting: ')
+          .concat(String(this.retryDelay / 1000))
+          .concat(' Seconds')
+      )
       // Sleep
-      core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt + 1)))
-      await sleep(RETRY_DELAY_IN_MILLISECONDS)
+      await sleep(this.retryDelay)
+      this.retryDelay = this.retryDelay * 2
       attempt++
     }
 

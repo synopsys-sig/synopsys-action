@@ -6,13 +6,14 @@ let info: string[]
 let retryHelper: RetryHelper
 
 describe('retry-helper tests', () => {
+  jest.setTimeout(12000)
   beforeAll(() => {
     // Mock @actions/core info()
     jest.spyOn(core, 'info').mockImplementation((message: string) => {
       info.push(message)
     })
 
-    retryHelper = new RetryHelper(3)
+    retryHelper = new RetryHelper(3, 100)
 
     Object.defineProperty(constants, 'RETRY_COUNT', {value: 3})
     Object.defineProperty(constants, 'RETRY_DELAY_IN_MILLISECONDS', {value: 100})

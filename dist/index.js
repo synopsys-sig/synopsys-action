@@ -58,7 +58,7 @@ exports.EXIT_CODE_MAP = new Map([
     ['8', 'The config option bridge.break has been set to true'],
     ['9', 'Bridge initialization failed']
 ]);
-exports.RETRY_DELAY_IN_MILLISECONDS = 10000;
+exports.RETRY_DELAY_IN_MILLISECONDS = 15000;
 exports.RETRY_COUNT = 3;
 exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
 
@@ -500,17 +500,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RetryHelper = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const application_constants_1 = __nccwpck_require__(9717);
 const utility_1 = __nccwpck_require__(7643);
 /**
  * Internal class for retries
  */
 class RetryHelper {
-    constructor(maxAttempts) {
+    constructor(maxAttempts, retryDelay) {
         if (maxAttempts < 1) {
             throw new Error('max attempts should be greater than or equal to 1');
         }
         this.maxAttempts = maxAttempts;
+        this.retryDelay = retryDelay;
     }
     execute(action, isRetryable) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -526,9 +526,14 @@ class RetryHelper {
                     }
                     core.info(err.message);
                 }
+                core.info('Synopsys bridge download has been failed, retries left: '
+                    .concat(String(this.maxAttempts - attempt + 1))
+                    .concat(', Waiting: ')
+                    .concat(String(this.retryDelay / 1000))
+                    .concat(' Seconds'));
                 // Sleep
-                core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt + 1)));
-                yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
+                yield (0, utility_1.sleep)(this.retryDelay);
+                this.retryDelay = this.retryDelay * 2;
                 attempt++;
             }
             // Last attempt
@@ -795,7 +800,8 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             let htmlResponse = '';
             const httpClient = new HttpClient_1.HttpClient('synopsys-task');
-            let retryCount = application_constants_1.RETRY_COUNT;
+            let retryCountLocal = application_constants_1.RETRY_COUNT;
+            let retryDelay = application_constants_1.RETRY_DELAY_IN_MILLISECONDS;
             let httpResponse;
             const versionArray = [];
             do {
@@ -803,12 +809,17 @@ class SynopsysBridge {
                     Accept: 'text/html'
                 });
                 if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-                    yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
-                    retryCount--;
-                    (0, core_1.info)('Getting all available bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
+                    (0, core_1.info)('Getting all available bridge versions has been failed, retries left: '
+                        .concat(String(retryCountLocal))
+                        .concat(', Waiting: ')
+                        .concat(String(retryDelay / 1000))
+                        .concat(' Seconds'));
+                    yield (0, utility_1.sleep)(retryDelay);
+                    retryDelay = retryDelay * 2;
+                    retryCountLocal--;
                 }
                 else {
-                    retryCount = 0;
+                    retryCountLocal = 0;
                     htmlResponse = yield httpResponse.readBody();
                     const domParser = new dom_parser_1.default();
                     const doms = domParser.parseFromString(htmlResponse);
@@ -825,10 +836,10 @@ class SynopsysBridge {
                         }
                     }
                 }
-                if (retryCount === 0) {
+                if (retryCountLocal === 0) {
                     (0, core_1.warning)('Unable to retrieve the Synopsys Bridge Versions from Artifactory');
                 }
-            } while (retryCount > 0);
+            } while (retryCountLocal > 0);
             return versionArray;
         });
     }
@@ -892,19 +903,25 @@ class SynopsysBridge {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const httpClient = new HttpClient_1.HttpClient('');
-                let retryCount = application_constants_1.RETRY_COUNT;
+                let retryCountLocal = application_constants_1.RETRY_COUNT;
+                let retryDelay = application_constants_1.RETRY_DELAY_IN_MILLISECONDS;
                 let httpResponse;
                 do {
                     httpResponse = yield httpClient.get(latestVersionsUrl, {
                         Accept: 'text/html'
                     });
                     if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-                        yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
-                        retryCount--;
-                        (0, core_1.info)('Getting latest Synopsys Bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
+                        (0, core_1.info)('Getting latest Synopsys Bridge versions has been failed, retries left: '
+                            .concat(String(retryCountLocal))
+                            .concat(', Waiting: ')
+                            .concat(String(retryDelay / 1000))
+                            .concat(' Seconds'));
+                        yield (0, utility_1.sleep)(retryDelay);
+                        retryDelay = retryDelay * 2;
+                        retryCountLocal--;
                     }
                     else if (httpResponse.message.statusCode === 200) {
-                        retryCount = 0;
+                        retryCountLocal = 0;
                         const htmlResponse = (yield httpResponse.readBody()).trim();
                         const lines = htmlResponse.split('\n');
                         for (const line of lines) {
@@ -913,10 +930,10 @@ class SynopsysBridge {
                             }
                         }
                     }
-                    if (retryCount === 0) {
+                    if (retryCountLocal === 0) {
                         (0, core_1.warning)('Unable to retrieve the most recent version from Artifactory URL');
                     }
-                } while (retryCount > 0);
+                } while (retryCountLocal > 0);
             }
             catch (e) {
                 (0, core_1.debug)('Error reading version file content: '.concat(e.message));
@@ -1033,7 +1050,7 @@ function downloadTool(url, dest, auth, headers) {
         yield io.mkdirP(path.dirname(dest));
         core.debug(`Downloading ${url}`);
         core.debug(`Destination ${dest}`);
-        const retryHelper = new retry_helper_1.RetryHelper(application_constants_1.RETRY_COUNT);
+        const retryHelper = new retry_helper_1.RetryHelper(application_constants_1.RETRY_COUNT, application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
         return yield retryHelper.execute(() => __awaiter(this, void 0, void 0, function* () {
             return yield downloadToolAttempt(url, dest || '', auth, headers);
         }), (err) => {
@@ -1041,6 +1058,9 @@ function downloadTool(url, dest, auth, headers) {
                 if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(err.httpStatusCode))) {
                     return true;
                 }
+            }
+            else if (!err.message.includes('Destination file path')) {
+                return true;
             }
             // Otherwise retry
             return false;
