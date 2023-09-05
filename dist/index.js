@@ -7,8 +7,8 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-            exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-            exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = "/synopsys-bridge"; //Path will be in home
+exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/';
@@ -28,46 +28,45 @@ exports.COVERITY_INSTALL_DIRECTORY_KEY = 'coverity_install_directory';
 exports.COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view';
 exports.COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name';
 exports.COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name';
-            exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = "coverity_automation_prcomment";
-            exports.COVERITY_LOCAL_KEY = "bridge_coverity_local";
-            exports.COVERITY_VERSION_KEY = "bridge_coverity_version";
+exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = 'coverity_automation_prcomment';
+exports.COVERITY_LOCAL_KEY = 'bridge_coverity_local';
+exports.COVERITY_VERSION_KEY = 'bridge_coverity_version';
 // Polaris
-            exports.POLARIS_ACCESS_TOKEN_KEY = "polaris_accessToken";
-            exports.POLARIS_APPLICATION_NAME_KEY = "polaris_application_name";
-            exports.POLARIS_PROJECT_NAME_KEY = "polaris_project_name";
-            exports.POLARIS_ASSESSMENT_TYPES_KEY = "polaris_assessment_types";
-            exports.POLARIS_SERVER_URL_KEY = "polaris_serverUrl";
-            exports.POLARIS_TRIAGE_KEY = "bridge_polaris_triage";
-            exports.POLARIS_PRCOMMENT_ENABLED_KEY = "bridge_polaris_prComment_enabled";
-            exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = "bridge_polaris_prComment_severities";
+exports.POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken';
+exports.POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name';
+exports.POLARIS_PROJECT_NAME_KEY = 'polaris_project_name';
+exports.POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types';
+exports.POLARIS_SERVER_URL_KEY = 'polaris_serverUrl';
+exports.POLARIS_TRIAGE_KEY = 'bridge_polaris_triage';
+exports.POLARIS_PRCOMMENT_ENABLED_KEY = 'bridge_polaris_prComment_enabled';
+exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = 'bridge_polaris_prComment_severities';
 // Blackduck
-            exports.BLACKDUCK_URL_KEY = "blackduck_url";
-            exports.BLACKDUCK_API_TOKEN_KEY = "blackduck_apiToken";
-            exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = "blackduck_install_directory";
-            exports.BLACKDUCK_SCAN_FULL_KEY = "blackduck_scan_full";
-            exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = "blackduck_scan_failure_severities";
-            exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = "blackduck_automation_fixpr";
-            exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = "blackduck_automation_prcomment";
-            exports.GITHUB_TOKEN_KEY = "github_token";
-            exports.INCLUDE_DIAGNOSTICS_KEY = "include_diagnostics";
+exports.BLACKDUCK_URL_KEY = 'blackduck_url';
+exports.BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken';
+exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory';
+exports.BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full';
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities';
+exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr';
+exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment';
+exports.GITHUB_TOKEN_KEY = 'github_token';
+exports.INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics';
 exports.NETWORK_AIRGAP_KEY = 'bridge_network_airgap';
-            exports.DIAGNOSTICS_RETENTION_DAYS_KEY = "diagnostics_retention_days";
+exports.DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days';
 // Bridge Exit Codes
-            exports.EXIT_CODE_MAP = new Map([
-                ["0", "Bridge execution successfully completed"],
-                ["1", "Undefined error, check error logs"],
-                ["2", "Error from adapter end"],
-                ["3", "Failed to shutdown the bridge"],
-                ["8", "The config option bridge.break has been set to true"],
-                ["9", "Bridge initialization failed"]
-            ]);
-            exports.RETRY_DELAY_IN_MILLISECONDS = 10000;
-            exports.RETRY_COUNT = 3;
-            exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
+exports.EXIT_CODE_MAP = new Map([
+    ['0', 'Bridge execution successfully completed'],
+    ['1', 'Undefined error, check error logs'],
+    ['2', 'Error from adapter end'],
+    ['3', 'Failed to shutdown the bridge'],
+    ['8', 'The config option bridge.break has been set to true'],
+    ['9', 'Bridge initialization failed']
+]);
+exports.RETRY_DELAY_IN_MILLISECONDS = 10000;
+exports.RETRY_COUNT = 3;
+exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
 
 
-            /***/
-        }),
+/***/ }),
 
 /***/ 3109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
@@ -305,9 +304,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.extractZipped = exports.getRemoteFile = void 0;
 const core_1 = __nccwpck_require__(2186);
 const path_1 = __importDefault(__nccwpck_require__(5622));
-            const tool_cache_1 = __nccwpck_require__(7784);
-            const tool_cache_local_1 = __nccwpck_require__(5212);
-            const fs = __importStar(__nccwpck_require__(5747));
+const tool_cache_1 = __nccwpck_require__(7784);
+const tool_cache_local_1 = __nccwpck_require__(5212);
+const fs = __importStar(__nccwpck_require__(5747));
 const validators_1 = __nccwpck_require__(8401);
 function getRemoteFile(destFilePath, url) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -413,178 +412,147 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 }) : function(o, v) {
     o["default"] = v;
 });
-            var __importStar = (this && this.__importStar) || function(mod) {
-                if (mod && mod.__esModule) return mod;
-                var result = {};
-                if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-                __setModuleDefault(result, mod);
-                return result;
-            };
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1,
-              _2, _3, _4, _5, _6, _7, _8, _9;
-            Object.defineProperty(exports, "__esModule", ({ value: true }));
-            exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_AUTOMATION_FIXPR = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-            exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === "true" || false;
+exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) === 'true' || false;
 //Bridge download url
-            exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)("bridge_download_url")) === null || _c === void 0 ? void 0 : _c.trim()) || "";
-            exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)("bridge_download_version")) === null || _d === void 0 ? void 0 : _d.trim()) || "";
+exports.BRIDGE_DOWNLOAD_URL = ((_c = (0, core_1.getInput)('bridge_download_url')) === null || _c === void 0 ? void 0 : _c.trim()) || '';
+exports.BRIDGE_DOWNLOAD_VERSION = ((_d = (0, core_1.getInput)('bridge_download_version')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
 // Polaris related inputs
-            exports.POLARIS_ACCESS_TOKEN = ((_e = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || "";
-            exports.POLARIS_APPLICATION_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || "";
-            exports.POLARIS_PROJECT_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || "";
-            exports.POLARIS_ASSESSMENT_TYPES = ((_h = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || "";
-            exports.POLARIS_SERVER_URL = ((_j = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || "";
-            exports.POLARIS_TRIAGE = ((_k = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || "";
-            exports.POLARIS_PRCOMMENT_ENABLED = ((_l = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_ENABLED_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || "";
-            exports.POLARIS_PRCOMMENT_SEVERITIES = ((_m = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_SEVERITIES_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || "";
+exports.POLARIS_ACCESS_TOKEN = ((_e = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';
+exports.POLARIS_APPLICATION_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
+exports.POLARIS_PROJECT_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
+exports.POLARIS_ASSESSMENT_TYPES = ((_h = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
+exports.POLARIS_SERVER_URL = ((_j = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
+exports.POLARIS_TRIAGE = ((_k = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
+exports.POLARIS_PRCOMMENT_ENABLED = ((_l = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_ENABLED_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
+exports.POLARIS_PRCOMMENT_SEVERITIES = ((_m = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_SEVERITIES_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || '';
 // Coverity related inputs
-            exports.COVERITY_URL = ((_o = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _o === void 0 ? void 0 : _o.trim()) || "";
-            exports.COVERITY_USER = ((_p = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _p === void 0 ? void 0 : _p.trim()) || "";
-            exports.COVERITY_PASSPHRASE = ((_q = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _q === void 0 ? void 0 : _q.trim()) || "";
-            exports.COVERITY_PROJECT_NAME = ((_r = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || "";
-            exports.COVERITY_STREAM_NAME = ((_s = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || "";
-            exports.COVERITY_INSTALL_DIRECTORY = ((_t = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || "";
-            exports.COVERITY_POLICY_VIEW = ((_u = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || "";
-            exports.COVERITY_REPOSITORY_NAME = ((_v = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || "";
-            exports.COVERITY_BRANCH_NAME = ((_w = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || "";
-            exports.COVERITY_AUTOMATION_PRCOMMENT = ((_x = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || "";
-            exports.COVERITY_LOCAL = ((_y = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) === "true" || false;
-            exports.COVERITY_VERSION = ((_z = (0, core_1.getInput)(constants.COVERITY_VERSION_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || "";
+exports.COVERITY_URL = ((_o = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _o === void 0 ? void 0 : _o.trim()) || '';
+exports.COVERITY_USER = ((_p = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _p === void 0 ? void 0 : _p.trim()) || '';
+exports.COVERITY_PASSPHRASE = ((_q = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _q === void 0 ? void 0 : _q.trim()) || '';
+exports.COVERITY_PROJECT_NAME = ((_r = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
+exports.COVERITY_STREAM_NAME = ((_s = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
+exports.COVERITY_INSTALL_DIRECTORY = ((_t = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
+exports.COVERITY_POLICY_VIEW = ((_u = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
+exports.COVERITY_REPOSITORY_NAME = ((_v = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
+exports.COVERITY_BRANCH_NAME = ((_w = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
+exports.COVERITY_AUTOMATION_PRCOMMENT = ((_x = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
+exports.COVERITY_LOCAL = ((_y = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) === 'true' || false;
+exports.COVERITY_VERSION = ((_z = (0, core_1.getInput)(constants.COVERITY_VERSION_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
 // Blackduck related inputs
-            exports.BLACKDUCK_URL = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || "";
-            exports.BLACKDUCK_API_TOKEN = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || "";
-            exports.BLACKDUCK_INSTALL_DIRECTORY = ((_2 = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || "";
-            exports.BLACKDUCK_SCAN_FULL = ((_3 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || "";
-            exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_4 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || "";
-            exports.BLACKDUCK_AUTOMATION_FIXPR = ((_5 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || "";
-            exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_6 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || "";
-            exports.GITHUB_TOKEN = ((_7 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _7 === void 0 ? void 0 : _7.trim()) || "";
-            exports.INCLUDE_DIAGNOSTICS = ((_8 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _8 === void 0 ? void 0 : _8.trim()) || "";
-            exports.DIAGNOSTICS_RETENTION_DAYS = ((_9 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _9 === void 0 ? void 0 : _9.trim()) || "";
+exports.BLACKDUCK_URL = ((_0 = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
+exports.BLACKDUCK_API_TOKEN = ((_1 = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
+exports.BLACKDUCK_INSTALL_DIRECTORY = ((_2 = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
+exports.BLACKDUCK_SCAN_FULL = ((_3 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_4 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_FIXPR = ((_5 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || '';
+exports.BLACKDUCK_AUTOMATION_PRCOMMENT = ((_6 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || '';
+exports.GITHUB_TOKEN = ((_7 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _7 === void 0 ? void 0 : _7.trim()) || '';
+exports.INCLUDE_DIAGNOSTICS = ((_8 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _8 === void 0 ? void 0 : _8.trim()) || '';
+exports.DIAGNOSTICS_RETENTION_DAYS = ((_9 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _9 === void 0 ? void 0 : _9.trim()) || '';
 
 
-            /***/
-        }),
+/***/ }),
 
-        /***/ 8793:
-        /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+/***/ 8793:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-            "use strict";
+"use strict";
 
-            var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-                    desc = {
-                        enumerable: true, get: function() {
-                            return m[k];
-                        }
-                    };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.RetryHelper = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const application_constants_1 = __nccwpck_require__(9717);
+const utility_1 = __nccwpck_require__(7643);
+/**
+ * Internal class for retries
+ */
+class RetryHelper {
+    constructor(maxAttempts) {
+        if (maxAttempts < 1) {
+            throw new Error('max attempts should be greater than or equal to 1');
+        }
+        this.maxAttempts = maxAttempts;
+    }
+    execute(action, isRetryable) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let attempt = 1;
+            while (attempt <= this.maxAttempts) {
+                // Try
+                try {
+                    return yield action();
                 }
-                Object.defineProperty(o, k2, desc);
-            }) : (function(o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-            }));
-            var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-                Object.defineProperty(o, "default", { enumerable: true, value: v });
-            }) : function(o, v) {
-                o["default"] = v;
-            });
-            var __importStar = (this && this.__importStar) || function(mod) {
-                if (mod && mod.__esModule) return mod;
-                var result = {};
-                if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-                __setModuleDefault(result, mod);
-                return result;
-            };
-            var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
-                function adopt(value) {
-                    return value instanceof P ? value : new P(function(resolve) {
-                        resolve(value);
-                    });
+                catch (err) {
+                    if (isRetryable && !isRetryable(err)) {
+                        throw err;
+                    }
+                    core.info(err.message);
                 }
-
-                return new (P || (P = Promise))(function(resolve, reject) {
-                    function fulfilled(value) {
-                        try {
-                            step(generator.next(value));
-                        } catch (e) {
-                            reject(e);
-                        }
-                    }
-
-                    function rejected(value) {
-                        try {
-                            step(generator["throw"](value));
-                        } catch (e) {
-                            reject(e);
-                        }
-                    }
-
-                    function step(result) {
-                        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-                    }
-
-                    step((generator = generator.apply(thisArg, _arguments || [])).next());
-                });
-            };
-            Object.defineProperty(exports, "__esModule", ({ value: true }));
-            exports.RetryHelper = void 0;
-            const core = __importStar(__nccwpck_require__(2186));
-            const application_constants_1 = __nccwpck_require__(9717);
-            const utility_1 = __nccwpck_require__(7643);
-
-            /**
-             * Internal class for retries
-             */
-            class RetryHelper {
-                constructor(maxAttempts) {
-                    if (maxAttempts < 1) {
-                        throw new Error("max attempts should be greater than or equal to 1");
-                    }
-                    this.maxAttempts = maxAttempts;
-                }
-
-                execute(action, isRetryable) {
-                    return __awaiter(this, void 0, void 0, function* () {
-                        let attempt = 1;
-                        while (attempt <= this.maxAttempts) {
-                            // Try
-                            try {
-                                return yield action();
-                            } catch (err) {
-                                if (isRetryable && !isRetryable(err)) {
-                                    throw err;
-                                }
-                                core.info(err.message);
-                            }
-                            // Sleep
-                            core.info("Synopsys bridge download has been failed, retries left: ".concat(String(this.maxAttempts - attempt + 1)));
-                            yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
-                            attempt++;
-                        }
-                        // Last attempt
-                        return yield action();
-                    });
-                }
+                // Sleep
+                core.info('Synopsys bridge download has been failed, retries left: '.concat(String(this.maxAttempts - attempt + 1)));
+                yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
+                attempt++;
             }
+            // Last attempt
+            return yield action();
+        });
+    }
+}
+exports.RetryHelper = RetryHelper;
 
-            exports.RetryHelper = RetryHelper;
 
+/***/ }),
 
-            /***/
-        }),
+/***/ 2659:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-        /***/ 2659:
-        /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+"use strict";
 
-            "use strict";
-
-            var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     var desc = Object.getOwnPropertyDescriptor(m, k);
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -831,30 +799,31 @@ class SynopsysBridge {
     }
     getAllAvailableBridgeVersions() {
         return __awaiter(this, void 0, void 0, function* () {
-            let htmlResponse = "";
-            const httpClient = new HttpClient_1.HttpClient("synopsys-task");
+            let htmlResponse = '';
+            const httpClient = new HttpClient_1.HttpClient('synopsys-task');
             let retryCount = application_constants_1.RETRY_COUNT;
             let httpResponse;
             const versionArray = [];
             do {
                 httpResponse = yield httpClient.get(this.bridgeArtifactoryURL, {
-                    Accept: "text/html"
+                    Accept: 'text/html'
                 });
                 if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
                     yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
                     retryCount--;
-                    (0, core_1.info)("Getting all available bridge versions has been failed, retries left: ".concat(String(retryCount + 1)));
-                } else {
+                    (0, core_1.info)('Getting all available bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
+                }
+                else {
                     retryCount = 0;
                     htmlResponse = yield httpResponse.readBody();
                     const domParser = new dom_parser_1.default();
                     const doms = domParser.parseFromString(htmlResponse);
-                    const elems = doms.getElementsByTagName("a"); //querySelectorAll('a')
+                    const elems = doms.getElementsByTagName('a'); //querySelectorAll('a')
                     if (elems != null) {
                         for (const el of elems) {
                             const content = el.textContent;
                             if (content != null) {
-                                const v = content.match("^[0-9]+.[0-9]+.[0-9]+");
+                                const v = content.match('^[0-9]+.[0-9]+.[0-9]+');
                                 if (v != null && v.length === 1) {
                                     versionArray.push(v[0]);
                                 }
@@ -863,7 +832,7 @@ class SynopsysBridge {
                     }
                 }
                 if (retryCount === 0) {
-                    (0, core_1.warning)("Unable to retrieve the Synopsys Bridge Versions from Artifactory");
+                    (0, core_1.warning)('Unable to retrieve the Synopsys Bridge Versions from Artifactory');
                 }
             } while (retryCount > 0);
             return versionArray;
@@ -928,34 +897,35 @@ class SynopsysBridge {
     getSynopsysBridgeVersionFromLatestURL(latestVersionsUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const httpClient = new HttpClient_1.HttpClient("");
+                const httpClient = new HttpClient_1.HttpClient('');
                 let retryCount = application_constants_1.RETRY_COUNT;
                 let httpResponse;
                 do {
                     httpResponse = yield httpClient.get(latestVersionsUrl, {
-                        Accept: "text/html"
+                        Accept: 'text/html'
                     });
                     if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
                         yield (0, utility_1.sleep)(application_constants_1.RETRY_DELAY_IN_MILLISECONDS);
                         retryCount--;
-                        (0, core_1.info)("Getting latest Synopsys Bridge versions has been failed, retries left: ".concat(String(retryCount + 1)));
-                    } else if (httpResponse.message.statusCode === 200) {
+                        (0, core_1.info)('Getting latest Synopsys Bridge versions has been failed, retries left: '.concat(String(retryCount + 1)));
+                    }
+                    else if (httpResponse.message.statusCode === 200) {
                         retryCount = 0;
                         const htmlResponse = (yield httpResponse.readBody()).trim();
-                        const lines = htmlResponse.split("\n");
+                        const lines = htmlResponse.split('\n');
                         for (const line of lines) {
-                            if (line.includes("Synopsys Bridge Package")) {
-                                return line.split(":")[1].trim();
+                            if (line.includes('Synopsys Bridge Package')) {
+                                return line.split(':')[1].trim();
                             }
                         }
                     }
                     if (retryCount === 0) {
-                        (0, core_1.warning)("Unable to retrieve the most recent version from Artifactory URL");
+                        (0, core_1.warning)('Unable to retrieve the most recent version from Artifactory URL');
                     }
                 } while (retryCount > 0);
             }
             catch (e) {
-                (0, core_1.debug)("Error reading version file content: ".concat(e.message));
+                (0, core_1.debug)('Error reading version file content: '.concat(e.message));
             }
             return '';
         });
@@ -982,207 +952,174 @@ class SynopsysBridge {
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('\\synopsys-bridge'), ['.exe']);
             }
             else if (process.platform === 'darwin' || process.platform === 'linux') {
-                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat("/synopsys-bridge"), []);
+                this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
             }
         });
     }
 }
+exports.SynopsysBridge = SynopsysBridge;
 
-            exports.SynopsysBridge = SynopsysBridge;
 
+/***/ }),
 
-            /***/
-        }),
+/***/ 5212:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-        /***/ 5212:
-        /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+"use strict";
 
-            "use strict";
-
-            var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-                    desc = {
-                        enumerable: true, get: function() {
-                            return m[k];
-                        }
-                    };
-                }
-                Object.defineProperty(o, k2, desc);
-            }) : (function(o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                o[k2] = m[k];
-            }));
-            var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-                Object.defineProperty(o, "default", { enumerable: true, value: v });
-            }) : function(o, v) {
-                o["default"] = v;
-            });
-            var __importStar = (this && this.__importStar) || function(mod) {
-                if (mod && mod.__esModule) return mod;
-                var result = {};
-                if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-                __setModuleDefault(result, mod);
-                return result;
-            };
-            var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
-                function adopt(value) {
-                    return value instanceof P ? value : new P(function(resolve) {
-                        resolve(value);
-                    });
-                }
-
-                return new (P || (P = Promise))(function(resolve, reject) {
-                    function fulfilled(value) {
-                        try {
-                            step(generator.next(value));
-                        } catch (e) {
-                            reject(e);
-                        }
-                    }
-
-                    function rejected(value) {
-                        try {
-                            step(generator["throw"](value));
-                        } catch (e) {
-                            reject(e);
-                        }
-                    }
-
-                    function step(result) {
-                        result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-                    }
-
-                    step((generator = generator.apply(thisArg, _arguments || [])).next());
-                });
-            };
-            var __importDefault = (this && this.__importDefault) || function(mod) {
-                return (mod && mod.__esModule) ? mod : { "default": mod };
-            };
-            Object.defineProperty(exports, "__esModule", ({ value: true }));
-            exports.downloadTool = exports.HTTPError = void 0;
-            const retry_helper_1 = __nccwpck_require__(8793);
-            const core = __importStar(__nccwpck_require__(2186));
-            const io = __importStar(__nccwpck_require__(7436));
-            const fs = __importStar(__nccwpck_require__(5747));
-            const path = __importStar(__nccwpck_require__(5622));
-            const httpm = __importStar(__nccwpck_require__(6255));
-            const stream = __importStar(__nccwpck_require__(2413));
-            const util = __importStar(__nccwpck_require__(1669));
-            const uuid_1 = __nccwpck_require__(5840);
-            const os_1 = __importDefault(__nccwpck_require__(2087));
-            const application_constants_1 = __nccwpck_require__(9717);
-
-            class HTTPError extends Error {
-                constructor(httpStatusCode) {
-                    super(`Unexpected HTTP response: ${httpStatusCode}`);
-                    this.httpStatusCode = httpStatusCode;
-                    Object.setPrototypeOf(this, new.target.prototype);
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.downloadTool = exports.HTTPError = void 0;
+const retry_helper_1 = __nccwpck_require__(8793);
+const core = __importStar(__nccwpck_require__(2186));
+const io = __importStar(__nccwpck_require__(7436));
+const fs = __importStar(__nccwpck_require__(5747));
+const path = __importStar(__nccwpck_require__(5622));
+const httpm = __importStar(__nccwpck_require__(6255));
+const stream = __importStar(__nccwpck_require__(2413));
+const util = __importStar(__nccwpck_require__(1669));
+const uuid_1 = __nccwpck_require__(5840);
+const os_1 = __importDefault(__nccwpck_require__(2087));
+const application_constants_1 = __nccwpck_require__(9717);
+class HTTPError extends Error {
+    constructor(httpStatusCode) {
+        super(`Unexpected HTTP response: ${httpStatusCode}`);
+        this.httpStatusCode = httpStatusCode;
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+exports.HTTPError = HTTPError;
+const userAgent = 'actions/tool-cache';
+/**
+ * Download a tool from an url and stream it into a file
+ *
+ * @param url       url of tool to download
+ * @param dest      path to download tool
+ * @param auth      authorization header
+ * @param headers   other headers
+ * @returns         path to downloaded tool
+ */
+function downloadTool(url, dest, auth, headers) {
+    return __awaiter(this, void 0, void 0, function* () {
+        dest = dest || path.join(os_1.default.tmpdir(), (0, uuid_1.v4)());
+        yield io.mkdirP(path.dirname(dest));
+        core.debug(`Downloading ${url}`);
+        core.debug(`Destination ${dest}`);
+        const retryHelper = new retry_helper_1.RetryHelper(application_constants_1.RETRY_COUNT);
+        return yield retryHelper.execute(() => __awaiter(this, void 0, void 0, function* () {
+            return yield downloadToolAttempt(url, dest || '', auth, headers);
+        }), (err) => {
+            if (err instanceof HTTPError && err.httpStatusCode) {
+                if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(err.httpStatusCode))) {
+                    return true;
                 }
             }
-
-            exports.HTTPError = HTTPError;
-            const userAgent = "actions/tool-cache";
-
-            /**
-             * Download a tool from an url and stream it into a file
-             *
-             * @param url       url of tool to download
-             * @param dest      path to download tool
-             * @param auth      authorization header
-             * @param headers   other headers
-             * @returns         path to downloaded tool
-             */
-            function downloadTool(url, dest, auth, headers) {
-                return __awaiter(this, void 0, void 0, function* () {
-                    dest = dest || path.join(os_1.default.tmpdir(), (0, uuid_1.v4)());
-                    yield io.mkdirP(path.dirname(dest));
-                    core.debug(`Downloading ${url}`);
-                    core.debug(`Destination ${dest}`);
-                    const retryHelper = new retry_helper_1.RetryHelper(application_constants_1.RETRY_COUNT);
-                    return yield retryHelper.execute(() => __awaiter(this, void 0, void 0, function* () {
-                        return yield downloadToolAttempt(url, dest || "", auth, headers);
-                    }), (err) => {
-                        if (err instanceof HTTPError && err.httpStatusCode) {
-                            if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(err.httpStatusCode))) {
-                                return true;
-                            }
-                        }
-                        // Otherwise retry
-                        return false;
-                    });
-                });
+            // Otherwise retry
+            return false;
+        });
+    });
+}
+exports.downloadTool = downloadTool;
+function downloadToolAttempt(url, dest, auth, headers) {
+    return __awaiter(this, void 0, void 0, function* () {
+        if (fs.existsSync(dest)) {
+            throw new Error(`Destination file path ${dest} already exists`);
+        }
+        // Get the response headers
+        const http = new httpm.HttpClient(userAgent, [], {
+            allowRetries: false
+        });
+        if (auth) {
+            core.debug('set auth');
+            if (headers === undefined) {
+                headers = {};
             }
-
-            exports.downloadTool = downloadTool;
-
-            function downloadToolAttempt(url, dest, auth, headers) {
-                return __awaiter(this, void 0, void 0, function* () {
-                    if (fs.existsSync(dest)) {
-                        throw new Error(`Destination file path ${dest} already exists`);
-                    }
-                    // Get the response headers
-                    const http = new httpm.HttpClient(userAgent, [], {
-                        allowRetries: false
-                    });
-                    if (auth) {
-                        core.debug("set auth");
-                        if (headers === undefined) {
-                            headers = {};
-                        }
-                        headers.authorization = auth;
-                    }
-                    const response = yield http.get(url, headers);
-                    if (response.message.statusCode !== 200) {
-                        const err = new HTTPError(response.message.statusCode);
-                        core.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
-                        throw err;
-                    }
-                    // Download the response body
-                    const pipeline = util.promisify(stream.pipeline);
-                    const responseMessageFactory = _getGlobal("TEST_DOWNLOAD_TOOL_RESPONSE_MESSAGE_FACTORY", () => response.message);
-                    const readStream = responseMessageFactory();
-                    let succeeded = false;
-                    try {
-                        yield pipeline(readStream, fs.createWriteStream(dest));
-                        core.debug("download complete");
-                        succeeded = true;
-                        return dest;
-                    } finally {
-                        // Error, delete dest before retry
-                        if (!succeeded) {
-                            core.debug("download failed");
-                            try {
-                                yield io.rmRF(dest);
-                            } catch (err) {
-                                core.debug(`Failed to delete '${dest}'. ${err}`);
-                            }
-                        }
-                    }
-                });
+            headers.authorization = auth;
+        }
+        const response = yield http.get(url, headers);
+        if (response.message.statusCode !== 200) {
+            const err = new HTTPError(response.message.statusCode);
+            core.debug(`Failed to download from "${url}". Code(${response.message.statusCode}) Message(${response.message.statusMessage})`);
+            throw err;
+        }
+        // Download the response body
+        const pipeline = util.promisify(stream.pipeline);
+        const responseMessageFactory = _getGlobal('TEST_DOWNLOAD_TOOL_RESPONSE_MESSAGE_FACTORY', () => response.message);
+        const readStream = responseMessageFactory();
+        let succeeded = false;
+        try {
+            yield pipeline(readStream, fs.createWriteStream(dest));
+            core.debug('download complete');
+            succeeded = true;
+            return dest;
+        }
+        finally {
+            // Error, delete dest before retry
+            if (!succeeded) {
+                core.debug('download failed');
+                try {
+                    yield io.rmRF(dest);
+                }
+                catch (err) {
+                    core.debug(`Failed to delete '${dest}'. ${err}`);
+                }
             }
+        }
+    });
+}
+function _getGlobal(key, defaultValue) {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const value = global[key];
+    /* eslint-enable @typescript-eslint/no-explicit-any */
+    return value !== undefined ? value : defaultValue;
+}
 
-            function _getGlobal(key, defaultValue) {
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                const value = global[key];
-                /* eslint-enable @typescript-eslint/no-explicit-any */
-                return value !== undefined ? value : defaultValue;
-            }
 
+/***/ }),
 
-            /***/
-        }),
+/***/ 7080:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
-        /***/ 7080:
-        /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+"use strict";
 
-            "use strict";
-
-            var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-                if (k2 === undefined) k2 = k;
-                var desc = Object.getOwnPropertyDescriptor(m, k);
-                if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
       desc = { enumerable: true, get: function() { return m[k]; } };
     }
     Object.defineProperty(o, k2, desc);
@@ -1250,11 +1187,11 @@ class SynopsysToolsParameter {
             polData.data.polaris.triage = inputs.POLARIS_TRIAGE;
         }
         if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
-            (0, core_1.info)("Polaris PR comment is enabled");
+            (0, core_1.info)('Polaris PR comment is enabled');
             const prCommentSeverities = [];
             const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES;
             if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
-                const severityValues = inputPrCommentSeverities.split(",");
+                const severityValues = inputPrCommentSeverities.split(',');
                 for (const severity of severityValues) {
                     if (severity.trim()) {
                         prCommentSeverities.push(severity.trim());
@@ -1266,14 +1203,15 @@ class SynopsysToolsParameter {
                 severities: prCommentSeverities
             };
             polData.data.github = this.getGithubRepoInfo();
-        } else {
+        }
+        else {
             polData.data.polaris.prComment = { enabled: false };
         }
         const inputJson = JSON.stringify(polData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
-        (0, core_1.debug)("Generated state json file at - ".concat(stateFilePath));
-        (0, core_1.debug)("Generated state json file content is - ".concat(inputJson));
+        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
@@ -1429,13 +1367,13 @@ class SynopsysToolsParameter {
         const githubAPIURL = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
-        const githubPrNumber = githubRef !== undefined ? githubRef.split("/")[2].trim() : "";
+        const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
         const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if (githubToken == null || githubToken.length === 0) {
-            throw new Error("Missing required github token for fix pull request/automation comment");
+            throw new Error('Missing required github token for fix pull request/automation comment');
         }
         if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
-            throw new Error("Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.");
+            throw new Error('Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.');
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null && githubAPIURL != null) {
@@ -1525,8 +1463,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-            Object.defineProperty(exports, "__esModule", ({ value: true }));
-            exports.sleep = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.sleep = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -1565,31 +1503,25 @@ function parseToBoolean(value) {
     }
     return false;
 }
-
-            exports.parseToBoolean = parseToBoolean;
-
-            function checkIfPathExists(fileOrDirectoryPath) {
-                if (fileOrDirectoryPath && fs.existsSync(fileOrDirectoryPath.trim())) {
-                    return true;
-                }
-                return false;
-            }
-
-            exports.checkIfPathExists = checkIfPathExists;
-
-            function sleep(duration) {
-                return __awaiter(this, void 0, void 0, function* () {
-                    return new Promise(resolve => {
-                        setTimeout(resolve, duration);
-                    });
-                });
-            }
-
-            exports.sleep = sleep;
+exports.parseToBoolean = parseToBoolean;
+function checkIfPathExists(fileOrDirectoryPath) {
+    if (fileOrDirectoryPath && fs.existsSync(fileOrDirectoryPath.trim())) {
+        return true;
+    }
+    return false;
+}
+exports.checkIfPathExists = checkIfPathExists;
+function sleep(duration) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise(resolve => {
+            setTimeout(resolve, duration);
+        });
+    });
+}
+exports.sleep = sleep;
 
 
-            /***/
-        }),
+/***/ }),
 
 /***/ 8401:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
