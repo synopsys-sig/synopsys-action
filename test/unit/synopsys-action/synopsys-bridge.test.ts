@@ -7,6 +7,10 @@ import {Socket} from 'net'
 import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
 import * as inputs from '../../../src/synopsys-action/inputs'
 import * as constants from '../../../src/application-constants'
+import {run} from '../../../src/main'
+import {error} from '@actions/core'
+import * as downloadUtility from '../../../src/synopsys-action/download-utility'
+import {DownloadFileResponse, extractZipped} from '../../../src/synopsys-action/download-utility'
 
 const util = require('../../../src/synopsys-action/utility')
 
@@ -289,6 +293,24 @@ test('Test fetch version details from BRIDGE_DOWNLOAD_URL', () => {
   expect(response).rejects.toThrowError()
 })
 
+test('Test without version details from BRIDGE_DOWNLOAD_URL', () => {
+  const sb = new SynopsysBridge()
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-macosx.zip'})
+  const downloadFileResp: DownloadFileResponse = {filePath: '/user/temp/download/', fileName: 'C:/ser/temp/download/bridge-win.zip'}
+
+  jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  fs.existsSync = jest.fn()
+  fs.existsSync.mockReturnValueOnce(false)
+
+  try {
+    sb.downloadBridge('/working_directory')
+  } catch (error: any) {
+    expect(error.message).toContain('')
+  }
+})
 test('Test invalid path for SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', () => {
   const sb = new SynopsysBridge()
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test-dir'})
