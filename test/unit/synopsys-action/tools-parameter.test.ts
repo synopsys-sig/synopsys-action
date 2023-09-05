@@ -67,6 +67,21 @@ test('Test invalid data error in getFormattedCommandForPolaris', () => {
   }
 })
 
+test('Test getFormattedCommandForPolaris - prComment', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: true})
+  Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForPolaris()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage polaris')
+})
+
 test('Test getFormattedCommandForCoverity', () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
   Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
@@ -98,6 +113,7 @@ test('Enable Test getFormattedCommandForCoverity Airgap: SUCCESS', () => {
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
@@ -119,6 +135,7 @@ test('Enable Test getFormattedCommandForCoverity Airgap: EXCEPTION', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
@@ -141,6 +158,8 @@ test('Disable Test getFormattedCommandForCoverity Airgap', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   const resp = stp.getFormattedCommandForCoverity()
@@ -204,6 +223,7 @@ test('Test getFormattedCommandForCoverity - pr comment', () => {
   Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   let resp = stp.getFormattedCommandForCoverity()
@@ -294,6 +314,7 @@ test('Test getFormattedCommandForBlackduck', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   const resp = stp.getFormattedCommandForBlackduck()
@@ -309,6 +330,7 @@ test('Test getFormattedCommandForBlackduck - fix pr test cases', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_FIXPR', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   let resp = stp.getFormattedCommandForBlackduck()
@@ -372,6 +394,7 @@ test('Test getFormattedCommandForBlackduck - pr comment test cases', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
   Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   let resp = stp.getFormattedCommandForBlackduck()

@@ -32,7 +32,7 @@ inputs:
   coverity_branch_name:
     description: 'Branch name'
     required: false
-  coverity_local:
+  bridge_coverity_local:
     description: 'Flag to enable/disable to run coverity scan locally.'
     required: false
   polaris_accessToken:
@@ -50,9 +50,15 @@ inputs:
   polaris_serverUrl:
     description: 'Polaris Server URL'
     required: false
+  bridge_polaris_prComment_enabled:
+    description: 'Flag to enable pull request comments based on Polaris scan result'
+    required: false
+  bridge_polaris_prComment_severities:
+    description: 'List of severities for which the PR Comments should be created'
+    required: false
   bridge_polaris_triage:
     description: 'Polaris Triage'
-    required: false  
+    required: false
   synopsys_bridge_install_directory:
     description: 'Synopsys Bridge Install Directory'
     required: false

@@ -27,6 +27,10 @@ const fs = require('fs')
 mock('fs')
 
 beforeEach(() => {
+  Object.defineProperty(constants, 'RETRY_COUNT', {value: 3})
+  Object.defineProperty(constants, 'RETRY_DELAY_IN_MILLISECONDS', {value: 100})
+  Object.defineProperty(constants, 'NON_RETRY_HTTP_CODES', {value: new Set([200, 201, 401, 403, 416]), configurable: true})
+
   Object.defineProperty(process, 'platform', {
     value: process.platform
   })
@@ -172,7 +176,7 @@ test('Test validateBridgeVersion', async () => {
     readBody: jest.fn()
   }
   httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
-
+  httpResponse.message.statusCode = 200
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
   const sb = new SynopsysBridge()
