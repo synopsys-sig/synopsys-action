@@ -60,6 +60,27 @@ export class SynopsysToolsParameter {
       }
     }
 
+    if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+      info('Polaris PR comment is enabled')
+      const prCommentSeverities: string[] = []
+      const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES
+      if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
+        const severityValues = inputPrCommentSeverities.split(',')
+        for (const severity of severityValues) {
+          if (severity.trim()) {
+            prCommentSeverities.push(severity.trim())
+          }
+        }
+      }
+      polData.data.polaris.prComment = {
+        enabled: true,
+        severities: prCommentSeverities
+      }
+      polData.data.github = this.getGithubRepoInfo()
+    } else {
+      polData.data.polaris.prComment = {enabled: false}
+    }
+
     const inputJson = JSON.stringify(polData)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
@@ -244,12 +265,12 @@ export class SynopsysToolsParameter {
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
 
-    if (githubToken == null) {
+    if (githubToken == null || githubToken.length === 0) {
       throw new Error('Missing required github token for fix pull request/automation comment')
     }
 
-    if ((parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT)) && isNaN(Number(githubPrNumber))) {
-      throw new Error('Coverity/Blackduck automation PR comment can only be triggered on a pull request.')
+    if ((parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || parseToBoolean(inputs.COVERITY_AUTOMATION_PRCOMMENT) || parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
+      throw new Error('Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.')
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
