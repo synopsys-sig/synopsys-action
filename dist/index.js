@@ -537,6 +537,7 @@ class RetryHelper {
                     .concat(' Seconds'));
                 // Sleep
                 yield (0, utility_1.sleep)(this.retryDelay);
+                // Delayed exponentially starting from 15 seconds
                 this.retryDelay = this.retryDelay * 2;
                 attempt++;
             }
@@ -813,13 +814,7 @@ class SynopsysBridge {
                     Accept: 'text/html'
                 });
                 if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-                    (0, core_1.info)('Getting all available bridge versions has been failed, retries left: '
-                        .concat(String(retryCountLocal))
-                        .concat(', Waiting: ')
-                        .concat(String(retryDelay / 1000))
-                        .concat(' Seconds'));
-                    yield (0, utility_1.sleep)(retryDelay);
-                    retryDelay = retryDelay * 2;
+                    retryDelay = yield this.retrySleepHelper('Getting all available bridge versions has been failed, retries left: ', retryCountLocal, retryDelay);
                     retryCountLocal--;
                 }
                 else {
@@ -915,13 +910,7 @@ class SynopsysBridge {
                         Accept: 'text/html'
                     });
                     if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-                        (0, core_1.info)('Getting latest Synopsys Bridge versions has been failed, retries left: '
-                            .concat(String(retryCountLocal))
-                            .concat(', Waiting: ')
-                            .concat(String(retryDelay / 1000))
-                            .concat(' Seconds'));
-                        yield (0, utility_1.sleep)(retryDelay);
-                        retryDelay = retryDelay * 2;
+                        retryDelay = yield this.retrySleepHelper('Getting latest Synopsys Bridge versions has been failed, retries left: ', retryCountLocal, retryDelay);
                         retryCountLocal--;
                     }
                     else if (httpResponse.message.statusCode === 200) {
@@ -969,6 +958,19 @@ class SynopsysBridge {
             else if (process.platform === 'darwin' || process.platform === 'linux') {
                 this.bridgeExecutablePath = yield (0, io_util_1.tryGetExecutablePath)(this.synopsysBridgePath.concat('/synopsys-bridge'), []);
             }
+        });
+    }
+    retrySleepHelper(message, retryCountLocal, retryDelay) {
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)(message
+                .concat(String(retryCountLocal))
+                .concat(', Waiting: ')
+                .concat(String(retryDelay / 1000))
+                .concat(' Seconds'));
+            yield (0, utility_1.sleep)(retryDelay);
+            // Delayed exponentially starting from 15 seconds
+            retryDelay = retryDelay * 2;
+            return retryDelay;
         });
     }
 }

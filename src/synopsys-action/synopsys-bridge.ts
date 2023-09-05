@@ -223,15 +223,7 @@ export class SynopsysBridge {
       })
 
       if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-        info(
-          'Getting all available bridge versions has been failed, retries left: '
-            .concat(String(retryCountLocal))
-            .concat(', Waiting: ')
-            .concat(String(retryDelay / 1000))
-            .concat(' Seconds')
-        )
-        await sleep(retryDelay)
-        retryDelay = retryDelay * 2
+        retryDelay = await this.retrySleepHelper('Getting all available bridge versions has been failed, retries left: ', retryCountLocal, retryDelay)
         retryCountLocal--
       } else {
         retryCountLocal = 0
@@ -329,15 +321,7 @@ export class SynopsysBridge {
         })
 
         if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-          info(
-            'Getting latest Synopsys Bridge versions has been failed, retries left: '
-              .concat(String(retryCountLocal))
-              .concat(', Waiting: ')
-              .concat(String(retryDelay / 1000))
-              .concat(' Seconds')
-          )
-          await sleep(retryDelay)
-          retryDelay = retryDelay * 2
+          retryDelay = await this.retrySleepHelper('Getting latest Synopsys Bridge versions has been failed, retries left: ', retryCountLocal, retryDelay)
           retryCountLocal--
         } else if (httpResponse.message.statusCode === 200) {
           retryCountLocal = 0
@@ -380,5 +364,19 @@ export class SynopsysBridge {
     } else if (process.platform === 'darwin' || process.platform === 'linux') {
       this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('/synopsys-bridge'), [])
     }
+  }
+
+  private async retrySleepHelper(message: string, retryCountLocal: number, retryDelay: number): Promise<number> {
+    info(
+      message
+        .concat(String(retryCountLocal))
+        .concat(', Waiting: ')
+        .concat(String(retryDelay / 1000))
+        .concat(' Seconds')
+    )
+    await sleep(retryDelay)
+    // Delayed exponentially starting from 15 seconds
+    retryDelay = retryDelay * 2
+    return retryDelay
   }
 }

@@ -38,6 +38,7 @@ export class RetryHelper {
       )
       // Sleep
       await sleep(this.retryDelay)
+      // Delayed exponentially starting from 15 seconds
       this.retryDelay = this.retryDelay * 2
       attempt++
     }
