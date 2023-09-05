@@ -32,6 +32,7 @@ export const POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name'
 export const POLARIS_PROJECT_NAME_KEY = 'polaris_project_name'
 export const POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types'
 export const POLARIS_SERVER_URL_KEY = 'polaris_serverUrl'
+export const POLARIS_TRIAGE_KEY = 'bridge_polaris_triage'
 export const POLARIS_PRCOMMENT_ENABLED_KEY = 'bridge_polaris_prComment_enabled'
 export const POLARIS_PRCOMMENT_SEVERITIES_KEY = 'bridge_polaris_prComment_severities'
 

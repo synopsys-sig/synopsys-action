@@ -29,6 +29,8 @@ test('Test getFormattedCommandForPolaris', () => {
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
   Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: ' sca ,sast'})
+  Object.defineProperty(inputs, 'POLARIS_TRIAGE', {value: 'REQUIRED'})
+
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   const resp = stp.getFormattedCommandForPolaris()

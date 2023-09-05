@@ -56,6 +56,9 @@ inputs:
   bridge_polaris_prComment_severities:
     description: 'List of severities for which the PR Comments should be created'
     required: false
+  bridge_polaris_triage:
+    description: 'Polaris Triage'
+    required: false
   synopsys_bridge_install_directory:
     description: 'Synopsys Bridge Install Directory'
     required: false
@@ -103,7 +106,7 @@ inputs:
     required: false
   bridge_coverity_version:
     description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
-    required: false  
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
