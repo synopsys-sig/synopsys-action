@@ -102,16 +102,38 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
         return result;
       };
       var __awaiter = (this && this.__awaiter) || function(thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.logBridgeExitCodes = exports.run = void 0;
+        function adopt(value) {
+          return value instanceof P ? value : new P(function(resolve) {
+            resolve(value);
+          });
+        }
+
+        return new (P || (P = Promise))(function(resolve, reject) {
+          function fulfilled(value) {
+            try {
+              step(generator.next(value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+
+          function rejected(value) {
+            try {
+              step(generator["throw"](value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+
+          function step(result) {
+            result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          }
+
+          step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+      };
+      Object.defineProperty(exports, "__esModule", ({ value: true }));
+      exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
@@ -276,16 +298,16 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
       desc = { enumerable: true, get: function() { return m[k]; } };
     }
-    Object.defineProperty(o, k2, desc);
+  Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-  o["default"] = v;
-});
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+        o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function(mod) {
         if (mod && mod.__esModule) return mod;
         var result = {};
@@ -650,16 +672,33 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
         }
 
         return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
+          function fulfilled(value) {
+            try {
+              step(generator.next(value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+
+          function rejected(value) {
+            try {
+              step(generator["throw"](value));
+            } catch (e) {
+              reject(e);
+            }
+          }
+
+          function step(result) {
+            result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+          }
+
+          step((generator = generator.apply(thisArg, _arguments || [])).next());
+        });
+      };
+      var __importDefault = (this && this.__importDefault) || function(mod) {
+        return (mod && mod.__esModule) ? mod : { "default": mod };
+      };
+      Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.SynopsysBridge = void 0;
 const exec_1 = __nccwpck_require__(1514);
 const inputs_1 = __nccwpck_require__(7481);
@@ -1256,16 +1295,18 @@ class SynopsysBridge {
       const validators_1 = __nccwpck_require__(8401);
       const inputs = __importStar(__nccwpck_require__(7481));
       const blackduck_1 = __nccwpck_require__(6619);
-const constants = __importStar(__nccwpck_require__(9717));
-const utility_1 = __nccwpck_require__(7643);
-class SynopsysToolsParameter {
-    constructor(tempDir) {
-        this.tempDir = tempDir;
-    }
-    getFormattedCommandForPolaris() {
-        let command = '';
-        const assessmentTypeArray = [];
-        if (inputs.POLARIS_ASSESSMENT_TYPES) {
+      const constants = __importStar(__nccwpck_require__(9717));
+      const utility_1 = __nccwpck_require__(7643);
+
+      class SynopsysToolsParameter {
+        constructor(tempDir) {
+          this.tempDir = tempDir;
+        }
+
+        getFormattedCommandForPolaris() {
+          let command = "";
+          const assessmentTypeArray = [];
+          if (inputs.POLARIS_ASSESSMENT_TYPES) {
             // converting provided assessmentTypes to uppercase
             const assessmentTypes = inputs.POLARIS_ASSESSMENT_TYPES.toUpperCase().split(',');
             for (const assessmentType of assessmentTypes) {
@@ -1289,39 +1330,37 @@ class SynopsysToolsParameter {
                 }
             }
         };
-      (0, core_1.info)("triage".concat(inputs.POLARIS_TRIAGE));
-        if (inputs.POLARIS_TRIAGE) {
+          (0, core_1.info)("triage".concat(inputs.POLARIS_TRIAGE));
+          if (inputs.POLARIS_TRIAGE) {
             polData.data.polaris.triage = inputs.POLARIS_TRIAGE;
-        }
-      (0, core_1.info)("triage".concat(inputs.POLARIS_TRIAGE));
-        if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
-          (0, core_1.info)("Polaris PR comment is enabled");
-          const prCommentSeverities = [];
-          const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES;
-          if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
-            const severityValues = inputPrCommentSeverities.split(",");
-            for (const severity of severityValues) {
-              if (severity.trim()) {
-                prCommentSeverities.push(severity.trim());
+          }
+          if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+            const prCommentSeverities = [];
+            const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES;
+            if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
+              const severityValues = inputPrCommentSeverities.split(",");
+              for (const severity of severityValues) {
+                if (severity.trim()) {
+                  prCommentSeverities.push(severity.trim());
+                }
               }
             }
+            polData.data.polaris.prComment = {
+              enabled: true,
+              severities: prCommentSeverities
+            };
+            polData.data.github = this.getGithubRepoInfo();
+          } else {
+            polData.data.polaris.prComment = { enabled: false };
           }
-          polData.data.polaris.prComment = {
-            enabled: true,
-            severities: prCommentSeverities
-          };
-          polData.data.github = this.getGithubRepoInfo();
-        } else {
-          polData.data.polaris.prComment = { enabled: false };
+          const inputJson = JSON.stringify(polData);
+          const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
+          fs.writeFileSync(stateFilePath, inputJson);
+          (0, core_1.debug)("Generated state json file at - ".concat(stateFilePath));
+          (0, core_1.debug)("Generated state json file content is - ".concat(inputJson));
+          command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+          return command;
         }
-      const inputJson = JSON.stringify(polData);
-      const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
-      fs.writeFileSync(stateFilePath, inputJson);
-      (0, core_1.debug)("Generated state json file at - ".concat(stateFilePath));
-      (0, core_1.debug)("Generated state json file content is - ".concat(inputJson));
-      command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
-      return command;
-    }
     getFormattedCommandForCoverity() {
         let command = '';
         const covData = {
@@ -1541,16 +1580,16 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
     if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
       desc = { enumerable: true, get: function() { return m[k]; } };
     }
-    Object.defineProperty(o, k2, desc);
+  Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
+  if (k2 === undefined) k2 = k;
+  o[k2] = m[k];
 }));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-  o["default"] = v;
-});
+      var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+        Object.defineProperty(o, "default", { enumerable: true, value: v });
+      }) : function(o, v) {
+        o["default"] = v;
+      });
       var __importStar = (this && this.__importStar) || function(mod) {
         if (mod && mod.__esModule) return mod;
         var result = {};
@@ -1700,16 +1739,17 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
         return result;
       };
       Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBridgeUrl = exports.isNullOrEmpty = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateScanTypes = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
-const fs = __importStar(__nccwpck_require__(5747));
-const core_1 = __nccwpck_require__(2186);
-const constants = __importStar(__nccwpck_require__(9717));
-const inputs = __importStar(__nccwpck_require__(7481));
-function validateCoverityInstallDirectoryParam(installDir) {
-    if (installDir == null || installDir.length === 0) {
-        (0, core_1.error)(`[${constants.COVERITY_INSTALL_DIRECTORY_KEY}] parameter for Coverity is missing`);
-        return false;
-    }
+      exports.validateBridgeUrl = exports.isNullOrEmpty = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateScanTypes = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
+      const fs = __importStar(__nccwpck_require__(5747));
+      const core_1 = __nccwpck_require__(2186);
+      const constants = __importStar(__nccwpck_require__(9717));
+      const inputs = __importStar(__nccwpck_require__(7481));
+
+      function validateCoverityInstallDirectoryParam(installDir) {
+        if (installDir == null || installDir.length === 0) {
+          (0, core_1.error)(`[${constants.COVERITY_INSTALL_DIRECTORY_KEY}] parameter for Coverity is missing`);
+          return false;
+        }
     if (!fs.existsSync(installDir)) {
         (0, core_1.error)(`[${constants.COVERITY_INSTALL_DIRECTORY_KEY}] parameter for Coverity is invalid`);
         return false;

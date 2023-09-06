@@ -60,9 +60,8 @@ export class SynopsysToolsParameter {
     if (inputs.POLARIS_TRIAGE) {
       polData.data.polaris.triage = inputs.POLARIS_TRIAGE
     }
-    info('triage'.concat(inputs.POLARIS_TRIAGE))
+
     if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
-      info('Polaris PR comment is enabled')
       const prCommentSeverities: string[] = []
       const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES
       if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
