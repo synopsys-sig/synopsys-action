@@ -223,7 +223,7 @@ export class SynopsysBridge {
       })
 
       if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-        retryDelay = await this.retrySleepHelper('Getting all available bridge versions has been failed, retries left: ', retryCountLocal, retryDelay)
+        retryDelay = await this.retrySleepHelper('Getting all available bridge versions has been failed, Retries left: ', retryCountLocal, retryDelay)
         retryCountLocal--
       } else {
         retryCountLocal = 0
@@ -321,7 +321,7 @@ export class SynopsysBridge {
         })
 
         if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-          retryDelay = await this.retrySleepHelper('Getting latest Synopsys Bridge versions has been failed, retries left: ', retryCountLocal, retryDelay)
+          retryDelay = await this.retrySleepHelper('Getting latest Synopsys Bridge versions has been failed, Retries left: ', retryCountLocal, retryDelay)
           retryCountLocal--
         } else if (httpResponse.message.statusCode === 200) {
           retryCountLocal = 0

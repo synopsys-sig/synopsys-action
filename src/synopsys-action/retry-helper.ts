@@ -30,7 +30,7 @@ export class RetryHelper {
       }
 
       core.info(
-        'Synopsys bridge download has been failed, retries left: '
+        'Synopsys Bridge download has been failed, Retries left: '
           .concat(String(this.maxAttempts - attempt + 1))
           .concat(', Waiting: ')
           .concat(String(this.retryDelay / 1000))

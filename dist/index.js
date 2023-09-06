@@ -532,7 +532,7 @@ class RetryHelper {
                     }
                     core.info(err.message);
                 }
-                core.info('Synopsys bridge download has been failed, retries left: '
+                core.info('Synopsys Bridge download has been failed, Retries left: '
                     .concat(String(this.maxAttempts - attempt + 1))
                     .concat(', Waiting: ')
                     .concat(String(this.retryDelay / 1000))
@@ -816,7 +816,7 @@ class SynopsysBridge {
                     Accept: 'text/html'
                 });
                 if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-                    retryDelay = yield this.retrySleepHelper('Getting all available bridge versions has been failed, retries left: ', retryCountLocal, retryDelay);
+                    retryDelay = yield this.retrySleepHelper('Getting all available bridge versions has been failed, Retries left: ', retryCountLocal, retryDelay);
                     retryCountLocal--;
                 }
                 else {
@@ -912,7 +912,7 @@ class SynopsysBridge {
                         Accept: 'text/html'
                     });
                     if (!application_constants_1.NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-                        retryDelay = yield this.retrySleepHelper('Getting latest Synopsys Bridge versions has been failed, retries left: ', retryCountLocal, retryDelay);
+                        retryDelay = yield this.retrySleepHelper('Getting latest Synopsys Bridge versions has been failed, Retries left: ', retryCountLocal, retryDelay);
                         retryCountLocal--;
                     }
                     else if (httpResponse.message.statusCode === 200) {
