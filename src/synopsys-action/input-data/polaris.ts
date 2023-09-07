@@ -11,6 +11,7 @@ export interface PolarisData {
   serverUrl: string
   application: {name: string}
   project: {name: string}
+  branch: Branch
   assessment: {types: string[]}
   prComment?: PrComment
 }
@@ -18,4 +19,9 @@ export interface PolarisData {
 export interface PrComment {
   enabled?: boolean
   severities?: string[]
+}
+
+export interface Branch {
+  name?: string
+  parent: {name?: string}
 }

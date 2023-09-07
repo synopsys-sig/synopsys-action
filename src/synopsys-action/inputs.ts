@@ -17,6 +17,8 @@ export const POLARIS_SERVER_URL = getInput(constants.POLARIS_SERVER_URL_KEY)?.tr
 export const POLARIS_TRIAGE = getInput(constants.POLARIS_TRIAGE_KEY)?.trim() || ''
 export const POLARIS_PRCOMMENT_ENABLED = getInput(constants.POLARIS_PRCOMMENT_ENABLED_KEY)?.trim() || ''
 export const POLARIS_PRCOMMENT_SEVERITIES = getInput(constants.POLARIS_PRCOMMENT_SEVERITIES_KEY)?.trim() || ''
+export const POLARIS_BRANCH_NAME = getInput(constants.POLARIS_BRANCH_NAME_KEY)?.trim() || ''
+export const POLARIS_PARENT_BRANCH_NAME = getInput(constants.POLARIS_BRANCH_PARENT_NAME_KEY)?.trim() || ''
 
 // Coverity related inputs
 export const COVERITY_URL = getInput(constants.COVERITY_URL_KEY)?.trim() || ''

@@ -35,6 +35,8 @@ export const POLARIS_SERVER_URL_KEY = 'polaris_serverUrl'
 export const POLARIS_TRIAGE_KEY = 'bridge_polaris_triage'
 export const POLARIS_PRCOMMENT_ENABLED_KEY = 'bridge_polaris_prComment_enabled'
 export const POLARIS_PRCOMMENT_SEVERITIES_KEY = 'bridge_polaris_prComment_severities'
+export const POLARIS_BRANCH_NAME_KEY = 'bridge_polaris_branch_name'
+export const POLARIS_BRANCH_PARENT_NAME_KEY = 'bridge_polaris_branch_parent_name'
 
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'
