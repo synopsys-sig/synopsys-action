@@ -213,7 +213,8 @@ export class SynopsysBridge {
     let htmlResponse = ''
     const httpClient = new HttpClient('synopsys-task')
 
-    let retryCount = RETRY_COUNT
+    let retryCountLocal = RETRY_COUNT
+    let retryDelay = RETRY_DELAY_IN_MILLISECONDS
     let httpResponse
     const versionArray: string[] = []
     do {
@@ -222,11 +223,10 @@ export class SynopsysBridge {
       })
 
       if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-        await sleep(RETRY_DELAY_IN_MILLISECONDS)
-        retryCount--
-        info('Getting all available bridge versions has been failed, retries left: '.concat(String(retryCount + 1)))
+        retryDelay = await this.retrySleepHelper('Getting all available bridge versions has been failed, Retries left: ', retryCountLocal, retryDelay)
+        retryCountLocal--
       } else {
-        retryCount = 0
+        retryCountLocal = 0
         htmlResponse = await httpResponse.readBody()
 
         const domParser = new DomParser()
@@ -247,10 +247,10 @@ export class SynopsysBridge {
         }
       }
 
-      if (retryCount === 0) {
+      if (retryCountLocal === 0) {
         warning('Unable to retrieve the Synopsys Bridge Versions from Artifactory')
       }
-    } while (retryCount > 0)
+    } while (retryCountLocal > 0)
     return versionArray
   }
 
@@ -312,7 +312,8 @@ export class SynopsysBridge {
     try {
       const httpClient = new HttpClient('')
 
-      let retryCount = RETRY_COUNT
+      let retryCountLocal = RETRY_COUNT
+      let retryDelay = RETRY_DELAY_IN_MILLISECONDS
       let httpResponse
       do {
         httpResponse = await httpClient.get(latestVersionsUrl, {
@@ -320,11 +321,10 @@ export class SynopsysBridge {
         })
 
         if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-          await sleep(RETRY_DELAY_IN_MILLISECONDS)
-          retryCount--
-          info('Getting latest Synopsys Bridge versions has been failed, retries left: '.concat(String(retryCount + 1)))
+          retryDelay = await this.retrySleepHelper('Getting latest Synopsys Bridge versions has been failed, Retries left: ', retryCountLocal, retryDelay)
+          retryCountLocal--
         } else if (httpResponse.message.statusCode === 200) {
-          retryCount = 0
+          retryCountLocal = 0
           const htmlResponse = (await httpResponse.readBody()).trim()
           const lines = htmlResponse.split('\n')
           for (const line of lines) {
@@ -334,10 +334,10 @@ export class SynopsysBridge {
           }
         }
 
-        if (retryCount === 0) {
+        if (retryCountLocal === 0) {
           warning('Unable to retrieve the most recent version from Artifactory URL')
         }
-      } while (retryCount > 0)
+      } while (retryCountLocal > 0)
     } catch (e) {
       debug('Error reading version file content: '.concat((e as Error).message))
     }
@@ -364,5 +364,19 @@ export class SynopsysBridge {
     } else if (process.platform === 'darwin' || process.platform === 'linux') {
       this.bridgeExecutablePath = await tryGetExecutablePath(this.synopsysBridgePath.concat('/synopsys-bridge'), [])
     }
+  }
+
+  private async retrySleepHelper(message: string, retryCountLocal: number, retryDelay: number): Promise<number> {
+    info(
+      message
+        .concat(String(retryCountLocal))
+        .concat(', Waiting: ')
+        .concat(String(retryDelay / 1000))
+        .concat(' Seconds')
+    )
+    await sleep(retryDelay)
+    // Delayed exponentially starting from 15 seconds
+    retryDelay = retryDelay * 2
+    return retryDelay
   }
 }
