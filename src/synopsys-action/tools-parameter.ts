@@ -52,13 +52,20 @@ export class SynopsysToolsParameter {
           serverUrl: inputs.POLARIS_SERVER_URL,
           application: {name: inputs.POLARIS_APPLICATION_NAME},
           project: {name: inputs.POLARIS_PROJECT_NAME},
-          assessment: {types: assessmentTypeArray}
+          assessment: {types: assessmentTypeArray},
+          branch: {parent: {}}
         }
       }
     }
 
     if (inputs.POLARIS_TRIAGE) {
       polData.data.polaris.triage = inputs.POLARIS_TRIAGE
+    }
+    if (inputs.POLARIS_BRANCH_NAME) {
+      polData.data.polaris.branch.name = inputs.POLARIS_BRANCH_NAME
+    }
+    if (inputs.POLARIS_PARENT_BRANCH_NAME) {
+      polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME
     }
     if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
       info('Polaris PR comment is enabled')
