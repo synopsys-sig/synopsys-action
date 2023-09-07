@@ -7,12 +7,12 @@ Synopsys Action leverages Synopsys Bridge, a foundational piece of technology th
 
 To use Synopsys Action, please follow the steps below:
 
-1. Configure GitHub as described in the [GitHub Prerequisites](https://doc.sig-pages.synopsys.com/bridge/develop/documentation/c_github-prerequisites.html) page.
+1. Configure GitHub as described in the [GitHub Prerequisites](https://sig-product-docs.synopsys.com/bundle/bridge/page/documentation/c_github-prerequisites.html) page.
 2. Install and configure Synopsys Action for the Synopsys product you are using. <br/>
-[Polaris](https://doc.sig-pages.synopsys.com/bridge/develop/documentation/c_github-polaris.html) <br/>
-[Black Duck](https://doc.sig-pages.synopsys.com/bridge/develop/documentation/c_github-blackduck.html)  <br/>
-[Coverity](https://doc.sig-pages.synopsys.com/bridge/develop/documentation/c_github-coverity.html) <br/>
-3. For additional configuration options, visit the [Additional GitHub Configuration](https://doc.sig-pages.synopsys.com/bridge/develop/documentation/c_additional-github-parameters.html) page.
+[Polaris](https://sig-product-docs.synopsys.com/bundle/bridge/page/documentation/c_github-polaris.html) <br/>
+[Black Duck](https://sig-product-docs.synopsys.com/bundle/bridge/page/documentation/c_github-blackduck.html)  <br/>
+[Coverity](https://sig-product-docs.synopsys.com/bundle/bridge/page/documentation/c_github-coverity.html) <br/>
+3. For additional configuration options, visit the [Additional GitHub Configuration](https://sig-product-docs.synopsys.com/bundle/bridge/page/documentation/c_additional-github-parameters.html) page.
 
 As an alternative to Synopsys Action, you also have the option to use Synopsys Bridge CLI. <br/>
 Detailed documentation for Synopsys Bridge CLI can be found [here](https://sig-product-docs.synopsys.com/bundle/bridge/page/bridge_1.html).
