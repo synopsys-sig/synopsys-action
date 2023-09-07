@@ -60,6 +60,6 @@ export let EXIT_CODE_MAP = new Map<string, string>([
   ['9', 'Bridge initialization failed']
 ])
 
-export const RETRY_DELAY_IN_MILLISECONDS = 10000
+export const RETRY_DELAY_IN_MILLISECONDS = 15000
 export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])

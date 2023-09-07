@@ -6,13 +6,14 @@ let info: string[]
 let retryHelper: RetryHelper
 
 describe('retry-helper tests', () => {
+  jest.setTimeout(12000)
   beforeAll(() => {
     // Mock @actions/core info()
     jest.spyOn(core, 'info').mockImplementation((message: string) => {
       info.push(message)
     })
 
-    retryHelper = new RetryHelper(3)
+    retryHelper = new RetryHelper(3, 100)
 
     Object.defineProperty(constants, 'RETRY_COUNT', {value: 3})
     Object.defineProperty(constants, 'RETRY_DELAY_IN_MILLISECONDS', {value: 100})
@@ -50,7 +51,7 @@ describe('retry-helper tests', () => {
     expect(actual).toBe('some result')
     expect(info).toHaveLength(2)
     expect(info[0]).toBe('some error')
-    expect(info[1]).toMatch(/Synopsys bridge download has been failed, retries left: .+/)
+    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
   })
 
   it('third attempt succeeds', async () => {
@@ -66,9 +67,9 @@ describe('retry-helper tests', () => {
     expect(actual).toBe('some result')
     expect(info).toHaveLength(4)
     expect(info[0]).toBe('some error 1')
-    expect(info[1]).toMatch(/Synopsys bridge download has been failed, retries left: .+/)
+    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
     expect(info[2]).toBe('some error 2')
-    expect(info[3]).toMatch(/Synopsys bridge download has been failed, retries left: .+/)
+    expect(info[3]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
   })
 
   it('all attempts fail', async () => {
@@ -85,9 +86,9 @@ describe('retry-helper tests', () => {
     expect(attempts).toBe(4)
     expect(info).toHaveLength(6)
     expect(info[0]).toBe('some error 1')
-    expect(info[1]).toMatch(/Synopsys bridge download has been failed, retries left: .+/)
+    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
     expect(info[2]).toBe('some error 2')
-    expect(info[3]).toMatch(/Synopsys bridge download has been failed, retries left: .+/)
+    expect(info[3]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
   })
 
   it('checks retryable after first attempt', async () => {
@@ -125,6 +126,6 @@ describe('retry-helper tests', () => {
     expect(attempts).toBe(2)
     expect(info).toHaveLength(2)
     expect(info[0]).toBe('some error 1')
-    expect(info[1]).toMatch(/Synopsys bridge download has been failed, retries left: .+/)
+    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
   })
 })
