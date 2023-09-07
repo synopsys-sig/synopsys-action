@@ -435,7 +435,7 @@ exports.POLARIS_APPLICATION_NAME = ((_f = (0, core_1.getInput)(constants.POLARIS
 exports.POLARIS_PROJECT_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
 exports.POLARIS_ASSESSMENT_TYPES = ((_h = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
 exports.POLARIS_SERVER_URL = ((_j = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
-exports.POLARIS_TRIAGE = ((_k = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
+exports.POLARIS_TRIAGE = ((_k = (0, core_1.getInput)(constants.POLARIS_TRIAGE_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
 exports.POLARIS_PRCOMMENT_ENABLED = ((_l = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_ENABLED_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
 exports.POLARIS_PRCOMMENT_SEVERITIES = ((_m = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_SEVERITIES_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || '';
 // Coverity related inputs
