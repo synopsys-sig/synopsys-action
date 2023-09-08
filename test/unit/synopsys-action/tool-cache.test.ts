@@ -1,7 +1,6 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as io from '@actions/io'
-import * as exec from '@actions/exec'
 import * as stream from 'stream'
 import nock from 'nock'
 
@@ -15,9 +14,7 @@ process.env['RUNNER_TOOL_CACHE'] = cachePath
 import * as tc from '../../../src/synopsys-action/tool-cache-local'
 import * as constants from '../../../src/application-constants'
 
-const IS_WINDOWS = process.platform === 'win32'
-const IS_MAC = process.platform === 'darwin'
-
+jest.unmock('nock');
 describe('@actions/tool-cache', function () {
   beforeAll(function () {
     nock('http://example.com').persist().get('/bytes/35').reply(200, {
