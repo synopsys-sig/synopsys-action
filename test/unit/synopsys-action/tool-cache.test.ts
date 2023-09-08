@@ -14,7 +14,6 @@ process.env['RUNNER_TOOL_CACHE'] = cachePath
 import * as tc from '../../../src/synopsys-action/tool-cache-local'
 import * as constants from '../../../src/application-constants'
 
-jest.unmock('nock');
 describe('@actions/tool-cache', function () {
   beforeAll(function () {
     nock('http://example.com').persist().get('/bytes/35').reply(200, {
@@ -28,10 +27,10 @@ describe('@actions/tool-cache', function () {
   })
 
   beforeEach(async function () {
-    await io.rmRF(cachePath)
+    /*await io.rmRF(cachePath)
     await io.rmRF(tempPath)
     await io.mkdirP(cachePath)
-    await io.mkdirP(tempPath)
+    await io.mkdirP(tempPath)*/
   })
 
   afterEach(function () {
@@ -39,10 +38,8 @@ describe('@actions/tool-cache', function () {
   })
 
   afterAll(async function () {
-    await io.rmRF(tempPath)
-    await io.rmRF(cachePath)
-    setGlobal('TEST_DOWNLOAD_TOOL_RETRY_MIN_SECONDS', undefined)
-    setGlobal('TEST_DOWNLOAD_TOOL_RETRY_MAX_SECONDS', undefined)
+    /* await io.rmRF(tempPath)
+    await io.rmRF(cachePath)*/
   })
 
   it('downloads a 35 byte file', async () => {
