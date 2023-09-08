@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as io from '@actions/io'
+import * as exec from '@actions/exec'
 import * as stream from 'stream'
 import nock from 'nock'
 
@@ -13,6 +14,9 @@ process.env['RUNNER_TOOL_CACHE'] = cachePath
 // eslint-disable-next-line import/first
 import * as tc from '../../../src/synopsys-action/tool-cache-local'
 import * as constants from '../../../src/application-constants'
+
+const IS_WINDOWS = process.platform === 'win32'
+const IS_MAC = process.platform === 'darwin'
 
 describe('@actions/tool-cache', function () {
   beforeAll(function () {
@@ -27,10 +31,10 @@ describe('@actions/tool-cache', function () {
   })
 
   beforeEach(async function () {
-    /*await io.rmRF(cachePath)
+    await io.rmRF(cachePath)
     await io.rmRF(tempPath)
     await io.mkdirP(cachePath)
-    await io.mkdirP(tempPath)*/
+    await io.mkdirP(tempPath)
   })
 
   afterEach(function () {
@@ -38,8 +42,10 @@ describe('@actions/tool-cache', function () {
   })
 
   afterAll(async function () {
-    /* await io.rmRF(tempPath)
-    await io.rmRF(cachePath)*/
+    await io.rmRF(tempPath)
+    await io.rmRF(cachePath)
+    setGlobal('TEST_DOWNLOAD_TOOL_RETRY_MIN_SECONDS', undefined)
+    setGlobal('TEST_DOWNLOAD_TOOL_RETRY_MAX_SECONDS', undefined)
   })
 
   it('downloads a 35 byte file', async () => {
