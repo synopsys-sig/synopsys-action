@@ -4,6 +4,7 @@ import {error, info} from '@actions/core'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
 import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
+import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
 import * as io from '@actions/io'
 import * as utility from '../../src/synopsys-action/utility'
 
@@ -113,6 +114,7 @@ describe('Coverity flow contract', () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockCoverityParamsExcept(['NONE'])
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValueOnce(false)
     setAllMocks()
 
     try {
@@ -185,7 +187,7 @@ export function setAllMocks() {
   let coverity: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
   jest.spyOn(validator, 'validateCoverityInputs').mockReturnValueOnce(coverity)
-  jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
+  jest.spyOn(toolCacheLocal, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')
   jest.spyOn(validator, 'validateBridgeUrl').mockReturnValue(true)
