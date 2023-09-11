@@ -2,7 +2,7 @@ import mock = jest.mock
 import {extractZipped, getRemoteFile} from '../../../src/synopsys-action/download-utility'
 import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utility'
 import {tmpdir} from 'os'
-
+import * as constants from '../../../src/application-constants'
 const path = require('path')
 mock('path')
 
@@ -19,6 +19,9 @@ beforeEach(() => {
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
   })
+  Object.defineProperty(constants, 'RETRY_COUNT', {value: 3})
+  Object.defineProperty(constants, 'RETRY_DELAY_IN_MILLISECONDS', {value: 100})
+  Object.defineProperty(constants, 'NON_RETRY_HTTP_CODES', {value: new Set([200, 201, 401, 403, 416]), configurable: true})
 })
 
 test('Test getRemoteFile', () => {
