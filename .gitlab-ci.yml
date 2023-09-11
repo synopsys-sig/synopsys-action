@@ -42,15 +42,13 @@ contract_test_job:
   extends:
     - .contract_tests
   stage: build
+  tags:
+    - linux
 
 code_coverage_job:
   stage: coverage_report
   extends:
     -  .code_coverage
-
-job:
-  tags:
-    - linux
 
 #check_dist_job:
 #  extends:
