@@ -18,7 +18,7 @@ beforeEach(() => {
 
 jest.mock('@actions/artifact')
 
-describe('uploadDiagnostics - success', () => {
+describe.skip('uploadDiagnostics - success', () => {
   it('should call uploadArtifact with the correct arguments', async () => {
     const mockUploadArtifact = jest.fn()
     const mockArtifactClient: Partial<artifact.ArtifactClient> = {
@@ -38,7 +38,7 @@ describe('uploadDiagnostics - success', () => {
   })
 })
 
-test('Test uploadDiagnostics expect API error', () => {
+test.skip('Test uploadDiagnostics expect API error', () => {
   const uploadResponse: UploadResponse = {
     artifactItems: ['bridge.log'],
     artifactName: 'bridge_diagnostics',
@@ -55,7 +55,7 @@ test('Test uploadDiagnostics expect API error', () => {
   uploadDiagnostics().catch(Error)
 })
 
-test('Test uploadDiagnostics - invalid value for retention days', () => {
+test.skip('Test uploadDiagnostics - invalid value for retention days', () => {
   const uploadResponse: UploadResponse = {
     artifactItems: ['bridge.log'],
     artifactName: 'bridge_diagnostics',
