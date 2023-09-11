@@ -4,7 +4,6 @@ import {error, info} from '@actions/core'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
 import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
-import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
 import * as io from '@actions/io'
 import * as utility from '../../src/synopsys-action/utility'
 
@@ -185,7 +184,7 @@ export function setAllMocks() {
   let blackduck: string[] = []
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
   jest.spyOn(validator, 'validateBlackDuckInputs').mockReturnValueOnce(blackduck)
-  jest.spyOn(toolCacheLocal, 'downloadTool').mockResolvedValueOnce(__dirname)
+  jest.spyOn(toolCache, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()
   jest.spyOn(toolCache, 'extractZip').mockResolvedValueOnce('Extracted')
   jest.spyOn(validator, 'validateBridgeUrl').mockReturnValue(true)
