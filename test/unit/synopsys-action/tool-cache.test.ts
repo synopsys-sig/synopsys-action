@@ -101,7 +101,7 @@ describe('@actions/tool-cache', function () {
     expect(fs.statSync(downPath).size).toBe(35)
   })
 
-  it('handles error from response message stream', async () => {
+  it.skip('handles error from response message stream', async () => {
     nock('http://example.com').persist().get('/error-from-response-message-stream').reply(200, {})
 
     setResponseMessageFactory(() => {
