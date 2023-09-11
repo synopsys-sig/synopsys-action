@@ -48,6 +48,10 @@ code_coverage_job:
   extends:
     -  .code_coverage
 
+job:
+  tags:
+    - linux
+
 #check_dist_job:
 #  extends:
 #    - .check_dist
