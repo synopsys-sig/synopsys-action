@@ -234,12 +234,3 @@ function setGlobal<T>(key: string, value: T | undefined): void {
     g[key] = value
   }
 }
-
-function removePWSHFromPath(pathEnv: string | undefined): string {
-  return (pathEnv || '')
-    .split(';')
-    .filter(segment => {
-      return !segment.startsWith(`C:\\Program Files\\PowerShell`)
-    })
-    .join(';')
-}
