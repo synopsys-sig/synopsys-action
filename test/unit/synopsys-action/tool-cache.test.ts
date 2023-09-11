@@ -1,21 +1,13 @@
 import * as fs from 'fs'
 import * as path from 'path'
-import * as io from '@actions/io'
-import * as exec from '@actions/exec'
 import * as stream from 'stream'
 import nock from 'nock'
-
-const cachePath = path.join(__dirname, 'CACHE')
-const tempPath = path.join(__dirname, 'TEMP')
-// Set temp and tool directories before importing (used to set global state)
-process.env['RUNNER_TEMP'] = tempPath
-process.env['RUNNER_TOOL_CACHE'] = cachePath
 
 // eslint-disable-next-line import/first
 import * as tc from '../../../src/synopsys-action/tool-cache-local'
 import * as constants from '../../../src/application-constants'
 
-describe('@actions/tool-cache',  function () {
+describe('@actions/tool-cache', function () {
   beforeAll(async function () {
     nock('http://example.com').persist().get('/bytes/35').reply(200, {
       username: 'abc',
@@ -27,18 +19,8 @@ describe('@actions/tool-cache',  function () {
     Object.defineProperty(constants, 'NON_RETRY_HTTP_CODES', {value: new Set([200, 201, 401, 403, 416]), configurable: true})
   })
 
-  beforeEach(async function () {
-    await io.mkdirP(cachePath)
-    await io.mkdirP(tempPath)
-  })
-
   afterEach(function () {
     setResponseMessageFactory(undefined)
-  })
-
-  afterAll(async function () {
-    await io.rmRF(tempPath)
-    await io.rmRF(cachePath)
   })
 
   it('downloads a 35 byte file', async () => {
