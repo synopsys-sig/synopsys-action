@@ -43,7 +43,7 @@ contract_test_job:
     - .contract_tests
   stage: build
   tags:
-    - linux
+    - linux64-docker
 
 code_coverage_job:
   stage: coverage_report
