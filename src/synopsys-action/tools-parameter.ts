@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import {debug, info} from '@actions/core'
-import {validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam} from './validators'
+import {isNullOrEmptyValue, validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam} from './validators'
 import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
@@ -271,7 +271,7 @@ export class SynopsysToolsParameter {
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
 
-    if (githubToken == null || githubToken.length === 0) {
+    if (isNullOrEmptyValue(githubToken)) {
       throw new Error('Missing required github token for fix pull request/automation comment')
     }
 

@@ -89,6 +89,10 @@ export function isNullOrEmpty(params: Map<string, string>): string[] {
   return invalidParams
 }
 
+export function isNullOrEmptyValue(param: string): boolean {
+  return param == null || param.length === 0
+}
+
 export function validateBridgeUrl(url: string): boolean {
   if (!url.match('.*\\.(zip|ZIP)$')) {
     return false

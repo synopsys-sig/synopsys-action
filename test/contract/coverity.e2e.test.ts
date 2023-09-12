@@ -114,6 +114,7 @@ describe('Coverity flow contract', () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockCoverityParamsExcept(['NONE'])
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValueOnce(false)
     setAllMocks()
 
     try {

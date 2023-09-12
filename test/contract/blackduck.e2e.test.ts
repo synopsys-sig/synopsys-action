@@ -98,6 +98,7 @@ describe('Blackduck flow contract', () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValue(false)
     setAllMocks()
 
     try {
