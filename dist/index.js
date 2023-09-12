@@ -1402,7 +1402,7 @@ class SynopsysToolsParameter {
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
         const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
-        if (githubToken == null || githubToken.length === 0) {
+        if ((0, validators_1.isNullOrEmptyValue)(githubToken)) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
         if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.COVERITY_AUTOMATION_PRCOMMENT) || (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
@@ -1585,7 +1585,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBridgeUrl = exports.isNullOrEmpty = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateScanTypes = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
+exports.validateBridgeUrl = exports.isNullOrEmptyValue = exports.isNullOrEmpty = exports.validateParameters = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateScanTypes = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
@@ -1676,6 +1676,10 @@ function isNullOrEmpty(params) {
     return invalidParams;
 }
 exports.isNullOrEmpty = isNullOrEmpty;
+function isNullOrEmptyValue(param) {
+    return param == null || param.length === 0;
+}
+exports.isNullOrEmptyValue = isNullOrEmptyValue;
 function validateBridgeUrl(url) {
     if (!url.match('.*\\.(zip|ZIP)$')) {
         return false;

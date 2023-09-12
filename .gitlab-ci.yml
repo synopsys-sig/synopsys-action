@@ -42,8 +42,6 @@ contract_test_job:
   extends:
     - .contract_tests
   stage: build
-  tags:
-    - linux64-docker
 
 code_coverage_job:
   stage: coverage_report
