@@ -262,7 +262,7 @@ export class SynopsysToolsParameter {
     const githubToken = inputs.GITHUB_TOKEN
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
+    const githubBranchName = parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? '' : process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
     const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
     const githubAPIURL = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL]
 
