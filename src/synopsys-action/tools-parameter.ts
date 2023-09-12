@@ -261,15 +261,22 @@ export class SynopsysToolsParameter {
   private getGithubRepoInfo(): GithubData | undefined {
     const githubToken = inputs.GITHUB_TOKEN
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
+    info('githubRepo - '.concat(githubRepo !== undefined ? githubRepo : ''))
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? '' : process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
+    info('githubRepoName - '.concat(githubRepoName !== undefined ? githubRepoName : ''))
+    const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
+    info('githubBranchName - '.concat(githubBranchName !== undefined ? githubBranchName : ''))
     const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
+    info('githubRef - '.concat(githubRef !== undefined ? githubRef : ''))
     const githubAPIURL = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL]
+    info('githubAPIURL - '.concat(githubAPIURL !== undefined ? githubAPIURL : ''))
 
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
+    info('githubPrNumber - '.concat(githubPrNumber !== undefined ? githubPrNumber.toString() : ''))
     const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
+    info('githubRepoOwner - '.concat(githubRepoOwner !== undefined ? githubRepoOwner.toString() : ''))
 
     if (isNullOrEmptyValue(githubToken)) {
       throw new Error('Missing required github token for fix pull request/automation comment')
