@@ -1397,7 +1397,7 @@ class SynopsysToolsParameter {
         (0, core_1.info)('githubRepo - '.concat(githubRepo !== undefined ? githubRepo : ''));
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
         (0, core_1.info)('githubRepoName - '.concat(githubRepoName !== undefined ? githubRepoName : ''));
-        const githubBranchName = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
+        const githubBranchName = (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
         (0, core_1.info)('githubBranchName - '.concat(githubBranchName !== undefined ? githubBranchName : ''));
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
         (0, core_1.info)('githubRef - '.concat(githubRef !== undefined ? githubRef : ''));

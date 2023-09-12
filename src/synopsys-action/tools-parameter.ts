@@ -264,7 +264,7 @@ export class SynopsysToolsParameter {
     info('githubRepo - '.concat(githubRepo !== undefined ? githubRepo : ''))
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
     info('githubRepoName - '.concat(githubRepoName !== undefined ? githubRepoName : ''))
-    const githubBranchName = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
+    const githubBranchName = parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
     info('githubBranchName - '.concat(githubBranchName !== undefined ? githubBranchName : ''))
     const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
     info('githubRef - '.concat(githubRef !== undefined ? githubRef : ''))
