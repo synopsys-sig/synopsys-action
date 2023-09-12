@@ -1394,21 +1394,14 @@ class SynopsysToolsParameter {
     getGithubRepoInfo() {
         const githubToken = inputs.GITHUB_TOKEN;
         const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
-        (0, core_1.info)('githubRepo - '.concat(githubRepo !== undefined ? githubRepo : ''));
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        (0, core_1.info)('githubRepoName - '.concat(githubRepoName !== undefined ? githubRepoName : ''));
         const githubBranchName = (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
-        (0, core_1.info)('githubBranchName - '.concat(githubBranchName !== undefined ? githubBranchName : ''));
         const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
-        (0, core_1.info)('githubRef - '.concat(githubRef !== undefined ? githubRef : ''));
         const githubAPIURL = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
-        (0, core_1.info)('githubAPIURL - '.concat(githubAPIURL !== undefined ? githubAPIURL : ''));
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
-        (0, core_1.info)('githubPrNumber - '.concat(githubPrNumber !== undefined ? githubPrNumber.toString() : ''));
         const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
-        (0, core_1.info)('githubRepoOwner - '.concat(githubRepoOwner !== undefined ? githubRepoOwner.toString() : ''));
         if ((0, validators_1.isNullOrEmptyValue)(githubToken)) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
