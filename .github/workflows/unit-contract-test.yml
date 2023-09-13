@@ -1,0 +1,37 @@
+name: Unit and Contract Test Cases
+
+on:
+  push:
+    branches: [ main, SIGINT-987 ]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v3
+      - name: Install Nodejs  
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Install Dependencies
+        run: npm ci
+      - name: Unit Tests  
+        run: npm run test
+
+  contract-tests:
+    runs-on: ubuntu-latest
+    needs: unit-tests
+    steps:
+      - name: Configure Nodejs  
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Unit Tests
+        run: npm run contract-test
