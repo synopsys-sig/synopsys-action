@@ -136,7 +136,6 @@ test('Enable Test getFormattedCommandForCoverity Airgap: EXCEPTION', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
@@ -324,7 +323,7 @@ test('Test getFormattedCommandForBlackduck', () => {
   expect(resp).toContain('--stage blackduck')
 })
 
-test('Test getFormattedCommandForBlackduck - fix pr enabled with createSinglePR false', () => {
+test('Test getFormattedCommandForBlackduck - fix pr test cases', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
