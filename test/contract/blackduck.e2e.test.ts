@@ -15,7 +15,7 @@ blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'true')
 blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'ALL')
 blackduckParamMap.set('BLACKDUCK_INSTALL_DIRECTORY', '/User/home')
 blackduckParamMap.set('BLACKDUCK_AUTOMATION_PRCOMMENT', 'true')
-blackduckParamMap.set('BLACKDUCK_AUTOMATION_FIXPR', 'true')
+blackduckParamMap.set('BLACKDUCK_FIXPR_ENABLED', 'true')
 
 describe('Blackduck flow contract', () => {
   afterAll(() => {

@@ -417,7 +417,7 @@ test('Test getFormattedCommandForBlackduck - fix pr enabled with createSinglePR 
     stp.getFormattedCommandForBlackduck()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('bridge_blackduck_fixpr_maxCount is not applicable with bridge_blackduck_fixpr_createSinglePR')
+    expect(error.message).toContain('blackduck_fixpr_maxCount is not applicable with blackduck_fixpr_createSinglePR')
   }
 })
 
@@ -432,7 +432,7 @@ test('Test getFormattedCommandForBlackduck - fix pr enabled with invalid max cou
     stp.getFormattedCommandForBlackduck()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Invalid value for bridge_blackduck_fixpr_maxCount')
+    expect(error.message).toContain('Invalid value for blackduck_fixpr_maxCount')
   }
 })
 
