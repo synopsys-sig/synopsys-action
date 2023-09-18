@@ -2,7 +2,7 @@ import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = getInput(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)?.trim() || ''
-export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIRGAP_KEY)?.trim() === 'true' || false
+export const ENABLE_NETWORK_AIR_GAP = (getInput(constants.NETWORK_AIRGAP_KEY)?.trim() || getInput(constants.BRIDGE_NETWORK_AIRGAP_KEY)?.trim()) === 'true' || false
 
 //Bridge download url
 export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
@@ -32,7 +32,7 @@ export const COVERITY_REPOSITORY_NAME = getInput(constants.COVERITY_REPOSITORY_N
 export const COVERITY_BRANCH_NAME = getInput(constants.COVERITY_BRANCH_NAME_KEY)?.trim() || ''
 export const COVERITY_AUTOMATION_PRCOMMENT = getInput(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)?.trim() || ''
 export const COVERITY_LOCAL = getInput(constants.COVERITY_LOCAL_KEY)?.trim() === 'true' || false
-export const COVERITY_VERSION = getInput(constants.COVERITY_VERSION_KEY)?.trim() || ''
+export const COVERITY_VERSION = getInput(constants.COVERITY_VERSION_KEY)?.trim() || getInput(constants.BRIDGE_COVERITY_VERSION_KEY)?.trim() || ''
 
 // Blackduck related inputs
 export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''

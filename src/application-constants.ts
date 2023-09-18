@@ -23,8 +23,9 @@ export const COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view'
 export const COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name'
 export const COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name'
 export const COVERITY_AUTOMATION_PRCOMMENT_KEY = 'coverity_automation_prcomment'
-export const COVERITY_LOCAL_KEY = 'bridge_coverity_local'
-export const COVERITY_VERSION_KEY = 'bridge_coverity_version'
+export const COVERITY_LOCAL_KEY = 'coverity_local'
+export const BRIDGE_COVERITY_VERSION_KEY = 'bridge_coverity_version'
+export const COVERITY_VERSION_KEY = 'coverity_version'
 
 // Polaris
 export const POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken'
@@ -32,11 +33,11 @@ export const POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name'
 export const POLARIS_PROJECT_NAME_KEY = 'polaris_project_name'
 export const POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types'
 export const POLARIS_SERVER_URL_KEY = 'polaris_serverUrl'
-export const POLARIS_TRIAGE_KEY = 'bridge_polaris_triage'
-export const POLARIS_PRCOMMENT_ENABLED_KEY = 'bridge_polaris_prComment_enabled'
-export const POLARIS_PRCOMMENT_SEVERITIES_KEY = 'bridge_polaris_prComment_severities'
-export const POLARIS_BRANCH_NAME_KEY = 'bridge_polaris_branch_name'
-export const POLARIS_BRANCH_PARENT_NAME_KEY = 'bridge_polaris_branch_parent_name'
+export const POLARIS_TRIAGE_KEY = 'polaris_triage'
+export const POLARIS_PRCOMMENT_ENABLED_KEY = 'polaris_prComment_enabled'
+export const POLARIS_PRCOMMENT_SEVERITIES_KEY = 'polaris_prComment_severities'
+export const POLARIS_BRANCH_NAME_KEY = 'polaris_branch_name'
+export const POLARIS_BRANCH_PARENT_NAME_KEY = 'polaris_branch_parent_name'
 
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'
@@ -49,7 +50,8 @@ export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcommen
 
 export const GITHUB_TOKEN_KEY = 'github_token'
 export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
-export const NETWORK_AIRGAP_KEY = 'bridge_network_airgap'
+export const BRIDGE_NETWORK_AIRGAP_KEY = 'bridge_network_airgap'
+export const NETWORK_AIRGAP_KEY = 'network_airgap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
 
 // Bridge Exit Codes
