@@ -22,6 +22,7 @@ export interface BlackduckData {
   install?: {directory: string}
   scan?: {full?: boolean; failure?: {severities: BLACKDUCK_SCAN_FAILURE_SEVERITIES[]}}
   automation: AutomationData
+  fixpr?: BlackDuckFixPrData
 }
 
 export interface Branch {
@@ -52,6 +53,18 @@ export interface GithubData {
   user: User
   repository: Repository
   api?: GithubURL
+}
+
+export interface BlackDuckFixPrData {
+  enabled?: boolean
+  maxCount?: number
+  createSinglePR?: boolean
+  useUpgradeGuidance?: string[]
+  filter?: BlackDuckFixPrFilerData
+}
+
+export interface BlackDuckFixPrFilerData {
+  severities?: string[]
 }
 
 export const FIXPR_ENVIRONMENT_VARIABLES = {

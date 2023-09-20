@@ -6,7 +6,7 @@ import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
-import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData} from './input-data/blackduck'
+import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
 import {parseToBoolean} from './utility'
 
@@ -229,13 +229,14 @@ export class SynopsysToolsParameter {
     }
 
     // Check and put environment variable for fix pull request
-    if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_FIXPR)) {
-      info('Blackduck Automation Fix PR is enabled')
+    if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+      info('Black Duck Fix PR is enabled')
+      blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
       blackduckData.data.github = this.getGithubRepoInfo()
       blackduckData.data.blackduck.automation.fixpr = true
     } else {
       // Disable fix pull request for adapters
-      blackduckData.data.blackduck.automation.fixpr = false
+      blackduckData.data.blackduck.fixpr = {enabled: false}
     }
 
     if (parseToBoolean(inputs.BLACKDUCK_AUTOMATION_PRCOMMENT)) {
@@ -309,5 +310,45 @@ export class SynopsysToolsParameter {
       githubData.repository.pull.number = Number(githubPrNumber)
     }
     return githubData
+  }
+
+  private setBlackDuckFixPrInputs(): BlackDuckFixPrData | undefined {
+    if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && isNaN(Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT))) {
+      throw new Error('Invalid value for '.concat(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY))
+    }
+    const createSinglePr = parseToBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)
+    if (createSinglePr && inputs.BLACKDUCK_FIXPR_MAXCOUNT) {
+      throw new Error(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY.concat(' is not applicable with ').concat(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY))
+    }
+    const blackDuckFixPrData: BlackDuckFixPrData = {}
+    blackDuckFixPrData.enabled = true
+    blackDuckFixPrData.createSinglePR = createSinglePr === true
+    if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
+      blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT)
+    }
+
+    const useUpgradeGuidance: string[] = []
+    if (inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE != null && inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE.length > 0) {
+      const useUpgradeGuidanceList = inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE.split(',')
+      for (const upgradeGuidance of useUpgradeGuidanceList) {
+        if (upgradeGuidance != null && upgradeGuidance !== '') {
+          useUpgradeGuidance.push(upgradeGuidance.trim())
+        }
+      }
+      blackDuckFixPrData.useUpgradeGuidance = useUpgradeGuidance
+    }
+    const fixPRFilterSeverities: string[] = []
+    if (inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES != null && inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES.length > 0) {
+      const filterSeverities = inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES.split(',')
+      for (const fixPrSeverity of filterSeverities) {
+        if (fixPrSeverity != null && fixPrSeverity !== '') {
+          fixPRFilterSeverities.push(fixPrSeverity.trim())
+        }
+      }
+    }
+    blackDuckFixPrData.filter = {
+      ...(fixPRFilterSeverities.length > 0 ? {severities: fixPRFilterSeverities} : {})
+    }
+    return blackDuckFixPrData
   }
 }
