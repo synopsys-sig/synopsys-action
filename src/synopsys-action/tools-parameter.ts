@@ -233,7 +233,6 @@ export class SynopsysToolsParameter {
       info('Black Duck Fix PR is enabled')
       blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
       blackduckData.data.github = this.getGithubRepoInfo()
-      blackduckData.data.blackduck.automation.fixpr = true
     } else {
       // Disable fix pull request for adapters
       blackduckData.data.blackduck.fixpr = {enabled: false}
