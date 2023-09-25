@@ -93,7 +93,19 @@ inputs:
     description: 'If provided, Blackduck will break the build if any issues produced match one of the given severities'
     required: false
   blackduck_automation_fixpr:
-    description: 'If set as true, Fix PRs will be created if vulnerability is found after scan'
+    description: 'If set as true, separate Fix PRs will be created if vulnerability is found after scan'
+    required: false
+  blackduck_fixpr_enabled:
+    description: 'Flag to enable/disable the automatic fix pull request creations for Black Duck'
+    required: false
+  blackduck_fixpr_maxCount:
+    description: 'Maximum number of Pull Requests to be created that violate policies'
+    required: false
+  blackduck_fixpr_filter_severities:
+    description: 'If provided, Fix PRs will be created only for given severities'
+    required: false
+  blackduck_fixpr_useUpgradeGuidance:
+    description: 'Flag to enable long term upgrade guidance'
     required: false
   bridge_download_version:
     description: 'If provided, Synopsys-action will configure the version of Bridge'
