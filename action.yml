@@ -96,13 +96,10 @@ inputs:
     description: 'If set as true, separate Fix PRs will be created if vulnerability is found after scan'
     required: false
   blackduck_fixpr_enabled:
-    description: 'If set as true, separate Fix PRs will be created if vulnerability is found after scan'
+    description: 'Flag to enable/disable the automatic fix pull request creations for Black Duck'
     required: false
   blackduck_fixpr_maxCount:
-    description: 'The maximum number of issues to create the pull request'
-    required: false
-  blackduck_fixpr_createSinglePR:
-    description: 'If set as true, single Fix PR will be created for all vulnerabilities found after scan'
+    description: 'Maximum number of Pull Requests to be created that violate policies'
     required: false
   blackduck_fixpr_filter_severities:
     description: 'If provided, Fix PRs will be created only for given severities'
