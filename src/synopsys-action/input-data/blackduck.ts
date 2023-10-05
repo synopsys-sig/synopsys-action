@@ -1,3 +1,5 @@
+import {Reports} from './reports'
+
 export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
   ALL = 'ALL',
   NONE = 'NONE',
@@ -14,6 +16,7 @@ export interface Blackduck {
   blackduck: BlackduckData
   github?: GithubData
   network: NetworkAirGap
+  reports?: Reports
 }
 
 export interface BlackduckData {

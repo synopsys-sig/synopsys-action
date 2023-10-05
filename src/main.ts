@@ -1,10 +1,11 @@
 import {info, setFailed} from '@actions/core'
-import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
+import {cleanupTempDir, createTempDir, parseToBoolean} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from './application-constants'
 import * as inputs from './synopsys-action/inputs'
 import {uploadDiagnostics} from './synopsys-action/diagnostics'
+import {GithubClientService} from './synopsys-action/github-client-service'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -24,6 +25,12 @@ export async function run() {
     }
     // Execute bridge command
     const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    //Generate SARIF Reort
+    if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
+      info('REPORTS_SARIF_CREATE enabled')
+      const gitHubClientService = new GithubClientService()
+      await gitHubClientService.uploadSarifReport()
+    }
     if (exitCode === 0) {
       info('Synopsys Action workflow execution completed')
     }
@@ -39,8 +46,8 @@ export async function run() {
 }
 
 export function logBridgeExitCodes(message: string): string {
-  var exitCode = message.trim().slice(-1)
-  return constants.EXIT_CODE_MAP.has(exitCode) ? 'Exit Code: ' + exitCode + ' ' + constants.EXIT_CODE_MAP.get(exitCode) : message
+  const exitCode = message.trim().slice(-1)
+  return constants.EXIT_CODE_MAP.has(exitCode) ? `Exit Code: ${exitCode} ${constants.EXIT_CODE_MAP.get(exitCode)}` : message
 }
 
 run().catch(error => {

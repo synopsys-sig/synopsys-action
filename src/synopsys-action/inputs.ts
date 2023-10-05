@@ -49,3 +49,7 @@ export const BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = getInput(constants.BLACKDUCK_F
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || ''
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)?.trim() || ''
 export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)?.trim() || ''
+export const REPORTS_SARIF_CREATE = getInput(constants.REPORTS_SARIF_CREATE_KEY)?.trim() || ''
+export const REPORTS_SARIF_FILE_PATH = getInput(constants.REPORTS_SARIF_FILE_PATH_KEY)?.trim() || ''
+export const REPORTS_SARIF_ISSUE_TYPES = getInput(constants.REPORTS_SARIF_ISSUE_TYPES_KEY)?.trim() || ''
+export const REPORTS_SARIF_SEVERITIES = getInput(constants.REPORTS_SARIF_SEVERITIES_KEY)?.trim() || ''

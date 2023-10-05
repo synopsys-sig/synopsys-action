@@ -101,6 +101,10 @@ export const RETRY_DELAY_IN_MILLISECONDS = 15000
 export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
 export const GITHUB_CLOUD_URL = 'https://github.com'
+export const REPORTS_SARIF_CREATE_KEY = 'reports_sarif_create'
+export const REPORTS_SARIF_FILE_PATH_KEY = 'reports_sarif_file_path'
+export const REPORTS_SARIF_ISSUE_TYPES_KEY = 'reports_sarif_issue_types'
+export const REPORTS_SARIF_SEVERITIES_KEY = 'reports_sarif_severities'
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_TOKEN: 'GITHUB_TOKEN',
