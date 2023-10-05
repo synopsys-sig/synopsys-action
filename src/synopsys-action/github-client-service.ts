@@ -65,10 +65,10 @@ export class GithubClientService {
   private async uploadSarifReportAsArtifact(sarifFilePath: string): Promise<UploadResponse | void> {
     info(`uploadSarifReportAsArtifact:: start`)
     const artifactClient = artifact.create()
-    const pwd = getWorkSpaceDirectory().concat(this.getSarifReportPath(false))
+    //const pwd = getWorkSpaceDirectory().concat(this.getSarifReportPath(false))
     const options: UploadOptions = {}
     options.continueOnError = false
-    return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], pwd, options)
+    return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], '/Users/spurohit/.bridge', options)
   }
 
   private getSarifReportPath(appendFilePath: boolean): string {
