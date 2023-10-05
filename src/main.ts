@@ -25,12 +25,6 @@ export async function run() {
     }
     // Execute bridge command
     const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
-    //Generate SARIF Reort
-    if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
-      info('REPORTS_SARIF_CREATE enabled')
-      const gitHubClientService = new GithubClientService()
-      await gitHubClientService.uploadSarifReport()
-    }
     if (exitCode === 0) {
       info('Synopsys Action workflow execution completed')
     }
@@ -40,6 +34,12 @@ export async function run() {
   } finally {
     if (inputs.INCLUDE_DIAGNOSTICS) {
       await uploadDiagnostics()
+    }
+    //Generate SARIF Report
+    if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
+      info('REPORTS_SARIF_CREATE enabled')
+      const gitHubClientService = new GithubClientService()
+      await gitHubClientService.uploadSarifReport()
     }
     await cleanupTempDir(tempDir)
   }
