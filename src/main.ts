@@ -37,7 +37,6 @@ export async function run() {
     }
     //Generate SARIF Report
     if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
-      info('REPORTS_SARIF_CREATE enabled')
       const gitHubClientService = new GithubClientService()
       await gitHubClientService.uploadSarifReport()
     }

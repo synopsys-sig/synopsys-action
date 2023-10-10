@@ -27,7 +27,7 @@ describe('uploadDiagnostics - success', () => {
     const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
 
     const mockPwd = './.bridge'
-    const mockFiles = ['./.bridge/bridge.log']
+    const mockFiles = ['./.bridge/SARIF Generator/sarif_report.json', './.bridge/bridge.log']
     const mockOptions: UploadOptions = {continueOnError: false}
     jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
 

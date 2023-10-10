@@ -385,6 +385,9 @@ export class SynopsysToolsParameter {
   }
 
   private setSarifReportsInputs(): Reports {
+    if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+      throw new Error('Missing required github token for uploading SARIF result')
+    }
     const sarifReportIssueTypes: string[] = []
     if (inputs.POLARIS_SERVER_URL && inputs.REPORTS_SARIF_ISSUE_TYPES != null && inputs.REPORTS_SARIF_ISSUE_TYPES.length > 0) {
       const issueTypes = inputs.REPORTS_SARIF_ISSUE_TYPES.split(',')

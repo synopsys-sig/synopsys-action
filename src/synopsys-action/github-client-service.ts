@@ -17,7 +17,7 @@ export class GithubClientService {
   }
 
   async uploadSarifReport(): Promise<void> {
-    info('uploadSarifReport :: start')
+    info('Uploading SARIF results to GitHub')
     const githubToken = inputs.GITHUB_TOKEN.trim()
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const repoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
@@ -31,13 +31,12 @@ export class GithubClientService {
     const endpoint = stringFormat(githubApiURL.concat(this.gitHubCodeScanningUrl), repoOwner, repoName)
     const sarifFilePath = inputs.REPORTS_SARIF_FILE_PATH.trim() ? inputs.REPORTS_SARIF_FILE_PATH.trim() : this.getSarifReportPath(true)
 
-    info(`sarifFilePath:: ${sarifFilePath}`)
+    //info(`sarifFilePath:: ${sarifFilePath}`)
     if (checkIfPathExists(sarifFilePath)) {
       try {
         const sarifContent = fs.readFileSync(sarifFilePath, 'utf8')
         const compressedSarif = zlib.gzipSync(sarifContent)
         const base64Sarif = compressedSarif.toString('base64')
-        //console.log(`base64Sarif: ${base64Sarif}`)
         const data = {
           commit_sha,
           ref: githubRef,
@@ -58,24 +57,25 @@ export class GithubClientService {
       } catch (error) {
         warning(`Error uploading SARIF data to GitHub Advance Security: ${error}`)
       }
+    } else {
+      warning('No SARIF file to upload')
     }
-    info('uploadSarifReport :: end')
   }
 
   private async uploadSarifReportAsArtifact(sarifFilePath: string): Promise<UploadResponse | void> {
-    info(`uploadSarifReportAsArtifact:: start`)
     const artifactClient = artifact.create()
-    //const pwd = getWorkSpaceDirectory().concat(this.getSarifReportPath(false))
+    const pwd = getWorkSpaceDirectory().concat(this.getSarifReportPath(false))
     const options: UploadOptions = {}
     options.continueOnError = false
-    return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], '/Users/spurohit/.bridge', options)
+    //return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], '/Users/spurohit/.bridge', options)
+    return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], pwd, options)
   }
 
   private getSarifReportPath(appendFilePath: boolean): string {
     if (process.platform === 'win32') {
-      return !appendFilePath ? '\\.bridge\\SARIF Generator' : '\\.bridge\\SARIF Generator\\sarif_report.json'
+      return !appendFilePath ? '.bridge\\SARIF Generator' : '.bridge\\SARIF Generator\\sarif_report.json'
     } else {
-      return !appendFilePath ? '/.bridge/SARIF Generator' : '/.bridge/SARIF Generator/sarif_report.json'
+      return !appendFilePath ? '.bridge/SARIF Generator' : '.bridge/SARIF Generator/sarif_report.json'
     }
   }
 }

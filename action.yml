@@ -134,6 +134,18 @@ inputs:
   network_airgap:
     description: 'If provided, Synopsys Action will be using local network to download and execute bridge .'
     required: false
+  reports_sarif_create:
+    description: 'Flag to enable/disable SARIF report generation'
+    required: false
+  reports_sarif_file_path:
+    description: 'File path including file name where SARIF report should be created'
+    required: false
+  reports_sarif_issue_types:
+    description: 'Indicates which assessment issue types to include in SARIF file report'
+    required: false
+  reports_sarif_severities:
+    description: 'Indicates what SAST/SCA issues severity categories to include in SARIF file report'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

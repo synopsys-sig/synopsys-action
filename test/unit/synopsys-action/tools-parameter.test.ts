@@ -2,7 +2,6 @@ import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utilit
 import {SynopsysToolsParameter} from '../../../src/synopsys-action/tools-parameter'
 import mock = jest.mock
 import * as inputs from '../../../src/synopsys-action/inputs'
-
 let tempPath = '/temp'
 let polaris_input_file = '/polaris_input.json'
 let coverity_input_file = '/coverity_input.json'
@@ -154,6 +153,42 @@ test('Test getFormattedCommandForPolaris - pr comment for cloud github', () => {
 })
 
 process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
+test('Test getFormattedCommandForPolaris with sarif params', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: false})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForPolaris()
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage polaris')
+})
+
+test('Test getFormattedCommandForPolaris with sarif params and missing github token', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: false})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  try {
+    stp.getFormattedCommandForPolaris()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Missing required github token for uploading SARIF result')
+  }
+})
+
 test('Test getFormattedCommandForCoverity', () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
   Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
@@ -681,5 +716,35 @@ test('Test missing data error in getFormattedCommandForBlackduck', () => {
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('required parameters for BlackDuck is missing')
+  }
+})
+
+test('Test getFormattedCommandForBlackduck with sarif params', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForBlackduck()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+})
+
+test('Test getFormattedCommandForBlackduck with sarif params and missing github token', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  try {
+    stp.getFormattedCommandForBlackduck()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Missing required github token for uploading SARIF result')
   }
 })
