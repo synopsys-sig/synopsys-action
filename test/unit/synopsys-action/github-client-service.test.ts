@@ -6,6 +6,8 @@ import {GithubClientService} from '../../../src/synopsys-action/github-client-se
 import {Socket} from 'net'
 import * as artifact from '@actions/artifact'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import any = jasmine.any
+import {UploadResponse} from '@actions/artifact'
 
 const originalEnv = process.env
 beforeEach(() => {
@@ -39,9 +41,14 @@ test('should upload sarif report successfully', () => {
   }
   const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
   const mockDir = jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
-  jest.spyOn(mockArtifactClient, 'uploadArtifact')
+  const mockPwd = './.bridge/SARIF Generator'
+  const mockFiles = ['./.bridge/SARIF Generator/sarif_report.json']
+  //jest.spyOn(mockArtifactClient, 'uploadArtifact')
+  const uploadResponse = new Promise<UploadResponse>((resolve, reject) => {})
+  jest.spyOn(mockArtifactClient, 'uploadArtifact').mockReturnValue(uploadResponse)
 
   const response = githubClientService.uploadSarifReport()
+  //expect(mockUploadArtifact).toHaveBeenCalled()
   expect(response).resolves.toBeUndefined()
   mockCreate.mockRestore()
 })

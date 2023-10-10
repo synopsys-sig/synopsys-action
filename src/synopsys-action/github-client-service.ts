@@ -64,18 +64,19 @@ export class GithubClientService {
 
   private async uploadSarifReportAsArtifact(sarifFilePath: string): Promise<UploadResponse | void> {
     const artifactClient = artifact.create()
-    const pwd = getWorkSpaceDirectory().concat(this.getSarifReportPath(false))
+    const rootDir = this.getSarifReportPath(false)
     const options: UploadOptions = {}
     options.continueOnError = false
     //return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], '/Users/spurohit/.bridge', options)
-    return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], pwd, options)
+    return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], rootDir, options)
   }
 
   private getSarifReportPath(appendFilePath: boolean): string {
+    const pwd = getWorkSpaceDirectory()
     if (process.platform === 'win32') {
-      return !appendFilePath ? '.bridge\\SARIF Generator' : '.bridge\\SARIF Generator\\sarif_report.json'
+      return !appendFilePath ? pwd.concat('\\.bridge\\SARIF Generator') : pwd.concat('\\.bridge\\SARIF Generator\\sarif_report.json')
     } else {
-      return !appendFilePath ? '.bridge/SARIF Generator' : '.bridge/SARIF Generator/sarif_report.json'
+      return !appendFilePath ? pwd.concat('/.bridge/SARIF Generator') : pwd.concat('/.bridge/SARIF Generator/sarif_report.json')
     }
   }
 }
