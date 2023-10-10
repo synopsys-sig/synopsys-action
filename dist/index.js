@@ -440,11 +440,11 @@ exports.ENABLE_NETWORK_AIR_GAP = (((_b = (0, core_1.getInput)(constants.NETWORK_
 exports.BRIDGE_DOWNLOAD_URL = ((_d = (0, core_1.getInput)('bridge_download_url')) === null || _d === void 0 ? void 0 : _d.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_e = (0, core_1.getInput)('bridge_download_version')) === null || _e === void 0 ? void 0 : _e.trim()) || '';
 // Polaris related inputs
-exports.POLARIS_ACCESS_TOKEN = ((_f = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
+exports.POLARIS_ACCESS_TOKEN = ((_f = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || process.env['POLARIS_ACCESS_TOKEN'] || '';
 exports.POLARIS_APPLICATION_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
 exports.POLARIS_PROJECT_NAME = ((_h = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
 exports.POLARIS_ASSESSMENT_TYPES = ((_j = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
-exports.POLARIS_SERVER_URL = ((_k = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
+exports.POLARIS_SERVER_URL = ((_k = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || process.env['POLARIS_SERVER_URL'] || '';
 exports.POLARIS_TRIAGE = ((_l = (0, core_1.getInput)(constants.POLARIS_TRIAGE_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
 exports.POLARIS_PRCOMMENT_ENABLED = ((_m = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_ENABLED_KEY)) === null || _m === void 0 ? void 0 : _m.trim()) || '';
 exports.POLARIS_PRCOMMENT_SEVERITIES = ((_o = (0, core_1.getInput)(constants.POLARIS_PRCOMMENT_SEVERITIES_KEY)) === null || _o === void 0 ? void 0 : _o.trim()) || '';
