@@ -7,6 +7,10 @@ import * as inputs from './synopsys-action/inputs'
 import {uploadDiagnostics} from './synopsys-action/diagnostics'
 
 export async function run() {
+  // @ts-ignore
+  info('POLARIS_ACCESS_TOKEN: '.concat(process.env['POLARIS_ACCESS_TOKEN']))
+  // @ts-ignore
+  info('URL: '.concat(process.env['POLARIS_SERVER_URL']))
   info('Synopsys Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
