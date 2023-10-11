@@ -192,14 +192,13 @@ function run() {
             throw error;
         }
         finally {
-            if (inputs.INCLUDE_DIAGNOSTICS) {
-                yield (0, diagnostics_1.uploadDiagnostics)();
-            }
-            //Generate SARIF Report
             if ((0, utility_1.parseToBoolean)(inputs.REPORTS_SARIF_CREATE)) {
                 (0, core_1.info)('REPORTS_SARIF_CREATE enabled');
                 const gitHubClientService = new github_client_service_1.GithubClientService();
                 yield gitHubClientService.uploadSarifReport();
+            }
+            if (inputs.INCLUDE_DIAGNOSTICS) {
+                yield (0, diagnostics_1.uploadDiagnostics)();
             }
             yield (0, utility_1.cleanupTempDir)(tempDir);
         }

@@ -32,13 +32,12 @@ export async function run() {
   } catch (error) {
     throw error
   } finally {
-    if (inputs.INCLUDE_DIAGNOSTICS) {
-      await uploadDiagnostics()
-    }
-    //Generate SARIF Report
     if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
       const gitHubClientService = new GithubClientService()
       await gitHubClientService.uploadSarifReport()
+    }
+    if (inputs.INCLUDE_DIAGNOSTICS) {
+      await uploadDiagnostics()
     }
     await cleanupTempDir(tempDir)
   }

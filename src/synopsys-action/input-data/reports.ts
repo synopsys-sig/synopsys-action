@@ -1,6 +1,3 @@
-// export interface Reports {
-//   reports?: ReportsData
-// }
 export interface Reports {
   sarif?: Sarif
 }
