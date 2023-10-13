@@ -46,7 +46,7 @@ describe('upload sarif', () => {
 
     const response = await githubClientService.uploadSarifReport()
     expect(mockUploadArtifact).toHaveBeenCalled()
-    expect(mockUploadArtifact).toHaveBeenCalledWith('sarif_report', ['./.bridge/SARIF Generator/sarif_report.json'], './.bridge/SARIF Generator', {continueOnError: false})
+    expect(mockUploadArtifact).toHaveBeenCalledWith('sarif_report', ['.bridge/SARIF Generator/sarif_report.json'], '.bridge/SARIF Generator', {continueOnError: false})
     expect(response).toBeUndefined()
     mockCreate.mockRestore()
   })

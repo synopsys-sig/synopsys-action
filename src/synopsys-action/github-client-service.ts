@@ -9,6 +9,8 @@ import * as artifact from '@actions/artifact'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {UploadOptions} from '@actions/artifact/lib/internal/upload-options'
 import {info, warning} from '@actions/core'
+import * as path from 'path'
+import * as constants from '../application-constants'
 
 export class GithubClientService {
   gitHubCodeScanningUrl: string
@@ -29,9 +31,7 @@ export class GithubClientService {
       return url.replace(/{(\d+)}/g, (match, index) => args[index] || '')
     }
     const endpoint = stringFormat(githubApiURL.concat(this.gitHubCodeScanningUrl), repoOwner, repoName)
-    const sarifFilePath = inputs.REPORTS_SARIF_FILE_PATH.trim() ? inputs.REPORTS_SARIF_FILE_PATH.trim() : this.getSarifReportPath(true)
-
-    //info(`sarifFilePath:: ${sarifFilePath}`)
+    const sarifFilePath = inputs.REPORTS_SARIF_FILE_PATH.trim() ? inputs.REPORTS_SARIF_FILE_PATH.trim() : this.getDefaultSarifReportPath(true)
     if (checkIfPathExists(sarifFilePath)) {
       try {
         const sarifContent = fs.readFileSync(sarifFilePath, 'utf8')
@@ -64,19 +64,20 @@ export class GithubClientService {
 
   private async uploadSarifReportAsArtifact(sarifFilePath: string): Promise<UploadResponse | void> {
     const artifactClient = artifact.create()
-    const rootDir = this.getSarifReportPath(false)
+    let rootDir = ''
+    if (inputs.REPORTS_SARIF_FILE_PATH.trim()) {
+      rootDir = path.dirname(sarifFilePath)
+    } else {
+      rootDir = this.getDefaultSarifReportPath(false)
+    }
+    info('rootDir: '.concat(rootDir))
     const options: UploadOptions = {}
     options.continueOnError = false
-    //return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], '/Users/spurohit/.bridge', options)
-    return await artifactClient.uploadArtifact('sarif_report', [sarifFilePath], rootDir, options)
+    return await artifactClient.uploadArtifact(constants.SARIF_UPLOAD_FOLDER_ARTIFACT_NAME, [sarifFilePath], rootDir, options)
   }
 
-  private getSarifReportPath(appendFilePath: boolean): string {
+  private getDefaultSarifReportPath(appendFilePath: boolean): string {
     const pwd = getWorkSpaceDirectory()
-    if (process.platform === 'win32') {
-      return !appendFilePath ? pwd.concat('\\.bridge\\SARIF Generator') : pwd.concat('\\.bridge\\SARIF Generator\\sarif_report.json')
-    } else {
-      return !appendFilePath ? pwd.concat('/.bridge/SARIF Generator') : pwd.concat('/.bridge/SARIF Generator/sarif_report.json')
-    }
+    return !appendFilePath ? path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER) : path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER, constants.SARIF_DEFAULT_FILE_NAME)
   }
 }
