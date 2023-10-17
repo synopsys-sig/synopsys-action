@@ -20,7 +20,7 @@ jobs:
     #runs-on: [ self-hosted ]
     # Use ubuntu-latest to run workflow on github hosted runner
     #  runs-on: [ ubuntu-latest ]
-
+    environment: env-test
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
