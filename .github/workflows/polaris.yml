@@ -24,8 +24,8 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout Source
-        uses: actions/checkout@v3
+      #- name: Checkout Source
+      #  uses: actions/checkout@v3
 
       - name: print all vars
       - run: echo 'Hi env.POLARIS_SERVER_URL - ${{ env.POLARIS_SERVER_URL }}'
@@ -37,15 +37,15 @@ jobs:
       - run: echo 'Hi vars.POLARIS_ACCESS_TOKEN - ${{ vars.POLARIS_ACCESS_TOKEN }}'
 
 
-      - name: Polaris Scan
+      #- name: Polaris Scan
         # Use the action defined in this repository
-        uses: synopsys-sig/synopsys-action@1182
+      #  uses: synopsys-sig/synopsys-action@1182
 
-        with:
-          polaris_serverUrl: ${{ env.POLARIS_SERVER_URL }}
-          polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
-          polaris_application_name: ${{ github.event.repository.name }}
-          polaris_project_name: ${{ github.event.repository.name }}
-          polaris_assessment_types: "SAST,SCA"
+      #  with:
+      #    polaris_serverUrl: ${{ env.POLARIS_SERVER_URL }}
+      #    polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+      #    polaris_application_name: ${{ github.event.repository.name }}
+      #    polaris_project_name: ${{ github.event.repository.name }}
+      #    polaris_assessment_types: "SAST,SCA"
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
