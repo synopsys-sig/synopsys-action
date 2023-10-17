@@ -9,11 +9,11 @@ export const BRIDGE_DOWNLOAD_URL = getInput('bridge_download_url')?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim() || ''
 
 // Polaris related inputs
-export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || process.env['POLARIS_ACCESS_TOKEN'] || ''
+export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''
 export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_NAME_KEY)?.trim() || ''
 export const POLARIS_PROJECT_NAME = getInput(constants.POLARIS_PROJECT_NAME_KEY)?.trim() || ''
 export const POLARIS_ASSESSMENT_TYPES = getInput(constants.POLARIS_ASSESSMENT_TYPES_KEY)?.trim() || ''
-export const POLARIS_SERVER_URL = getInput(constants.POLARIS_SERVER_URL_KEY)?.trim() || process.env['POLARIS_SERVER_URL'] || ''
+export const POLARIS_SERVER_URL = getInput(constants.POLARIS_SERVER_URL_KEY)?.trim() || ''
 export const POLARIS_TRIAGE = getInput(constants.POLARIS_TRIAGE_KEY)?.trim() || ''
 export const POLARIS_PRCOMMENT_ENABLED = getInput(constants.POLARIS_PRCOMMENT_ENABLED_KEY)?.trim() || ''
 export const POLARIS_PRCOMMENT_SEVERITIES = getInput(constants.POLARIS_PRCOMMENT_SEVERITIES_KEY)?.trim() || ''
