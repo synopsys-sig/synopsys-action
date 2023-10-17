@@ -31,7 +31,7 @@ jobs:
         # Use the action defined in this repository
         uses: synopsys-sig/synopsys-action@1182
         with:
-          polaris_serverUrl: ${{ vars.POLARIS_SERVER_URL }}
+          polaris_serverUrl: ${{ secrets.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
           polaris_application_name: ${{ github.event.repository.name }}
           polaris_project_name: ${{ github.event.repository.name }}
