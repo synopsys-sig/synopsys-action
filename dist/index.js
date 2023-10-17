@@ -127,9 +127,9 @@ const diagnostics_1 = __nccwpck_require__(1721);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         // @ts-ignore
-        (0, core_1.info)('polaris url: '.concat(inputs.POLARIS_SERVER_URL));
+        (0, core_1.info)('polaris url: '.concat(process.env['POLARIS_SERVER_URL']));
         // @ts-ignore
-        (0, core_1.info)('token: '.concat(inputs.POLARIS_ACCESS_TOKEN));
+        (0, core_1.info)('token: '.concat(process.env['POLARIS_ACCESS_TOKEN']));
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
