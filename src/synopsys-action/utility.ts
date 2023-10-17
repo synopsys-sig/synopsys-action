@@ -35,6 +35,13 @@ export function parseToBoolean(value: string | boolean): boolean {
   return false
 }
 
+export function isBoolean(value: string | boolean): boolean {
+  if (value !== null && value !== '' && (value.toString().toLowerCase() === 'true' || value === true || value.toString().toLowerCase() === 'false' || value === false)) {
+    return true
+  }
+  return false
+}
+
 export function checkIfPathExists(fileOrDirectoryPath: string): boolean {
   if (fileOrDirectoryPath && fs.existsSync(fileOrDirectoryPath.trim())) {
     return true

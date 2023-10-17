@@ -8,7 +8,7 @@ import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
-import {parseToBoolean} from './utility'
+import {isBoolean, parseToBoolean} from './utility'
 import {Reports} from './input-data/reports'
 import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
@@ -418,7 +418,8 @@ export class SynopsysToolsParameter {
         issue: {
           //...(sarifReportIssueTypes.length > 0 ? {types: sarifReportIssueTypes} : {})
           types: sarifReportIssueTypes
-        }
+        },
+        groupSCAIssues: isBoolean(inputs.REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.REPORTS_SARIF_GROUP_SCA_ISSUES) : true
       }
     }
     return reportData

@@ -163,6 +163,7 @@ test('Test getFormattedCommandForPolaris with sarif params', () => {
   Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_GROUP_SCA_ISSUES', {value: false})
   Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: false})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
@@ -727,6 +728,7 @@ test('Test getFormattedCommandForBlackduck with sarif params', () => {
   Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_GROUP_SCA_ISSUES', {value: false})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   const resp = stp.getFormattedCommandForBlackduck()

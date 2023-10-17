@@ -7,6 +7,7 @@ export interface Sarif {
   file?: File
   issue?: Issue
   severities?: string[]
+  groupSCAIssues?: boolean
 }
 
 export interface File {
