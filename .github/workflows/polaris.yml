@@ -27,7 +27,7 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v3
 
-      - name: Polaris Scan
+      - name: print all vars
       - run: echo 'Hi env.POLARIS_SERVER_URL - ${{ env.POLARIS_SERVER_URL }}'
       - run: echo 'Hi vars.POLARIS_SERVER_URL - ${{ vars.POLARIS_SERVER_URL }}'
       - run: echo 'Hi secrets.POLARIS_SERVER_URL - ${{ secrets.POLARIS_SERVER_URL }}'
@@ -35,8 +35,12 @@ jobs:
       - run: echo 'Hi env.POLARIS_ACCESS_TOKEN - ${{ env.POLARIS_ACCESS_TOKEN }}'
       - run: echo 'Hi secrets.POLARIS_ACCESS_TOKEN - ${{ secrets.POLARIS_ACCESS_TOKEN }}'
       - run: echo 'Hi vars.POLARIS_ACCESS_TOKEN - ${{ vars.POLARIS_ACCESS_TOKEN }}'
+
+
+      - name: Polaris Scan
         # Use the action defined in this repository
         uses: synopsys-sig/synopsys-action@1182
+
         with:
           polaris_serverUrl: ${{ env.POLARIS_SERVER_URL }}
           polaris_accessToken: ${{ secrets.POLARIS_ACCESS_TOKEN }}
