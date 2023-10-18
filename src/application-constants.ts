@@ -107,7 +107,7 @@ export const REPORTS_SARIF_ISSUE_TYPES_KEY = 'reports_sarif_issue_types'
 export const REPORTS_SARIF_SEVERITIES_KEY = 'reports_sarif_severities'
 export const REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'reports_sarif_groupSCAIssues'
 export const BRIDGE_DIAGNOSTICS_FOLDER = '.bridge'
-export const BRIDGE_SARIF_GENERATOR_FOLDER = 'SARIF Generator'
+export const BRIDGE_SARIF_GENERATOR_FOLDER = 'SARIF Report Generator'
 export const SARIF_UPLOAD_FOLDER_ARTIFACT_NAME = 'sarif_report'
 export const SARIF_DEFAULT_FILE_NAME = 'sarif_report.json'
 

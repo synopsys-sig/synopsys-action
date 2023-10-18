@@ -146,6 +146,9 @@ inputs:
   reports_sarif_severities:
     description: 'Indicates what SAST/SCA issues severity categories to include in SARIF file report'
     required: false
+  reports_sarif_groupSCAIssues:
+    description: 'Flag to enable/disable Component-Version grouping for SCA Issues in SARIF report rules section'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'
