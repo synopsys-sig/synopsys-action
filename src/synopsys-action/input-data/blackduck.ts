@@ -67,16 +67,6 @@ export interface BlackDuckFixPrFilerData {
   severities?: string[]
 }
 
-export const FIXPR_ENVIRONMENT_VARIABLES = {
-  GITHUB_TOKEN: 'GITHUB_TOKEN',
-  GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
-  GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
-  GITHUB_REF: 'GITHUB_REF',
-  GITHUB_REF_NAME: 'GITHUB_REF_NAME',
-  GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
-  GITHUB_API_URL: 'GITHUB_API_URL'
-}
-
 export interface GithubURL {
   url: string
 }

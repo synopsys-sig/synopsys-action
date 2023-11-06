@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = void 0;
+exports.GITHUB_ENVIRONMENT_VARIABLES = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -74,6 +74,17 @@ exports.EXIT_CODE_MAP = new Map([
 exports.RETRY_DELAY_IN_MILLISECONDS = 15000;
 exports.RETRY_COUNT = 3;
 exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
+exports.GITHUB_ENVIRONMENT_VARIABLES = {
+    GITHUB_TOKEN: 'GITHUB_TOKEN',
+    GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
+    GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
+    GITHUB_REF: 'GITHUB_REF',
+    GITHUB_REF_NAME: 'GITHUB_REF_NAME',
+    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
+    GITHUB_API_URL: 'GITHUB_API_URL',
+    GITHUB_BASE_REF: 'GITHUB_BASE_REF',
+    GITHUB_EVENT_NAME: 'GITHUB_EVENT_NAME'
+};
 
 
 /***/ }),
@@ -375,7 +386,7 @@ exports.extractZipped = extractZipped;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FIXPR_ENVIRONMENT_VARIABLES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = void 0;
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = void 0;
 var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
 (function (BLACKDUCK_SCAN_FAILURE_SEVERITIES) {
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["ALL"] = "ALL";
@@ -388,15 +399,6 @@ var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["TRIVIAL"] = "TRIVIAL";
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
 })(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
-exports.FIXPR_ENVIRONMENT_VARIABLES = {
-    GITHUB_TOKEN: 'GITHUB_TOKEN',
-    GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
-    GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
-    GITHUB_REF: 'GITHUB_REF',
-    GITHUB_REF_NAME: 'GITHUB_REF_NAME',
-    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
-    GITHUB_API_URL: 'GITHUB_API_URL'
-};
 
 
 /***/ }),
@@ -434,6 +436,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
+const application_constants_1 = __nccwpck_require__(9717);
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
 exports.ENABLE_NETWORK_AIR_GAP = (((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || ((_c = (0, core_1.getInput)(constants.BRIDGE_NETWORK_AIRGAP_KEY)) === null || _c === void 0 ? void 0 : _c.trim())) === 'true' || false;
 //Bridge download url
@@ -441,8 +444,8 @@ exports.BRIDGE_DOWNLOAD_URL = ((_d = (0, core_1.getInput)('bridge_download_url')
 exports.BRIDGE_DOWNLOAD_VERSION = ((_e = (0, core_1.getInput)('bridge_download_version')) === null || _e === void 0 ? void 0 : _e.trim()) || '';
 // Polaris related inputs
 exports.POLARIS_ACCESS_TOKEN = ((_f = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
-exports.POLARIS_APPLICATION_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
-exports.POLARIS_PROJECT_NAME = ((_h = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
+exports.POLARIS_APPLICATION_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
+exports.POLARIS_PROJECT_NAME = ((_h = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
 exports.POLARIS_ASSESSMENT_TYPES = ((_j = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
 exports.POLARIS_SERVER_URL = ((_k = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
 exports.POLARIS_TRIAGE = ((_l = (0, core_1.getInput)(constants.POLARIS_TRIAGE_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
@@ -454,8 +457,8 @@ exports.POLARIS_PARENT_BRANCH_NAME = ((_q = (0, core_1.getInput)(constants.POLAR
 exports.COVERITY_URL = ((_r = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
 exports.COVERITY_USER = ((_s = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
 exports.COVERITY_PASSPHRASE = ((_t = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
-exports.COVERITY_PROJECT_NAME = ((_u = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
-exports.COVERITY_STREAM_NAME = ((_v = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
+exports.COVERITY_PROJECT_NAME = ((_u = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
+exports.COVERITY_STREAM_NAME = ((_v = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME] || '';
 exports.COVERITY_INSTALL_DIRECTORY = ((_w = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
 exports.COVERITY_POLICY_VIEW = ((_x = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
 exports.COVERITY_REPOSITORY_NAME = ((_y = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
@@ -1190,6 +1193,7 @@ const inputs = __importStar(__nccwpck_require__(7481));
 const blackduck_1 = __nccwpck_require__(6619);
 const constants = __importStar(__nccwpck_require__(9717));
 const utility_1 = __nccwpck_require__(7643);
+const application_constants_1 = __nccwpck_require__(9717);
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
@@ -1269,7 +1273,7 @@ class SynopsysToolsParameter {
                         user: { name: inputs.COVERITY_USER, password: inputs.COVERITY_PASSPHRASE },
                         url: inputs.COVERITY_URL,
                         project: { name: inputs.COVERITY_PROJECT_NAME },
-                        stream: { name: inputs.COVERITY_STREAM_NAME }
+                        stream: { name: inputs.COVERITY_PROJECT_NAME.concat('-').concat(inputs.COVERITY_STREAM_NAME) }
                     },
                     automation: {}
                 },
@@ -1405,15 +1409,15 @@ class SynopsysToolsParameter {
     }
     getGithubRepoInfo() {
         const githubToken = inputs.GITHUB_TOKEN;
-        const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
+        const githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        const githubBranchName = (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
-        const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
-        const githubAPIURL = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
+        const githubBranchName = (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
+        const githubRef = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF];
+        const githubAPIURL = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
-        const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
+        const githubRepoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if ((0, validators_1.isNullOrEmptyValue)(githubToken)) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }

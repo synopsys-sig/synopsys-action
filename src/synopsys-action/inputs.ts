@@ -1,5 +1,6 @@
 import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
+import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
 export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = getInput(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)?.trim() || ''
 export const ENABLE_NETWORK_AIR_GAP = (getInput(constants.NETWORK_AIRGAP_KEY)?.trim() || getInput(constants.BRIDGE_NETWORK_AIRGAP_KEY)?.trim()) === 'true' || false
@@ -10,8 +11,8 @@ export const BRIDGE_DOWNLOAD_VERSION = getInput('bridge_download_version')?.trim
 
 // Polaris related inputs
 export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''
-export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_NAME_KEY)?.trim() || ''
-export const POLARIS_PROJECT_NAME = getInput(constants.POLARIS_PROJECT_NAME_KEY)?.trim() || ''
+export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_NAME_KEY)?.trim() || process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+export const POLARIS_PROJECT_NAME = getInput(constants.POLARIS_PROJECT_NAME_KEY)?.trim() || process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || ''
 export const POLARIS_ASSESSMENT_TYPES = getInput(constants.POLARIS_ASSESSMENT_TYPES_KEY)?.trim() || ''
 export const POLARIS_SERVER_URL = getInput(constants.POLARIS_SERVER_URL_KEY)?.trim() || ''
 export const POLARIS_TRIAGE = getInput(constants.POLARIS_TRIAGE_KEY)?.trim() || ''
@@ -24,8 +25,8 @@ export const POLARIS_PARENT_BRANCH_NAME = getInput(constants.POLARIS_BRANCH_PARE
 export const COVERITY_URL = getInput(constants.COVERITY_URL_KEY)?.trim() || ''
 export const COVERITY_USER = getInput(constants.COVERITY_USER_KEY)?.trim() || ''
 export const COVERITY_PASSPHRASE = getInput(constants.COVERITY_PASSPHRASE_KEY)?.trim() || ''
-export const COVERITY_PROJECT_NAME = getInput(constants.COVERITY_PROJECT_NAME_KEY)?.trim() || ''
-export const COVERITY_STREAM_NAME = getInput(constants.COVERITY_STREAM_NAME_KEY)?.trim() || ''
+export const COVERITY_PROJECT_NAME = getInput(constants.COVERITY_PROJECT_NAME_KEY)?.trim() || process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || ''
+export const COVERITY_STREAM_NAME = getInput(constants.COVERITY_STREAM_NAME_KEY)?.trim() || process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME] || ''
 export const COVERITY_INSTALL_DIRECTORY = getInput(constants.COVERITY_INSTALL_DIRECTORY_KEY)?.trim() || ''
 export const COVERITY_POLICY_VIEW = getInput(constants.COVERITY_POLICY_VIEW_KEY)?.trim() || ''
 export const COVERITY_REPOSITORY_NAME = getInput(constants.COVERITY_REPOSITORY_NAME_KEY)?.trim() || ''
