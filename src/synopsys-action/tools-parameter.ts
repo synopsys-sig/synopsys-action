@@ -30,7 +30,7 @@ export class SynopsysToolsParameter {
     this.tempDir = tempDir
   }
 
-  getFormattedCommandForPolaris(): string {
+  getFormattedCommandForPolaris(githubRepoName: string): string {
     let command = ''
     const assessmentTypeArray: string[] = []
     if (inputs.POLARIS_ASSESSMENT_TYPES) {
@@ -46,13 +46,23 @@ export class SynopsysToolsParameter {
       }
     }
 
+    let projectName = inputs.POLARIS_PROJECT_NAME
+    if (isNullOrEmptyValue(projectName)) {
+      projectName = githubRepoName
+    }
+
+    let applicationName = inputs.POLARIS_APPLICATION_NAME
+    if (isNullOrEmptyValue(applicationName)) {
+      applicationName = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+    }
+
     const polData: InputData<Polaris> = {
       data: {
         polaris: {
           accesstoken: inputs.POLARIS_ACCESS_TOKEN,
           serverUrl: inputs.POLARIS_SERVER_URL,
-          application: {name: inputs.POLARIS_APPLICATION_NAME},
-          project: {name: inputs.POLARIS_PROJECT_NAME},
+          application: {name: applicationName},
+          project: {name: projectName},
           assessment: {types: assessmentTypeArray},
           branch: {parent: {}}
         }
@@ -100,16 +110,29 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForCoverity(): string {
+  getFormattedCommandForCoverity(githubRepoName: string): string {
     let command = ''
+
+    let coverityStreamName = inputs.COVERITY_STREAM_NAME
+
+    if (isNullOrEmptyValue(coverityStreamName)) {
+      const defaultStreamName = (process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+      coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName)
+    }
+
+    let coverityProjectName = inputs.COVERITY_PROJECT_NAME
+    if (isNullOrEmptyValue(coverityProjectName)) {
+      coverityProjectName = githubRepoName
+    }
+
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
           connect: {
             user: {name: inputs.COVERITY_USER, password: inputs.COVERITY_PASSPHRASE},
             url: inputs.COVERITY_URL,
-            project: {name: inputs.COVERITY_PROJECT_NAME},
-            stream: {name: inputs.COVERITY_PROJECT_NAME.concat('-').concat(inputs.COVERITY_STREAM_NAME as string)}
+            project: {name: coverityProjectName},
+            stream: {name: coverityStreamName}
           },
           automation: {}
         },

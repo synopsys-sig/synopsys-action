@@ -436,7 +436,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_AUTOMATION_PRCOMMENT = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_AUTOMATION_PRCOMMENT = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
-const application_constants_1 = __nccwpck_require__(9717);
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
 exports.ENABLE_NETWORK_AIR_GAP = (((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || ((_c = (0, core_1.getInput)(constants.BRIDGE_NETWORK_AIRGAP_KEY)) === null || _c === void 0 ? void 0 : _c.trim())) === 'true' || false;
 //Bridge download url
@@ -444,8 +443,8 @@ exports.BRIDGE_DOWNLOAD_URL = ((_d = (0, core_1.getInput)('bridge_download_url')
 exports.BRIDGE_DOWNLOAD_VERSION = ((_e = (0, core_1.getInput)('bridge_download_version')) === null || _e === void 0 ? void 0 : _e.trim()) || '';
 // Polaris related inputs
 exports.POLARIS_ACCESS_TOKEN = ((_f = (0, core_1.getInput)(constants.POLARIS_ACCESS_TOKEN_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || '';
-exports.POLARIS_APPLICATION_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
-exports.POLARIS_PROJECT_NAME = ((_h = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
+exports.POLARIS_APPLICATION_NAME = ((_g = (0, core_1.getInput)(constants.POLARIS_APPLICATION_NAME_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
+exports.POLARIS_PROJECT_NAME = ((_h = (0, core_1.getInput)(constants.POLARIS_PROJECT_NAME_KEY)) === null || _h === void 0 ? void 0 : _h.trim()) || '';
 exports.POLARIS_ASSESSMENT_TYPES = ((_j = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_TYPES_KEY)) === null || _j === void 0 ? void 0 : _j.trim()) || '';
 exports.POLARIS_SERVER_URL = ((_k = (0, core_1.getInput)(constants.POLARIS_SERVER_URL_KEY)) === null || _k === void 0 ? void 0 : _k.trim()) || '';
 exports.POLARIS_TRIAGE = ((_l = (0, core_1.getInput)(constants.POLARIS_TRIAGE_KEY)) === null || _l === void 0 ? void 0 : _l.trim()) || '';
@@ -457,8 +456,8 @@ exports.POLARIS_PARENT_BRANCH_NAME = ((_q = (0, core_1.getInput)(constants.POLAR
 exports.COVERITY_URL = ((_r = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _r === void 0 ? void 0 : _r.trim()) || '';
 exports.COVERITY_USER = ((_s = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _s === void 0 ? void 0 : _s.trim()) || '';
 exports.COVERITY_PASSPHRASE = ((_t = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _t === void 0 ? void 0 : _t.trim()) || '';
-exports.COVERITY_PROJECT_NAME = ((_u = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
-exports.COVERITY_STREAM_NAME = ((_v = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME] || '';
+exports.COVERITY_PROJECT_NAME = ((_u = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _u === void 0 ? void 0 : _u.trim()) || '';
+exports.COVERITY_STREAM_NAME = ((_v = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _v === void 0 ? void 0 : _v.trim()) || '';
 exports.COVERITY_INSTALL_DIRECTORY = ((_w = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _w === void 0 ? void 0 : _w.trim()) || '';
 exports.COVERITY_POLICY_VIEW = ((_x = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _x === void 0 ? void 0 : _x.trim()) || '';
 exports.COVERITY_REPOSITORY_NAME = ((_y = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _y === void 0 ? void 0 : _y.trim()) || '';
@@ -780,17 +779,19 @@ class SynopsysBridge {
                 if (invalidParams.length === 3) {
                     return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
                 }
+                const githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
+                const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
                 // validating and preparing command for polaris
                 const polarisErrors = (0, validators_1.validatePolarisInputs)();
                 if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                    formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
+                    formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(githubRepoName));
                 }
                 // validating and preparing command for coverity
                 const coverityErrors = (0, validators_1.validateCoverityInputs)();
                 if (coverityErrors.length === 0 && inputs.COVERITY_URL) {
                     const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                    formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
+                    formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(githubRepoName));
                 }
                 // validating and preparing command for blackduck
                 const blackduckErrors = (0, validators_1.validateBlackDuckInputs)();
@@ -1198,7 +1199,7 @@ class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
     }
-    getFormattedCommandForPolaris() {
+    getFormattedCommandForPolaris(githubRepoName) {
         let command = '';
         const assessmentTypeArray = [];
         if (inputs.POLARIS_ASSESSMENT_TYPES) {
@@ -1214,13 +1215,21 @@ class SynopsysToolsParameter {
                 }
             }
         }
+        let projectName = inputs.POLARIS_PROJECT_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(projectName)) {
+            projectName = githubRepoName;
+        }
+        let applicationName = inputs.POLARIS_APPLICATION_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(applicationName)) {
+            applicationName = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
+        }
         const polData = {
             data: {
                 polaris: {
                     accesstoken: inputs.POLARIS_ACCESS_TOKEN,
                     serverUrl: inputs.POLARIS_SERVER_URL,
-                    application: { name: inputs.POLARIS_APPLICATION_NAME },
-                    project: { name: inputs.POLARIS_PROJECT_NAME },
+                    application: { name: applicationName },
+                    project: { name: projectName },
                     assessment: { types: assessmentTypeArray },
                     branch: { parent: {} }
                 }
@@ -1264,16 +1273,25 @@ class SynopsysToolsParameter {
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
-    getFormattedCommandForCoverity() {
+    getFormattedCommandForCoverity(githubRepoName) {
         let command = '';
+        let coverityStreamName = inputs.COVERITY_STREAM_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(coverityStreamName)) {
+            const defaultStreamName = (process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
+            coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName);
+        }
+        let coverityProjectName = inputs.COVERITY_PROJECT_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(coverityProjectName)) {
+            coverityProjectName = githubRepoName;
+        }
         const covData = {
             data: {
                 coverity: {
                     connect: {
                         user: { name: inputs.COVERITY_USER, password: inputs.COVERITY_PASSPHRASE },
                         url: inputs.COVERITY_URL,
-                        project: { name: inputs.COVERITY_PROJECT_NAME },
-                        stream: { name: inputs.COVERITY_PROJECT_NAME.concat('-').concat(inputs.COVERITY_STREAM_NAME) }
+                        project: { name: coverityProjectName },
+                        stream: { name: coverityStreamName }
                     },
                     automation: {}
                 },
@@ -1675,8 +1693,6 @@ function validatePolarisInputs() {
     if (inputs.POLARIS_SERVER_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
-        paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME);
-        paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
         paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
         paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
         errors = validateParameters(paramsMap, constants.POLARIS_KEY);
@@ -1692,7 +1708,6 @@ function validateCoverityInputs() {
         paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE);
         paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
         paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
-        paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
         errors = validateParameters(paramsMap, constants.COVERITY_KEY);
     }
     return errors;
