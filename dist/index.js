@@ -1707,7 +1707,6 @@ function validateCoverityInputs() {
         paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
         paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE);
         paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
-        paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
         errors = validateParameters(paramsMap, constants.COVERITY_KEY);
     }
     return errors;

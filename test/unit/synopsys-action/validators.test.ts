@@ -85,7 +85,7 @@ test('Coverity - Without mandatory fields', async () => {
     expect(response).toBe(false)
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('[coverity_user,coverity_passphrase,coverity_project_name] - required parameters for coverity is missing')
+    expect(error.message).toContain('[coverity_user,coverity_passphrase] - required parameters for coverity is missing')
   }
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
 })
