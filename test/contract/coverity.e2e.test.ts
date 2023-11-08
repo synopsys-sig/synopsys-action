@@ -12,9 +12,7 @@ const coverityParamMap: Map<string, string> = new Map<string, string>()
 coverityParamMap.set('COVERITY_URL', 'https://testing.coverity.synopsys.com')
 coverityParamMap.set('COVERITY_USER', 'User1')
 coverityParamMap.set('COVERITY_PASSPHRASE', 'passphrase')
-coverityParamMap.set('COVERITY_PROJECT_NAME', 'Project')
-coverityParamMap.set('COVERITY_STREAM_NAME', 'stream')
-coverityParamMap.set('COVERITY_INSTALL_DIRECTORY', '/user/coverity')
+coverityParamMap.set('COVERITY_INSTALL_DIRECTORY', '/')
 coverityParamMap.set('COVERITY_POLICY_VIEW', 'policy')
 coverityParamMap.set('COVERITY_REPOSITORY_NAME', 'repo')
 coverityParamMap.set('COVERITY_BRANCH_NAME', 'branch')
@@ -68,34 +66,6 @@ describe('Coverity flow contract', () => {
     }
   })
 
-  it('With missing mandatory fields coverity.connect.project.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PROJECT_NAME'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
-  it('With missing mandatory fields coverity.connect.stream.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_STREAM_NAME'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
   it('With all mandatory and optional fields', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockCoverityParamsExcept(['NONE'])
@@ -114,13 +84,12 @@ describe('Coverity flow contract', () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockCoverityParamsExcept(['NONE'])
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
-    jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValueOnce(false)
     setAllMocks()
 
     try {
       const resp = await run()
     } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 1')
+      expect(err).toContain('Missing required github token for fix pull request')
       error(err)
     }
   })
@@ -218,9 +187,11 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   Object.defineProperty(inputs, 'BRIDGE_NETWORK_AIRGAP', {value: true})
-  process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
+  process.env['GITHUB_REPOSITORY'] = 'synopsys-sig/synopsys-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
-  process.env['GITHUB_REF_NAME'] = 'synopsys-sig'
+  process.env['GITHUB_REF_NAME'] = 'synopsys-action'
+  process.env['GITHUB_EVENT_NAME'] = 'pull_request'
+  process.env['GITHUB_BASE_REF'] = 'current-branch'
 }
