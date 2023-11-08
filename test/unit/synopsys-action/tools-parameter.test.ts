@@ -4,16 +4,23 @@ import mock = jest.mock
 import * as inputs from '../../../src/synopsys-action/inputs'
 
 let tempPath = '/temp'
+let polaris_input_file = '/polaris_input.json'
+let coverity_input_file = '/coverity_input.json'
 
 beforeAll(() => {
+  createTempDir().then(path => (tempPath = path))
+})
+
+beforeEach(() => {
+  process.env['GITHUB_EVENT_NAME'] = 'pull_request'
   process.env['GITHUB_TOKEN'] = 'token'
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   process.env['GITHUB_REF_NAME'] = 'ref-name'
-
-  createTempDir().then(path => (tempPath = path))
+  process.env['GITHUB_HEAD_REF'] = 'feature-branch-1'
+  process.env['GITHUB_BASE_REF'] = 'main'
 })
 
 afterAll(() => {
@@ -35,7 +42,28 @@ test('Test getFormattedCommandForPolaris', () => {
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForPolaris()
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage polaris')
+
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: null})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: null})
+})
+
+test('Test getFormattedCommandForPolaris with default values', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'sca,sast'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(jsonData.data.polaris.application.name).toBe('synopsys-sig')
+  expect(jsonData.data.polaris.project.name).toBe('synopsys-action')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage polaris')
@@ -48,7 +76,7 @@ test('Test missing data error in getFormattedCommandForPolaris', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForPolaris()
+    stp.getFormattedCommandForPolaris('synopsys-action')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('parameters for Altair is missing')
@@ -62,7 +90,7 @@ test('Test invalid data error in getFormattedCommandForPolaris', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForPolaris()
+    stp.getFormattedCommandForPolaris('synopsys-action')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Invalid value for polaris_assessment_types')
@@ -79,7 +107,7 @@ test('Test getFormattedCommandForPolaris - prComment', () => {
   Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
-  const resp = stp.getFormattedCommandForPolaris()
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage polaris')
 })
@@ -96,8 +124,42 @@ test('Test getFormattedCommandForCoverity', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity()
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
 
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
+})
+
+test('Test getFormattedCommandForCoverity with default values - pull request event', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(jsonData.data.coverity.connect.project.name).toBe('synopsys-action')
+  expect(jsonData.data.coverity.connect.stream.name).toBe('synopsys-action-main')
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+})
+
+test('Test getFormattedCommandForCoverity with default values - non pull request event', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  process.env['GITHUB_EVENT_NAME'] = 'Manual'
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(jsonData.data.coverity.connect.project.name).toBe('synopsys-action')
+  expect(jsonData.data.coverity.connect.stream.name).toBe('synopsys-action-ref-name')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 })
@@ -119,10 +181,12 @@ test('Enable Test getFormattedCommandForCoverity Airgap: SUCCESS', () => {
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity()
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
 test('Enable Test getFormattedCommandForCoverity Airgap: EXCEPTION', () => {
@@ -141,11 +205,13 @@ test('Enable Test getFormattedCommandForCoverity Airgap: EXCEPTION', () => {
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
-    stp.getFormattedCommandForCoverity()
+    stp.getFormattedCommandForCoverity('synopsys-action')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Github API URL is missing')
   }
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
 test('Disable Test getFormattedCommandForCoverity Airgap', () => {
@@ -164,9 +230,11 @@ test('Disable Test getFormattedCommandForCoverity Airgap', () => {
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity()
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
 test('Test getFormattedCommandForCoverity - when COVERITY_LOCAL is true', () => {
@@ -178,10 +246,12 @@ test('Test getFormattedCommandForCoverity - when COVERITY_LOCAL is true', () => 
   Object.defineProperty(inputs, 'COVERITY_LOCAL', {value: true})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity()
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
 test('Test getFormattedCommandForCoverity - when COVERITY_LOCAL is false', () => {
@@ -193,10 +263,12 @@ test('Test getFormattedCommandForCoverity - when COVERITY_LOCAL is false', () =>
   Object.defineProperty(inputs, 'COVERITY_LOCAL', {value: false})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity()
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
 test('Test getFormattedCommandForCoverity - when COVERITY_VERSION is provided', () => {
@@ -209,9 +281,11 @@ test('Test getFormattedCommandForCoverity - when COVERITY_VERSION is provided', 
   Object.defineProperty(inputs, 'COVERITY_VERSION', {value: '2023.6'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForCoverity()
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
 test('Test getFormattedCommandForCoverity - pr comment', () => {
@@ -228,65 +302,68 @@ test('Test getFormattedCommandForCoverity - pr comment', () => {
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  let resp = stp.getFormattedCommandForCoverity()
+  let resp = stp.getFormattedCommandForCoverity('synopsys-action')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: false})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'false'})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'true'})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'FALSE'})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'TRUE'})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'FALSEEEE'})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: 'TRUEEEE'})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
 
   Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: ' '})
   stp = new SynopsysToolsParameter(tempPath)
-  resp = stp.getFormattedCommandForCoverity()
+  resp = stp.getFormattedCommandForCoverity('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage connect')
+
+  Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
 test('Test missing data error in getFormattedCommandForCoverity', () => {
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   try {
-    stp.getFormattedCommandForCoverity()
+    stp.getFormattedCommandForCoverity('synopsys-action')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('required parameters for Coverity is missing')
@@ -302,7 +379,7 @@ test('Test in getFormattedCommandForCoverityInstallDirectory', () => {
     Object.defineProperty(process, 'platform', {
       value: 'win32'
     })
-    stp.getFormattedCommandForCoverity()
+    stp.getFormattedCommandForCoverity('synopsys-action')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Invalid Install Directory')

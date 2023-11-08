@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = void 0;
+exports.GITHUB_ENVIRONMENT_VARIABLES = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -74,6 +74,17 @@ exports.EXIT_CODE_MAP = new Map([
 exports.RETRY_DELAY_IN_MILLISECONDS = 15000;
 exports.RETRY_COUNT = 3;
 exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
+exports.GITHUB_ENVIRONMENT_VARIABLES = {
+    GITHUB_TOKEN: 'GITHUB_TOKEN',
+    GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
+    GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
+    GITHUB_REF: 'GITHUB_REF',
+    GITHUB_REF_NAME: 'GITHUB_REF_NAME',
+    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
+    GITHUB_API_URL: 'GITHUB_API_URL',
+    GITHUB_BASE_REF: 'GITHUB_BASE_REF',
+    GITHUB_EVENT_NAME: 'GITHUB_EVENT_NAME'
+};
 
 
 /***/ }),
@@ -375,7 +386,7 @@ exports.extractZipped = extractZipped;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FIXPR_ENVIRONMENT_VARIABLES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = void 0;
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = void 0;
 var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
 (function (BLACKDUCK_SCAN_FAILURE_SEVERITIES) {
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["ALL"] = "ALL";
@@ -388,15 +399,6 @@ var BLACKDUCK_SCAN_FAILURE_SEVERITIES;
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["TRIVIAL"] = "TRIVIAL";
     BLACKDUCK_SCAN_FAILURE_SEVERITIES["UNSPECIFIED"] = "UNSPECIFIED";
 })(BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES || (exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = {}));
-exports.FIXPR_ENVIRONMENT_VARIABLES = {
-    GITHUB_TOKEN: 'GITHUB_TOKEN',
-    GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
-    GITHUB_HEAD_REF: 'GITHUB_HEAD_REF',
-    GITHUB_REF: 'GITHUB_REF',
-    GITHUB_REF_NAME: 'GITHUB_REF_NAME',
-    GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
-    GITHUB_API_URL: 'GITHUB_API_URL'
-};
 
 
 /***/ }),
@@ -777,17 +779,19 @@ class SynopsysBridge {
                 if (invalidParams.length === 3) {
                     return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
                 }
+                const githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
+                const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
                 // validating and preparing command for polaris
                 const polarisErrors = (0, validators_1.validatePolarisInputs)();
                 if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
                     const polarisCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                    formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris());
+                    formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(githubRepoName));
                 }
                 // validating and preparing command for coverity
                 const coverityErrors = (0, validators_1.validateCoverityInputs)();
                 if (coverityErrors.length === 0 && inputs.COVERITY_URL) {
                     const coverityCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                    formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity());
+                    formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(githubRepoName));
                 }
                 // validating and preparing command for blackduck
                 const blackduckErrors = (0, validators_1.validateBlackDuckInputs)();
@@ -1190,11 +1194,12 @@ const inputs = __importStar(__nccwpck_require__(7481));
 const blackduck_1 = __nccwpck_require__(6619);
 const constants = __importStar(__nccwpck_require__(9717));
 const utility_1 = __nccwpck_require__(7643);
+const application_constants_1 = __nccwpck_require__(9717);
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
     }
-    getFormattedCommandForPolaris() {
+    getFormattedCommandForPolaris(githubRepoName) {
         let command = '';
         const assessmentTypeArray = [];
         if (inputs.POLARIS_ASSESSMENT_TYPES) {
@@ -1210,13 +1215,21 @@ class SynopsysToolsParameter {
                 }
             }
         }
+        let projectName = inputs.POLARIS_PROJECT_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(projectName)) {
+            projectName = githubRepoName;
+        }
+        let applicationName = inputs.POLARIS_APPLICATION_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(applicationName)) {
+            applicationName = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
+        }
         const polData = {
             data: {
                 polaris: {
                     accesstoken: inputs.POLARIS_ACCESS_TOKEN,
                     serverUrl: inputs.POLARIS_SERVER_URL,
-                    application: { name: inputs.POLARIS_APPLICATION_NAME },
-                    project: { name: inputs.POLARIS_PROJECT_NAME },
+                    application: { name: applicationName },
+                    project: { name: projectName },
                     assessment: { types: assessmentTypeArray },
                     branch: { parent: {} }
                 }
@@ -1260,16 +1273,25 @@ class SynopsysToolsParameter {
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
-    getFormattedCommandForCoverity() {
+    getFormattedCommandForCoverity(githubRepoName) {
         let command = '';
+        let coverityStreamName = inputs.COVERITY_STREAM_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(coverityStreamName)) {
+            const defaultStreamName = (process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
+            coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName);
+        }
+        let coverityProjectName = inputs.COVERITY_PROJECT_NAME;
+        if ((0, validators_1.isNullOrEmptyValue)(coverityProjectName)) {
+            coverityProjectName = githubRepoName;
+        }
         const covData = {
             data: {
                 coverity: {
                     connect: {
                         user: { name: inputs.COVERITY_USER, password: inputs.COVERITY_PASSPHRASE },
                         url: inputs.COVERITY_URL,
-                        project: { name: inputs.COVERITY_PROJECT_NAME },
-                        stream: { name: inputs.COVERITY_STREAM_NAME }
+                        project: { name: coverityProjectName },
+                        stream: { name: coverityStreamName }
                     },
                     automation: {}
                 },
@@ -1405,15 +1427,15 @@ class SynopsysToolsParameter {
     }
     getGithubRepoInfo() {
         const githubToken = inputs.GITHUB_TOKEN;
-        const githubRepo = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
+        const githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        const githubBranchName = (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
-        const githubRef = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF];
-        const githubAPIURL = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
+        const githubBranchName = (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME];
+        const githubRef = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF];
+        const githubAPIURL = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL];
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
-        const githubRepoOwner = process.env[blackduck_1.FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
+        const githubRepoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if ((0, validators_1.isNullOrEmptyValue)(githubToken)) {
             throw new Error('Missing required github token for fix pull request/automation comment');
         }
@@ -1671,8 +1693,6 @@ function validatePolarisInputs() {
     if (inputs.POLARIS_SERVER_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.POLARIS_ACCESS_TOKEN_KEY, inputs.POLARIS_ACCESS_TOKEN);
-        paramsMap.set(constants.POLARIS_APPLICATION_NAME_KEY, inputs.POLARIS_APPLICATION_NAME);
-        paramsMap.set(constants.POLARIS_PROJECT_NAME_KEY, inputs.POLARIS_PROJECT_NAME);
         paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
         paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
         errors = validateParameters(paramsMap, constants.POLARIS_KEY);
@@ -1687,8 +1707,6 @@ function validateCoverityInputs() {
         paramsMap.set(constants.COVERITY_USER_KEY, inputs.COVERITY_USER);
         paramsMap.set(constants.COVERITY_PASSPHRASE_KEY, inputs.COVERITY_PASSPHRASE);
         paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
-        paramsMap.set(constants.COVERITY_PROJECT_NAME_KEY, inputs.COVERITY_PROJECT_NAME);
-        paramsMap.set(constants.COVERITY_STREAM_NAME_KEY, inputs.COVERITY_STREAM_NAME);
         errors = validateParameters(paramsMap, constants.COVERITY_KEY);
     }
     return errors;

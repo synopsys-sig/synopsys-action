@@ -51,7 +51,7 @@ test('Polaris - Without mandatory fields', async () => {
     expect(response).toBe(false)
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('[polaris_accessToken,polaris_application_name,polaris_project_name,polaris_assessment_types] - required parameters for polaris is missing')
+    expect(error.message).toContain('[polaris_accessToken,polaris_assessment_types] - required parameters for polaris is missing')
   }
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
 })
@@ -85,7 +85,7 @@ test('Coverity - Without mandatory fields', async () => {
     expect(response).toBe(false)
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('[coverity_user,coverity_passphrase,coverity_project_name,coverity_stream_name] - required parameters for coverity is missing')
+    expect(error.message).toContain('[coverity_user,coverity_passphrase] - required parameters for coverity is missing')
   }
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
 })

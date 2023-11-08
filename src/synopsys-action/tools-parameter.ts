@@ -6,9 +6,10 @@ import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
-import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, FIXPR_ENVIRONMENT_VARIABLES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
+import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
 import {parseToBoolean} from './utility'
+import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -29,7 +30,7 @@ export class SynopsysToolsParameter {
     this.tempDir = tempDir
   }
 
-  getFormattedCommandForPolaris(): string {
+  getFormattedCommandForPolaris(githubRepoName: string): string {
     let command = ''
     const assessmentTypeArray: string[] = []
     if (inputs.POLARIS_ASSESSMENT_TYPES) {
@@ -45,13 +46,23 @@ export class SynopsysToolsParameter {
       }
     }
 
+    let projectName = inputs.POLARIS_PROJECT_NAME
+    if (isNullOrEmptyValue(projectName)) {
+      projectName = githubRepoName
+    }
+
+    let applicationName = inputs.POLARIS_APPLICATION_NAME
+    if (isNullOrEmptyValue(applicationName)) {
+      applicationName = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+    }
+
     const polData: InputData<Polaris> = {
       data: {
         polaris: {
           accesstoken: inputs.POLARIS_ACCESS_TOKEN,
           serverUrl: inputs.POLARIS_SERVER_URL,
-          application: {name: inputs.POLARIS_APPLICATION_NAME},
-          project: {name: inputs.POLARIS_PROJECT_NAME},
+          application: {name: applicationName},
+          project: {name: projectName},
           assessment: {types: assessmentTypeArray},
           branch: {parent: {}}
         }
@@ -99,16 +110,29 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForCoverity(): string {
+  getFormattedCommandForCoverity(githubRepoName: string): string {
     let command = ''
+
+    let coverityStreamName = inputs.COVERITY_STREAM_NAME
+
+    if (isNullOrEmptyValue(coverityStreamName)) {
+      const defaultStreamName = (process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+      coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName)
+    }
+
+    let coverityProjectName = inputs.COVERITY_PROJECT_NAME
+    if (isNullOrEmptyValue(coverityProjectName)) {
+      coverityProjectName = githubRepoName
+    }
+
     const covData: InputData<Coverity> = {
       data: {
         coverity: {
           connect: {
             user: {name: inputs.COVERITY_USER, password: inputs.COVERITY_PASSPHRASE},
             url: inputs.COVERITY_URL,
-            project: {name: inputs.COVERITY_PROJECT_NAME},
-            stream: {name: inputs.COVERITY_STREAM_NAME}
+            project: {name: coverityProjectName},
+            stream: {name: coverityStreamName}
           },
           automation: {}
         },
@@ -260,16 +284,16 @@ export class SynopsysToolsParameter {
 
   private getGithubRepoInfo(): GithubData | undefined {
     const githubToken = inputs.GITHUB_TOKEN
-    const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
+    const githubRepo = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
-    const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF]
-    const githubAPIURL = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL]
+    const githubBranchName = parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
+    const githubRef = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
+    const githubAPIURL = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL]
 
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
-    const githubRepoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
+    const githubRepoOwner = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
 
     if (isNullOrEmptyValue(githubToken)) {
       throw new Error('Missing required github token for fix pull request/automation comment')
