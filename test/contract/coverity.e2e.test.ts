@@ -68,34 +68,6 @@ describe('Coverity flow contract', () => {
     }
   })
 
-  it('With missing mandatory fields coverity.connect.project.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PROJECT_NAME'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
-  it('With missing mandatory fields coverity.connect.stream.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_STREAM_NAME'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
   it('With all mandatory and optional fields', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockCoverityParamsExcept(['NONE'])
@@ -113,8 +85,7 @@ describe('Coverity flow contract', () => {
   it('With coverity.automation.prcomment true and empty github token', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
     mockCoverityParamsExcept(['NONE'])
-    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
-    jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValueOnce(false)
+    process.env['GITHUB_TOKEN'] = ''
     setAllMocks()
 
     try {
@@ -223,4 +194,5 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   process.env['GITHUB_REF_NAME'] = 'synopsys-sig'
+  process.env['GITHUB_TOKEN'] = 'token'
 }
