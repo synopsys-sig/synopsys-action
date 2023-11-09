@@ -3,6 +3,8 @@ import * as os from 'os'
 import path from 'path'
 import {APPLICATION_NAME} from '../application-constants'
 import {rmRF} from '@actions/io'
+import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
+import * as constants from '../application-constants'
 
 export function cleanUrl(url: string): string {
   if (url && url.endsWith('/')) {
@@ -53,4 +55,9 @@ export async function sleep(duration: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, duration)
   })
+}
+
+export function getDefaultSarifReportPath(appendFilePath: boolean): string {
+  const pwd = getWorkSpaceDirectory()
+  return !appendFilePath ? path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER) : path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER, constants.SARIF_DEFAULT_FILE_NAME)
 }

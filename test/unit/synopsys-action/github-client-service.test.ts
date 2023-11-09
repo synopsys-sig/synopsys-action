@@ -4,12 +4,8 @@ import {IncomingMessage} from 'http'
 import Mocked = jest.Mocked
 import {GithubClientService} from '../../../src/synopsys-action/github-client-service'
 import {Socket} from 'net'
-import * as artifact from '@actions/artifact'
-import * as configVariables from '@actions/artifact/lib/internal/config-variables'
-import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as utility from '../../../src/synopsys-action/utility'
 import fs from 'fs'
-import * as zlib from 'zlib'
 
 jest.mock('@actions/artifact')
 const originalEnv = process.env
@@ -26,15 +22,14 @@ beforeEach(() => {
   Object.defineProperty(process, 'platform', {value: 'linux'})
 })
 
-describe('upload sarif', () => {
+describe('upload sarif results', () => {
   it('should upload sarif report successfully with default location', async function () {
     const githubClientService = new GithubClientService()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
-    const mockCheckIfPathExists = jest.spyOn(utility, 'checkIfPathExists')
-    mockCheckIfPathExists.mockReturnValue(true)
-    const mockReadFileSync = jest.spyOn(fs, 'readFileSync')
-    mockReadFileSync.mockReturnValue('test-content')
+    jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
+    jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
+    jest.spyOn(fs, 'readFileSync').mockReturnValue('test-content')
 
     const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
     const httpResponse: Mocked<HttpClientResponse> = {
@@ -43,20 +38,8 @@ describe('upload sarif', () => {
     }
     httpResponse.message.statusCode = 202
     jest.spyOn(HttpClient.prototype, 'post').mockResolvedValueOnce(httpResponse)
-
-    const mockUploadArtifact = jest.fn()
-    const mockArtifactClient: Partial<artifact.ArtifactClient> = {
-      uploadArtifact: mockUploadArtifact
-    }
-    const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
-    jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
-    jest.spyOn(mockArtifactClient, 'uploadArtifact')
-
     const response = await githubClientService.uploadSarifReport()
-    expect(mockUploadArtifact).toHaveBeenCalled()
-    expect(mockUploadArtifact).toHaveBeenCalledWith('sarif_report', ['.bridge/SARIF Report Generator/sarif_report.json'], '.bridge/SARIF Report Generator', {continueOnError: false})
     expect(response).toBeUndefined()
-    mockCreate.mockRestore()
   })
 
   it('should upload sarif report successfully with REPORTS_SARIF_FILE_PATH', async function () {
@@ -64,10 +47,10 @@ describe('upload sarif', () => {
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
     Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
-    const mockCheckIfPathExists = jest.spyOn(utility, 'checkIfPathExists')
-    mockCheckIfPathExists.mockReturnValue(true)
-    const mockReadFileSync = jest.spyOn(fs, 'readFileSync')
-    mockReadFileSync.mockReturnValue('test-content')
+
+    jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
+    jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
+    jest.spyOn(fs, 'readFileSync').mockReturnValue('test-content')
 
     const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
     const httpResponse: Mocked<HttpClientResponse> = {
@@ -76,31 +59,60 @@ describe('upload sarif', () => {
     }
     httpResponse.message.statusCode = 202
     jest.spyOn(HttpClient.prototype, 'post').mockResolvedValueOnce(httpResponse)
-
-    const mockUploadArtifact = jest.fn()
-    const mockArtifactClient: Partial<artifact.ArtifactClient> = {
-      uploadArtifact: mockUploadArtifact
-    }
-    const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
-    jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
-    jest.spyOn(mockArtifactClient, 'uploadArtifact')
-
     const response = await githubClientService.uploadSarifReport()
-    expect(mockUploadArtifact).toHaveBeenCalled()
-    expect(mockUploadArtifact).toHaveBeenCalledWith('sarif_report', ['test-path'], '.', {continueOnError: false})
     expect(response).toBeUndefined()
-    mockCreate.mockRestore()
   })
 
-  it('should not upload sarif report if it does not exist', async function () {
+  it('should throw error while upload sarif report', async function () {
     const githubClientService = new GithubClientService()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
-    Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'testpath'})
-    const mockCheckIfPathExists = jest.spyOn(utility, 'checkIfPathExists')
-    mockCheckIfPathExists.mockReturnValue(false)
-    const response = await githubClientService.uploadSarifReport()
-    expect(response).toBeUndefined()
+    Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
+
+    jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
+    jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
+    jest.spyOn(fs, 'readFileSync').mockReturnValue('test-content')
+
+    const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+    const httpResponse: Mocked<HttpClientResponse> = {
+      message: incomingMessage,
+      readBody: jest.fn()
+    }
+    httpResponse.message.statusCode = 500
+    jest.spyOn(HttpClient.prototype, 'post').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
+
+    try {
+      await githubClientService.uploadSarifReport()
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toContain('Error uploading SARIF data to GitHub Advance Security:')
+    }
+  })
+
+  it('should throw error while upload sarif report if file does not exist', async function () {
+    const githubClientService = new GithubClientService()
+
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+
+    jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(false)
+    jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
+    try {
+      await githubClientService.uploadSarifReport()
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toContain('No SARIF file found to upload')
+    }
+  })
+
+  it('should throw error for missing GitHub token while uploading sarif result to advance security', async function () {
+    const githubClientService = new GithubClientService()
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    try {
+      await githubClientService.uploadSarifReport()
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error)
+      expect(error.message).toContain('Missing required GitHub token for uploading SARIF result to advance security')
+    }
   })
 })
 

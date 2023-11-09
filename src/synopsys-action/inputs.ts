@@ -54,3 +54,4 @@ export const REPORTS_SARIF_FILE_PATH = getInput(constants.REPORTS_SARIF_FILE_PAT
 export const REPORTS_SARIF_ISSUE_TYPES = getInput(constants.REPORTS_SARIF_ISSUE_TYPES_KEY)?.trim() || ''
 export const REPORTS_SARIF_SEVERITIES = getInput(constants.REPORTS_SARIF_SEVERITIES_KEY)?.trim() || ''
 export const REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
+export const UPLOAD_SARIF_RESULT = getInput(constants.UPLOAD_SARIF_RESULT_KEY)?.trim() || ''

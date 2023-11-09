@@ -3,14 +3,9 @@ import * as inputs from './inputs'
 import {FIXPR_ENVIRONMENT_VARIABLES} from './input-data/blackduck'
 import * as fs from 'fs'
 import * as zlib from 'zlib'
-import {checkIfPathExists} from './utility'
-import {UploadResponse} from '@actions/artifact/lib/internal/upload-response'
-import * as artifact from '@actions/artifact'
-import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
-import {UploadOptions} from '@actions/artifact/lib/internal/upload-options'
-import {info, warning} from '@actions/core'
-import * as path from 'path'
-import * as constants from '../application-constants'
+import {checkIfPathExists, getDefaultSarifReportPath} from './utility'
+import {debug, info, warning} from '@actions/core'
+import {isNullOrEmptyValue} from './validators'
 
 export class GithubClientService {
   gitHubCodeScanningUrl: string
@@ -20,6 +15,9 @@ export class GithubClientService {
 
   async uploadSarifReport(): Promise<void> {
     info('Uploading SARIF results to GitHub')
+    if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+      throw new Error('Missing required GitHub token for uploading SARIF result to advance security')
+    }
     const githubToken = inputs.GITHUB_TOKEN.trim()
     const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const repoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
@@ -31,7 +29,7 @@ export class GithubClientService {
       return url.replace(/{(\d+)}/g, (match, index) => args[index] || '')
     }
     const endpoint = stringFormat(githubApiURL.concat(this.gitHubCodeScanningUrl), repoOwner, repoName)
-    const sarifFilePath = inputs.REPORTS_SARIF_FILE_PATH.trim() ? inputs.REPORTS_SARIF_FILE_PATH.trim() : this.getDefaultSarifReportPath(true)
+    const sarifFilePath = inputs.REPORTS_SARIF_FILE_PATH.trim() ? inputs.REPORTS_SARIF_FILE_PATH.trim() : getDefaultSarifReportPath(true)
     if (checkIfPathExists(sarifFilePath)) {
       try {
         const sarifContent = fs.readFileSync(sarifFilePath, 'utf8')
@@ -48,36 +46,17 @@ export class GithubClientService {
           Authorization: `Bearer ${githubToken}`,
           Accept: 'application/vnd.github+json'
         })
-        info(`http status code:${httpResponse.message.statusCode}`)
+        debug(`HTTP Status Code: ${httpResponse.message.statusCode}`)
         if (httpResponse.message.statusCode === 202) {
-          await this.uploadSarifReportAsArtifact(sarifFilePath)
+          info('SARIF result uploaded successfully to GitHub Advance Security')
         } else {
           warning('Error uploading SARIF data to GitHub Advance Security')
         }
       } catch (error) {
-        warning(`Error uploading SARIF data to GitHub Advance Security: ${error}`)
+        throw new Error(`Error uploading SARIF data to GitHub Advance Security: ${error}`)
       }
     } else {
-      warning('No SARIF file to upload')
+      throw new Error('No SARIF file found to upload')
     }
-  }
-
-  private async uploadSarifReportAsArtifact(sarifFilePath: string): Promise<UploadResponse | void> {
-    const artifactClient = artifact.create()
-    let rootDir = ''
-    if (inputs.REPORTS_SARIF_FILE_PATH.trim()) {
-      rootDir = path.dirname(sarifFilePath)
-    } else {
-      rootDir = this.getDefaultSarifReportPath(false)
-    }
-    info('rootDir: '.concat(rootDir))
-    const options: UploadOptions = {}
-    options.continueOnError = false
-    return await artifactClient.uploadArtifact(constants.SARIF_UPLOAD_FOLDER_ARTIFACT_NAME, [sarifFilePath], rootDir, options)
-  }
-
-  private getDefaultSarifReportPath(appendFilePath: boolean): string {
-    const pwd = getWorkSpaceDirectory()
-    return !appendFilePath ? path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER) : path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER, constants.SARIF_DEFAULT_FILE_NAME)
   }
 }

@@ -4,9 +4,10 @@ import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
 import {DownloadFileResponse} from '../../src/synopsys-action/download-utility'
 import * as downloadUtility from './../../src/synopsys-action/download-utility'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
-import * as diagnostics from '../../src/synopsys-action/diagnostics'
+import * as diagnostics from '../../src/synopsys-action/artifacts'
 import {UploadResponse} from '@actions/artifact'
 import {GithubClientService} from '../../src/synopsys-action/github-client-service'
+import {UPLOAD_SARIF_RESULT} from '../../src/synopsys-action/inputs'
 beforeEach(() => {
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
@@ -472,7 +473,7 @@ test('Test error messages with bridge exit codes', () => {
   var errorMessage = 'Error: The process failed with exit code 2'
   expect(logBridgeExitCodes(errorMessage)).toEqual('Exit Code: 2 Error from adapter end')
 })
-test('Run Polaris flow for uploading sarif result', async () => {
+test('Run Polaris flow for uploading sarif result as artifact', async () => {
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
   Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
@@ -483,9 +484,42 @@ test('Run Polaris flow for uploading sarif result', async () => {
   Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: 'C://user/temp/download/',
+    fileName: 'C://user/temp/download/bridge-win.zip'
+  }
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+
+  let response = await run()
+  expect(response).not.toBe(null)
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+})
+
+test('Run Polaris flow for uploading sarif result to advance security and artifacts', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'UPLOAD_SARIF_RESULT', {value: 'true'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
     fileName: 'C://user/temp/download/bridge-win.zip'
@@ -499,5 +533,35 @@ test('Run Polaris flow for uploading sarif result', async () => {
 
   let response = await run()
   expect(response).not.toBe(null)
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+})
+
+test('should throw error while uploading sarif result to advance security', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
+  Object.defineProperty(inputs, 'UPLOAD_SARIF_RESULT', {value: 'true'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: 'C://user/temp/download/',
+    fileName: 'C://user/temp/download/bridge-win.zip'
+  }
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
+
+  try {
+    await run()
+  } catch (error: any) {
+    expect(error.message).toEqual('Error uploading SARIF data to GitHub Advance Security:')
+  }
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
 })

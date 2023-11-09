@@ -4,7 +4,7 @@ import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from './application-constants'
 import * as inputs from './synopsys-action/inputs'
-import {uploadDiagnostics} from './synopsys-action/diagnostics'
+import {uploadDiagnostics, uploadSarifReportAsArtifact} from './synopsys-action/artifacts'
 import {GithubClientService} from './synopsys-action/github-client-service'
 
 export async function run() {
@@ -32,9 +32,14 @@ export async function run() {
   } catch (error) {
     throw error
   } finally {
-    if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
+    // Upload results to code scanning tab
+    if (parseToBoolean(inputs.UPLOAD_SARIF_RESULT)) {
       const gitHubClientService = new GithubClientService()
       await gitHubClientService.uploadSarifReport()
+    }
+    // Upload sarif file as GitHub artifact
+    if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
+      await uploadSarifReportAsArtifact()
     }
     if (inputs.INCLUDE_DIAGNOSTICS) {
       await uploadDiagnostics()

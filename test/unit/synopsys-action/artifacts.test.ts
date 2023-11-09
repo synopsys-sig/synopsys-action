@@ -1,11 +1,12 @@
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
 import {tmpdir} from 'os'
-import {uploadDiagnostics} from '../../../src/synopsys-action/diagnostics'
+import {uploadDiagnostics, uploadSarifReportAsArtifact} from '../../../src/synopsys-action/artifacts'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import {UploadOptions} from '@actions/artifact/lib/internal/upload-options'
 import * as inputs from '../../../src/synopsys-action/inputs'
 import {UploadResponse} from '@actions/artifact'
 import * as artifact from '@actions/artifact'
+import * as utility from '../../../src/synopsys-action/utility'
 const fs = require('fs')
 
 let tempPath = '/temp'
@@ -27,7 +28,7 @@ describe('uploadDiagnostics - success', () => {
     const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
 
     const mockPwd = './.bridge'
-    const mockFiles = ['./.bridge/SARIF Report Generator/sarif_report.json', './.bridge/bridge.log']
+    const mockFiles = ['./.bridge/bridge.log']
     const mockOptions: UploadOptions = {continueOnError: false}
     jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
 
@@ -70,4 +71,21 @@ test('Test uploadDiagnostics - invalid value for retention days', () => {
   dir.mockReturnValue(files)
   jest.spyOn(fs.statSync('./.bridge/bridge.log'), 'isDirectory').mockReturnValue(false)
   uploadDiagnostics().catch(Error)
+})
+
+describe('uploadSarifReport', () => {
+  it('should uploadSarifReport successfully', async () => {
+    const mockUploadArtifact = jest.fn()
+    const mockArtifactClient: Partial<artifact.ArtifactClient> = {
+      uploadArtifact: mockUploadArtifact
+    }
+    const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
+    jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
+    jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
+    jest.spyOn(mockArtifactClient, 'uploadArtifact')
+    await uploadSarifReportAsArtifact()
+    expect(mockUploadArtifact).toHaveBeenCalled()
+    expect(mockUploadArtifact).toHaveBeenCalledWith('sarif_report', ['test-path'], 'test-path', {continueOnError: false})
+    mockCreate.mockRestore()
+  })
 })

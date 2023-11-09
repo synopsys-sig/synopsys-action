@@ -736,17 +736,3 @@ test('Test getFormattedCommandForBlackduck with sarif params', () => {
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
 })
-
-test('Test getFormattedCommandForBlackduck with sarif params and missing github token', () => {
-  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
-  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
-  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
-  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
-  try {
-    stp.getFormattedCommandForBlackduck()
-  } catch (error: any) {
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Missing required github token for uploading SARIF result')
-  }
-})
