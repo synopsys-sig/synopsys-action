@@ -7,7 +7,6 @@ import {Socket} from 'net'
 import * as utility from '../../../src/synopsys-action/utility'
 import fs from 'fs'
 
-jest.mock('@actions/artifact')
 const originalEnv = process.env
 beforeEach(() => {
   jest.resetModules()
@@ -20,6 +19,18 @@ beforeEach(() => {
     GITHUB_SHA: 'test-sha'
   }
   Object.defineProperty(process, 'platform', {value: 'linux'})
+  jest.mock('@actions/artifact')
+})
+
+test('should throw error for missing GitHub token while uploading sarif result to advance security', async function () {
+  const githubClientService = new GithubClientService()
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+  try {
+    await githubClientService.uploadSarifReport()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Missing required GitHub token for uploading SARIF result to advance security')
+  }
 })
 
 describe('upload sarif results', () => {
@@ -101,17 +112,6 @@ describe('upload sarif results', () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error)
       expect(error.message).toContain('No SARIF file found to upload')
-    }
-  })
-
-  it('should throw error for missing GitHub token while uploading sarif result to advance security', async function () {
-    const githubClientService = new GithubClientService()
-    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
-    try {
-      await githubClientService.uploadSarifReport()
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(Error)
-      expect(error.message).toContain('Missing required GitHub token for uploading SARIF result to advance security')
     }
   })
 })
