@@ -34,7 +34,7 @@ export const COVERITY_VERSION_KEY = 'coverity_version'
 
 // Polaris
 export const POLARIS_ACCESSTOKEN_KEY = 'polaris_accessToken'
-export const POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken'
+export const POLARIS_ACCESS_TOKEN_KEY = 'polaris_access_token'
 export const POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name'
 export const POLARIS_PROJECT_NAME_KEY = 'polaris_project_name'
 export const POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types'

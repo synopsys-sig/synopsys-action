@@ -39,7 +39,7 @@ exports.BRIDGE_COVERITY_VERSION_KEY = 'bridge_coverity_version';
 exports.COVERITY_VERSION_KEY = 'coverity_version';
 // Polaris
 exports.POLARIS_ACCESSTOKEN_KEY = 'polaris_accessToken';
-exports.POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken';
+exports.POLARIS_ACCESS_TOKEN_KEY = 'polaris_access_token';
 exports.POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name';
 exports.POLARIS_PROJECT_NAME_KEY = 'polaris_project_name';
 exports.POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types';

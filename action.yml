@@ -41,7 +41,7 @@ inputs:
   bridge_coverity_version:
     description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
     required: false  
-  polaris_accessToken:
+  polaris_access_token:
     description: 'Polaris Access Token'
     required: false
   polaris_application_name:
@@ -53,7 +53,7 @@ inputs:
   polaris_assessment_types:
     description: 'Polaris Assess Types SAST/SCA'
     required: false
-  polaris_serverUrl:
+  polaris_server_url:
     description: 'Polaris Server URL'
     required: false
   polaris_prComment_enabled:
@@ -74,7 +74,7 @@ inputs:
   synopsys_bridge_install_directory:
     description: 'Synopsys Bridge Install Directory'
     required: false
-  bridge_download_url:
+  synopsys_bridge_download_url:
     description: 'URL to download bridge from'
     required: false
   blackduck_url:
@@ -107,7 +107,7 @@ inputs:
   blackduck_fixpr_useUpgradeGuidance:
     description: 'Flag to enable long term upgrade guidance'
     required: false
-  bridge_download_version:
+  synopsys_bridge_download_version:
     description: 'If provided, Synopsys-action will configure the version of Bridge'
     required: false
   blackduck_automation_prcomment:
