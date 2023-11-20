@@ -1,11 +1,11 @@
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import * as inputs from './inputs'
-import {FIXPR_ENVIRONMENT_VARIABLES} from './input-data/blackduck'
 import * as fs from 'fs'
 import * as zlib from 'zlib'
 import {checkIfPathExists, getDefaultSarifReportPath} from './utility'
 import {debug, info, warning} from '@actions/core'
 import {isNullOrEmptyValue} from './validators'
+import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
 export class GithubClientService {
   gitHubCodeScanningUrl: string
@@ -19,12 +19,12 @@ export class GithubClientService {
       throw new Error('Missing required GitHub token for uploading SARIF result to advance security')
     }
     const githubToken = inputs.GITHUB_TOKEN.trim()
-    const githubRepo = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
+    const githubRepo = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const repoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const repoOwner = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
-    const githubApiURL = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_API_URL] || ''
-    const commit_sha = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_SHA] || ''
-    const githubRef = process.env[FIXPR_ENVIRONMENT_VARIABLES.GITHUB_REF] || ''
+    const repoOwner = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+    const githubApiURL = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL] || ''
+    const commit_sha = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || ''
+    const githubRef = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || ''
     const stringFormat = (url: string, ...args: string[]): string => {
       return url.replace(/{(\d+)}/g, (match, index) => args[index] || '')
     }

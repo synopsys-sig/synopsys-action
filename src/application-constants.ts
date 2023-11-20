@@ -88,7 +88,7 @@ export const NETWORK_AIRGAP_KEY = 'network_airgap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
 
 // Bridge Exit Codes
-export let EXIT_CODE_MAP = new Map<string, string>([
+export const EXIT_CODE_MAP = new Map<string, string>([
   ['0', 'Bridge execution successfully completed'],
   ['1', 'Undefined error, check error logs'],
   ['2', 'Error from adapter end'],
@@ -111,7 +111,6 @@ export const BRIDGE_DIAGNOSTICS_FOLDER = '.bridge'
 export const BRIDGE_SARIF_GENERATOR_FOLDER = 'SARIF Generator'
 export const SARIF_UPLOAD_FOLDER_ARTIFACT_NAME = 'sarif_report'
 export const SARIF_DEFAULT_FILE_NAME = 'report.sarif.json'
-
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_TOKEN: 'GITHUB_TOKEN',

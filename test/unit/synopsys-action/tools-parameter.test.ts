@@ -167,7 +167,7 @@ test('Test getFormattedCommandForPolaris with sarif params', () => {
   Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: false})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
-  const resp = stp.getFormattedCommandForPolaris()
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage polaris')
 })
@@ -183,7 +183,7 @@ test('Test getFormattedCommandForPolaris with sarif params and missing github to
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   try {
-    stp.getFormattedCommandForPolaris()
+    stp.getFormattedCommandForPolaris('synopsys-action')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Missing required github token for uploading SARIF result')
