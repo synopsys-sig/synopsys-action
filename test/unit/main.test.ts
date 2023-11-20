@@ -36,7 +36,7 @@ test('Not supported flow error - run', async () => {
     await run()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Requires at least one scan type: (polaris_serverUrl,coverity_url,blackduck_url)')
+    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url)')
   }
 })
 
@@ -54,7 +54,7 @@ test('Not supported flow error (empty strings) - run', async () => {
     await run()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Requires at least one scan type: (polaris_serverUrl,coverity_url,blackduck_url)')
+    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url)')
   }
 })
 

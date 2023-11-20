@@ -7,6 +7,11 @@ export const APPLICATION_NAME = 'synopsys-action'
 
 export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_install_directory'
 
+export const BRIDGE_DOWNLOAD_URL_KEY = 'bridge_download_url'
+export const SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = 'synopsys_bridge_download_url'
+export const BRIDGE_DOWNLOAD_VERSION_KEY = 'bridge_download_version'
+export const SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = 'synopsys_bridge_download_version'
+
 // Scan Types
 export const COVERITY_KEY = 'coverity'
 export const POLARIS_KEY = 'polaris'
@@ -28,11 +33,13 @@ export const BRIDGE_COVERITY_VERSION_KEY = 'bridge_coverity_version'
 export const COVERITY_VERSION_KEY = 'coverity_version'
 
 // Polaris
+export const POLARIS_ACCESSTOKEN_KEY = 'polaris_accessToken'
 export const POLARIS_ACCESS_TOKEN_KEY = 'polaris_accessToken'
 export const POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name'
 export const POLARIS_PROJECT_NAME_KEY = 'polaris_project_name'
 export const POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types'
-export const POLARIS_SERVER_URL_KEY = 'polaris_serverUrl'
+export const POLARIS_SERVERURL_KEY = 'polaris_serverUrl'
+export const POLARIS_SERVER_URL_KEY = 'polaris_server_url'
 export const POLARIS_TRIAGE_KEY = 'polaris_triage'
 export const POLARIS_PRCOMMENT_ENABLED_KEY = 'polaris_prComment_enabled'
 export const POLARIS_PRCOMMENT_SEVERITIES_KEY = 'polaris_prComment_severities'
@@ -42,6 +49,7 @@ export const POLARIS_BRANCH_PARENT_NAME_KEY = 'polaris_branch_parent_name'
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'
 export const BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken'
+export const BLACKDUCK_TOKEN_KEY = 'blackduck_token'
 export const BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory'
 export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
 export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'
