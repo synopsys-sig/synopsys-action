@@ -481,7 +481,7 @@ exports.BLACKDUCK_INSTALL_DIRECTORY = ((_12 = (0, core_1.getInput)(constants.BLA
 exports.BLACKDUCK_SCAN_FULL = ((_13 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _13 === void 0 ? void 0 : _13.trim()) || '';
 exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_14 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _14 === void 0 ? void 0 : _14.trim()) || '';
 exports.BLACKDUCK_FIXPR_ENABLED = ((_15 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _15 === void 0 ? void 0 : _15.trim()) || ((_16 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_ENABLED_KEY)) === null || _16 === void 0 ? void 0 : _16.trim()) || '';
-exports.BLACKDUCK_PRCOMMENT_ENABLED = ((_17 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _17 === void 0 ? void 0 : _17.trim()) || ((_18 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _18 === void 0 ? void 0 : _18.trim()) || '';
+exports.BLACKDUCK_PRCOMMENT_ENABLED = ((_17 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _17 === void 0 ? void 0 : _17.trim()) || ((_18 = (0, core_1.getInput)(constants.BLACKDUCK_PRCOMMENT_ENABLED_KEY)) === null || _18 === void 0 ? void 0 : _18.trim()) || '';
 exports.BLACKDUCK_FIXPR_MAXCOUNT = ((_19 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY)) === null || _19 === void 0 ? void 0 : _19.trim()) || '';
 exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = ((_20 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY)) === null || _20 === void 0 ? void 0 : _20.trim()) || '';
 exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = ((_21 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY)) === null || _21 === void 0 ? void 0 : _21.trim()) || '';
@@ -1331,7 +1331,7 @@ class SynopsysToolsParameter {
             covData.data.coverity.version = inputs.COVERITY_VERSION;
         }
         if ((0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED)) {
-            (0, core_1.info)('Coverity Automation comment is enabled');
+            (0, core_1.info)('Coverity PR comment is enabled');
             covData.data.github = this.getGithubRepoInfo();
             covData.data.coverity.automation.prcomment = true;
         }
@@ -1419,7 +1419,7 @@ class SynopsysToolsParameter {
             blackduckData.data.blackduck.fixpr = { enabled: false };
         }
         if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
-            (0, core_1.info)('Blackduck Automation comment is enabled');
+            (0, core_1.info)('Black Duck PR comment is enabled');
             blackduckData.data.github = this.getGithubRepoInfo();
             blackduckData.data.blackduck.automation.prcomment = true;
         }
@@ -1446,7 +1446,7 @@ class SynopsysToolsParameter {
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
         const githubRepoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER];
         if ((0, validators_1.isNullOrEmptyValue)(githubToken)) {
-            throw new Error('Missing required github token for fix pull request/automation comment');
+            throw new Error('Missing required github token for fix pull request/pull request comments');
         }
         if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED) || (0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED) || (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
             throw new Error('Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.');
@@ -1726,7 +1726,7 @@ function validateBlackDuckInputs() {
     if (inputs.BLACKDUCK_URL) {
         const paramsMap = new Map();
         paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
-        paramsMap.set(constants.BLACKDUCK_API_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
+        paramsMap.set(constants.BLACKDUCK_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
         errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY);
     }
     return errors;

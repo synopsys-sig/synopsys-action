@@ -170,7 +170,7 @@ export class SynopsysToolsParameter {
     }
 
     if (parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
-      info('Coverity Automation comment is enabled')
+      info('Coverity PR comment is enabled')
       covData.data.github = this.getGithubRepoInfo()
       covData.data.coverity.automation.prcomment = true
     } else {
@@ -263,7 +263,7 @@ export class SynopsysToolsParameter {
     }
 
     if (parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
-      info('Blackduck Automation comment is enabled')
+      info('Black Duck PR comment is enabled')
       blackduckData.data.github = this.getGithubRepoInfo()
       blackduckData.data.blackduck.automation.prcomment = true
     } else {
@@ -296,7 +296,7 @@ export class SynopsysToolsParameter {
     const githubRepoOwner = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER]
 
     if (isNullOrEmptyValue(githubToken)) {
-      throw new Error('Missing required github token for fix pull request/automation comment')
+      throw new Error('Missing required github token for fix pull request/pull request comments')
     }
 
     if ((parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED) || parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED) || parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
