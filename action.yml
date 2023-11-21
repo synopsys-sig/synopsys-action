@@ -110,11 +110,11 @@ inputs:
   synopsys_bridge_download_version:
     description: 'If provided, Synopsys-action will configure the version of Bridge'
     required: false
-  blackduck_automation_prcomment:
-    description: 'If provided, PR will be raised for each issue from blackduck results'
+  blackduck_prComment_enabled:
+    description: 'Flag to enable pull request comments for new issues found in the Black Duck scan'
     required: false
-  coverity_automation_prcomment:
-    description: 'If provided, PR will be raised for each issue from coverity results'
+  coverity_prComment_enabled:
+    description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
     required: false
   github_token:
     description: 'Github token to be used for git related rest operation'
