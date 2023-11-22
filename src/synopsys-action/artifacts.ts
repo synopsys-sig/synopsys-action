@@ -52,7 +52,7 @@ export function getFiles(dir: string, allFiles: string[]): string[] {
   return allFiles
 }
 
-export async function uploadSarifReportAsArtifact(): Promise<UploadResponse | void> {
+export async function uploadSarifReportAsArtifact(): Promise<UploadResponse> {
   const artifactClient = artifact.create()
   const sarifFilePath = inputs.REPORTS_SARIF_FILE_PATH ? inputs.REPORTS_SARIF_FILE_PATH : getDefaultSarifReportPath(true)
   let rootDir = ''
