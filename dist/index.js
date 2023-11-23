@@ -15,10 +15,14 @@ exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/';
 exports.APPLICATION_NAME = 'synopsys-action';
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_install_directory';
-// bridge_download_url is deprecated and will be removed later
+/**
+ * @deprecated Use synopsys_bridge_download_url instead. This can be removed in future release.
+ */
 exports.BRIDGE_DOWNLOAD_URL_KEY = 'bridge_download_url';
 exports.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = 'synopsys_bridge_download_url';
-// bridge_download_version is deprecated and will be removed later
+/**
+ * @deprecated Use synopsys_bridge_download_version instead. This can be removed in future release.
+ */
 exports.BRIDGE_DOWNLOAD_VERSION_KEY = 'bridge_download_version';
 exports.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = 'synopsys_bridge_download_version';
 // Scan Types
@@ -35,20 +39,26 @@ exports.COVERITY_INSTALL_DIRECTORY_KEY = 'coverity_install_directory';
 exports.COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view';
 exports.COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name';
 exports.COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name';
-// coverity_automation_prcomment is deprecated and will be removed later
+/**
+ * @deprecated Use coverity_prComment_enabled instead. This can be removed in future release.
+ */
 exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = 'coverity_automation_prcomment';
 exports.COVERITY_PRCOMMENT_ENABLED_KEY = 'coverity_prComment_enabled';
 exports.COVERITY_LOCAL_KEY = 'coverity_local';
 exports.BRIDGE_COVERITY_VERSION_KEY = 'bridge_coverity_version';
 exports.COVERITY_VERSION_KEY = 'coverity_version';
 // Polaris
-// polaris_accessToken is deprecated and will be removed later
+/**
+ * @deprecated Use polaris_access_token instead. This can be removed in future release.
+ */
 exports.POLARIS_ACCESSTOKEN_KEY = 'polaris_accessToken';
 exports.POLARIS_ACCESS_TOKEN_KEY = 'polaris_access_token';
 exports.POLARIS_APPLICATION_NAME_KEY = 'polaris_application_name';
 exports.POLARIS_PROJECT_NAME_KEY = 'polaris_project_name';
 exports.POLARIS_ASSESSMENT_TYPES_KEY = 'polaris_assessment_types';
-// polaris_serverUrl is deprecated and will be removed later
+/**
+ * @deprecated Use polaris_server_url instead. This can be removed in future release.
+ */
 exports.POLARIS_SERVERURL_KEY = 'polaris_serverUrl';
 exports.POLARIS_SERVER_URL_KEY = 'polaris_server_url';
 exports.POLARIS_TRIAGE_KEY = 'polaris_triage';
@@ -69,7 +79,9 @@ exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = 'blackduck_fixpr_maxCount';
 exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = 'blackduck_fixpr_createSinglePR';
 exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = 'blackduck_fixpr_filter_severities';
 exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = 'blackduck_fixpr_useUpgradeGuidance';
-// blackduck_automation_prcomment is deprecated and will be removed later
+/**
+ * @deprecated Use blackduck_prComment_enabled instead. This can be removed in future release.
+ */
 exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment';
 exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = 'blackduck_prComment_enabled';
 exports.GITHUB_TOKEN_KEY = 'github_token';
