@@ -52,7 +52,7 @@ export interface AutomationData {
 export interface GithubData {
   user: User
   repository: Repository
-  api?: GithubURL
+  host?: GithubURL
 }
 
 export interface BlackDuckFixPrData {
