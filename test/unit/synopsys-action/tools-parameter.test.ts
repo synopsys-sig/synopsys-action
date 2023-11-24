@@ -176,7 +176,7 @@ test('Enable Test getFormattedCommandForCoverity Airgap: SUCCESS', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'GITHUB_API_URL', {value: 'GITHUB_API_URL'})
+  Object.defineProperty(inputs, 'GITHUB_HOST_URL', {value: 'GITHUB_API_URL'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
