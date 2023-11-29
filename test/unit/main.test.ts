@@ -36,7 +36,7 @@ test('Not supported flow error - run', async () => {
     await run()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Requires at least one scan type: (polaris_serverUrl,coverity_url,blackduck_url)')
+    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url)')
   }
 })
 
@@ -54,7 +54,7 @@ test('Not supported flow error (empty strings) - run', async () => {
     await run()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Requires at least one scan type: (polaris_serverUrl,coverity_url,blackduck_url)')
+    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url)')
   }
 })
 
@@ -133,7 +133,7 @@ test('Run blackduck flow - run', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
   Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'false'})
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'BLACKDUCK_PRCOMMENT_ENABLED', {value: true})
 
   jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
@@ -156,7 +156,7 @@ test('Run blackduck flow - PR COMMENT - when MR details not found', async () => 
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'ALL'})
   Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: 'false'})
-  Object.defineProperty(inputs, 'BLACKDUCK_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'BLACKDUCK_PRCOMMENT_ENABLED', {value: true})
   delete process.env['GITHUB_REF']
   jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
@@ -252,7 +252,7 @@ test('Run coverity flow - run - with optional fields', async () => {
   Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
   Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
-  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
 
   jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
@@ -276,7 +276,7 @@ test('Run coverity flow - run - with optional fields - when MR details not found
   Object.defineProperty(inputs, 'COVERITY_POLICY_VIEW', {value: 'COVERITY_POLICY_VIEW'})
   Object.defineProperty(inputs, 'COVERITY_REPOSITORY_NAME', {value: 'COVERITY_REPOSITORY_NAME'})
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
-  Object.defineProperty(inputs, 'COVERITY_AUTOMATION_PRCOMMENT', {value: true})
+  Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
   delete process.env['GITHUB_REF']
 
   jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
