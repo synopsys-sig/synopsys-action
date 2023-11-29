@@ -80,6 +80,7 @@ export const BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = 'blackduck_fixpr_useUpgr
 export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment'
 export const BLACKDUCK_PRCOMMENT_ENABLED_KEY = 'blackduck_prComment_enabled'
 
+export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'
 export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
 export const BRIDGE_NETWORK_AIRGAP_KEY = 'bridge_network_airgap'
@@ -107,7 +108,6 @@ export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_REF: 'GITHUB_REF',
   GITHUB_REF_NAME: 'GITHUB_REF_NAME',
   GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
-  GITHUB_API_URL: 'GITHUB_API_URL',
   GITHUB_BASE_REF: 'GITHUB_BASE_REF',
   GITHUB_EVENT_NAME: 'GITHUB_EVENT_NAME'
 }
