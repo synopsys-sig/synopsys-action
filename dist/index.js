@@ -857,7 +857,7 @@ class SynopsysBridge {
                         }
                     }
                 }
-                if (retryCountLocal === 0) {
+                if (retryCountLocal === 0 && !(versionArray.length > 0)) {
                     (0, core_1.warning)('Unable to retrieve the Synopsys Bridge Versions from Artifactory');
                 }
             } while (retryCountLocal > 0);
