@@ -51,7 +51,7 @@ test('Polaris - Without mandatory fields', async () => {
     expect(response).toBe(false)
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('[polaris_accessToken,polaris_assessment_types] - required parameters for polaris is missing')
+    expect(error.message).toContain('[polaris_access_token,polaris_assessment_types] - required parameters for polaris is missing')
   }
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
 })
@@ -122,7 +122,7 @@ test('Blackduck - Without mandatory fields', async () => {
     validateBlackDuckInputs()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('[blackduck_apiToken,blackduck_scan_full] - required parameters for blackduck is missing')
+    expect(error.message).toContain('[blackduck_token,blackduck_scan_full] - required parameters for blackduck is missing')
   }
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
 })
