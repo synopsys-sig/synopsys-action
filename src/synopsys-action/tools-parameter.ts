@@ -288,7 +288,7 @@ export class SynopsysToolsParameter {
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
     const githubBranchName = parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]
     const githubRef = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
-    const githubAPIURL = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL]
+    const githubHostUrl = inputs.GITHUB_HOST_URL ? inputs.GITHUB_HOST_URL : ''
 
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
@@ -304,13 +304,13 @@ export class SynopsysToolsParameter {
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
-    if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null && githubAPIURL != null) {
-      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubAPIURL)
+    if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
+      return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubHostUrl)
     }
     return undefined
   }
 
-  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string, apiurl: string): GithubData {
+  private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string, githubHostUrl: string): GithubData {
     const githubData: GithubData = {
       user: {
         token: githubToken
@@ -325,8 +325,8 @@ export class SynopsysToolsParameter {
           name: githubBranchName
         }
       },
-      api: {
-        url: apiurl
+      host: {
+        url: githubHostUrl
       }
     }
     if (githubPrNumber != null) {

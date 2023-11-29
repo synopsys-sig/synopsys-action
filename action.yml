@@ -116,6 +116,9 @@ inputs:
   coverity_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
     required: false
+  github_host_url:
+    description: 'Host URL for Github'
+    required: false
   github_token:
     description: 'Github token to be used for git related rest operation'
     required: false
