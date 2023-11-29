@@ -16,7 +16,7 @@ coverityParamMap.set('COVERITY_INSTALL_DIRECTORY', '/')
 coverityParamMap.set('COVERITY_POLICY_VIEW', 'policy')
 coverityParamMap.set('COVERITY_REPOSITORY_NAME', 'repo')
 coverityParamMap.set('COVERITY_BRANCH_NAME', 'branch')
-coverityParamMap.set('COVERITY_AUTOMATION_PRCOMMENT', 'true')
+coverityParamMap.set('COVERITY_PRCOMMENT_ENABLED', 'true')
 
 describe('Coverity flow contract', () => {
   afterAll(() => {
@@ -30,7 +30,7 @@ describe('Coverity flow contract', () => {
 
   it('With all mandatory fields', async () => {
     mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_AUTOMATION_PRCOMMENT'])
+    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PRCOMMENT_ENABLED'])
 
     setAllMocks()
 
