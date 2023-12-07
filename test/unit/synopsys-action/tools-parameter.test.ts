@@ -197,7 +197,6 @@ test('Enable Test getFormattedCommandForCoverity Airgap: SUCCESS', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'GITHUB_HOST_URL', {value: 'GITHUB_API_URL'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
@@ -321,7 +320,6 @@ test('Test getFormattedCommandForCoverity - pr comment', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
-  Object.defineProperty(inputs, 'GITHUB_SERVER_URL', {value: 'https://github.com'})
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   let resp = stp.getFormattedCommandForCoverity('synopsys-action')
@@ -647,7 +645,6 @@ test('Test getFormattedCommandForBlackduck - pr comment - with default github.ho
   const jsonData = JSON.parse(jsonString)
   expect(jsonData.data.github.host.url).toBe('https://github.com')
 })
-
 
 test('Test missing data error in getFormattedCommandForBlackduck', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
