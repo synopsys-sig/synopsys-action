@@ -417,7 +417,6 @@ test('Test getFormattedCommandForCoverity - pr comment for enterprise github', (
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
-  Object.defineProperty(inputs, 'GITHUB_SERVER_URL', {value: 'https://github.com'})
   process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
