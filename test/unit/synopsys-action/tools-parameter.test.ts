@@ -22,7 +22,7 @@ beforeEach(() => {
   process.env['GITHUB_REF_NAME'] = 'ref-name'
   process.env['GITHUB_HEAD_REF'] = 'feature-branch-1'
   process.env['GITHUB_BASE_REF'] = 'main'
-  process.env['GITHUB_SERVER_URL'] = 'https://github.com'
+  process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
 })
 
 afterAll(() => {
@@ -114,7 +114,7 @@ test('Test getFormattedCommandForPolaris - prComment', () => {
   expect(resp).toContain('--stage polaris')
 })
 
-test('Test getFormattedCommandForPolaris - pr comment with default github.host.url', () => {
+test('Test getFormattedCommandForPolaris - pr comment for enterprise github', () => {
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
   Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
@@ -123,7 +123,6 @@ test('Test getFormattedCommandForPolaris - pr comment with default github.host.u
   Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
-  Object.defineProperty(inputs, 'GITHUB_SERVER_URL', {value: 'https://github.com'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   const resp = stp.getFormattedCommandForPolaris('synopsys-action')
   expect(resp).not.toBeNull()
@@ -131,8 +130,30 @@ test('Test getFormattedCommandForPolaris - pr comment with default github.host.u
 
   const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
-  expect(jsonData.data.github.host.url).toBe('https://github.com')
+  expect(jsonData.data.github.host.url).toBe('https://custom.com')
 })
+
+test('Test getFormattedCommandForPolaris - pr comment for cloud github', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: true})
+  Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+  process.env['GITHUB_SERVER_URL'] = 'https://github.com'
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage polaris')
+
+  const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(jsonData.data.github).toBe(undefined)
+})
+
+process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
 test('Test getFormattedCommandForCoverity', () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
   Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
@@ -320,6 +341,7 @@ test('Test getFormattedCommandForCoverity - pr comment', () => {
   Object.defineProperty(inputs, 'COVERITY_BRANCH_NAME', {value: 'COVERITY_BRANCH_NAME'})
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+  process.env['GITHUB_SERVER_URL'] = 'https://github.com'
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   let resp = stp.getFormattedCommandForCoverity('synopsys-action')
@@ -329,7 +351,7 @@ test('Test getFormattedCommandForCoverity - pr comment', () => {
 
   const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
-  expect(jsonData.data.github.host.url).toBe('https://github.com')
+  expect(jsonData.data.github).toBe(undefined)
 
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: false})
   stp = new SynopsysToolsParameter(tempPath)
@@ -383,7 +405,7 @@ test('Test getFormattedCommandForCoverity - pr comment', () => {
   Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: null})
 })
 
-test('Test getFormattedCommandForCoverity - pr comment with default github.host.url', () => {
+test('Test getFormattedCommandForCoverity - pr comment for enterprise github', () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
   Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
   Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
@@ -396,6 +418,7 @@ test('Test getFormattedCommandForCoverity - pr comment with default github.host.
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   Object.defineProperty(inputs, 'GITHUB_SERVER_URL', {value: 'https://github.com'})
+  process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   let resp = stp.getFormattedCommandForCoverity('synopsys-action')
@@ -405,7 +428,7 @@ test('Test getFormattedCommandForCoverity - pr comment with default github.host.
 
   const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
-  expect(jsonData.data.github.host.url).toBe('https://github.com')
+  expect(jsonData.data.github.host.url).toBe('https://custom.com')
 })
 
 test('Test missing data error in getFormattedCommandForCoverity', () => {
@@ -625,7 +648,7 @@ test('Test getFormattedCommandForBlackduck - pr comment test cases', () => {
   expect(resp).toContain('--stage blackduck')
 })
 
-test('Test getFormattedCommandForBlackduck - pr comment - with default github.host.url', () => {
+test('Test getFormattedCommandForBlackduck - pr comment - for enterprise github', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
   Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
@@ -634,6 +657,7 @@ test('Test getFormattedCommandForBlackduck - pr comment - with default github.ho
   Object.defineProperty(inputs, 'BLACKDUCK_PRCOMMENT_ENABLED', {value: true})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: false})
+  process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
   let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
   let resp = stp.getFormattedCommandForBlackduck()
@@ -643,7 +667,7 @@ test('Test getFormattedCommandForBlackduck - pr comment - with default github.ho
 
   const jsonString = fs.readFileSync(tempPath.concat(blackduck_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
-  expect(jsonData.data.github.host.url).toBe('https://github.com')
+  expect(jsonData.data.github.host.url).toBe('https://custom.com')
 })
 
 test('Test missing data error in getFormattedCommandForBlackduck', () => {

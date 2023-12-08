@@ -100,6 +100,7 @@ export let EXIT_CODE_MAP = new Map<string, string>([
 export const RETRY_DELAY_IN_MILLISECONDS = 15000
 export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
+export const GITHUB_CLOUD_URL = 'https://github.com'
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_TOKEN: 'GITHUB_TOKEN',
