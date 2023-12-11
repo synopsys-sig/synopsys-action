@@ -46,7 +46,6 @@ export const BLACKDUCK_FIXPR_MAXCOUNT = getInput(constants.BLACKDUCK_FIXPR_MAXCO
 export const BLACKDUCK_FIXPR_CREATE_SINGLE_PR = getInput(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY)?.trim() || ''
 export const BLACKDUCK_FIXPR_FILTER_SEVERITIES = getInput(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY)?.trim() || ''
 export const BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = getInput(constants.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY)?.trim() || ''
-export const GITHUB_HOST_URL = getInput(constants.GITHUB_HOST_URL_KEY)?.trim() || ''
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || ''
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)?.trim() || ''
 export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)?.trim() || ''

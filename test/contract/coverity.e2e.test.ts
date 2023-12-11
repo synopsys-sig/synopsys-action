@@ -194,4 +194,5 @@ export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
   process.env['GITHUB_REF_NAME'] = 'synopsys-action'
   process.env['GITHUB_EVENT_NAME'] = 'pull_request'
   process.env['GITHUB_BASE_REF'] = 'current-branch'
+  process.env['GITHUB_SERVER_URL'] = 'https://github.com'
 }
