@@ -1,0 +1,45 @@
+name: "E2E Deployment testing workflow"
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+    
+jobs:
+  build:
+     runs-on: [ E2E-test-linux ]
+     steps:
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk
+      - name: unit testing
+        run: |
+          echo "unit testing stage"
+      - name: build
+        run: |
+          echo "build stage"
+      - name: pop
+        run: |
+          echo "Pop stage"
+      - name: e2e
+        run: |
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations
+          ls -al
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar
+          ls -al
+          echo "product=integrations" > /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=E2E-test-linux" >> /tmp/test.properties
+          echo "runner.os=linux" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "github.branch=master" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
+      - name: publish
+        run: |
+          echo "publish stage"
