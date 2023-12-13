@@ -25,18 +25,22 @@ jobs:
           echo "Pop stage"
       - name: e2e
         run: |
-          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
           ls -al
-          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
           ls -al
-          echo "product=integrations" > /tmp/test.properties
+          if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
+            echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
+          else
+            echo github.action.version=${GITHUB_REF} >> /tmp/test.properties
+          fi
+          echo "product=integrations" >> /tmp/test.properties
           echo "product.name=integrations" >> /tmp/test.properties
           echo "scm=github" >> /tmp/test.properties
           echo "runner=E2E-test-linux" >> /tmp/test.properties
           echo "runner.os=linux" >> /tmp/test.properties
           echo "pipeline=true" >> /tmp/test.properties
           echo "cloud.storage=S3" >> /tmp/test.properties
-          echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
