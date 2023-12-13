@@ -29,7 +29,6 @@ jobs:
           ls -al
           aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
           ls -al
-          echo "Ref ---  $GITHUB_HEAD_REF"
           if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
             echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
           else
