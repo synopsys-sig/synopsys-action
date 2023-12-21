@@ -658,11 +658,13 @@ const tools_parameter_1 = __nccwpck_require__(7080);
 const constants = __importStar(__nccwpck_require__(9717));
 const HttpClient_1 = __nccwpck_require__(5538);
 const dom_parser_1 = __importDefault(__nccwpck_require__(9592));
+const os_1 = __importDefault(__nccwpck_require__(2087));
 class SynopsysBridge {
     constructor() {
         this.WINDOWS_PLATFORM = 'win64';
         this.LINUX_PLATFORM = 'linux64';
         this.MAC_PLATFORM = 'macosx';
+        this.MAC_ARM_PLATFORM = 'macos_arm';
         this.bridgeExecutablePath = '';
         this.synopsysBridgePath = '';
         this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL;
@@ -743,7 +745,7 @@ class SynopsysBridge {
                     if (versionInfo != null) {
                         bridgeVersion = versionInfo[1];
                         if (!bridgeVersion) {
-                            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/;
+                            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx|macos_arm).zip)/;
                             bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'));
                         }
                     }
@@ -785,11 +787,11 @@ class SynopsysBridge {
                 const errorObject = e.message;
                 yield (0, utility_1.cleanupTempDir)(tempDir);
                 if (errorObject.includes('404') || errorObject.toLowerCase().includes('invalid url')) {
-                    let os = '';
+                    let OS = '';
                     if (process.env['RUNNER_OS']) {
-                        os = process.env['RUNNER_OS'];
+                        OS = process.env['RUNNER_OS'];
                     }
-                    return Promise.reject(new Error('Provided Synopsys Bridge url is not valid for the configured '.concat(os, ' runner')));
+                    return Promise.reject(new Error('Provided Synopsys Bridge url is not valid for the configured '.concat(OS, ' runner')));
                 }
                 else if (errorObject.toLowerCase().includes('empty')) {
                     return Promise.reject(new Error('Provided Synopsys Bridge URL cannot be empty'));
@@ -904,7 +906,8 @@ class SynopsysBridge {
         let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version);
         bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version);
         if (osName === 'darwin') {
-            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM);
+            const isArm = os_1.default.arch().includes('arm');
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM);
         }
         else if (osName === 'linux') {
             bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM);
@@ -918,7 +921,8 @@ class SynopsysBridge {
         const osName = process.platform;
         let bridgeDownloadUrl = this.bridgeUrlLatestPattern;
         if (osName === 'darwin') {
-            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM);
+            const isArm = os_1.default.arch() === 'arm64';
+            bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM);
         }
         else if (osName === 'linux') {
             bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM);

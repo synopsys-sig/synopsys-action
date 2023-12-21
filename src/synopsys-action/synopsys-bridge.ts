@@ -14,6 +14,7 @@ import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import DomParser from 'dom-parser'
+import os from 'os'
 
 export class SynopsysBridge {
   bridgeExecutablePath: string
@@ -24,6 +25,7 @@ export class SynopsysBridge {
   WINDOWS_PLATFORM = 'win64'
   LINUX_PLATFORM = 'linux64'
   MAC_PLATFORM = 'macosx'
+  MAC_ARM_PLATFORM = 'macos_arm'
 
   constructor() {
     this.bridgeExecutablePath = ''
@@ -103,7 +105,7 @@ export class SynopsysBridge {
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
           if (!bridgeVersion) {
-            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx).zip)/
+            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx|macos_arm).zip)/
             bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'))
           }
         }
@@ -143,11 +145,11 @@ export class SynopsysBridge {
       const errorObject = (e as Error).message
       await cleanupTempDir(tempDir)
       if (errorObject.includes('404') || errorObject.toLowerCase().includes('invalid url')) {
-        let os = ''
+        let OS = ''
         if (process.env['RUNNER_OS']) {
-          os = process.env['RUNNER_OS']
+          OS = process.env['RUNNER_OS']
         }
-        return Promise.reject(new Error('Provided Synopsys Bridge url is not valid for the configured '.concat(os, ' runner')))
+        return Promise.reject(new Error('Provided Synopsys Bridge url is not valid for the configured '.concat(OS, ' runner')))
       } else if (errorObject.toLowerCase().includes('empty')) {
         return Promise.reject(new Error('Provided Synopsys Bridge URL cannot be empty'))
       } else {
@@ -269,7 +271,8 @@ export class SynopsysBridge {
     let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version)
     bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version)
     if (osName === 'darwin') {
-      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM)
+      const isArm = os.arch().includes('arm')
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
     } else if (osName === 'win32') {
@@ -283,7 +286,8 @@ export class SynopsysBridge {
     const osName = process.platform
     let bridgeDownloadUrl = this.bridgeUrlLatestPattern
     if (osName === 'darwin') {
-      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.MAC_PLATFORM)
+      const isArm = os.arch() === 'arm64'
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
     } else if (osName === 'win32') {
