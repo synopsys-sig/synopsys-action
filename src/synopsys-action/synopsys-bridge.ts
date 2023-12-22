@@ -139,6 +139,9 @@ export class SynopsysBridge {
 
         info('Download and configuration of Synopsys Bridge completed')
       } else {
+        const isArm = os.arch().includes('arm')
+        info(`isArm value : ${isArm}`)
+        info(`os.arch() value : ${os.arch()}`)
         info('Synopsys Bridge already exists, download has been skipped')
       }
     } catch (e) {
