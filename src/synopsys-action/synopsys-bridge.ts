@@ -120,6 +120,7 @@ export class SynopsysBridge {
         info('Checking for latest version of Synopsys Bridge to download and configure')
         bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
         bridgeUrl = this.getLatestVersionUrl()
+        info(`bridgeUrl value : ${bridgeUrl}`)
       }
 
       if (!(await this.checkIfSynopsysBridgeExists(bridgeVersion))) {
