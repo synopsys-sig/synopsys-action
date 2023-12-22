@@ -763,6 +763,7 @@ class SynopsysBridge {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
                     bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
                     bridgeUrl = this.getLatestVersionUrl();
+                    (0, core_1.info)(`os.arch() -  ${os_1.default.arch()}`);
                     (0, core_1.info)(`bridgeUrl value : ${bridgeUrl}`);
                 }
                 if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
