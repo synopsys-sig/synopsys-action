@@ -120,6 +120,7 @@ export class SynopsysBridge {
         info('Checking for latest version of Synopsys Bridge to download and configure')
         bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
         bridgeUrl = this.getLatestVersionUrl()
+        info(`os.arch() -  ${os.arch()}`)
         info(`bridgeUrl value : ${bridgeUrl}`)
       }
 
@@ -286,7 +287,6 @@ export class SynopsysBridge {
     const osName = process.platform
     let bridgeDownloadUrl = this.bridgeUrlLatestPattern
     if (osName === 'darwin') {
-      info(`os.arch() -  ${os.arch()}`)
       const isArm = os.arch().includes('arm') || os.arch() === 'x64'
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
