@@ -287,9 +287,6 @@ export class SynopsysBridge {
     let bridgeDownloadUrl = this.bridgeUrlLatestPattern
     if (osName === 'darwin') {
       const isArm = os.arch().includes('arm') || os.arch() === 'x64'
-      info(`isArm value : ${isArm}`)
-      info(`os.arch() value : ${os.arch()}`)
-
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)

@@ -923,8 +923,6 @@ class SynopsysBridge {
         let bridgeDownloadUrl = this.bridgeUrlLatestPattern;
         if (osName === 'darwin') {
             const isArm = os_1.default.arch().includes('arm') || os_1.default.arch() === 'x64';
-            (0, core_1.info)(`isArm value : ${isArm}`);
-            (0, core_1.info)(`os.arch() value : ${os_1.default.arch()}`);
             bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM);
         }
         else if (osName === 'linux') {
