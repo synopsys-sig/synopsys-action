@@ -137,15 +137,8 @@ export class SynopsysBridge {
           }
         }
         await extractZipped(downloadResponse.filePath, extractZippedFilePath)
-        const isArm = os.arch().includes('arm')
-        info(`isArm value : ${isArm}`)
-        info(`os.arch() value : ${os.arch()}`)
-
         info('Download and configuration of Synopsys Bridge completed')
       } else {
-        const isArm = os.arch().includes('arm')
-        info(`isArm value : ${isArm}`)
-        info(`os.arch() value : ${os.arch()}`)
         info('Synopsys Bridge already exists, download has been skipped')
       }
     } catch (e) {
@@ -278,7 +271,7 @@ export class SynopsysBridge {
     let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version)
     bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version)
     if (osName === 'darwin') {
-      const isArm = os.arch().includes('arm')
+      const isArm = os.arch().includes('arm') || os.arch() === 'x64'
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
@@ -293,7 +286,7 @@ export class SynopsysBridge {
     const osName = process.platform
     let bridgeDownloadUrl = this.bridgeUrlLatestPattern
     if (osName === 'darwin') {
-      const isArm = os.arch().includes('arm')
+      const isArm = os.arch().includes('arm') || os.arch() === 'x64'
       info(`isArm value : ${isArm}`)
       info(`os.arch() value : ${os.arch()}`)
 
