@@ -763,6 +763,7 @@ class SynopsysBridge {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
                     bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
                     bridgeUrl = this.getLatestVersionUrl();
+                    (0, core_1.info)(`bridgeUrl value : ${bridgeUrl}`);
                 }
                 if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
@@ -777,9 +778,15 @@ class SynopsysBridge {
                         }
                     }
                     yield (0, download_utility_1.extractZipped)(downloadResponse.filePath, extractZippedFilePath);
+                    const isArm = os_1.default.arch().includes('arm');
+                    (0, core_1.info)(`isArm value : ${isArm}`);
+                    (0, core_1.info)(`os.arch() value : ${os_1.default.arch()}`);
                     (0, core_1.info)('Download and configuration of Synopsys Bridge completed');
                 }
                 else {
+                    const isArm = os_1.default.arch().includes('arm');
+                    (0, core_1.info)(`isArm value : ${isArm}`);
+                    (0, core_1.info)(`os.arch() value : ${os_1.default.arch()}`);
                     (0, core_1.info)('Synopsys Bridge already exists, download has been skipped');
                 }
             }
@@ -921,7 +928,9 @@ class SynopsysBridge {
         const osName = process.platform;
         let bridgeDownloadUrl = this.bridgeUrlLatestPattern;
         if (osName === 'darwin') {
-            const isArm = os_1.default.arch() === 'arm64';
+            const isArm = os_1.default.arch().includes('arm');
+            (0, core_1.info)(`isArm value : ${isArm}`);
+            (0, core_1.info)(`os.arch() value : ${os_1.default.arch()}`);
             bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM);
         }
         else if (osName === 'linux') {

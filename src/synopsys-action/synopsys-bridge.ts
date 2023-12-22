@@ -137,6 +137,9 @@ export class SynopsysBridge {
           }
         }
         await extractZipped(downloadResponse.filePath, extractZippedFilePath)
+        const isArm = os.arch().includes('arm')
+        info(`isArm value : ${isArm}`)
+        info(`os.arch() value : ${os.arch()}`)
 
         info('Download and configuration of Synopsys Bridge completed')
       } else {
@@ -293,7 +296,7 @@ export class SynopsysBridge {
       const isArm = os.arch().includes('arm')
       info(`isArm value : ${isArm}`)
       info(`os.arch() value : ${os.arch()}`)
-      
+
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
