@@ -67,7 +67,6 @@
     "@actions/github": "^5.0.3",
     "@actions/io": "^1.1.2",
     "@actions/tool-cache": "^2.0.1",
-    "@stdlib/os-arch": "^0.1.1",
     "@types/unzipper": "^0.10.5",
     "dom-parser": "^0.1.6",
     "nock": "^13.3.3",

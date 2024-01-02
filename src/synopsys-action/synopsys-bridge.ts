@@ -15,8 +15,8 @@ import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import DomParser from 'dom-parser'
 import os from 'os'
-import ARCH from '@stdlib/os-arch'
-
+import {promisify} from 'util'
+import {exec as execAsync} from 'child_process'
 export class SynopsysBridge {
   bridgeExecutablePath: string
   synopsysBridgePath: string
@@ -119,10 +119,13 @@ export class SynopsysBridge {
         }
       } else {
         info('Checking for latest version of Synopsys Bridge to download and configure')
-        bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
-        bridgeUrl = this.getLatestVersionUrl()
+        //have to remove
+        const {stdout} = await execAsync('uname -m')
+        info(`stdout?.toString().trim() ${stdout?.toString().trim()}`)
         info(`os.arch() -  ${os.arch()}`)
         info(`bridgeUrl value : ${bridgeUrl}`)
+        bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))
+        bridgeUrl = this.getLatestVersionUrl()
       }
 
       if (!(await this.checkIfSynopsysBridgeExists(bridgeVersion))) {
@@ -273,8 +276,7 @@ export class SynopsysBridge {
     let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version)
     bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version)
     if (osName === 'darwin') {
-      info(`ARCH======${ARCH}`)
-      const isArm = os.arch().includes('arm') || os.arch() === 'x64'
+      const isArm = os.arch().includes('arm')
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
@@ -289,8 +291,7 @@ export class SynopsysBridge {
     const osName = process.platform
     let bridgeDownloadUrl = this.bridgeUrlLatestPattern
     if (osName === 'darwin') {
-      info(`ARCH======${ARCH}`)
-      const isArm = os.arch().includes('arm') || os.arch() === 'x64'
+      const isArm = os.arch().includes('arm')
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)

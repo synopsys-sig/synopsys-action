@@ -659,7 +659,6 @@ const constants = __importStar(__nccwpck_require__(9717));
 const HttpClient_1 = __nccwpck_require__(5538);
 const dom_parser_1 = __importDefault(__nccwpck_require__(9592));
 const os_1 = __importDefault(__nccwpck_require__(2087));
-const os_arch_1 = __importDefault(__nccwpck_require__(8370));
 class SynopsysBridge {
     constructor() {
         this.WINDOWS_PLATFORM = 'win64';
@@ -762,10 +761,11 @@ class SynopsysBridge {
                 }
                 else {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
+                    //have to remove
+                    (0, core_1.info)(`os.arch() :  ${os_1.default.arch()}`);
+                    (0, core_1.info)(`bridgeUrl value : ${bridgeUrl}`);
                     bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
                     bridgeUrl = this.getLatestVersionUrl();
-                    (0, core_1.info)(`os.arch() -  ${os_1.default.arch()}`);
-                    (0, core_1.info)(`bridgeUrl value : ${bridgeUrl}`);
                 }
                 if (!(yield this.checkIfSynopsysBridgeExists(bridgeVersion))) {
                     (0, core_1.info)('Downloading and configuring Synopsys Bridge');
@@ -909,8 +909,7 @@ class SynopsysBridge {
         let bridgeDownloadUrl = this.bridgeUrlPattern.replace('$version', version);
         bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version);
         if (osName === 'darwin') {
-            (0, core_1.info)(`ARCH======${os_arch_1.default}`);
-            const isArm = os_1.default.arch().includes('arm') || os_1.default.arch() === 'x64';
+            const isArm = os_1.default.arch().includes('arm');
             bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM);
         }
         else if (osName === 'linux') {
@@ -925,8 +924,7 @@ class SynopsysBridge {
         const osName = process.platform;
         let bridgeDownloadUrl = this.bridgeUrlLatestPattern;
         if (osName === 'darwin') {
-            (0, core_1.info)(`ARCH======${os_arch_1.default}`);
-            const isArm = os_1.default.arch().includes('arm') || os_1.default.arch() === 'x64';
+            const isArm = os_1.default.arch().includes('arm');
             bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isArm ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM);
         }
         else if (osName === 'linux') {
@@ -9648,104 +9646,6 @@ function v4(options, buf, offset) {
 }
 
 module.exports = v4;
-
-
-/***/ }),
-
-/***/ 8370:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-/**
-* @license Apache-2.0
-*
-* Copyright (c) 2018 The Stdlib Authors.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-
-
-
-/**
-* Operating system CPU architecture for which the JavaScript runtime binary was compiled.
-*
-* @module @stdlib/os-arch
-*
-* @example
-* var ARCH = require( '@stdlib/os-arch' );
-*
-* if ( ARCH === 'arm' || ARCH === 'arm64' ) {
-*    console.log( 'Running on ARM...' );
-* } else {
-*    console.log( 'Running on something else...' );
-* }
-*/
-
-// MODULES //
-
-var main = __nccwpck_require__( 3751 );
-
-
-// EXPORTS //
-
-module.exports = main;
-
-
-/***/ }),
-
-/***/ 3751:
-/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
-
-"use strict";
-/**
-* @license Apache-2.0
-*
-* Copyright (c) 2018 The Stdlib Authors.
-*
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*    http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
-
-
-
-// MODULES //
-
-var proc = __nccwpck_require__( 1765 );
-
-
-// MAIN //
-
-/**
-* Operating system CPU architecture for which the JavaScript runtime binary was compiled.
-*
-* @constant
-* @type {string}
-*/
-var ARCH = proc.arch;
-
-
-// EXPORTS //
-
-module.exports = ARCH;
 
 
 /***/ }),
@@ -18508,14 +18408,6 @@ module.exports = require("path");
 
 "use strict";
 module.exports = require("perf_hooks");
-
-/***/ }),
-
-/***/ 1765:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("process");
 
 /***/ }),
 
