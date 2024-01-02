@@ -659,6 +659,7 @@ const constants = __importStar(__nccwpck_require__(9717));
 const HttpClient_1 = __nccwpck_require__(5538);
 const dom_parser_1 = __importDefault(__nccwpck_require__(9592));
 const os_1 = __importDefault(__nccwpck_require__(2087));
+const child_process_1 = __nccwpck_require__(3129);
 class SynopsysBridge {
     constructor() {
         this.WINDOWS_PLATFORM = 'win64';
@@ -762,7 +763,9 @@ class SynopsysBridge {
                 else {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
                     //have to remove
-                    (0, core_1.info)(`os.arch() :  ${os_1.default.arch()}`);
+                    const { stdout } = (0, child_process_1.exec)('uname -m');
+                    (0, core_1.info)(`stdout?.toString().trim() ${stdout === null || stdout === void 0 ? void 0 : stdout.toString().trim()}`);
+                    (0, core_1.info)(`os.arch() -  ${os_1.default.arch()}`);
                     (0, core_1.info)(`bridgeUrl value : ${bridgeUrl}`);
                     bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
                     bridgeUrl = this.getLatestVersionUrl();

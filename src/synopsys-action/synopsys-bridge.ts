@@ -15,7 +15,6 @@ import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import DomParser from 'dom-parser'
 import os from 'os'
-import {promisify} from 'util'
 import {exec as execAsync} from 'child_process'
 export class SynopsysBridge {
   bridgeExecutablePath: string
@@ -120,7 +119,7 @@ export class SynopsysBridge {
       } else {
         info('Checking for latest version of Synopsys Bridge to download and configure')
         //have to remove
-        const {stdout} = await execAsync('uname -m')
+        const {stdout} = execAsync('uname -m')
         info(`stdout?.toString().trim() ${stdout?.toString().trim()}`)
         info(`os.arch() -  ${os.arch()}`)
         info(`bridgeUrl value : ${bridgeUrl}`)
