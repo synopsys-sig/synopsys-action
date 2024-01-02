@@ -4,7 +4,7 @@ import {debug, error, info, warning} from '@actions/core'
 import {GITHUB_ENVIRONMENT_VARIABLES, NON_RETRY_HTTP_CODES, RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
-import {checkIfPathExists, cleanupTempDir, sleep} from './utility'
+import {checkIfPathExists, cleanupTempDir, execShellCommand, sleep} from './utility'
 import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs, {readFileSync} from 'fs'
@@ -15,7 +15,6 @@ import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import DomParser from 'dom-parser'
 import os from 'os'
-import {exec as execAsync} from 'child_process'
 export class SynopsysBridge {
   bridgeExecutablePath: string
   synopsysBridgePath: string
@@ -119,8 +118,8 @@ export class SynopsysBridge {
       } else {
         info('Checking for latest version of Synopsys Bridge to download and configure')
         //have to remove
-        const {stdout} = execAsync('uname -m')
-        info(`stdout?.toString().trim() ${stdout?.toString().trim()}`)
+        const stdout = await execShellCommand('uname -m')
+        info(`stdout?.toString().trim() ${stdout}`)
         info(`os.arch() -  ${os.arch()}`)
         info(`bridgeUrl value : ${bridgeUrl}`)
         bridgeVersion = await this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'))

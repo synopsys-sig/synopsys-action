@@ -3,6 +3,7 @@ import * as os from 'os'
 import path from 'path'
 import {APPLICATION_NAME} from '../application-constants'
 import {rmRF} from '@actions/io'
+import {ExecException, exec} from 'child_process'
 
 export function cleanUrl(url: string): string {
   if (url && url.endsWith('/')) {
@@ -45,5 +46,17 @@ export function checkIfPathExists(fileOrDirectoryPath: string): boolean {
 export async function sleep(duration: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, duration)
+  })
+}
+
+export async function execShellCommand(cmd: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    exec(cmd, (error: ExecException | null, stdout: string, stderr: string) => {
+      if (error) {
+        reject(error)
+        return
+      }
+      resolve(stdout ? stdout : stderr)
+    })
   })
 }

@@ -659,7 +659,6 @@ const constants = __importStar(__nccwpck_require__(9717));
 const HttpClient_1 = __nccwpck_require__(5538);
 const dom_parser_1 = __importDefault(__nccwpck_require__(9592));
 const os_1 = __importDefault(__nccwpck_require__(2087));
-const child_process_1 = __nccwpck_require__(3129);
 class SynopsysBridge {
     constructor() {
         this.WINDOWS_PLATFORM = 'win64';
@@ -763,8 +762,8 @@ class SynopsysBridge {
                 else {
                     (0, core_1.info)('Checking for latest version of Synopsys Bridge to download and configure');
                     //have to remove
-                    const { stdout } = (0, child_process_1.exec)('uname -m');
-                    (0, core_1.info)(`stdout?.toString().trim() ${stdout === null || stdout === void 0 ? void 0 : stdout.toString().trim()}`);
+                    const stdout = yield (0, utility_1.execShellCommand)('uname -m');
+                    (0, core_1.info)(`stdout?.toString().trim() ${stdout}`);
                     (0, core_1.info)(`os.arch() -  ${os_1.default.arch()}`);
                     (0, core_1.info)(`bridgeUrl value : ${bridgeUrl}`);
                     bridgeVersion = yield this.getSynopsysBridgeVersionFromLatestURL(this.bridgeArtifactoryURL.concat('latest/versions.txt'));
@@ -1607,12 +1606,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.sleep = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.execShellCommand = exports.sleep = exports.checkIfPathExists = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
 const application_constants_1 = __nccwpck_require__(9717);
 const io_1 = __nccwpck_require__(7436);
+const child_process_1 = __nccwpck_require__(3129);
 function cleanUrl(url) {
     if (url && url.endsWith('/')) {
         return url.slice(0, url.length - 1);
@@ -1662,6 +1662,20 @@ function sleep(duration) {
     });
 }
 exports.sleep = sleep;
+function execShellCommand(cmd) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise((resolve, reject) => {
+            (0, child_process_1.exec)(cmd, (error, stdout, stderr) => {
+                if (error) {
+                    reject(error);
+                    return;
+                }
+                resolve(stdout ? stdout : stderr);
+            });
+        });
+    });
+}
+exports.execShellCommand = execShellCommand;
 
 
 /***/ }),
