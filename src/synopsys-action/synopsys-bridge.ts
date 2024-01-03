@@ -15,6 +15,8 @@ import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import DomParser from 'dom-parser'
 import os from 'os'
+import semver from 'semver'
+
 export class SynopsysBridge {
   bridgeExecutablePath: string
   synopsysBridgePath: string
@@ -271,7 +273,8 @@ export class SynopsysBridge {
     bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version)
     if (osName === 'darwin') {
       const isARM = !os.cpus()[0].model.includes('Intel')
-      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isARM ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
+      const isValidVersionForARM = semver.gte(version, constants.MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION)
+      bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isARM && isValidVersionForARM ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
     } else if (osName === 'win32') {
