@@ -39,7 +39,7 @@ export async function run() {
     }
     // Upload sarif file as GitHub artifact
     if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-      await uploadSarifReportAsArtifact()
+      await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
     }
     if (inputs.INCLUDE_DIAGNOSTICS) {
       await uploadDiagnostics()

@@ -212,7 +212,7 @@ function run() {
             }
             // Upload sarif file as GitHub artifact
             if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-                yield (0, artifacts_1.uploadSarifReportAsArtifact)();
+                yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME);
             }
             if (inputs.INCLUDE_DIAGNOSTICS) {
                 yield (0, artifacts_1.uploadDiagnostics)();
@@ -334,23 +334,14 @@ function getFiles(dir, allFiles) {
     return allFiles;
 }
 exports.getFiles = getFiles;
-function uploadSarifReportAsArtifact() {
+function uploadSarifReportAsArtifact(defaultSarifReportDirectory, userSarifFilePath, artifactName) {
     return __awaiter(this, void 0, void 0, function* () {
         const artifactClient = artifact.create();
-        let rootDir = '';
-        let blackDuckSarifFilePath = '';
-        if (inputs.BLACKDUCK_URL) {
-            blackDuckSarifFilePath = inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH ? inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH : (0, utility_1.getDefaultSarifReportPath)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, true);
-        }
-        if (inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()) {
-            rootDir = path_1.default.dirname(blackDuckSarifFilePath);
-        }
-        else {
-            rootDir = (0, utility_1.getDefaultSarifReportPath)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, false);
-        }
+        const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
+        const rootDir = userSarifFilePath ? path_1.default.dirname(userSarifFilePath) : (0, utility_1.getDefaultSarifReportPath)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, false);
         const options = {};
         options.continueOnError = false;
-        return yield artifactClient.uploadArtifact(constants.BLACKDUCK_SARIF_ARTIFACT_NAME, [blackDuckSarifFilePath, '/Users/spurohit/code/github/tmp/polaris_results.sarif.json'], rootDir, options);
+        return yield artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options);
     });
 }
 exports.uploadSarifReportAsArtifact = uploadSarifReportAsArtifact;
@@ -624,9 +615,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UPLOAD_SARIF_RESULT = exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_ISSUE_TYPES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
+exports.UPLOAD_SARIF_RESULT = exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
@@ -672,13 +663,12 @@ exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = ((_21 = (0, core_1.getInput)(constan
 exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = ((_22 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY)) === null || _22 === void 0 ? void 0 : _22.trim()) || '';
 exports.BLACKDUCK_REPORTS_SARIF_CREATE = ((_23 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_CREATE_KEY)) === null || _23 === void 0 ? void 0 : _23.trim()) || '';
 exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = ((_24 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY)) === null || _24 === void 0 ? void 0 : _24.trim()) || '';
-exports.BLACKDUCK_REPORTS_SARIF_ISSUE_TYPES = ((_25 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_ISSUE_TYPES_KEY)) === null || _25 === void 0 ? void 0 : _25.trim()) || '';
-exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = ((_26 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)) === null || _26 === void 0 ? void 0 : _26.trim()) || '';
-exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = ((_27 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)) === null || _27 === void 0 ? void 0 : _27.trim()) || '';
-exports.GITHUB_TOKEN = ((_28 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _28 === void 0 ? void 0 : _28.trim()) || '';
-exports.INCLUDE_DIAGNOSTICS = ((_29 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _29 === void 0 ? void 0 : _29.trim()) || '';
-exports.DIAGNOSTICS_RETENTION_DAYS = ((_30 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
-exports.UPLOAD_SARIF_RESULT = ((_31 = (0, core_1.getInput)(constants.UPLOAD_SARIF_RESULT_KEY)) === null || _31 === void 0 ? void 0 : _31.trim()) || '';
+exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = ((_25 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)) === null || _25 === void 0 ? void 0 : _25.trim()) || '';
+exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = ((_26 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)) === null || _26 === void 0 ? void 0 : _26.trim()) || '';
+exports.GITHUB_TOKEN = ((_27 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _27 === void 0 ? void 0 : _27.trim()) || '';
+exports.INCLUDE_DIAGNOSTICS = ((_28 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _28 === void 0 ? void 0 : _28.trim()) || '';
+exports.DIAGNOSTICS_RETENTION_DAYS = ((_29 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _29 === void 0 ? void 0 : _29.trim()) || '';
+exports.UPLOAD_SARIF_RESULT = ((_30 = (0, core_1.getInput)(constants.UPLOAD_SARIF_RESULT_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
 
 
 /***/ }),

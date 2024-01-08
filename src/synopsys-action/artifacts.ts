@@ -52,19 +52,11 @@ export function getFiles(dir: string, allFiles: string[]): string[] {
   return allFiles
 }
 
-export async function uploadSarifReportAsArtifact(): Promise<UploadResponse> {
+export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: string, userSarifFilePath: string, artifactName: string): Promise<UploadResponse> {
   const artifactClient = artifact.create()
-  let rootDir = ''
-  let blackDuckSarifFilePath = ''
-  if (inputs.BLACKDUCK_URL) {
-    blackDuckSarifFilePath = inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH ? inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH : getDefaultSarifReportPath(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, true)
-  }
-  if (inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()) {
-    rootDir = path.dirname(blackDuckSarifFilePath)
-  } else {
-    rootDir = getDefaultSarifReportPath(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, false)
-  }
+  const sarifFilePath = userSarifFilePath ? userSarifFilePath : getDefaultSarifReportPath(defaultSarifReportDirectory, true)
+  const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, false)
   const options: UploadOptions = {}
   options.continueOnError = false
-  return await artifactClient.uploadArtifact(constants.BLACKDUCK_SARIF_ARTIFACT_NAME, [blackDuckSarifFilePath, '/Users/spurohit/code/github/tmp/polaris_results.sarif.json'], rootDir, options)
+  return await artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options)
 }
