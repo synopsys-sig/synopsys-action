@@ -15,7 +15,7 @@ beforeEach(() => {
     GITHUB_REPOSITORY: 'test-repo',
     GITHUB_HEAD_REF: 'test-owner',
     GITHUB_REF: 'test-ref',
-    GITHUB_API_URL: 'test-url',
+    GITHUB_SERVER_URL: 'test-url',
     GITHUB_SHA: 'test-sha'
   }
   Object.defineProperty(process, 'platform', {value: 'linux'})

@@ -1,10 +1,8 @@
 import {GithubData} from './blackduck'
-import {Reports} from './reports'
 
 export interface Polaris {
   polaris: PolarisData
   github?: GithubData
-  reports?: Reports
 }
 
 export interface PolarisData {

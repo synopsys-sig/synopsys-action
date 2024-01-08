@@ -16,7 +16,6 @@ export interface Blackduck {
   blackduck: BlackduckData
   github?: GithubData
   network: NetworkAirGap
-  reports?: Reports
 }
 
 export interface BlackduckData {
@@ -26,6 +25,7 @@ export interface BlackduckData {
   scan?: {full?: boolean; failure?: {severities: BLACKDUCK_SCAN_FAILURE_SEVERITIES[]}}
   automation: AutomationData
   fixpr?: BlackDuckFixPrData
+  reports?: Reports
 }
 
 export interface Branch {

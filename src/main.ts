@@ -38,7 +38,7 @@ export async function run() {
       await gitHubClientService.uploadSarifReport()
     }
     // Upload sarif file as GitHub artifact
-    if (parseToBoolean(inputs.REPORTS_SARIF_CREATE)) {
+    if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       await uploadSarifReportAsArtifact()
     }
     if (inputs.INCLUDE_DIAGNOSTICS) {

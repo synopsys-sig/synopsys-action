@@ -116,9 +116,6 @@ inputs:
   coverity_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
     required: false
-  github_host_url:
-    description: 'Host URL for Github'
-    required: false
   github_token:
     description: 'Github token to be used for git related rest operation'
     required: false
@@ -134,19 +131,19 @@ inputs:
   network_airgap:
     description: 'If provided, Synopsys Action will be using local network to download and execute bridge .'
     required: false
-  reports_sarif_create:
+  blackduck_reports_sarif_create:
     description: 'Flag to enable/disable SARIF report generation'
     required: false
-  reports_sarif_file_path:
+  blackduck_reports_sarif_file_path:
     description: 'File path including file name where SARIF report should be created'
     required: false
-  reports_sarif_issue_types:
+  blackduck_reports_sarif_issue_types:
     description: 'Indicates which assessment issue types to include in SARIF file report'
     required: false
-  reports_sarif_severities:
+  blackduck_reports_sarif_severities:
     description: 'Indicates what SAST/SCA issues severity categories to include in SARIF file report'
     required: false
-  reports_sarif_groupSCAIssues:
+  blackduck_reports_sarif_groupSCAIssues:
     description: 'Flag to enable/disable Component-Version grouping for SCA Issues in SARIF report rules section'
     required: false
 runs:

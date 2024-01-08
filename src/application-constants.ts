@@ -79,6 +79,11 @@ export const BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = 'blackduck_fixpr_useUpgr
  */
 export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment'
 export const BLACKDUCK_PRCOMMENT_ENABLED_KEY = 'blackduck_prComment_enabled'
+export const BLACKDUCK_REPORTS_SARIF_CREATE_KEY = 'blackduck_reports_sarif_create'
+export const BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_file_path'
+export const BLACKDUCK_REPORTS_SARIF_ISSUE_TYPES_KEY = 'blackduck_reports_sarif_issue_types'
+export const BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities'
+export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues'
 
 export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'
@@ -101,15 +106,11 @@ export const RETRY_DELAY_IN_MILLISECONDS = 15000
 export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
 export const GITHUB_CLOUD_URL = 'https://github.com'
-export const REPORTS_SARIF_CREATE_KEY = 'reports_sarif_create'
-export const REPORTS_SARIF_FILE_PATH_KEY = 'reports_sarif_file_path'
-export const REPORTS_SARIF_ISSUE_TYPES_KEY = 'reports_sarif_issue_types'
-export const REPORTS_SARIF_SEVERITIES_KEY = 'reports_sarif_severities'
-export const REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'reports_sarif_groupSCAIssues'
+export const GITHUB_CLOUD_API_URL = 'https://api.github.com'
 export const UPLOAD_SARIF_RESULT_KEY = 'upload_sarif_result'
-export const BRIDGE_DIAGNOSTICS_FOLDER = '.bridge'
-export const BRIDGE_SARIF_GENERATOR_FOLDER = 'SARIF Generator'
-export const SARIF_UPLOAD_FOLDER_ARTIFACT_NAME = 'sarif_report'
+export const BRIDGE_LOCAL_DIRECTORY = '.bridge'
+export const BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator'
+export const BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report'
 export const SARIF_DEFAULT_FILE_NAME = 'report.sarif.json'
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {

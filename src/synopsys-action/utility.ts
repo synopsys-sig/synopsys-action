@@ -57,7 +57,7 @@ export async function sleep(duration: number): Promise<void> {
   })
 }
 
-export function getDefaultSarifReportPath(appendFilePath: boolean): string {
+export function getDefaultSarifReportPath(sarifReportDirectory: string, appendFilePath: boolean): string {
   const pwd = getWorkSpaceDirectory()
-  return !appendFilePath ? path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER) : path.join(pwd, constants.BRIDGE_DIAGNOSTICS_FOLDER, constants.BRIDGE_SARIF_GENERATOR_FOLDER, constants.SARIF_DEFAULT_FILE_NAME)
+  return !appendFilePath ? path.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory) : path.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory, constants.SARIF_DEFAULT_FILE_NAME)
 }
