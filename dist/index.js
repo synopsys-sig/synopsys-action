@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_TOKEN_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_SERVERURL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.POLARIS_ACCESSTOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_PRCOMMENT_ENABLED_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = exports.BRIDGE_DOWNLOAD_VERSION_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = exports.BRIDGE_DOWNLOAD_URL_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-exports.GITHUB_ENVIRONMENT_VARIABLES = exports.SARIF_DEFAULT_FILE_NAME = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.UPLOAD_SARIF_RESULT_KEY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_ISSUE_TYPES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = void 0;
+exports.GITHUB_ENVIRONMENT_VARIABLES = exports.SARIF_DEFAULT_FILE_NAME = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.UPLOAD_BLACKDUCK_SARIF_RESULT_KEY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_ISSUE_TYPES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -109,7 +109,7 @@ exports.RETRY_COUNT = 3;
 exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
 exports.GITHUB_CLOUD_URL = 'https://github.com';
 exports.GITHUB_CLOUD_API_URL = 'https://api.github.com';
-exports.UPLOAD_SARIF_RESULT_KEY = 'upload_sarif_result';
+exports.UPLOAD_BLACKDUCK_SARIF_RESULT_KEY = 'upload_blackduck_sarif_result';
 exports.BRIDGE_LOCAL_DIRECTORY = '.bridge';
 exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator';
 exports.BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report';
@@ -206,9 +206,9 @@ function run() {
         }
         finally {
             // Upload results to code scanning tab
-            if ((0, utility_1.parseToBoolean)(inputs.UPLOAD_SARIF_RESULT)) {
+            if ((0, utility_1.parseToBoolean)(inputs.UPLOAD_BLACKDUCK_SARIF_RESULT)) {
                 const gitHubClientService = new github_client_service_1.GithubClientService();
-                yield gitHubClientService.uploadSarifReport();
+                yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
             }
             // Upload sarif file as GitHub artifact
             if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
@@ -288,7 +288,6 @@ const inputs = __importStar(__nccwpck_require__(7481));
 const utility_1 = __nccwpck_require__(7643);
 const core_1 = __nccwpck_require__(2186);
 const path_1 = __importDefault(__nccwpck_require__(5622));
-const constants = __importStar(__nccwpck_require__(9717));
 function uploadDiagnostics() {
     return __awaiter(this, void 0, void 0, function* () {
         const artifactClient = artifact.create();
@@ -338,7 +337,7 @@ function uploadSarifReportAsArtifact(defaultSarifReportDirectory, userSarifFileP
     return __awaiter(this, void 0, void 0, function* () {
         const artifactClient = artifact.create();
         const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
-        const rootDir = userSarifFilePath ? path_1.default.dirname(userSarifFilePath) : (0, utility_1.getDefaultSarifReportPath)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, false);
+        const rootDir = userSarifFilePath ? path_1.default.dirname(userSarifFilePath) : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, false);
         const options = {};
         options.continueOnError = false;
         return yield artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options);
@@ -499,62 +498,56 @@ const constants = __importStar(__nccwpck_require__(9717));
 class GithubClientService {
     constructor() {
         this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs';
+        this.githubToken = inputs.GITHUB_TOKEN;
+        this.githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
+        this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : '';
+        this.repoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
+        this.githubServerUrl = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
+        this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl;
+        this.commit_sha = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || '';
+        this.githubRef = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || '';
     }
-    uploadSarifReport() {
+    uploadSarifReport(defaultSarifReportDirectory, userSarifFilePath) {
         return __awaiter(this, void 0, void 0, function* () {
             (0, core_1.info)('Uploading SARIF results to GitHub');
             if ((0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
                 throw new Error('Missing required GitHub token for uploading SARIF result to advance security');
             }
-            const githubToken = inputs.GITHUB_TOKEN.trim();
-            const githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
-            const repoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-            const repoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
-            const githubServerUrl = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
-            const githubApiURL = githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : githubServerUrl;
-            const commit_sha = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || '';
-            const githubRef = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || '';
             const stringFormat = (url, ...args) => {
                 return url.replace(/{(\d+)}/g, (match, index) => args[index] || '');
             };
-            const endpoint = stringFormat(githubApiURL.concat(this.gitHubCodeScanningUrl), repoOwner, repoName);
-            const sarifReports = [];
-            if (inputs.BLACKDUCK_REPORTS_SARIF_CREATE) {
-                const sarifFilePath = inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim() ? inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim() : (0, utility_1.getDefaultSarifReportPath)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, true);
-                sarifReports.push(sarifFilePath);
+            const endpoint = stringFormat(this.githubApiURL.concat(this.gitHubCodeScanningUrl), this.repoOwner, this.repoName);
+            const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
+            if ((0, utility_1.checkIfPathExists)(sarifFilePath)) {
+                try {
+                    const sarifContent = fs.readFileSync(sarifFilePath, 'utf8');
+                    const compressedSarif = zlib.gzipSync(sarifContent);
+                    const base64Sarif = compressedSarif.toString('base64');
+                    const data = {
+                        commit_sha: this.commit_sha,
+                        ref: this.githubRef,
+                        sarif: base64Sarif,
+                        validate: true
+                    };
+                    const httpClient = new HttpClient_1.HttpClient('GithubClientService');
+                    const httpResponse = yield httpClient.post(endpoint, JSON.stringify(data), {
+                        Authorization: `Bearer ${this.githubToken}`,
+                        Accept: 'application/vnd.github+json'
+                    });
+                    (0, core_1.debug)(`HTTP Status Code: ${httpResponse.message.statusCode}`);
+                    if (httpResponse.message.statusCode === 202) {
+                        (0, core_1.info)('SARIF result uploaded successfully to GitHub Advance Security');
+                    }
+                    else {
+                        (0, core_1.warning)('Error uploading SARIF data to GitHub Advance Security');
+                    }
+                }
+                catch (error) {
+                    throw new Error(`Error uploading SARIF data to GitHub Advance Security: ${error}`);
+                }
             }
-            for (const sarifFile of sarifReports) {
-                if ((0, utility_1.checkIfPathExists)(sarifFile)) {
-                    try {
-                        const sarifContent = fs.readFileSync(sarifFile, 'utf8');
-                        const compressedSarif = zlib.gzipSync(sarifContent);
-                        const base64Sarif = compressedSarif.toString('base64');
-                        const data = {
-                            commit_sha,
-                            ref: githubRef,
-                            sarif: base64Sarif,
-                            validate: true
-                        };
-                        const httpClient = new HttpClient_1.HttpClient('GithubClientService');
-                        const httpResponse = yield httpClient.post(endpoint, JSON.stringify(data), {
-                            Authorization: `Bearer ${githubToken}`,
-                            Accept: 'application/vnd.github+json'
-                        });
-                        (0, core_1.debug)(`HTTP Status Code: ${httpResponse.message.statusCode}`);
-                        if (httpResponse.message.statusCode === 202) {
-                            (0, core_1.info)('SARIF result uploaded successfully to GitHub Advance Security');
-                        }
-                        else {
-                            (0, core_1.warning)('Error uploading SARIF data to GitHub Advance Security');
-                        }
-                    }
-                    catch (error) {
-                        throw new Error(`Error uploading SARIF data to GitHub Advance Security: ${error}`);
-                    }
-                }
-                else {
-                    throw new Error('No SARIF file found to upload');
-                }
+            else {
+                throw new Error('No SARIF file found to upload');
             }
         });
     }
@@ -617,7 +610,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UPLOAD_SARIF_RESULT = exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
+exports.UPLOAD_BLACKDUCK_SARIF_RESULT = exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
@@ -668,7 +661,7 @@ exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = ((_26 = (0, core_1.getInput)(
 exports.GITHUB_TOKEN = ((_27 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _27 === void 0 ? void 0 : _27.trim()) || '';
 exports.INCLUDE_DIAGNOSTICS = ((_28 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _28 === void 0 ? void 0 : _28.trim()) || '';
 exports.DIAGNOSTICS_RETENTION_DAYS = ((_29 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _29 === void 0 ? void 0 : _29.trim()) || '';
-exports.UPLOAD_SARIF_RESULT = ((_30 = (0, core_1.getInput)(constants.UPLOAD_SARIF_RESULT_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
+exports.UPLOAD_BLACKDUCK_SARIF_RESULT = ((_30 = (0, core_1.getInput)(constants.UPLOAD_BLACKDUCK_SARIF_RESULT_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
 
 
 /***/ }),

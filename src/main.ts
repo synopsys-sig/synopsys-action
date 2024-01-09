@@ -6,6 +6,7 @@ import * as constants from './application-constants'
 import * as inputs from './synopsys-action/inputs'
 import {uploadDiagnostics, uploadSarifReportAsArtifact} from './synopsys-action/artifacts'
 import {GithubClientService} from './synopsys-action/github-client-service'
+import {UPLOAD_BLACKDUCK_SARIF_RESULT} from './synopsys-action/inputs'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -33,9 +34,9 @@ export async function run() {
     throw error
   } finally {
     // Upload results to code scanning tab
-    if (parseToBoolean(inputs.UPLOAD_SARIF_RESULT)) {
+    if (parseToBoolean(inputs.UPLOAD_BLACKDUCK_SARIF_RESULT)) {
       const gitHubClientService = new GithubClientService()
-      await gitHubClientService.uploadSarifReport()
+      await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
     }
     // Upload sarif file as GitHub artifact
     if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {

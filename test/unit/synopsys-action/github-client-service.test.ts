@@ -26,7 +26,7 @@ test('should throw error for missing GitHub token while uploading sarif result t
   const githubClientService = new GithubClientService()
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
   try {
-    await githubClientService.uploadSarifReport()
+    await githubClientService.uploadSarifReport('test-dir', '/')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
     expect(error.message).toContain('Missing required GitHub token for uploading SARIF result to advance security')
@@ -49,7 +49,7 @@ describe('upload sarif results', () => {
     }
     httpResponse.message.statusCode = 202
     jest.spyOn(HttpClient.prototype, 'post').mockResolvedValueOnce(httpResponse)
-    const response = await githubClientService.uploadSarifReport()
+    const response = await githubClientService.uploadSarifReport('test-dir', '/')
     expect(response).toBeUndefined()
   })
 
@@ -70,7 +70,7 @@ describe('upload sarif results', () => {
     }
     httpResponse.message.statusCode = 202
     jest.spyOn(HttpClient.prototype, 'post').mockResolvedValueOnce(httpResponse)
-    const response = await githubClientService.uploadSarifReport()
+    const response = await githubClientService.uploadSarifReport('test-dir', '/')
     expect(response).toBeUndefined()
   })
 
@@ -93,7 +93,7 @@ describe('upload sarif results', () => {
     jest.spyOn(HttpClient.prototype, 'post').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
 
     try {
-      await githubClientService.uploadSarifReport()
+      await githubClientService.uploadSarifReport('test-dir', '/')
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error)
       expect(error.message).toContain('Error uploading SARIF data to GitHub Advance Security:')
@@ -108,7 +108,7 @@ describe('upload sarif results', () => {
     jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(false)
     jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
     try {
-      await githubClientService.uploadSarifReport()
+      await githubClientService.uploadSarifReport('test-dir', '/')
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error)
       expect(error.message).toContain('No SARIF file found to upload')

@@ -7,7 +7,6 @@ import * as configVariables from '@actions/artifact/lib/internal/config-variable
 import * as diagnostics from '../../src/synopsys-action/artifacts'
 import {UploadResponse} from '@actions/artifact'
 import {GithubClientService} from '../../src/synopsys-action/github-client-service'
-import {UPLOAD_SARIF_RESULT} from '../../src/synopsys-action/inputs'
 beforeEach(() => {
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
@@ -473,17 +472,15 @@ test('Test error messages with bridge exit codes', () => {
   var errorMessage = 'Error: The process failed with exit code 2'
   expect(logBridgeExitCodes(errorMessage)).toEqual('Exit Code: 2 Error from adapter end')
 })
-test('Run Polaris flow for uploading sarif result as artifact', async () => {
-  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
-  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
-  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
+test('Run Black Duck flow for uploading sarif result as artifact', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: '/'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
@@ -500,21 +497,19 @@ test('Run Polaris flow for uploading sarif result as artifact', async () => {
 
   let response = await run()
   expect(response).not.toBe(null)
-  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
 })
 
-test('Run Polaris flow for uploading sarif result to advance security and artifacts', async () => {
-  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
-  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
-  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
+test('Run Black Duck flow for uploading sarif result to advance security and artifacts', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_CREATE', {value: 'true'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: '/'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_ISSUE_TYPES', {value: 'SCA,SAST'})
-  Object.defineProperty(inputs, 'REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
-  Object.defineProperty(inputs, 'UPLOAD_SARIF_RESULT', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
+  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_RESULT', {value: 'true'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
@@ -533,17 +528,19 @@ test('Run Polaris flow for uploading sarif result to advance security and artifa
 
   let response = await run()
   expect(response).not.toBe(null)
-  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
 })
 
-test('should throw error while uploading sarif result to advance security', async () => {
-  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
-  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
-  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
-  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
+test('should throw error while uploading Black Duck sarif result to advance security', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
-  Object.defineProperty(inputs, 'UPLOAD_SARIF_RESULT', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
+  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_RESULT', {value: 'true'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
