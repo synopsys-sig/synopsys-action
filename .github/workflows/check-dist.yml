@@ -8,19 +8,19 @@ name: Check dist/
 on:
   push:
     branches:
-      - main
+      - SIGINT-1438-build_unittest_coverage
     paths-ignore:
       - '**.md'
-  pull_request:
-    branches:
-      - main
-    paths-ignore:
-      - '**.md'
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths-ignore:
+  #     - '**.md'
   workflow_dispatch:
 
 jobs:
   check-dist:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-4core
 
     steps:
       - uses: actions/checkout@v3
@@ -45,11 +45,15 @@ jobs:
             git diff
             exit 1
           fi
-        id: diff
+      - name: Unit Test
+        run: |
+            npm ci
+            npm run all
+        # id: diff
 
       # If index.js was different than expected, upload the expected version as an artifact
-      - uses: actions/upload-artifact@v2
-        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
-        with:
-          name: dist
-          path: dist/
+      # - uses: actions/upload-artifact@v2
+      #   if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+      #   with:
+      #     name: dist
+      #     path: dist/
