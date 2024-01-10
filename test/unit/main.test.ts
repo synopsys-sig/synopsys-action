@@ -540,10 +540,12 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
-  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_RESULT', {value: 'true'})
+  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: 'true'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
     fileName: 'C://user/temp/download/bridge-win.zip'
@@ -560,5 +562,5 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   } catch (error: any) {
     expect(error.message).toEqual('Error uploading SARIF data to GitHub Advance Security:')
   }
-  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
 })

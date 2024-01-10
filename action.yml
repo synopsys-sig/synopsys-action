@@ -125,8 +125,8 @@ inputs:
   blackduck_reports_sarif_groupSCAIssues:
     description: 'Flag to enable/disable Component-Version grouping for SCA Issues in Black Duck SARIF report rules section'
     required: false
-  upload_blackduck_sarif_result:
-    description: 'Flag to enable/disable uploading of Black Duck SARIF result to GitHub Advanced Security'
+  upload_blackduck_sarif_report:
+    description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
     required: false
   coverity_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
