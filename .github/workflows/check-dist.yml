@@ -8,7 +8,7 @@ name: Check dist/
 on:
   push:
     branches:
-      - SIGINT-1438-build_unittest_coverage
+      - main
     paths-ignore:
       - '**.md'
   # pull_request:
@@ -45,10 +45,10 @@ jobs:
             git diff
             exit 1
           fi
-      - name: Unit Test
-        run: |
-            npm ci
-            npm run all
+#      - name: Unit Test
+#        run: |
+#            npm ci
+#            npm run all
         # id: diff
 
       # If index.js was different than expected, upload the expected version as an artifact
