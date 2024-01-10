@@ -15,7 +15,7 @@ jobs:
       - name: Install Nodejs
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: 18
       - name: Install Dependencies
         run: npm ci
 #      - name: Code Coverage
