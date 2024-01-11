@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: [linux]
+    runs-on: [E2E-test-linux]
       # group: sig-default
       # labels: linux
     steps:
