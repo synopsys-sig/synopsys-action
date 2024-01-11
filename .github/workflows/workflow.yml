@@ -6,9 +6,9 @@ on:
 
 jobs:
   build:
-    runs-on:
-      group: sig-default
-      labels: linux
+    runs-on: [linux]
+      # group: sig-default
+      # labels: linux
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
