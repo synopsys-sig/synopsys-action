@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on:
       group: sig-default
-      labels: windows-2022-8core
+      labels: E2E-test-linux
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
