@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on:
       group: sig-default
-      labels: E2E-test-linux
+      labels: linux
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
