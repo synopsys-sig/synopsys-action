@@ -17,7 +17,7 @@ jobs:
         with:
           node-version: 18
       - name: Install Dependencies
-        run: npm run build
+        run: npm install
 #      - name: Code Coverage
 #        run: npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'
       - name: Unit Tests
