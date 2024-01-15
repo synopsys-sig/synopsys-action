@@ -29,8 +29,8 @@ jobs:
       - name: pop_polaris
         uses: synopsys-sig/synopsys-action@v1.6.0
         with:
-          polaris_serverUrl: ${{ secrets.POLARIS_SERVERURL }}
-          polaris_accessToken: ${{ secrets.POLARIS_ACCESSTOKEN }}
+          polaris_server_url: ${{ secrets.POLARIS_SERVERURL }}
+          polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
           polaris_application_name: node-goat-1
           polaris_project_name: node-goat-1
           polaris_assessment_types: "SAST"
