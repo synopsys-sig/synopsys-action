@@ -509,7 +509,7 @@ test('Run Black Duck flow for uploading sarif result to advance security and art
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
-  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_RESULT', {value: 'true'})
+  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: 'true'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)

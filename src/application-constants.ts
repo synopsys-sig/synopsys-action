@@ -81,7 +81,6 @@ export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcommen
 export const BLACKDUCK_PRCOMMENT_ENABLED_KEY = 'blackduck_prComment_enabled'
 export const BLACKDUCK_REPORTS_SARIF_CREATE_KEY = 'blackduck_reports_sarif_create'
 export const BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_file_path'
-export const BLACKDUCK_REPORTS_SARIF_ISSUE_TYPES_KEY = 'blackduck_reports_sarif_issue_types'
 export const BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities'
 export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues'
 
