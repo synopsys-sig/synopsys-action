@@ -36,7 +36,7 @@ jobs:
           echo "product=integrations" >> /tmp/test.properties
           echo "product.name=integrations" >> /tmp/test.properties
           echo "scm=github" >> /tmp/test.properties
-          echo "runner=macOS" >> /tmp/test.properties
+          echo "runner=macos" >> /tmp/test.properties
           echo "runner.os=mac" >> /tmp/test.properties
           echo "pipeline=true" >> /tmp/test.properties
           echo "cloud.storage=S3" >> /tmp/test.properties
