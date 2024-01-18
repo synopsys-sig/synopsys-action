@@ -498,6 +498,7 @@ test('Run Black Duck flow for uploading sarif result as artifact', async () => {
   let response = await run()
   expect(response).not.toBe(null)
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: null})
 })
 
 test('Run Black Duck flow for uploading sarif result to advance security and artifacts', async () => {
@@ -529,6 +530,8 @@ test('Run Black Duck flow for uploading sarif result to advance security and art
   let response = await run()
   expect(response).not.toBe(null)
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: null})
+  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: null})
 })
 
 test('should throw error while uploading Black Duck sarif result to advance security', async () => {
@@ -563,4 +566,111 @@ test('should throw error while uploading Black Duck sarif result to advance secu
     expect(error.message).toEqual('Error uploading SARIF data to GitHub Advance Security:')
   }
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: null})
+  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: null})
+})
+
+test('Run Polaris flow for uploading sarif result as artifact', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,sast'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
+
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: 'C://user/temp/download/',
+    fileName: 'C://user/temp/download/bridge-win.zip'
+  }
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
+
+  let response = await run()
+  expect(response).not.toBe(null)
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: null})
+
+  jest.restoreAllMocks()
+})
+
+test('Run Polaris flow for uploading sarif result to advance security and artifacts', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,sast'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
+  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: 'true'})
+
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: 'C://user/temp/download/',
+    fileName: 'C://user/temp/download/bridge-win.zip'
+  }
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
+
+  let response = await run()
+  expect(response).not.toBe(null)
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: null})
+  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: null})
+})
+
+test('should throw error while uploading Black Duck sarif result to advance security', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,sast'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
+  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: 'true'})
+
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: 'C://user/temp/download/',
+    fileName: 'C://user/temp/download/bridge-win.zip'
+  }
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
+
+  try {
+    await run()
+  } catch (error: any) {
+    expect(error.message).toEqual('Error uploading SARIF data to GitHub Advance Security:')
+  }
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+  Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: null})
+  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: null})
 })
