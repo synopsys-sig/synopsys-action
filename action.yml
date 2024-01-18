@@ -71,6 +71,24 @@ inputs:
   polaris_branch_parent_name:
     description: 'Polaris parent branch name'
     required: false
+  polaris_reports_sarif_create:
+    description: 'Flag to enable/disable Polaris SARIF report generation'
+    required: false
+  polaris_reports_sarif_file_path:
+    description: 'File path including file name where Polaris SARIF report should be created'
+    required: false
+  polaris_reports_sarif_severities:
+    description: 'Indicates what SAST/SCA issues severity categories to include in Polaris SARIF file report'
+    required: false
+  polaris_reports_sarif_groupSCAIssues:
+    description: 'Flag to enable/disable Component-Version grouping for SCA Issues in Polaris SARIF report rules section'
+    required: false
+  polaris_reports_sarif_issue_types:
+    description: 'Enum to indicate which assessment issues type to include in Polaris SARIF file report'
+    required: false
+  upload_polaris_sarif_report:
+    description: 'Flag to enable/disable uploading of Polaris SARIF report to GitHub Advanced Security'
+    required: false
   synopsys_bridge_install_directory:
     description: 'Synopsys Bridge Install Directory'
     required: false

@@ -60,6 +60,11 @@ export const POLARIS_PRCOMMENT_ENABLED_KEY = 'polaris_prComment_enabled'
 export const POLARIS_PRCOMMENT_SEVERITIES_KEY = 'polaris_prComment_severities'
 export const POLARIS_BRANCH_NAME_KEY = 'polaris_branch_name'
 export const POLARIS_BRANCH_PARENT_NAME_KEY = 'polaris_branch_parent_name'
+export const POLARIS_REPORTS_SARIF_CREATE_KEY = 'polaris_reports_sarif_create'
+export const POLARIS_REPORTS_SARIF_FILE_PATH_KEY = 'polaris_reports_sarif_file_path'
+export const POLARIS_REPORTS_SARIF_SEVERITIES_KEY = 'polaris_reports_sarif_severities'
+export const POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'polaris_reports_sarif_groupSCAIssues'
+export const POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = 'polaris_reports_sarif_issue_types'
 
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'
@@ -107,9 +112,12 @@ export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
 export const GITHUB_CLOUD_URL = 'https://github.com'
 export const GITHUB_CLOUD_API_URL = 'https://api.github.com'
 export const UPLOAD_BLACKDUCK_SARIF_REPORT_KEY = 'upload_blackduck_sarif_report'
+export const UPLOAD_POLARIS_SARIF_REPORT_KEY = 'upload_polaris_sarif_report'
 export const BRIDGE_LOCAL_DIRECTORY = '.bridge'
 export const BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator'
 export const BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report'
+export const POLARIS_SARIF_GENERATOR_DIRECTORY = 'Polaris SARIF Generator'
+export const POLARIS_SARIF_ARTIFACT_NAME = 'polaris_sarif_report'
 export const SARIF_DEFAULT_FILE_NAME = 'report.sarif.json'
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {
