@@ -9,7 +9,10 @@ jobs:
   build:
      runs-on: [ E2E-test-linux ]
      steps:
-      
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk
       - name: unit testing
         run: |
           echo "unit testing stage"
@@ -34,7 +37,7 @@ jobs:
           echo "product.name=integrations" >> /tmp/test.properties
           echo "scm=github" >> /tmp/test.properties
           echo "runner=Windows" >> /tmp/test.properties
-          echo "runner.os=windows" >> /tmp/test.properties
+          echo "runner.os=Windows" >> /tmp/test.properties
           echo "pipeline=true" >> /tmp/test.properties
           echo "cloud.storage=S3" >> /tmp/test.properties
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
@@ -52,4 +55,3 @@ jobs:
       - name: publish
         run: |
           echo "publish stage"
-    
