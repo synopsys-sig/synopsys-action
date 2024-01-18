@@ -8,6 +8,7 @@ on:
 jobs:
   build:
      runs-on: [ E2E-test-linux ]
+
      steps:
       - name: install
         run: |
@@ -49,9 +50,8 @@ jobs:
           cat /tmp/test.properties
           java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
       
-
-       - name: e2e_tests_mac
-        run: |
+      - name: e2e_tests_mac
+         run: |
           
           if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
             echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
@@ -71,8 +71,8 @@ jobs:
           java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
          
 
-       - name: e2e_tests_windows
-        run: |
+      - name: e2e_tests_windows
+         run: |
           
           if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
             echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
