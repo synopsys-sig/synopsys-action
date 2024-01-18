@@ -51,7 +51,46 @@ jobs:
           cat /tmp/test.properties
           java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
       
-      
+      - name: e2e_tests_mac
+        run: |
+          
+          if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
+            echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
+          else
+            echo github.action.version=$GITHUB_HEAD_REF >> /tmp/test.properties
+          fi
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=macos" >> /tmp/test.properties
+          echo "runner.os=mac" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
+
+      - name: e2e_tests_windows
+        run: |
+          
+          if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
+            echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
+          else
+            echo github.action.version=$GITHUB_HEAD_REF >> /tmp/test.properties
+          fi
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=Windows" >> /tmp/test.properties
+          echo "runner.os=Windows" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
+
       - name: Archive results
         if: always()
         uses: actions/upload-artifact@v3
