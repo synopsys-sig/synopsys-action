@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-     runs-on: [ Windows ]
+     runs-on: [ E2E-test-linux ]
      steps:
       
       - name: unit testing
