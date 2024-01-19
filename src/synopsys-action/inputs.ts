@@ -53,4 +53,4 @@ export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.BLACK
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || ''
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)?.trim() || ''
 export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)?.trim() || ''
-export const UPLOAD_BLACKDUCK_SARIF_REPORT = getInput(constants.UPLOAD_BLACKDUCK_SARIF_REPORT_KEY)?.trim() || ''
+export const BLACKDUCK_UPLOAD_SARIF_REPORT = getInput(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''

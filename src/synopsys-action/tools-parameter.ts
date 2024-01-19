@@ -272,7 +272,7 @@ export class SynopsysToolsParameter {
 
     if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
-      if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES != null && inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.length > 0) {
+      if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
         const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
         for (const fixPrSeverity of filterSeverities) {
           if (fixPrSeverity != null && fixPrSeverity !== '') {

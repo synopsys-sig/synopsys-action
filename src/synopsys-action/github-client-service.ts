@@ -5,7 +5,6 @@ import * as zlib from 'zlib'
 import {checkIfPathExists, getDefaultSarifReportPath, sleep} from './utility'
 import {debug, info} from '@actions/core'
 import {isNullOrEmptyValue} from './validators'
-import {GITHUB_ENVIRONMENT_VARIABLES, RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS} from '../application-constants'
 import * as constants from '../application-constants'
 
 export class GithubClientService {
@@ -22,13 +21,13 @@ export class GithubClientService {
   constructor() {
     this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs'
     this.githubToken = inputs.GITHUB_TOKEN
-    this.githubRepo = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || ''
-    this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : ''
-    this.repoOwner = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
-    this.githubServerUrl = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
+    this.githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || ''
+    this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : 'node-goat-1'
+    this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || 'spurohitsynopsys'
+    this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || 'https://api.github.com'
     this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl
-    this.commit_sha = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || ''
-    this.githubRef = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || ''
+    this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || 'e434b96cc4d26a0396ede1e76c4946afbcaf6ec6'
+    this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || 'ssss'
   }
 
   async uploadSarifReport(defaultSarifReportDirectory: string, userSarifFilePath: string): Promise<void> {
@@ -36,8 +35,8 @@ export class GithubClientService {
     if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
       throw new Error('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security')
     }
-    let retryCountLocal = RETRY_COUNT
-    let retryDelay = RETRY_DELAY_IN_MILLISECONDS
+    let retryCountLocal = constants.RETRY_COUNT
+    let retryDelay = constants.RETRY_DELAY_IN_MILLISECONDS
     const stringFormat = (url: string, ...args: string[]): string => {
       return url.replace(/{(\d+)}/g, (match, index) => args[index] || '')
     }
@@ -64,15 +63,22 @@ export class GithubClientService {
           debug(`HTTP Status Code: ${httpResponse.message.statusCode}`)
           debug(`HTTP Response Headers: ${JSON.stringify(httpResponse.message.headers)}`)
           const responseBody = await httpResponse.readBody()
-          const rateLimitRemaining = httpResponse.message?.headers['x-ratelimit-remaining'] || ''
+          const rateLimitRemaining = httpResponse.message?.headers[constants.X_RATE_LIMIT_REMAINING] || ''
           if (httpResponse.message.statusCode === 202) {
             info('SARIF result uploaded successfully to GitHub Advance Security')
             retryCountLocal = 0
           } else if (httpResponse.message.statusCode === 403 && (rateLimitRemaining === '0' || responseBody.includes('secondary rate limit'))) {
-            retryDelay = await this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay)
-            if (retryCountLocal === 1) {
-              const rateLimitReset = httpResponse.message?.headers['x-ratelimit-reset'] || ''
-              info(`Rate limit reset time is: ${rateLimitReset}`)
+            const rateLimitResetHeader = httpResponse.message?.headers[constants.X_RATE_LIMIT_RESET] || ''
+            const rateLimitReset = Array.isArray(rateLimitResetHeader) ? rateLimitResetHeader[0] : rateLimitResetHeader
+            const currentTimeInSeconds = Math.floor(Date.now() / 1000)
+            const resetTimeInSeconds = parseInt(rateLimitReset, 10)
+            const secondsUntilReset = resetTimeInSeconds - currentTimeInSeconds
+            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=115
+            if (secondsUntilReset <= 115) {
+              retryDelay = await this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay)
+            } else {
+              const minutesUntilreset = Math.ceil(secondsUntilReset / 60)
+              throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`)
             }
             retryCountLocal--
           } else {

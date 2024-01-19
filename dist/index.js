@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_TOKEN_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_SERVERURL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.POLARIS_ACCESSTOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_PRCOMMENT_ENABLED_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = exports.BRIDGE_DOWNLOAD_VERSION_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = exports.BRIDGE_DOWNLOAD_URL_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-exports.GITHUB_ENVIRONMENT_VARIABLES = exports.SARIF_DEFAULT_FILE_NAME = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.UPLOAD_BLACKDUCK_SARIF_REPORT_KEY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = void 0;
+exports.GITHUB_ENVIRONMENT_VARIABLES = exports.X_RATE_LIMIT_REMAINING = exports.X_RATE_LIMIT_RESET = exports.SARIF_DEFAULT_FILE_NAME = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -88,6 +88,7 @@ exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = 'blackduck_reports_sarif_create';
 exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_file_path';
 exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities';
 exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues';
+exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report';
 exports.GITHUB_HOST_URL_KEY = 'github_host_url';
 exports.GITHUB_TOKEN_KEY = 'github_token';
 exports.INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics';
@@ -108,11 +109,12 @@ exports.RETRY_COUNT = 3;
 exports.NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416]);
 exports.GITHUB_CLOUD_URL = 'https://github.com';
 exports.GITHUB_CLOUD_API_URL = 'https://api.github.com';
-exports.UPLOAD_BLACKDUCK_SARIF_REPORT_KEY = 'upload_blackduck_sarif_report';
 exports.BRIDGE_LOCAL_DIRECTORY = '.bridge';
 exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator';
 exports.BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report';
 exports.SARIF_DEFAULT_FILE_NAME = 'report.sarif.json';
+exports.X_RATE_LIMIT_RESET = 'x-ratelimit-reset';
+exports.X_RATE_LIMIT_REMAINING = 'x-ratelimit-remaining';
 exports.GITHUB_ENVIRONMENT_VARIABLES = {
     GITHUB_TOKEN: 'GITHUB_TOKEN',
     GITHUB_REPOSITORY: 'GITHUB_REPOSITORY',
@@ -212,7 +214,7 @@ function run() {
                 yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME);
             }
             // Upload Black Duck SARIF Report to code scanning tab
-            if ((0, utility_1.parseToBoolean)(inputs.UPLOAD_BLACKDUCK_SARIF_REPORT)) {
+            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
                 const gitHubClientService = new github_client_service_1.GithubClientService();
                 yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
             }
@@ -492,19 +494,18 @@ const zlib = __importStar(__nccwpck_require__(8761));
 const utility_1 = __nccwpck_require__(7643);
 const core_1 = __nccwpck_require__(2186);
 const validators_1 = __nccwpck_require__(8401);
-const application_constants_1 = __nccwpck_require__(9717);
 const constants = __importStar(__nccwpck_require__(9717));
 class GithubClientService {
     constructor() {
         this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs';
         this.githubToken = inputs.GITHUB_TOKEN;
-        this.githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
-        this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : '';
-        this.repoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
-        this.githubServerUrl = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
+        this.githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
+        this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : 'node-goat-1';
+        this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || 'spurohitsynopsys';
+        this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || 'https://api.github.com';
         this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl;
-        this.commit_sha = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || '';
-        this.githubRef = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || '';
+        this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || 'e434b96cc4d26a0396ede1e76c4946afbcaf6ec6';
+        this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || 'ssss';
     }
     uploadSarifReport(defaultSarifReportDirectory, userSarifFilePath) {
         var _a, _b;
@@ -513,8 +514,8 @@ class GithubClientService {
             if ((0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
                 throw new Error('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security');
             }
-            let retryCountLocal = application_constants_1.RETRY_COUNT;
-            let retryDelay = application_constants_1.RETRY_DELAY_IN_MILLISECONDS;
+            let retryCountLocal = constants.RETRY_COUNT;
+            let retryDelay = constants.RETRY_DELAY_IN_MILLISECONDS;
             const stringFormat = (url, ...args) => {
                 return url.replace(/{(\d+)}/g, (match, index) => args[index] || '');
             };
@@ -540,16 +541,24 @@ class GithubClientService {
                         (0, core_1.debug)(`HTTP Status Code: ${httpResponse.message.statusCode}`);
                         (0, core_1.debug)(`HTTP Response Headers: ${JSON.stringify(httpResponse.message.headers)}`);
                         const responseBody = yield httpResponse.readBody();
-                        const rateLimitRemaining = ((_a = httpResponse.message) === null || _a === void 0 ? void 0 : _a.headers['x-ratelimit-remaining']) || '';
+                        const rateLimitRemaining = ((_a = httpResponse.message) === null || _a === void 0 ? void 0 : _a.headers[constants.X_RATE_LIMIT_REMAINING]) || '';
                         if (httpResponse.message.statusCode === 202) {
                             (0, core_1.info)('SARIF result uploaded successfully to GitHub Advance Security');
                             retryCountLocal = 0;
                         }
                         else if (httpResponse.message.statusCode === 403 && (rateLimitRemaining === '0' || responseBody.includes('secondary rate limit'))) {
-                            retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
-                            if (retryCountLocal === 1) {
-                                const rateLimitReset = ((_b = httpResponse.message) === null || _b === void 0 ? void 0 : _b.headers['x-ratelimit-reset']) || '';
-                                (0, core_1.info)(`Rate limit reset time is: ${rateLimitReset}`);
+                            const rateLimitResetHeader = ((_b = httpResponse.message) === null || _b === void 0 ? void 0 : _b.headers[constants.X_RATE_LIMIT_RESET]) || '';
+                            const rateLimitReset = Array.isArray(rateLimitResetHeader) ? rateLimitResetHeader[0] : rateLimitResetHeader;
+                            const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+                            const resetTimeInSeconds = parseInt(rateLimitReset, 10);
+                            const secondsUntilReset = resetTimeInSeconds - currentTimeInSeconds;
+                            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=115
+                            if (secondsUntilReset <= 115) {
+                                retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
+                            }
+                            else {
+                                const minutesUntilreset = Math.ceil(secondsUntilReset / 60);
+                                throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`);
                             }
                             retryCountLocal--;
                         }
@@ -640,7 +649,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.UPLOAD_BLACKDUCK_SARIF_REPORT = exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
+exports.BLACKDUCK_UPLOAD_SARIF_REPORT = exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
@@ -691,7 +700,7 @@ exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = ((_26 = (0, core_1.getInput)(
 exports.GITHUB_TOKEN = ((_27 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _27 === void 0 ? void 0 : _27.trim()) || '';
 exports.INCLUDE_DIAGNOSTICS = ((_28 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _28 === void 0 ? void 0 : _28.trim()) || '';
 exports.DIAGNOSTICS_RETENTION_DAYS = ((_29 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _29 === void 0 ? void 0 : _29.trim()) || '';
-exports.UPLOAD_BLACKDUCK_SARIF_REPORT = ((_30 = (0, core_1.getInput)(constants.UPLOAD_BLACKDUCK_SARIF_REPORT_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
+exports.BLACKDUCK_UPLOAD_SARIF_REPORT = ((_30 = (0, core_1.getInput)(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
 
 
 /***/ }),
@@ -1631,7 +1640,7 @@ class SynopsysToolsParameter {
         }
         if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
             const sarifReportFilterSeverities = [];
-            if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES != null && inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.length > 0) {
+            if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
                 const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',');
                 for (const fixPrSeverity of filterSeverities) {
                     if (fixPrSeverity != null && fixPrSeverity !== '') {

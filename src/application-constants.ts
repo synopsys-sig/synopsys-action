@@ -83,6 +83,7 @@ export const BLACKDUCK_REPORTS_SARIF_CREATE_KEY = 'blackduck_reports_sarif_creat
 export const BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_file_path'
 export const BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities'
 export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues'
+export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
 
 export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'
@@ -106,11 +107,12 @@ export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
 export const GITHUB_CLOUD_URL = 'https://github.com'
 export const GITHUB_CLOUD_API_URL = 'https://api.github.com'
-export const UPLOAD_BLACKDUCK_SARIF_REPORT_KEY = 'upload_blackduck_sarif_report'
 export const BRIDGE_LOCAL_DIRECTORY = '.bridge'
 export const BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator'
 export const BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report'
 export const SARIF_DEFAULT_FILE_NAME = 'report.sarif.json'
+export const X_RATE_LIMIT_RESET = 'x-ratelimit-reset'
+export const X_RATE_LIMIT_REMAINING = 'x-ratelimit-remaining'
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_TOKEN: 'GITHUB_TOKEN',
