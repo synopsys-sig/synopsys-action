@@ -3,8 +3,10 @@ import {UploadResponse} from '@actions/artifact/lib/internal/upload-response'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as fs from 'fs'
 import * as inputs from './inputs'
+import {getDefaultSarifReportPath} from './utility'
 import {UploadOptions} from '@actions/artifact/lib/internal/upload-options'
 import {warning} from '@actions/core'
+import path from 'path'
 
 export async function uploadDiagnostics(): Promise<UploadResponse | void> {
   const artifactClient = artifact.create()
@@ -47,4 +49,13 @@ export function getFiles(dir: string, allFiles: string[]): string[] {
     }
   }
   return allFiles
+}
+
+export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: string, userSarifFilePath: string, artifactName: string): Promise<UploadResponse> {
+  const artifactClient = artifact.create()
+  const sarifFilePath = userSarifFilePath ? userSarifFilePath : getDefaultSarifReportPath(defaultSarifReportDirectory, true)
+  const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(defaultSarifReportDirectory, false)
+  const options: UploadOptions = {}
+  options.continueOnError = false
+  return await artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options)
 }

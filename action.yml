@@ -113,6 +113,21 @@ inputs:
   blackduck_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Black Duck scan'
     required: false
+  blackduck_reports_sarif_create:
+    description: 'Flag to enable/disable Black Duck SARIF report generation'
+    required: false
+    blackduck_reports_sarif_file_path:
+      description: 'File path including file name where Black Duck SARIF report should be created'
+      required: false
+    blackduck_reports_sarif_severities:
+      description: 'Indicates what SAST/SCA issues severity categories to include in Black Duck SARIF file report'
+      required: false
+    blackduck_reports_sarif_groupSCAIssues:
+      description: 'Flag to enable/disable Component-Version grouping for SCA Issues in Black Duck SARIF report rules section'
+      required: false
+    blackduck_upload_sarif_report:
+      description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
+      required: false
   coverity_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
     required: false

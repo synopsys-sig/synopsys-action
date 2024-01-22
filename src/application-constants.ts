@@ -79,6 +79,11 @@ export const BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = 'blackduck_fixpr_useUpgr
  */
 export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment'
 export const BLACKDUCK_PRCOMMENT_ENABLED_KEY = 'blackduck_prComment_enabled'
+export const BLACKDUCK_REPORTS_SARIF_CREATE_KEY = 'blackduck_reports_sarif_create'
+export const BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_file_path'
+export const BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities'
+export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues'
+export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
 
 export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'
@@ -88,7 +93,7 @@ export const NETWORK_AIRGAP_KEY = 'network_airgap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
 
 // Bridge Exit Codes
-export let EXIT_CODE_MAP = new Map<string, string>([
+export const EXIT_CODE_MAP = new Map<string, string>([
   ['0', 'Bridge execution successfully completed'],
   ['1', 'Undefined error, check error logs'],
   ['2', 'Error from adapter end'],
@@ -101,6 +106,16 @@ export const RETRY_DELAY_IN_MILLISECONDS = 15000
 export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
 export const GITHUB_CLOUD_URL = 'https://github.com'
+export const GITHUB_CLOUD_API_URL = 'https://api.github.com'
+export const BRIDGE_LOCAL_DIRECTORY = '.bridge'
+export const BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator'
+export const BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report'
+export const SARIF_DEFAULT_FILE_NAME = 'report.sarif.json'
+export const X_RATE_LIMIT_RESET = 'x-ratelimit-reset'
+export const X_RATE_LIMIT_REMAINING = 'x-ratelimit-remaining'
+export const SECONDARY_RATE_LIMIT = 'secondary rate limit'
+export const HTTP_STATUS_ACCEPTED = 202
+export const HTTP_STATUS_FORBIDDEN = 403
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_TOKEN: 'GITHUB_TOKEN',
@@ -111,5 +126,6 @@ export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_REPOSITORY_OWNER: 'GITHUB_REPOSITORY_OWNER',
   GITHUB_BASE_REF: 'GITHUB_BASE_REF',
   GITHUB_EVENT_NAME: 'GITHUB_EVENT_NAME',
-  GITHUB_SERVER_URL: 'GITHUB_SERVER_URL'
+  GITHUB_SERVER_URL: 'GITHUB_SERVER_URL',
+  GITHUB_SHA: 'GITHUB_SHA'
 }

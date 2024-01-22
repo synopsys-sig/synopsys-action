@@ -1,10 +1,11 @@
 import {info, setFailed} from '@actions/core'
-import {cleanupTempDir, createTempDir} from './synopsys-action/utility'
+import {cleanupTempDir, createTempDir, parseToBoolean} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from './application-constants'
 import * as inputs from './synopsys-action/inputs'
-import {uploadDiagnostics} from './synopsys-action/diagnostics'
+import {uploadDiagnostics, uploadSarifReportAsArtifact} from './synopsys-action/artifacts'
+import {GithubClientService} from './synopsys-action/github-client-service'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -33,6 +34,15 @@ export async function run() {
   } finally {
     if (inputs.INCLUDE_DIAGNOSTICS) {
       await uploadDiagnostics()
+    }
+    // Upload Black Duck sarif file as GitHub artifact
+    if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+      await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
+    }
+    // Upload Black Duck SARIF Report to code scanning tab
+    if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+      const gitHubClientService = new GithubClientService()
+      await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
     }
     await cleanupTempDir(tempDir)
   }
