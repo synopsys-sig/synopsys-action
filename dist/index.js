@@ -552,8 +552,8 @@ class GithubClientService {
                             const currentTimeInSeconds = Math.floor(Date.now() / 1000);
                             const resetTimeInSeconds = parseInt(rateLimitReset, 10);
                             const secondsUntilReset = resetTimeInSeconds - currentTimeInSeconds;
-                            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=115
-                            if (secondsUntilReset <= 115) {
+                            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=105
+                            if (secondsUntilReset <= 105) {
                                 retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
                             }
                             else {
