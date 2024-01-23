@@ -144,7 +144,7 @@ it('should return with 401 status code for bad credentials while upload sarif re
   }
 })
 
-it('should return rate limit error while upload sarif report', async function () {
+it('should return rate limit error and no retry while upload sarif report', async function () {
   const githubClientService = new GithubClientService()
 
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
@@ -160,14 +160,41 @@ it('should return rate limit error while upload sarif report', async function ()
     readBody: jest.fn()
   }
   httpResponse.message.statusCode = 403
-  httpResponse.message.headers = {'x-ratelimit-remaining': '0'}
+  httpResponse.message.headers = {'x-ratelimit-remaining': '0', 'x-ratelimit-reset': (Math.floor(Date.now() / 1000) + 200).toString()}
 
   jest.spyOn(HttpClient.prototype, 'post').mockResolvedValue(httpResponse)
   try {
     await githubClientService.uploadSarifReport('test-dir', '/')
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Uploading SARIF report to GitHub Advanced Security failed:')
+    expect(error.message).toContain('Uploading SARIF report to GitHub Advanced Security failed: Error: GitHub API rate limit has been exceeded, retry after 4 minutes.')
+  }
+})
+
+it('should return rate limit error and retry while upload sarif report', async function () {
+  const githubClientService = new GithubClientService()
+
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+  Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
+
+  jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
+  jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
+  jest.spyOn(fs, 'readFileSync').mockReturnValue('test-content')
+
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+  httpResponse.message.statusCode = 403
+  httpResponse.message.headers = {'x-ratelimit-remaining': '0', 'x-ratelimit-reset': (Math.floor(Date.now() / 1000) + 100).toString()}
+
+  jest.spyOn(HttpClient.prototype, 'post').mockResolvedValue(httpResponse)
+  try {
+    await githubClientService.uploadSarifReport('test-dir', '/')
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('bjhbhjbjhbhbjhb:')
   }
 })
 

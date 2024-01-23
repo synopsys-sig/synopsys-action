@@ -24,7 +24,7 @@ export const POLARIS_REPORTS_SARIF_FILE_PATH = getInput(constants.POLARIS_REPORT
 export const POLARIS_REPORTS_SARIF_SEVERITIES = getInput(constants.POLARIS_REPORTS_SARIF_SEVERITIES_KEY)?.trim() || ''
 export const POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
 export const POLARIS_REPORTS_SARIF_ISSUE_TYPES = getInput(constants.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY)?.trim() || ''
-export const UPLOAD_POLARIS_SARIF_REPORT = getInput(constants.UPLOAD_POLARIS_SARIF_REPORT_KEY)?.trim() || ''
+export const POLARIS_UPLOAD_SARIF_REPORT = getInput(constants.POLARIS_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
 
 // Coverity related inputs
 export const COVERITY_URL = getInput(constants.COVERITY_URL_KEY)?.trim() || ''
@@ -59,4 +59,4 @@ export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.BLACK
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || ''
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)?.trim() || ''
 export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)?.trim() || ''
-export const UPLOAD_BLACKDUCK_SARIF_REPORT = getInput(constants.UPLOAD_BLACKDUCK_SARIF_REPORT_KEY)?.trim() || ''
+export const BLACKDUCK_UPLOAD_SARIF_REPORT = getInput(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''

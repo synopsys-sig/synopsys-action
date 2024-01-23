@@ -510,7 +510,7 @@ test('Run Black Duck flow for uploading sarif result to advance security and art
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
-  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_UPLOAD_SARIF_REPORT', {value: 'true'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
@@ -531,7 +531,7 @@ test('Run Black Duck flow for uploading sarif result to advance security and art
   expect(response).not.toBe(null)
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: null})
-  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_UPLOAD_SARIF_REPORT', {value: null})
 })
 
 test('should throw error while uploading Black Duck sarif result to advance security', async () => {
@@ -543,7 +543,7 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
-  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_UPLOAD_SARIF_REPORT', {value: 'true'})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
@@ -567,7 +567,7 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   }
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: null})
-  Object.defineProperty(inputs, 'UPLOAD_BLACKDUCK_SARIF_REPORT', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_UPLOAD_SARIF_REPORT', {value: null})
 })
 
 test('Run Polaris flow for uploading sarif result as artifact', async () => {
@@ -615,7 +615,7 @@ test('Run Polaris flow for uploading sarif result to advance security and artifa
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
-  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: 'true'})
+  Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
@@ -635,7 +635,7 @@ test('Run Polaris flow for uploading sarif result to advance security and artifa
   expect(response).not.toBe(null)
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: null})
-  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: null})
+  Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: null})
 })
 
 test('should throw error while uploading Black Duck sarif result to advance security', async () => {
@@ -649,7 +649,7 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_FILE_PATH', {value: '/'})
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
-  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: 'true'})
+  Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
@@ -672,5 +672,5 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   }
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: null})
-  Object.defineProperty(inputs, 'UPLOAD_POLARIS_SARIF_REPORT', {value: null})
+  Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: null})
 })

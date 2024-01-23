@@ -86,7 +86,7 @@ inputs:
   polaris_reports_sarif_issue_types:
     description: 'Enum to indicate which assessment issues type to include in Polaris SARIF file report'
     required: false
-  upload_polaris_sarif_report:
+  polaris_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Polaris SARIF report to GitHub Advanced Security'
     required: false
   synopsys_bridge_install_directory:
@@ -143,7 +143,7 @@ inputs:
   blackduck_reports_sarif_groupSCAIssues:
     description: 'Flag to enable/disable Component-Version grouping for SCA Issues in Black Duck SARIF report rules section'
     required: false
-  upload_blackduck_sarif_report:
+  blackduck_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
     required: false
   coverity_prComment_enabled:

@@ -111,14 +111,19 @@ export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
 export const GITHUB_CLOUD_URL = 'https://github.com'
 export const GITHUB_CLOUD_API_URL = 'https://api.github.com'
-export const UPLOAD_BLACKDUCK_SARIF_REPORT_KEY = 'upload_blackduck_sarif_report'
-export const UPLOAD_POLARIS_SARIF_REPORT_KEY = 'upload_polaris_sarif_report'
+export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
+export const POLARIS_UPLOAD_SARIF_REPORT_KEY = 'polaris_upload_sarif_report'
 export const BRIDGE_LOCAL_DIRECTORY = '.bridge'
 export const BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator'
 export const BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report'
 export const POLARIS_SARIF_GENERATOR_DIRECTORY = 'Polaris SARIF Generator'
 export const POLARIS_SARIF_ARTIFACT_NAME = 'polaris_sarif_report'
 export const SARIF_DEFAULT_FILE_NAME = 'report.sarif.json'
+export const X_RATE_LIMIT_RESET = 'x-ratelimit-reset'
+export const X_RATE_LIMIT_REMAINING = 'x-ratelimit-remaining'
+export const SECONDARY_RATE_LIMIT = 'secondary rate limit'
+export const HTTP_STATUS_ACCEPTED = 202
+export const HTTP_STATUS_FORBIDDEN = 403
 
 export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_TOKEN: 'GITHUB_TOKEN',

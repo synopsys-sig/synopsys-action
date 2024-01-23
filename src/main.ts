@@ -46,13 +46,13 @@ export async function run() {
     }
 
     // Upload Black Duck SARIF Report to code scanning tab
-    if (parseToBoolean(inputs.UPLOAD_BLACKDUCK_SARIF_REPORT)) {
+    if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
       const gitHubClientService = new GithubClientService()
       await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
     }
 
     // Upload Polaris SARIF Report to code scanning tab
-    if (parseToBoolean(inputs.UPLOAD_POLARIS_SARIF_REPORT)) {
+    if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
       const gitHubClientService = new GithubClientService()
       await gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH)
     }
