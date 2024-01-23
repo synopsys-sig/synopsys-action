@@ -40,6 +40,7 @@ jobs:
           echo "runner=macos" >> /tmp/test.properties
           echo "runner.os=mac" >> /tmp/test.properties
           echo "pipeline=true" >> /tmp/test.properties
+          echo "coverity.url=https://integrationqa-20236.dev.coverity.synopsys.com" >> /tmp/test.properties
           echo "cloud.storage=S3" >> /tmp/test.properties
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
