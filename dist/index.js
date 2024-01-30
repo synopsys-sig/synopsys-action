@@ -1257,7 +1257,7 @@ class SynopsysToolsParameter {
         }
         let applicationName = inputs.POLARIS_APPLICATION_NAME;
         if ((0, validators_1.isNullOrEmptyValue)(applicationName)) {
-            applicationName = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
+            applicationName = githubRepoName;
         }
         const polData = {
             data: {

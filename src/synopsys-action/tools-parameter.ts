@@ -53,7 +53,7 @@ export class SynopsysToolsParameter {
 
     let applicationName = inputs.POLARIS_APPLICATION_NAME
     if (isNullOrEmptyValue(applicationName)) {
-      applicationName = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || ''
+      applicationName = githubRepoName
     }
 
     const polData: InputData<Polaris> = {
