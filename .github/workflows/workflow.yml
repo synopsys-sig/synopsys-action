@@ -6,36 +6,36 @@ on:
 
 jobs:
   build:
-    runs-on: [linux]
+    runs-on: [E2E-test-npm]
       # group: sig-default
       # labels: linux
-#     steps:
-#       - name: Checkout Source
-#         uses: actions/checkout@v3
-#       - name: Install Nodejs
-#         uses: actions/setup-node@v3
-#         with:
-#           node-version: 18
-#       - name: Install Dependencies
-#         run: npm install
-# #      - name: Code Coverage
-# #        run: npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'
-#       - name: Unit Tests
-#         run: npm run all
-#      - name: Contract Tests
-#        run: npm run all
-      # analysis:
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
-      - name: pop_polaris
-        uses: synopsys-sig/synopsys-action@v1.6.0
+      - name: Install Nodejs
+        uses: actions/setup-node@v3
         with:
-          polaris_server_url: ${{ secrets.POLARIS_SERVERURL }}
-          polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
-          polaris_application_name: node-goat-1
-          polaris_project_name: node-goat-1
-          polaris_assessment_types: "SAST"
+          node-version: 18
+      - name: Install Dependencies
+        run: npm install
+#      - name: Code Coverage
+#        run: npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'
+      - name: Unit Tests
+        run: npm run all
+      - name: Contract Tests
+        run: npm run all
+    #   # analysis:
+    # steps:
+    #   - name: Checkout Source
+    #     uses: actions/checkout@v3
+    #   - name: pop_polaris
+    #     uses: synopsys-sig/synopsys-action@v1.6.0
+    #     with:
+    #       polaris_server_url: ${{ secrets.POLARIS_SERVERURL }}
+    #       polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
+    #       polaris_application_name: node-goat-1
+    #       polaris_project_name: node-goat-1
+    #       polaris_assessment_types: "SAST"
           
       # - name: pop_blackduck
       #   if: always()
