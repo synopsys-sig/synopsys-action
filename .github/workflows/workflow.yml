@@ -18,7 +18,7 @@ jobs:
           node-version: 18
       - name: Install Dependencies
         run: |
-          cd /root/.npmrc
+          sudo cd /root/.npmrc
           sudo cat npmrc
 #          sudo rm package-lock.json
 #          npm ci
