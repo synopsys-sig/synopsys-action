@@ -18,9 +18,11 @@ jobs:
           node-version: 18
       - name: Install Dependencies
         run: |
-          sudo cd /root/.npmrc
-          sudo cat npmrc
-#          sudo rm package-lock.json
+          sudo rm package-lock.json
+          npm install --package-lock
+          sudo cat package-lock.json
+#         sudo cd /root/.npmrc
+#         sudo cat npmrc
 #          npm ci
 #      - name: Code Coverage
 #        run: npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'
