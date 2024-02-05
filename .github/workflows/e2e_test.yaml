@@ -6,7 +6,9 @@ on:
     branches: [ main ]
 
 jobs:
-  e2e_linux_executions:
+
+  delivery_stages:
+
      runs-on: [ E2E-test-linux ]
 
      steps:
@@ -30,6 +32,13 @@ jobs:
           aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
           ls -al    
       
+      
+  e2e_linux_executions:
+    
+      needs: delivery_stages         
+      runs-on: [ E2E-test-linux ]
+
+      steps:
       - name: e2e_tests_linux
         run: echo "E2E Tests for Linux"
 
@@ -39,35 +48,14 @@ jobs:
         with:
           name: test-output
           path: test-output
-      - name: publish
-        run: |
-          echo "publish stage"
-              
+
 
   e2e_mac_executions:
 
-     runs-on: [ E2E-test-linux ]
+      needs: delivery_stages
+      runs-on: [ E2E-test-linux ]
 
-     steps:
-      - name: install
-        run: |
-          sudo apt-get update
-          sudo apt-get install -qqy awscli jq openjdk-11-jdk
-      - name: unit testing
-        run: |
-          echo "unit testing stage"
-      - name: build
-        run: |
-          echo "build stage"
-      - name: pop
-        run: |
-          echo "Pop stage"
-      - name: download e2e artifacts
-        run: |
-          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
-          ls -al
-          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
-          ls -al    
+      steps:
       
       - name: e2e_tests_mac
         run: echo "E2E Tests for Mac"
@@ -78,35 +66,13 @@ jobs:
         with:
           name: test-output
           path: test-output
-      - name: publish
-        run: |
-          echo "publish stage"
               
   e2e_windows_executions:
     
-     runs-on: [ E2E-test-linux ]
+      needs: delivery_stages
+      runs-on: [ E2E-test-linux ]
 
-     steps:
-      - name: install
-        run: |
-          sudo apt-get update
-          sudo apt-get install -qqy awscli jq openjdk-11-jdk
-      - name: unit testing
-        run: |
-          echo "unit testing stage"
-      - name: build
-        run: |
-          echo "build stage"
-      - name: pop
-        run: |
-          echo "Pop stage"
-      - name: download e2e artifacts
-        run: |
-          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
-          ls -al
-          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
-          ls -al    
-      
+      steps:
       - name: e2e_tests_windows
         run: echo "E2E Tests for Linux"
         
@@ -116,8 +82,6 @@ jobs:
         with:
           name: test-output
           path: test-output
-      - name: publish
-        run: |
-          echo "publish stage"
+      
     
 
