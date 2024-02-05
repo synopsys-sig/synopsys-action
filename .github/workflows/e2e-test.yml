@@ -48,7 +48,6 @@ jobs:
           java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
       
       
-      
       - name: Archive results
         if: always()
         uses: actions/upload-artifact@v3
