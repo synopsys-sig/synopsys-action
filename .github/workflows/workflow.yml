@@ -20,7 +20,7 @@ jobs:
         run: |
           sudo rm package-lock.json
           npm install
-          npm install eslint-plugin-prettier@5.1.3 --save-dev
+          npm install eslint-plugin-prettier@4.2.1 --save-dev
 #          npm install --package-lock
 #          npm install eslint-plugin-prettier@latest --save-dev
 #          sudo cat package-lock.json
