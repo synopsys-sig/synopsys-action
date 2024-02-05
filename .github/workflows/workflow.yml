@@ -31,8 +31,8 @@ jobs:
 #        run: npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'
       - name: Unit Tests
         run: npm run all
-      # - name: Contract Tests
-      #   run: npm run all
+      - name: Contract Tests
+        run: npm run contract-test
     #   # analysis:
     # steps:
     #   - name: Checkout Source
