@@ -41,9 +41,24 @@ jobs:
       steps:
       - name: e2e_tests_linux
         run: |
-           echo "E2E Tests for Linux"
-           exit 1
-
+          
+          if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
+            echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
+          else
+            echo github.action.version=$GITHUB_HEAD_REF >> /tmp/test.properties
+          fi
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=linux" >> /tmp/test.properties
+          echo "runner.os=linux" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
+      
       - name: Archive results
         if: always()
         uses: actions/upload-artifact@v3
@@ -60,7 +75,25 @@ jobs:
       steps:
       
       - name: e2e_tests_mac
-        run: echo "E2E Tests for Mac"
+        run: |
+          
+          if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
+            echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
+          else
+            echo github.action.version=$GITHUB_HEAD_REF >> /tmp/test.properties
+          fi
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=macos" >> /tmp/test.properties
+          echo "runner.os=mac" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
+
 
       - name: Archive results
         if: always()
@@ -77,8 +110,24 @@ jobs:
       steps:
       - name: e2e_tests_windows
         run: |
-           echo "E2E Tests for Windows"
-           exit 1
+          
+          if [[ $GITHUB_EVENT_NAME == 'push' ]]; then
+            echo github.action.version=${GITHUB_REF#refs/heads/} >> /tmp/test.properties
+          else
+            echo github.action.version=$GITHUB_HEAD_REF >> /tmp/test.properties
+          fi
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=Windows" >> /tmp/test.properties
+          echo "runner.os=Windows" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/deployment/testng-github-scm.xml
+  
         
       - name: Archive results
         if: always()
