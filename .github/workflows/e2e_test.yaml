@@ -32,8 +32,9 @@ jobs:
 
       - name: e2e_tests_mac
         if: always()
-        run: echo "E2E Tests for Mac"
-        run: exit 1
+        run: |
+          echo "E2E Tests for Mac"
+          exit 1
 
       - name: e2e_tests_windows
         if: always()
