@@ -40,7 +40,9 @@ jobs:
 
       steps:
       - name: e2e_tests_linux
-        run: echo "E2E Tests for Linux"
+        run: |
+           echo "E2E Tests for Linux"
+           exit 1
 
       - name: Archive results
         if: always()
@@ -74,7 +76,9 @@ jobs:
 
       steps:
       - name: e2e_tests_windows
-        run: echo "E2E Tests for Linux"
+        run: |
+           echo "E2E Tests for Windows"
+           exit 1
         
       - name: Archive results
         if: always()
@@ -83,5 +87,15 @@ jobs:
           name: test-output
           path: test-output
       
-    
+      
+  post_e2e_executions:
+
+      needs: [e2e_linux_executions, e2e_mac_executions, e2e_windows_executions]
+      runs-on: [ E2E-test-linux ]
+
+      steps:
+
+      - name: publish
+        run: |
+          echo "publish stage"  
 
