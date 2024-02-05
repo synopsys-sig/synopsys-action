@@ -12,10 +12,10 @@ jobs:
      runs-on: [ E2E-test-linux ]
 
      steps:
-      - name: install
-        run: |
-          sudo apt-get update
-          sudo apt-get install -qqy awscli jq openjdk-11-jdk
+      # - name: install
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -qqy awscli jq openjdk-11-jdk
       - name: unit testing
         run: |
           echo "unit testing stage"
@@ -46,6 +46,12 @@ jobs:
       runs-on: [ E2E-test-linux ]
 
       steps:
+
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk
+            
       - name: download e2e artifacts
         run: |
           aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
@@ -90,6 +96,11 @@ jobs:
       runs-on: [ E2E-test-linux ]
 
       steps:
+
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk  
       
       - name: download e2e artifacts
         run: |
@@ -133,6 +144,11 @@ jobs:
       runs-on: [ E2E-test-linux ]
 
       steps:
+
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk  
 
       - name: download e2e artifacts
         run: |
