@@ -19,8 +19,9 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo rm package-lock.json
-          npm install --package-lock
-          npm install eslint-plugin-prettier@latest --save-dev
+          npm install
+#          npm install --package-lock
+#          npm install eslint-plugin-prettier@latest --save-dev
 #          sudo cat package-lock.json
 #         sudo cd /root/.npmrc
 #         sudo cat npmrc
