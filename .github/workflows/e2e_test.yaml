@@ -25,21 +25,20 @@ jobs:
       - name: pop
         run: |
           echo "Pop stage"
-      - name: download e2e artifacts
-        run: |
-          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
-          ls -al
-          mkdir test-integrations
-          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations/test-integrations-0.0.1-SNAPSHOT.jar --no-progress
-          ls -al
-          pwd
+      # - name: download e2e artifacts
+      #   run: |
+      #     aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
+      #     ls -al
+      #     aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+      #     ls -al
+      #     pwd
 
-      - name: Archive results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-integrations
-          path: test-integrations
+      # - name: Archive results
+      #   if: always()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: test-integrations
+      #     path: test-integrations
       
   e2e_linux_executions:
     
@@ -47,6 +46,15 @@ jobs:
       runs-on: [ E2E-test-linux ]
 
       steps:
+      - name: download e2e artifacts
+        run: |
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
+          ls -al
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+          ls -al
+          pwd
+
+      
       - name: e2e_tests_linux
         run: |
           pwd
@@ -83,6 +91,14 @@ jobs:
 
       steps:
       
+      - name: download e2e artifacts
+        run: |
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
+          ls -al
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+          ls -al
+          pwd
+
       - name: e2e_tests_mac
         run: |
           
@@ -117,6 +133,15 @@ jobs:
       runs-on: [ E2E-test-linux ]
 
       steps:
+
+      - name: download e2e artifacts
+        run: |
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
+          ls -al
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+          ls -al
+          pwd  
+        
       - name: e2e_tests_windows
         run: |
           
