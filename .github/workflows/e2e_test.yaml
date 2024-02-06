@@ -175,7 +175,6 @@ jobs:
   post_e2e_executions:
 
       needs: [e2e_linux_executions, e2e_mac_executions, e2e_windows_executions]
-      if: always()
       runs-on: [ E2E-test-linux ]
 
       steps:
