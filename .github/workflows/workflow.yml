@@ -18,6 +18,7 @@ jobs:
           node-version: 16
       - name: Install Dependencies
         run: |
+          sleep 30000
           sudo rm package-lock.json
           npm install --package-lock
           sudo cat package-lock.json
