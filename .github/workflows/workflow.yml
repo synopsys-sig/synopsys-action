@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: 16
       - name: display environmenta variables
-        run: echo "$env"
+        run: |
+          echo "${env}"
+          echo "${NPM}"
 #       - name: setup npmrc
 #         run: echo "$NPM" > "${HOME}/.npmrc"
 #       - name: Authenticate with Google Cloud
