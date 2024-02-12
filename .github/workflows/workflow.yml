@@ -16,24 +16,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: display environmenta variables
-        run: |
-          echo "${env}"
-          echo "${NPM}"
       - name: setup npmrc
         run: |
             echo "${NPM}" > "${HOME}/.npmrc"
             cat "${HOME}/.npmrc"
-#       - name: Authenticate with Google Cloud
-#         run: echo "$GCP_SA_KEY"  > "${HOME}/gcpkey.json"
-#       - name: Set Google Cloud credentials
-#         run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
-#       - name: Install Dependencies
-#         run: |
-#           sudo rm package-lock.json
-#           npm install --package-lock
-#           sudo cat package-lock.json
-#           sleep 300000
+      - name: Authenticate with Google Cloud
+        run: echo "${GCP_SA_KEY}"  > "${HOME}/gcp-key.json"
+      - name: Set Google Cloud credentials
+        run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
+      - name: Install Dependencies
+        run: |
+          pwd
+          sudo rm package-lock.json
+          npm install --package-lock
+          sudo cat package-lock.json
+          sleep 300000
 # #         npm install
 # #         npm install eslint-plugin-prettier@4.2.1 --save-dev
 # #          npm install --package-lock
