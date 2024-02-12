@@ -20,8 +20,10 @@ jobs:
         run: |
           echo "${env}"
           echo "${NPM}"
-#       - name: setup npmrc
-#         run: echo "$NPM" > "${HOME}/.npmrc"
+      - name: setup npmrc
+        run: |
+            echo "${NPM}" > "${HOME}/.npmrc"
+            cat "${HOME}/.npmrc"
 #       - name: Authenticate with Google Cloud
 #         run: echo "$GCP_SA_KEY"  > "${HOME}/gcpkey.json"
 #       - name: Set Google Cloud credentials
