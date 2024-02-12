@@ -24,12 +24,8 @@ jobs:
             
       - name: Authenticate with Google Cloud
         run: echo "${GCP_SA_KEY}"  > "${HOME}/gcp-key.json"
-      # - name: Set up Cloud SDK
-      #   uses: google-github-actions/setup-gcloud@master
-      #   with:
-      #     project_id: "${ACCOUNTID}"
-      #     service_account_key: "${GCP_SA_KEY}"
-      #     export_default_credentials: true
+      - name: create npmrc file
+        run: echo "${NPM}" > "{HOME}/.npmrc
       - name: Set Google Cloud credentials
         run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
       - name: Install Dependencies
