@@ -16,26 +16,34 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: Install Dependencies
-        run: |
-          sleep 30000
-          sudo rm package-lock.json
-          npm install --package-lock
-          sudo cat package-lock.json
-#         npm install
-#         npm install eslint-plugin-prettier@4.2.1 --save-dev
-#          npm install --package-lock
-#          npm install eslint-plugin-prettier@latest --save-dev
-#          sudo cat package-lock.json
-#         sudo cd /root/.npmrc
-#         sudo cat npmrc
-#          npm ci
-#      - name: Code Coverage
-#        run: npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'
-      - name: Unit Tests
-        run: npm run all
-      - name: Contract Tests
-        run: npm run contract-test
+      - name: display environmenta variables
+        run: echo "$env"
+#       - name: setup npmrc
+#         run: echo "$NPM" > "${HOME}/.npmrc"
+#       - name: Authenticate with Google Cloud
+#         run: echo "$GCP_SA_KEY"  > "${HOME}/gcpkey.json"
+#       - name: Set Google Cloud credentials
+#         run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
+#       - name: Install Dependencies
+#         run: |
+#           sudo rm package-lock.json
+#           npm install --package-lock
+#           sudo cat package-lock.json
+#           sleep 300000
+# #         npm install
+# #         npm install eslint-plugin-prettier@4.2.1 --save-dev
+# #          npm install --package-lock
+# #          npm install eslint-plugin-prettier@latest --save-dev
+# #          sudo cat package-lock.json
+# #         sudo cd /root/.npmrc
+# #         sudo cat npmrc
+# #          npm ci
+# #      - name: Code Coverage
+# #        run: npm test -- --coverage --collectCoverageFrom='src/**/*.{ts,jxs}'
+#       - name: Unit Tests
+#         run: npm run all
+#       - name: Contract Tests
+#         run: npm run contract-test
     #   # analysis:
     # steps:
     #   - name: Checkout Source
