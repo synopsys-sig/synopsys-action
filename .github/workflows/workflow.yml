@@ -9,8 +9,6 @@ jobs:
     runs-on: [E2E-test-npm]
       # group: sig-default
       # labels: linux
-    env:
-       ACCONT-ID: echo "${ACCOUNTID}" | base64 --decode
     steps:
       - name: Checkout Source
         uses: actions/checkout@v3
@@ -18,21 +16,21 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      - name: setup npmrc
-        run: |
-            echo "${NPM}" > "${HOME}/.npmrc"
-            cat "${HOME}/.npmrc"
-            echo "${ACCONT-ID}"
+      # - name: setup npmrc
+      #   run: |
+      #       echo "${NPM}" > "${HOME}/.npmrc"
+      #       cat "${HOME}/.npmrc"
+      #       echo "${ACCONT-ID}"
       - name: Authenticate with Google Cloud
         run: echo "${GCP_SA_KEY}"  > "${HOME}/gcp-key.json"
-      # - name: Set up Cloud SDK
-      #   uses: google-github-actions/setup-gcloud@master
-      #   with:
-      #     project_id: "${ACCOUNT-ID}"
-      #     service_account_key: "${GCP_SA_KEY}"
-      #     export_default_credentials: true
-      # - name: Set Google Cloud credentials
-      #   run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          project_id: "${ACCOUNTID}"
+          service_account_key: "${GCP_SA_KEY}"
+          export_default_credentials: true
+      - name: Set Google Cloud credentials
+        run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
       - name: Install Dependencies
         run: |
           pwd
