@@ -25,7 +25,7 @@ jobs:
       - name: Authenticate with Google Cloud
         run: echo "${GCP_SA_KEY}"  > "${HOME}/gcp-key.json"
       - name: create npmrc file
-        run: echo "${NPM}" > "{HOME}/.npmrc
+        run: echo "${NPM}" > "{HOME}/.npmrc"
       - name: Set Google Cloud credentials
         run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
       - name: Install Dependencies
