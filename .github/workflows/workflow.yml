@@ -34,7 +34,7 @@ jobs:
           sudo rm package-lock.json
           npm install --package-lock
           sudo cat package-lock.json
-          sleep 300000
+#          sleep 300000
 # #         npm install
 # #         npm install eslint-plugin-prettier@4.2.1 --save-dev
 # #          npm install --package-lock
