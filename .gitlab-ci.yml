@@ -78,7 +78,7 @@ polaris_bridge:
   extends: .polaris_bridge
 
 pop_blackduck:
-  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
+  image: us-docker.pkg.dev/cloudops-artifacts-prd/polaris/ember_cli:3.28.5-node_16
   extends:
     - .new_pop_blackduck
   before_script:
