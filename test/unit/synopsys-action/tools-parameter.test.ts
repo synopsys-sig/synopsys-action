@@ -683,3 +683,19 @@ test('Test missing data error in getFormattedCommandForBlackduck', () => {
     expect(error.message).toContain('required parameters for BlackDuck is missing')
   }
 })
+
+test('Test getFormattedCommandForBlackduck with sarif params', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'BLACKDUCK_GITHUB_TOKEN', {value: 'test-token'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: false})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForBlackduck()
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+})

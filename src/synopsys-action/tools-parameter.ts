@@ -8,7 +8,7 @@ import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
-import {parseToBoolean} from './utility'
+import {isBoolean, parseToBoolean} from './utility'
 import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
 export class SynopsysToolsParameter {
@@ -268,6 +268,28 @@ export class SynopsysToolsParameter {
       blackduckData.data.blackduck.automation.prcomment = true
     } else {
       blackduckData.data.blackduck.automation.prcomment = false
+    }
+
+    if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+      const sarifReportFilterSeverities: string[] = []
+      if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
+        const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
+        for (const fixPrSeverity of filterSeverities) {
+          if (fixPrSeverity != null && fixPrSeverity !== '') {
+            sarifReportFilterSeverities.push(fixPrSeverity.trim())
+          }
+        }
+      }
+      blackduckData.data.blackduck.reports = {
+        sarif: {
+          create: true,
+          severities: sarifReportFilterSeverities,
+          file: {
+            path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
+          },
+          groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
+        }
+      }
     }
 
     const inputJson = JSON.stringify(blackduckData)
