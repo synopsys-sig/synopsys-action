@@ -11,6 +11,7 @@ import {run} from '../../../src/main'
 import {error} from '@actions/core'
 import * as downloadUtility from '../../../src/synopsys-action/download-utility'
 import {DownloadFileResponse, extractZipped} from '../../../src/synopsys-action/download-utility'
+import os from 'os'
 
 const util = require('../../../src/synopsys-action/utility')
 
@@ -185,7 +186,7 @@ test('Test validateBridgeVersion', async () => {
   expect(response).toBe(true)
 })
 
-test('Test getVersionUrl - mac', () => {
+test('Test getVersionUrl - mac - Intel', () => {
   Object.defineProperty(process, 'platform', {value: 'darwin'})
 
   const sb = new SynopsysBridge()
@@ -194,6 +195,24 @@ test('Test getVersionUrl - mac', () => {
   expect(response).toContain('mac')
 
   Object.defineProperty(process, 'platform', {value: null})
+})
+
+test('Test getVersionUrl - mac - ARM with version greater 2.1.0', () => {
+  Object.defineProperty(process, 'platform', {value: 'darwin'})
+  const cpusMock = jest.spyOn(os, 'cpus')
+  cpusMock.mockReturnValue([
+    {
+      model: 'Apple M1',
+      speed: 3200,
+      times: {user: 100, nice: 0, sys: 50, idle: 500, irq: 0}
+    }
+  ])
+
+  const sb = new SynopsysBridge()
+  const response = sb.getVersionUrl('2.1.2')
+  expect(response).toContain('macos_arm')
+  Object.defineProperty(process, 'platform', {value: null})
+  cpusMock.mockRestore()
 })
 
 test('Test getVersionUrl win', () => {
@@ -248,6 +267,34 @@ test('Latest URL Version success', async () => {
 
   const response = sb.getLatestVersionUrl()
   expect(response).toContain('latest/synopsys-bridge')
+})
+
+test('Latest URL Version success for MAC ARM arch', async () => {
+  Object.defineProperty(process, 'platform', {value: 'darwin'})
+  const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
+  const sb = new SynopsysBridge()
+  const httpResponse: Mocked<HttpClientResponse> = {
+    message: incomingMessage,
+    readBody: jest.fn()
+  }
+
+  httpResponse.readBody.mockResolvedValue('Synopsys Bridge Package: 2.3.1')
+  httpResponse.message.statusCode = 200
+  jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
+
+  const cpusMock = jest.spyOn(os, 'cpus')
+  cpusMock.mockReturnValue([
+    {
+      model: 'Apple M1',
+      speed: 3200,
+      times: {user: 100, nice: 0, sys: 50, idle: 500, irq: 0}
+    }
+  ])
+
+  const response = sb.getLatestVersionUrl()
+  expect(response).toContain('latest/synopsys-bridge-macos_arm')
+  Object.defineProperty(process, 'platform', {value: null})
+  cpusMock.mockRestore()
 })
 
 test('Latest url version if not provided', async () => {

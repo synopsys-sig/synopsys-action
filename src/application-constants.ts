@@ -16,6 +16,7 @@ export const SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = 'synopsys_bridge_download_url'
  */
 export const BRIDGE_DOWNLOAD_VERSION_KEY = 'bridge_download_version'
 export const SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = 'synopsys_bridge_download_version'
+export const MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = '2.1.0'
 
 // Scan Types
 export const COVERITY_KEY = 'coverity'
