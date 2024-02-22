@@ -16,18 +16,18 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-#      - name: setup gcloud
-#        run: |
-#            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
-#            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
-#            sudo apt-get update && sudo apt-get install -y google-cloud-sdk
+      - name: setup gcloud
+        run: |
+            curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+            echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+            sudo apt-get update && sudo apt-get install -y google-cloud-sdk
             
-#      - name: Authenticate with Google Cloud
-#        run: echo "${GCP_SA_KEY}"  > "${HOME}/gcp-key.json"
-#      - name: create npmrc file
-#        run: echo "${NPM}" > "${HOME}/.npmrc"
-#      - name: Set Google Cloud credentials
-#        run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
+      - name: Authenticate with Google Cloud
+        run: echo "${GCP_SA_KEY}"  > "${HOME}/gcp-key.json"
+      - name: create npmrc file
+        run: echo "${NPM}" > "${HOME}/.npmrc"
+      - name: Set Google Cloud credentials
+        run: gcloud auth activate-service-account --key-file="${HOME}/gcp-key.json"
       - name: Install Dependencies
         run: |
           npm ci
