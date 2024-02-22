@@ -1523,7 +1523,7 @@ class SynopsysToolsParameter {
         if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
             const sarifReportFilterSeverities = [];
             const sarifReportFilterAssessmentIssuesType = [];
-            if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES != null && inputs.POLARIS_REPORTS_SARIF_SEVERITIES.length > 0) {
+            if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
                 const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',');
                 for (const fixPrSeverity of filterSeverities) {
                     if (fixPrSeverity != null && fixPrSeverity !== '') {

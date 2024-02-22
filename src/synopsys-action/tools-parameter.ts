@@ -103,7 +103,7 @@ export class SynopsysToolsParameter {
       const sarifReportFilterSeverities: string[] = []
       const sarifReportFilterAssessmentIssuesType: string[] = []
 
-      if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES != null && inputs.POLARIS_REPORTS_SARIF_SEVERITIES.length > 0) {
+      if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
         const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',')
         for (const fixPrSeverity of filterSeverities) {
           if (fixPrSeverity != null && fixPrSeverity !== '') {
