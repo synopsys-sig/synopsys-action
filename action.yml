@@ -150,5 +150,5 @@ inputs:
     description: 'If provided, Synopsys Action will be using local network to download and execute bridge .'
     required: false
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'
