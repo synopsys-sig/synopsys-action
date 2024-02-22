@@ -53,7 +53,7 @@ export class SynopsysToolsParameter {
 
     let applicationName = inputs.POLARIS_APPLICATION_NAME
     if (isNullOrEmptyValue(applicationName)) {
-      applicationName = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+      applicationName = githubRepoName
     }
 
     const polData: InputData<Polaris> = {
@@ -112,7 +112,7 @@ export class SynopsysToolsParameter {
         }
       }
 
-      if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES != null && inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.length > 0) {
+      if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES) {
         const filterIssueTypes = inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.split(',')
         for (const issueType of filterIssueTypes) {
           if (issueType != null && issueType !== '') {
@@ -308,7 +308,7 @@ export class SynopsysToolsParameter {
 
     if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
-      if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES != null && inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.length > 0) {
+      if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
         const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
         for (const fixPrSeverity of filterSeverities) {
           if (fixPrSeverity != null && fixPrSeverity !== '') {

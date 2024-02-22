@@ -7,6 +7,7 @@ import * as configVariables from '@actions/artifact/lib/internal/config-variable
 import * as diagnostics from '../../src/synopsys-action/artifacts'
 import {UploadResponse} from '@actions/artifact'
 import {GithubClientService} from '../../src/synopsys-action/github-client-service'
+
 beforeEach(() => {
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   process.env['GITHUB_REPOSITORY'] = 'synopsys-action'

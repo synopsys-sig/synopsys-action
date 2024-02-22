@@ -6,8 +6,8 @@ import {UploadOptions} from '@actions/artifact/lib/internal/upload-options'
 import * as inputs from '../../../src/synopsys-action/inputs'
 import {UploadResponse} from '@actions/artifact'
 import * as artifact from '@actions/artifact'
-import * as utility from '../../../src/synopsys-action/utility'
 const fs = require('fs')
+import * as utility from '../../../src/synopsys-action/utility'
 
 let tempPath = '/temp'
 beforeEach(() => {
@@ -15,9 +15,8 @@ beforeEach(() => {
   Object.defineProperty(process, 'platform', {
     value: 'linux'
   })
+  jest.mock('@actions/artifact')
 })
-
-jest.mock('@actions/artifact')
 
 describe('uploadDiagnostics - success', () => {
   it('should call uploadArtifact with the correct arguments', async () => {

@@ -63,7 +63,7 @@ test('Test getFormattedCommandForPolaris with default values', () => {
 
   const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
-  expect(jsonData.data.polaris.application.name).toBe('synopsys-sig')
+  expect(jsonData.data.polaris.application.name).toBe('synopsys-action')
   expect(jsonData.data.polaris.project.name).toBe('synopsys-action')
 
   expect(resp).not.toBeNull()

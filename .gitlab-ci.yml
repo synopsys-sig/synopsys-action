@@ -30,6 +30,7 @@ variables:
   GIT_DEPTH: 10
   BD_PRODUCT_GROUP: PolarisNG Projects Group
   BD_VERSION_PHASE: DEVELOPMENT
+  DISABLE_POLARIS_CLASSIC_ANALYSIS: "true"
 
 ##### MERGE REQUEST PIPELINE #####
 
@@ -72,16 +73,12 @@ generate_sbom:
     refs:
       - main
 
-
-pop_polaris:
-  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
-
 polaris_bridge:
   stage: analysis
   extends: .polaris_bridge
 
 pop_blackduck:
-  image: gcr.io/snps-polaris-ops-prod/ember_cli:3.28.5-node_16.14
+  image: us-docker.pkg.dev/cloudops-artifacts-prd/polaris/ember_cli:3.28.5-node_16
   extends:
     - .new_pop_blackduck
   before_script:
