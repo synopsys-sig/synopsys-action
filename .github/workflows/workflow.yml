@@ -15,7 +15,7 @@ jobs:
       - name: Install Nodejs
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
       - name: setup gcloud
         run: |
             curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
