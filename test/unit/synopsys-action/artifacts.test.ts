@@ -15,9 +15,8 @@ beforeEach(() => {
   Object.defineProperty(process, 'platform', {
     value: 'linux'
   })
+  jest.mock('@actions/artifact')
 })
-
-jest.mock('@actions/artifact')
 
 describe('uploadDiagnostics - success', () => {
   it('should call uploadArtifact with the correct arguments', async () => {

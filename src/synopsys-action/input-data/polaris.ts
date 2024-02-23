@@ -1,4 +1,5 @@
 import {GithubData} from './blackduck'
+import {Reports} from './reports'
 
 export interface Polaris {
   polaris: PolarisData
@@ -15,6 +16,7 @@ export interface PolarisData {
   assessment: {types: string[]}
   prComment?: PrComment
   test?: Test
+  reports?: Reports
 }
 
 export interface PrComment {

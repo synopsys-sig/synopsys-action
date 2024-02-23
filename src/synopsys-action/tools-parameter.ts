@@ -106,6 +106,42 @@ export class SynopsysToolsParameter {
       polData.data.polaris.prComment = {enabled: false}
     }
 
+    if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+      const sarifReportFilterSeverities: string[] = []
+      const sarifReportFilterAssessmentIssuesType: string[] = []
+
+      if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
+        const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',')
+        for (const fixPrSeverity of filterSeverities) {
+          if (fixPrSeverity != null && fixPrSeverity !== '') {
+            sarifReportFilterSeverities.push(fixPrSeverity.trim())
+          }
+        }
+      }
+
+      if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES) {
+        const filterIssueTypes = inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.split(',')
+        for (const issueType of filterIssueTypes) {
+          if (issueType != null && issueType !== '') {
+            sarifReportFilterAssessmentIssuesType.push(issueType.trim())
+          }
+        }
+      }
+      polData.data.polaris.reports = {
+        sarif: {
+          create: true,
+          severities: sarifReportFilterSeverities,
+          file: {
+            path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
+          },
+          issue: {
+            types: sarifReportFilterAssessmentIssuesType
+          },
+          groupSCAIssues: isBoolean(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
+        }
+      }
+    }
+
     const inputJson = JSON.stringify(polData)
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
