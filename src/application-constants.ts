@@ -66,6 +66,7 @@ export const POLARIS_REPORTS_SARIF_FILE_PATH_KEY = 'polaris_reports_sarif_file_p
 export const POLARIS_REPORTS_SARIF_SEVERITIES_KEY = 'polaris_reports_sarif_severities'
 export const POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'polaris_reports_sarif_groupSCAIssues'
 export const POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = 'polaris_reports_sarif_issue_types'
+export const POLARIS_UPLOAD_SARIF_REPORT_KEY = 'polaris_upload_sarif_report'
 
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'
@@ -89,6 +90,7 @@ export const BLACKDUCK_REPORTS_SARIF_CREATE_KEY = 'blackduck_reports_sarif_creat
 export const BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_file_path'
 export const BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities'
 export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues'
+export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
 
 export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'
@@ -112,8 +114,6 @@ export const RETRY_COUNT = 3
 export const NON_RETRY_HTTP_CODES = new Set([200, 201, 401, 403, 416])
 export const GITHUB_CLOUD_URL = 'https://github.com'
 export const GITHUB_CLOUD_API_URL = 'https://api.github.com'
-export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
-export const POLARIS_UPLOAD_SARIF_REPORT_KEY = 'polaris_upload_sarif_report'
 export const BRIDGE_LOCAL_DIRECTORY = '.bridge'
 export const BLACKDUCK_SARIF_GENERATOR_DIRECTORY = 'Blackduck SARIF Generator'
 export const BLACKDUCK_SARIF_ARTIFACT_NAME = 'blackduck_sarif_report'
