@@ -75,6 +75,13 @@ export class SynopsysToolsParameter {
     if (inputs.POLARIS_BRANCH_NAME) {
       polData.data.polaris.branch.name = inputs.POLARIS_BRANCH_NAME
     }
+    if (inputs.POLARIS_TEST_SCA_TYPE) {
+      polData.data.polaris.test = {
+        sca: {
+          type: inputs.POLARIS_TEST_SCA_TYPE
+        }
+      }
+    }
     if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
       info('Polaris PR comment is enabled')
       if (inputs.POLARIS_PARENT_BRANCH_NAME) {

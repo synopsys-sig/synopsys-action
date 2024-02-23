@@ -61,6 +61,7 @@ export const POLARIS_PRCOMMENT_ENABLED_KEY = 'polaris_prComment_enabled'
 export const POLARIS_PRCOMMENT_SEVERITIES_KEY = 'polaris_prComment_severities'
 export const POLARIS_BRANCH_NAME_KEY = 'polaris_branch_name'
 export const POLARIS_BRANCH_PARENT_NAME_KEY = 'polaris_branch_parent_name'
+export const POLARIS_TEST_SCA_TYPE_KEY = 'polaris_test_sca_type'
 
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'
