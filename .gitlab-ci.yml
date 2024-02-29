@@ -71,7 +71,7 @@ generate_sbom:
   stage: sbom
   only:
     refs:
-      - main
+      - bump-semantic-release-23.0.2
 
 polaris_bridge:
   stage: analysis
