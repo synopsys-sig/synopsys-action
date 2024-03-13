@@ -22,12 +22,12 @@ export class GithubClientService {
     this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs'
     this.githubToken = inputs.GITHUB_TOKEN
     this.githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || ''
-    this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : 'node-goat-1'
-    this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || 'spurohitsynopsys'
-    this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || 'https://api.github.com'
+    this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : ''
+    this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+    this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl
-    this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || 'e434b96cc4d26a0396ede1e76c4946afbcaf6ec6'
-    this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || 'ssss'
+    this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || ''
+    this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || ''
   }
 
   async uploadSarifReport(defaultSarifReportDirectory: string, userSarifFilePath: string): Promise<void> {
