@@ -1,5 +1,5 @@
-import {info, setFailed} from '@actions/core'
-import {cleanupTempDir, createTempDir, parseToBoolean} from './synopsys-action/utility'
+import {info, setFailed, warning} from '@actions/core'
+import {cleanupTempDir, createTempDir, isPullRequestEvent, parseToBoolean} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from './application-constants'
@@ -35,28 +35,31 @@ export async function run() {
     if (inputs.INCLUDE_DIAGNOSTICS) {
       await uploadDiagnostics()
     }
+    const isPREvent = isPullRequestEvent()
+    if (isPREvent && (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT))) {
+      warning('SARIF report create/upload is ignored in case of PR scan, it is only supported for non PR scans')
+    }
     // Upload Black Duck sarif file as GitHub artifact
-    if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+    if (!isPREvent && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
     }
 
     // Upload Polaris sarif file as GitHub artifact
-    if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+    if (!isPREvent && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
       await uploadSarifReportAsArtifact(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME)
     }
 
     // Upload Black Duck SARIF Report to code scanning tab
-    if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+    if (!isPREvent && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
       const gitHubClientService = new GithubClientService()
       await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
     }
 
     // Upload Polaris SARIF Report to code scanning tab
-    if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+    if (!isPREvent && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
       const gitHubClientService = new GithubClientService()
       await gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH)
     }
-
     await cleanupTempDir(tempDir)
   }
 }

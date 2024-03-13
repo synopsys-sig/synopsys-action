@@ -3,7 +3,7 @@ import * as inputs from './inputs'
 import * as fs from 'fs'
 import * as zlib from 'zlib'
 import {checkIfPathExists, getDefaultSarifReportPath, sleep} from './utility'
-import {debug, info} from '@actions/core'
+import {debug, info, warning} from '@actions/core'
 import {isNullOrEmptyValue} from './validators'
 import * as constants from '../application-constants'
 
@@ -77,20 +77,21 @@ export class GithubClientService {
             if (secondsUntilReset <= 105) {
               retryDelay = await this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay)
             } else {
-              const minutesUntilreset = Math.ceil(secondsUntilReset / 60)
-              throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`)
+              const minutesUntilReset = Math.ceil(secondsUntilReset / 60)
+              warning(`GitHub API rate limit has been exceeded, retry after ${minutesUntilReset} minutes.`)
+              break
             }
             retryCountLocal--
           } else {
             retryCountLocal = 0
-            throw new Error(responseBody)
+            warning(responseBody)
           }
         } while (retryCountLocal > 0)
       } catch (error) {
-        throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`)
+        warning(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`)
       }
     } else {
-      throw new Error('No SARIF file found to upload')
+      warning('No SARIF file found to upload')
     }
   }
 

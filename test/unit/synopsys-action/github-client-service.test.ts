@@ -7,6 +7,7 @@ import {Socket} from 'net'
 import * as utility from '../../../src/synopsys-action/utility'
 import fs from 'fs'
 import * as constants from '../../../src/application-constants'
+import * as core from '@actions/core'
 
 const originalEnv = process.env
 beforeEach(() => {
@@ -77,7 +78,7 @@ describe('upload sarif results', () => {
     expect(response).toBeUndefined()
   })
 
-  it('should throw error while upload sarif report', async function () {
+  it('should log warning while error in upload sarif report', async function () {
     const githubClientService = new GithubClientService()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
@@ -93,29 +94,23 @@ describe('upload sarif results', () => {
       readBody: jest.fn()
     }
     httpResponse.message.statusCode = 500
-    jest.spyOn(HttpClient.prototype, 'post').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advanced Security:'))
+    jest.spyOn(HttpClient.prototype, 'post').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advanced Security'))
 
-    try {
-      await githubClientService.uploadSarifReport('test-dir', '/')
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(Error)
-      expect(error.message).toContain('Error uploading SARIF data to GitHub Advanced Security:')
-    }
+    const warnSpy = jest.spyOn(core, 'warning').mockImplementation()
+    await githubClientService.uploadSarifReport('test-dir', '/')
+    expect(warnSpy).toHaveBeenCalledWith('Uploading SARIF report to GitHub Advanced Security failed: Error: Error uploading SARIF data to GitHub Advanced Security')
   })
 
-  it('should throw error while upload sarif report if file does not exist', async function () {
+  it('should log warning error while upload sarif report if file does not exist', async function () {
     const githubClientService = new GithubClientService()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
     jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(false)
     jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
-    try {
-      await githubClientService.uploadSarifReport('test-dir', '/')
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(Error)
-      expect(error.message).toContain('No SARIF file found to upload')
-    }
+    const warnSpy = jest.spyOn(core, 'warning').mockImplementation()
+    await githubClientService.uploadSarifReport('test-dir', '/')
+    expect(warnSpy).toHaveBeenCalledWith('No SARIF file found to upload')
   })
 })
 
@@ -135,16 +130,13 @@ it('should return with 401 status code for bad credentials while upload sarif re
     readBody: jest.fn()
   }
   httpResponse.message.statusCode = 401
-  jest.spyOn(HttpClient.prototype, 'post').mockResolvedValue(httpResponse)
-  try {
-    await githubClientService.uploadSarifReport('test-dir', '/')
-  } catch (error: any) {
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Uploading SARIF report to GitHub Advanced Security failed:')
-  }
+  jest.spyOn(HttpClient.prototype, 'post').mockRejectedValueOnce(new Error('Unauthorized'))
+  const warnSpy = jest.spyOn(core, 'warning').mockImplementation()
+  await githubClientService.uploadSarifReport('test-dir', '/')
+  expect(warnSpy).toHaveBeenCalledWith('Uploading SARIF report to GitHub Advanced Security failed: Error: Unauthorized')
 })
 
-it('should return rate limit error and no retry while upload sarif report', async function () {
+it('should return rate limit warning and no retry while upload sarif report', async function () {
   const githubClientService = new GithubClientService()
 
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
@@ -163,15 +155,12 @@ it('should return rate limit error and no retry while upload sarif report', asyn
   httpResponse.message.headers = {'x-ratelimit-remaining': '0', 'x-ratelimit-reset': (Math.floor(Date.now() / 1000) + 200).toString()}
 
   jest.spyOn(HttpClient.prototype, 'post').mockResolvedValue(httpResponse)
-  try {
-    await githubClientService.uploadSarifReport('test-dir', '/')
-  } catch (error: any) {
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Uploading SARIF report to GitHub Advanced Security failed: Error: GitHub API rate limit has been exceeded, retry after 4 minutes.')
-  }
+  const warnSpy = jest.spyOn(core, 'warning').mockImplementation()
+  await githubClientService.uploadSarifReport('test-dir', '/')
+  expect(warnSpy).toHaveBeenCalledWith('GitHub API rate limit has been exceeded, retry after 4 minutes.')
 })
 
-it('should return rate limit error and retry while upload sarif report', async function () {
+it('should return rate limit info and retry while upload sarif report', async function () {
   const githubClientService = new GithubClientService()
 
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
@@ -190,12 +179,9 @@ it('should return rate limit error and retry while upload sarif report', async f
   httpResponse.message.headers = {'x-ratelimit-remaining': '0', 'x-ratelimit-reset': (Math.floor(Date.now() / 1000) + 100).toString()}
 
   jest.spyOn(HttpClient.prototype, 'post').mockResolvedValue(httpResponse)
-  try {
-    await githubClientService.uploadSarifReport('test-dir', '/')
-  } catch (error: any) {
-    expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('bjhbhjbjhbhbjhb:')
-  }
+  const infoSpy = jest.spyOn(core, 'info').mockImplementation()
+  await githubClientService.uploadSarifReport('test-dir', '/')
+  expect(infoSpy).toHaveBeenCalledWith(expect.stringContaining('Retries left:'))
 })
 
 afterEach(() => {

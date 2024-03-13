@@ -221,21 +221,25 @@ function run() {
             if (inputs.INCLUDE_DIAGNOSTICS) {
                 yield (0, artifacts_1.uploadDiagnostics)();
             }
+            const isPREvent = (0, utility_1.isPullRequestEvent)();
+            if (isPREvent && ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) || (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT))) {
+                (0, core_1.warning)('SARIF report create/upload is ignored in case of PR scan, it is only supported for non PR scans');
+            }
             // Upload Black Duck sarif file as GitHub artifact
-            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+            if (!isPREvent && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
                 yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME);
             }
             // Upload Polaris sarif file as GitHub artifact
-            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+            if (!isPREvent && (0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
                 yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME);
             }
             // Upload Black Duck SARIF Report to code scanning tab
-            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+            if (!isPREvent && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
                 const gitHubClientService = new github_client_service_1.GithubClientService();
                 yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
             }
             // Upload Polaris SARIF Report to code scanning tab
-            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+            if (!isPREvent && (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
                 const gitHubClientService = new github_client_service_1.GithubClientService();
                 yield gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH);
             }
@@ -578,23 +582,24 @@ class GithubClientService {
                                 retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
                             }
                             else {
-                                const minutesUntilreset = Math.ceil(secondsUntilReset / 60);
-                                throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`);
+                                const minutesUntilReset = Math.ceil(secondsUntilReset / 60);
+                                (0, core_1.warning)(`GitHub API rate limit has been exceeded, retry after ${minutesUntilReset} minutes.`);
+                                break;
                             }
                             retryCountLocal--;
                         }
                         else {
                             retryCountLocal = 0;
-                            throw new Error(responseBody);
+                            (0, core_1.warning)(responseBody);
                         }
                     } while (retryCountLocal > 0);
                 }
                 catch (error) {
-                    throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
+                    (0, core_1.warning)(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
                 }
             }
             else {
-                throw new Error('No SARIF file found to upload');
+                (0, core_1.warning)('No SARIF file found to upload');
             }
         });
     }
@@ -1520,7 +1525,7 @@ class SynopsysToolsParameter {
         else {
             polData.data.polaris.prComment = { enabled: false };
         }
-        if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+        if (!utility_1.isPullRequestEvent && (0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
             const sarifReportFilterSeverities = [];
             const sarifReportFilterAssessmentIssuesType = [];
             if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
@@ -1705,7 +1710,7 @@ class SynopsysToolsParameter {
         else {
             blackduckData.data.blackduck.automation.prcomment = false;
         }
-        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+        if (!utility_1.isPullRequestEvent && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
             const sarifReportFilterSeverities = [];
             if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
                 const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',');
@@ -1877,7 +1882,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getDefaultSarifReportPath = exports.sleep = exports.checkIfPathExists = exports.isBoolean = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
+exports.isPullRequestEvent = exports.getDefaultSarifReportPath = exports.sleep = exports.checkIfPathExists = exports.isBoolean = exports.parseToBoolean = exports.checkIfGithubHostedAndLinux = exports.cleanupTempDir = exports.createTempDir = exports.cleanUrl = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const os = __importStar(__nccwpck_require__(2087));
 const path_1 = __importDefault(__nccwpck_require__(5622));
@@ -1946,6 +1951,11 @@ function getDefaultSarifReportPath(sarifReportDirectory, appendFilePath) {
     return !appendFilePath ? path_1.default.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory) : path_1.default.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory, constants.SARIF_DEFAULT_FILE_NAME);
 }
 exports.getDefaultSarifReportPath = getDefaultSarifReportPath;
+function isPullRequestEvent() {
+    const eventName = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] || '';
+    return eventName === 'pull_request' || false;
+}
+exports.isPullRequestEvent = isPullRequestEvent;
 
 
 /***/ }),
