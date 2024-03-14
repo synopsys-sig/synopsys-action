@@ -139,4 +139,4 @@ export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_SHA: 'GITHUB_SHA'
 }
 export const GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'GitHub token is required for SARIF report upload to GitHub Advanced Security'
-export const SARIF_REPORT_ERROR_FOR_NON_PR_SCANS = 'SARIF report create/upload is ignored in case of PR scans, it is only supported for non PR scans'
+export const SARIF_REPORT_ERROR_FOR__PR_SCANS = 'SARIF report create/upload is ignored in case of PR scans, it is only supported for non PR scans'
