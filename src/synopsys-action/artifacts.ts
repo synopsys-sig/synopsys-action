@@ -51,15 +51,11 @@ export function getFiles(dir: string, allFiles: string[]): string[] {
   return allFiles
 }
 
-export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: string, userSarifFilePath: string, artifactName: string): Promise<UploadResponse | void> {
-  try {
-    const artifactClient = artifact.create()
-    const sarifFilePath = userSarifFilePath ? userSarifFilePath : getDefaultSarifReportPath(defaultSarifReportDirectory, true)
-    const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(defaultSarifReportDirectory, false)
-    const options: UploadOptions = {}
-    options.continueOnError = false
-    return await artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options)
-  } catch (error) {
-    warning(`Error occurred while uploading SARIF report as artifact: ${error}`)
-  }
+export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: string, userSarifFilePath: string, artifactName: string): Promise<UploadResponse> {
+  const artifactClient = artifact.create()
+  const sarifFilePath = userSarifFilePath ? userSarifFilePath : getDefaultSarifReportPath(defaultSarifReportDirectory, true)
+  const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(defaultSarifReportDirectory, false)
+  const options: UploadOptions = {}
+  options.continueOnError = false
+  return await artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options)
 }

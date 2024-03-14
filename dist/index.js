@@ -364,17 +364,12 @@ function getFiles(dir, allFiles) {
 exports.getFiles = getFiles;
 function uploadSarifReportAsArtifact(defaultSarifReportDirectory, userSarifFilePath, artifactName) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const artifactClient = artifact.create();
-            const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
-            const rootDir = userSarifFilePath ? path_1.default.dirname(userSarifFilePath) : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, false);
-            const options = {};
-            options.continueOnError = false;
-            return yield artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options);
-        }
-        catch (error) {
-            (0, core_1.warning)(`Error occurred while uploading SARIF report as artifact: ${error}`);
-        }
+        const artifactClient = artifact.create();
+        const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
+        const rootDir = userSarifFilePath ? path_1.default.dirname(userSarifFilePath) : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, false);
+        const options = {};
+        options.continueOnError = false;
+        return yield artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options);
     });
 }
 exports.uploadSarifReportAsArtifact = uploadSarifReportAsArtifact;
