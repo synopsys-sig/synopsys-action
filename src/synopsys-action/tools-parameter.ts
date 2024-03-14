@@ -98,8 +98,7 @@ export class SynopsysToolsParameter {
     } else {
       polData.data.polaris.prComment = {enabled: false}
     }
-
-    if (!isPullRequestEvent && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+    if (!isPullRequestEvent() && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
       const sarifReportFilterAssessmentIssuesType: string[] = []
 
@@ -305,8 +304,7 @@ export class SynopsysToolsParameter {
     } else {
       blackduckData.data.blackduck.automation.prcomment = false
     }
-
-    if (!isPullRequestEvent && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+    if (!isPullRequestEvent() && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
       if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
         const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')

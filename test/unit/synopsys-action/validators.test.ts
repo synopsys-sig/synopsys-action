@@ -1,6 +1,8 @@
 import {validateBlackduckFailureSeverities, validateBlackDuckInputs, validateCoverityInputs, validateCoverityInstallDirectoryParam, validateParameters, validatePolarisInputs} from '../../../src/synopsys-action/validators'
 import * as constants from '../../../src/application-constants'
 import * as inputs from '../../../src/synopsys-action/inputs'
+import * as utility from '../../../src/synopsys-action/utility'
+import {SynopsysToolsParameter} from '../../../src/synopsys-action/tools-parameter'
 
 test('Test missing install directory for coverity', () => {
   try {
@@ -77,6 +79,23 @@ test('Polaris - With mandatory fields', async () => {
   jest.restoreAllMocks()
 })
 
+test('Test missing github token for polaris sarif report upload in non PR context', async () => {
+  try {
+    Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+    Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+    Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA'})
+    Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: 'true'})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
+    const response = validatePolarisInputs()
+    expect(response).toBe(false)
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('GitHub token is required for SARIF report upload to GitHub Advanced Security')
+  }
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
+})
+
 // COVERITY
 test('Coverity - Without mandatory fields', async () => {
   try {
@@ -149,6 +168,23 @@ test('Blackduck - With mandatory fields', async () => {
   let response = validateBlackDuckInputs()
   expect(response.length).toBe(0)
 
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
+})
+
+test('Test missing github token for blackduck sarif report upload in non PR context', () => {
+  try {
+    Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+    Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+    Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+    Object.defineProperty(inputs, 'BLACKDUCK_UPLOAD_SARIF_REPORT', {value: true})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
+    const response = validateBlackDuckInputs()
+    expect(response).toBe(false)
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('GitHub token is required for SARIF report upload to GitHub Advanced Security')
+  }
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})
 })

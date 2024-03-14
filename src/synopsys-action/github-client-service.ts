@@ -4,7 +4,6 @@ import * as fs from 'fs'
 import * as zlib from 'zlib'
 import {checkIfPathExists, getDefaultSarifReportPath, sleep} from './utility'
 import {debug, info, warning} from '@actions/core'
-import {isNullOrEmptyValue} from './validators'
 import * as constants from '../application-constants'
 
 export class GithubClientService {
@@ -32,9 +31,6 @@ export class GithubClientService {
 
   async uploadSarifReport(defaultSarifReportDirectory: string, userSarifFilePath: string): Promise<void> {
     info('Uploading SARIF results to GitHub')
-    if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
-      throw new Error('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security')
-    }
     let retryCountLocal = constants.RETRY_COUNT
     let retryDelay = constants.RETRY_DELAY_IN_MILLISECONDS
     const stringFormat = (url: string, ...args: string[]): string => {

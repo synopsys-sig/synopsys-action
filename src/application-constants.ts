@@ -138,3 +138,4 @@ export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_SERVER_URL: 'GITHUB_SERVER_URL',
   GITHUB_SHA: 'GITHUB_SHA'
 }
+export const GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'GitHub token is required for SARIF report upload to GitHub Advanced Security'
