@@ -1054,9 +1054,6 @@ class SynopsysBridge {
                 // validating and preparing command for blackduck
                 const blackduckErrors = (0, validators_1.validateBlackDuckInputs)();
                 if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
-                    if ((0, utility_1.isPullRequestEvent)() && ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT))) {
-                        (0, core_1.warning)(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS);
-                    }
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
