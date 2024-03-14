@@ -91,7 +91,7 @@ test('Test missing github token for polaris sarif report upload in non PR contex
     expect(response).toBe(false)
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('GitHub token is required for SARIF report upload to GitHub Advanced Security')
+    expect(error.message).toContain('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security')
   }
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
 })
@@ -183,7 +183,7 @@ test('Test missing github token for blackduck sarif report upload in non PR cont
     expect(response).toBe(false)
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('GitHub token is required for SARIF report upload to GitHub Advanced Security')
+    expect(error.message).toContain('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security')
   }
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: null})

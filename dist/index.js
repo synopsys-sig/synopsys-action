@@ -139,7 +139,7 @@ exports.GITHUB_ENVIRONMENT_VARIABLES = {
     GITHUB_SERVER_URL: 'GITHUB_SERVER_URL',
     GITHUB_SHA: 'GITHUB_SHA'
 };
-exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'GitHub token is required for SARIF report upload to GitHub Advanced Security';
+exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security';
 exports.SARIF_REPORT_ERROR_FOR_PR_SCANS = 'SARIF report create/upload is ignored in case of PR scans, it is only supported for non PR scans';
 
 
@@ -192,6 +192,7 @@ const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const artifacts_1 = __nccwpck_require__(1309);
 const github_client_service_1 = __nccwpck_require__(2016);
+const validators_1 = __nccwpck_require__(8401);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -232,15 +233,17 @@ function run() {
                 if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
                     yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME);
                 }
-                // Upload Black Duck SARIF Report to code scanning tab
-                if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-                    const gitHubClientService = new github_client_service_1.GithubClientService();
-                    yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
-                }
-                // Upload Polaris SARIF Report to code scanning tab
-                if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-                    const gitHubClientService = new github_client_service_1.GithubClientService();
-                    yield gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH);
+                if (!(0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
+                    // Upload Black Duck SARIF Report to code scanning tab
+                    if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+                        const gitHubClientService = new github_client_service_1.GithubClientService();
+                        yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
+                    }
+                    // Upload Polaris SARIF Report to code scanning tab
+                    if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+                        const gitHubClientService = new github_client_service_1.GithubClientService();
+                        yield gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH);
+                    }
                 }
             }
             yield (0, utility_1.cleanupTempDir)(tempDir);
@@ -583,24 +586,23 @@ class GithubClientService {
                                 retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
                             }
                             else {
-                                const minutesUntilReset = Math.ceil(secondsUntilReset / 60);
-                                (0, core_1.warning)(`GitHub API rate limit has been exceeded, retry after ${minutesUntilReset} minutes.`);
-                                break;
+                                const minutesUntilreset = Math.ceil(secondsUntilReset / 60);
+                                throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`);
                             }
                             retryCountLocal--;
                         }
                         else {
                             retryCountLocal = 0;
-                            (0, core_1.warning)(responseBody);
+                            throw new Error(responseBody);
                         }
                     } while (retryCountLocal > 0);
                 }
                 catch (error) {
-                    (0, core_1.warning)(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
+                    throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
                 }
             }
             else {
-                (0, core_1.warning)('No SARIF file found to upload');
+                throw new Error('No SARIF file found to upload');
             }
         });
     }
