@@ -36,9 +36,6 @@ export async function run() {
       await uploadDiagnostics()
     }
     const isPREvent = isPullRequestEvent()
-    if (isPREvent && (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT))) {
-      warning('SARIF report create/upload is ignored in case of PR scan, it is only supported for non PR scans')
-    }
     // Upload Black Duck sarif file as GitHub artifact
     if (!isPREvent && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
