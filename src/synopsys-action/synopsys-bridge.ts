@@ -174,7 +174,7 @@ export class SynopsysBridge {
       const polarisErrors: string[] = validatePolarisInputs()
       if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
         if (isPullRequestEvent() && (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT))) {
-          warning(constants.SARIF_REPORT_ERROR_FOR__PR_SCANS)
+          warning(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS)
         }
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(githubRepoName))
@@ -191,7 +191,7 @@ export class SynopsysBridge {
       const blackduckErrors: string[] = validateBlackDuckInputs()
       if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
         if (isPullRequestEvent() && (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT))) {
-          warning(constants.SARIF_REPORT_ERROR_FOR__PR_SCANS)
+          warning(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS)
         }
         const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
