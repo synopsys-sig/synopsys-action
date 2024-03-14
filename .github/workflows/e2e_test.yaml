@@ -38,7 +38,7 @@ jobs:
             
       - name: download e2e artifacts
         run: |
-          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
           ls -al
           aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
           ls -al
@@ -94,7 +94,7 @@ jobs:
       
       - name: download e2e artifacts
         run: |
-          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
           ls -al
           aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
           ls -al
@@ -150,7 +150,7 @@ jobs:
 
       - name: download e2e artifacts
         run: |
-          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations integrations --no-progress
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
           ls -al
           aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
           ls -al
