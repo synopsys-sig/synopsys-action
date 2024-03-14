@@ -173,9 +173,6 @@ export class SynopsysBridge {
       // validating and preparing command for polaris
       const polarisErrors: string[] = validatePolarisInputs()
       if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
-        if (isPullRequestEvent() && (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT))) {
-          warning(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS)
-        }
         const polarisCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(githubRepoName))
       }

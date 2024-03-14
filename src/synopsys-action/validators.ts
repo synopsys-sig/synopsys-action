@@ -1,5 +1,5 @@
 import * as fs from 'fs'
-import {error} from '@actions/core'
+import {error, warning} from '@actions/core'
 import * as constants from '../application-constants'
 import * as inputs from './inputs'
 import {isPullRequestEvent, parseToBoolean} from './utility'
@@ -40,7 +40,11 @@ export function validatePolarisInputs(): string[] {
     paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
     paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES)
     errors = validateParameters(paramsMap, constants.POLARIS_KEY)
-    if (!isPullRequestEvent() && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+    const isPREvent = isPullRequestEvent()
+    if (isPREvent && (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT))) {
+      warning(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS)
+    }
+    if (!isPREvent && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
       errors.push(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
     }
   }
@@ -66,7 +70,11 @@ export function validateBlackDuckInputs(): string[] {
     paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
     paramsMap.set(constants.BLACKDUCK_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
     errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY)
-    if (!isPullRequestEvent() && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+    const isPREvent = isPullRequestEvent()
+    if (isPREvent && (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT))) {
+      warning(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS)
+    }
+    if (!isPREvent && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
       errors.push(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
     }
   }
