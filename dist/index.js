@@ -372,7 +372,6 @@ function uploadSarifReportAsArtifact(defaultSarifReportDirectory, userSarifFileP
         }
         catch (error) {
             (0, core_1.warning)(`Error occurred while uploading SARIF report as artifact: ${error}`);
-            return Promise.reject(error);
         }
     });
 }
