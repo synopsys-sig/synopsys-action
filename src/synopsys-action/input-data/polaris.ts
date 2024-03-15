@@ -15,6 +15,7 @@ export interface PolarisData {
   branch: Branch
   assessment: {types: string[]}
   prComment?: PrComment
+  test?: Test
   reports?: Reports
 }
 
@@ -26,4 +27,8 @@ export interface PrComment {
 export interface Branch {
   name?: string
   parent: {name?: string}
+}
+
+export interface Test {
+  sca: {type: string}
 }
