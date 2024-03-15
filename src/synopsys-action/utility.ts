@@ -1,7 +1,7 @@
 import * as fs from 'fs'
 import * as os from 'os'
 import path from 'path'
-import {APPLICATION_NAME} from '../application-constants'
+import {APPLICATION_NAME, GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 import {rmRF} from '@actions/io'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from '../application-constants'
@@ -60,4 +60,9 @@ export async function sleep(duration: number): Promise<void> {
 export function getDefaultSarifReportPath(sarifReportDirectory: string, appendFilePath: boolean): string {
   const pwd = getWorkSpaceDirectory()
   return !appendFilePath ? path.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory) : path.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory, constants.SARIF_DEFAULT_FILE_NAME)
+}
+
+export function isPullRequestEvent(): boolean {
+  const eventName = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] || ''
+  return eventName === 'pull_request' || false
 }

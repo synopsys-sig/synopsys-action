@@ -8,7 +8,7 @@ import {InputData} from './input-data/input-data'
 import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
-import {isBoolean, parseToBoolean} from './utility'
+import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
 import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
 export class SynopsysToolsParameter {
@@ -105,8 +105,7 @@ export class SynopsysToolsParameter {
     } else {
       polData.data.polaris.prComment = {enabled: false}
     }
-
-    if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+    if (!isPullRequestEvent() && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
       const sarifReportFilterAssessmentIssuesType: string[] = []
 
@@ -312,8 +311,7 @@ export class SynopsysToolsParameter {
     } else {
       blackduckData.data.blackduck.automation.prcomment = false
     }
-
-    if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+    if (!isPullRequestEvent() && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
       if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
         const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
