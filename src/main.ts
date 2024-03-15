@@ -1,4 +1,4 @@
-import {info, setFailed, warning} from '@actions/core'
+import {info, setFailed} from '@actions/core'
 import {cleanupTempDir, createTempDir, isPullRequestEvent, parseToBoolean} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'

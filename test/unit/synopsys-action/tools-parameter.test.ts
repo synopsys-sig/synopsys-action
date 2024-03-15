@@ -2,7 +2,6 @@ import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utilit
 import {SynopsysToolsParameter} from '../../../src/synopsys-action/tools-parameter'
 import mock = jest.mock
 import * as inputs from '../../../src/synopsys-action/inputs'
-
 let tempPath = '/temp'
 let polaris_input_file = '/polaris_input.json'
 let coverity_input_file = '/coverity_input.json'
