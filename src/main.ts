@@ -12,7 +12,6 @@ export async function run() {
   info('Synopsys Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
-  let pluginErrors = false
   let exitCode = -1
 
   try {
@@ -33,33 +32,34 @@ export async function run() {
     }
     return exitCode
   } catch (error) {
-    pluginErrors = true
     throw error
   } finally {
-    if (inputs.INCLUDE_DIAGNOSTICS) {
-      await uploadDiagnostics()
-    }
-    if (!pluginErrors && exitCode >= 0 && !isPullRequestEvent()) {
-      // Upload Black Duck sarif file as GitHub artifact
-      if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-        await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
+    if (exitCode >= 0) {
+      if (inputs.INCLUDE_DIAGNOSTICS) {
+        await uploadDiagnostics()
       }
-
-      // Upload Polaris sarif file as GitHub artifact
-      if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
-        await uploadSarifReportAsArtifact(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME)
-      }
-      if (!isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
-        // Upload Black Duck SARIF Report to code scanning tab
-        if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-          const gitHubClientService = new GithubClientService()
-          await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
+      if (!isPullRequestEvent()) {
+        // Upload Black Duck sarif file as GitHub artifact
+        if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+          await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
         }
 
-        // Upload Polaris SARIF Report to code scanning tab
-        if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-          const gitHubClientService = new GithubClientService()
-          await gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH)
+        // Upload Polaris sarif file as GitHub artifact
+        if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+          await uploadSarifReportAsArtifact(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME)
+        }
+        if (!isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+          // Upload Black Duck SARIF Report to code scanning tab
+          if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+            const gitHubClientService = new GithubClientService()
+            await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
+          }
+
+          // Upload Polaris SARIF Report to code scanning tab
+          if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+            const gitHubClientService = new GithubClientService()
+            await gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH)
+          }
         }
       }
     }
