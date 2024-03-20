@@ -13,6 +13,7 @@ export async function run() {
   const tempDir = await createTempDir()
   let formattedCommand = ''
   let pluginErrors = false
+  let exitCode = -1
 
   try {
     const sb = new SynopsysBridge()
@@ -26,7 +27,7 @@ export async function run() {
       await sb.validateSynopsysBridgePath()
     }
     // Execute bridge command
-    const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
     if (exitCode === 0) {
       info('Synopsys Action workflow execution completed')
     }
@@ -38,7 +39,7 @@ export async function run() {
     if (inputs.INCLUDE_DIAGNOSTICS) {
       await uploadDiagnostics()
     }
-    if (!pluginErrors && !isPullRequestEvent()) {
+    if (!pluginErrors && exitCode >= 0 && !isPullRequestEvent()) {
       // Upload Black Duck sarif file as GitHub artifact
       if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
         await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)

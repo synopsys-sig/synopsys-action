@@ -200,6 +200,7 @@ function run() {
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
         let pluginErrors = false;
+        let exitCode = -1;
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
             // Prepare bridge command
@@ -213,7 +214,7 @@ function run() {
                 yield sb.validateSynopsysBridgePath();
             }
             // Execute bridge command
-            const exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
             if (exitCode === 0) {
                 (0, core_1.info)('Synopsys Action workflow execution completed');
             }
@@ -227,7 +228,7 @@ function run() {
             if (inputs.INCLUDE_DIAGNOSTICS) {
                 yield (0, artifacts_1.uploadDiagnostics)();
             }
-            if (!pluginErrors && !(0, utility_1.isPullRequestEvent)()) {
+            if (!pluginErrors && exitCode >= 0 && !(0, utility_1.isPullRequestEvent)()) {
                 // Upload Black Duck sarif file as GitHub artifact
                 if (inputs.BLACKDUCK_URL && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
                     yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME);
