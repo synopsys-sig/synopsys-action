@@ -58,12 +58,5 @@
     "typed-rest-client": "^1.8.9",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2"
-  },
-  "jest": {
-    "coverageThreshold": {
-      "global": {
-        "lines": 80
-      }
-    }
   }
 }

@@ -12,8 +12,7 @@ export async function run() {
   info('Synopsys Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
-  let bridgeError = false
-  let exitCode = -1
+  let isBridgeExecuted = false
 
   try {
     const sb = new SynopsysBridge()
@@ -27,17 +26,16 @@ export async function run() {
       await sb.validateSynopsysBridgePath()
     }
     // Execute bridge command
-    exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
     if (exitCode === 0) {
       info('Synopsys Action workflow execution completed')
-    } else {
-      bridgeError = true
     }
     return exitCode
   } catch (error) {
+    isBridgeExecuted = getBridgeExitCode(error as Error)
     throw error
   } finally {
-    if (exitCode === 0 || bridgeError) {
+    if (isBridgeExecuted) {
       if (inputs.INCLUDE_DIAGNOSTICS) {
         await uploadDiagnostics()
       }
@@ -57,7 +55,6 @@ export async function run() {
             const gitHubClientService = new GithubClientService()
             await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
           }
-
           // Upload Polaris SARIF Report to code scanning tab
           if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
             const gitHubClientService = new GithubClientService()
@@ -73,6 +70,15 @@ export async function run() {
 export function logBridgeExitCodes(message: string): string {
   const exitCode = message.trim().slice(-1)
   return constants.EXIT_CODE_MAP.has(exitCode) ? `Exit Code: ${exitCode} ${constants.EXIT_CODE_MAP.get(exitCode)}` : message
+}
+
+export function getBridgeExitCode(error: Error): boolean {
+  if (error.message !== undefined) {
+    const lastChar = error.message.trim().slice(-1)
+    const num = parseFloat(lastChar)
+    return !isNaN(num)
+  }
+  return false
 }
 
 run().catch(error => {

@@ -1,0 +1,101 @@
+2024-03-20 14:51:12.1594 IST [Synopsys Bridge] INFO: Starting adapters for stage blackduck
+2024-03-20 14:51:12.1605 IST [Synopsys Bridge] INFO: Starting Adapter: Blackduck Component Locator
+2024-03-20 14:51:12.1605 IST [Synopsys Bridge] INFO: Starting Adapter: Blackduck Results
+2024-03-20 14:51:12.1605 IST [Synopsys Bridge] INFO: Starting Adapter: Blackduck Hub Controller
+2024-03-20 14:51:12.1690 IST [Synopsys Bridge] INFO: New adapter loaded: Check pull request
+2024-03-20 14:51:12.1692 IST [Synopsys Bridge] INFO: Starting Adapter: Check pull request
+2024-03-20 14:51:12.1940 IST [Check pull request] INFO: Provided value for resource 'environment.scan.pull'
+2024-03-20 14:51:12.1941 IST [Check pull request] INFO: Adapter finished
+2024-03-20 14:51:12.9128 IST [Blackduck Hub Controller] INFO: Found Blackduck Detect jar file "synopsys-detect-9.4.0.jar" in "/Users/spurohit/.synopsys/bridge/tools/synopsys-detect/9.4.0"
+2024-03-20 14:51:12.9307 IST [Synopsys Bridge] INFO: New adapter loaded: Blackduck Execution
+2024-03-20 14:51:12.9620 IST [Synopsys Bridge] INFO: Starting Adapter: Blackduck Execution
+2024-03-20 14:51:12.9622 IST [Blackduck Hub Controller] INFO: Provided value for resource 'blackduck.execution.path'
+2024-03-20 14:51:12.9622 IST [Synopsys Bridge] INFO: Starting adapters for stage scm
+2024-03-20 14:51:12.9623 IST [Synopsys Bridge] INFO: Starting Adapter: SCM Checker
+2024-03-20 14:51:12.9632 IST [Blackduck Hub Controller] INFO: Adapter finished
+2024-03-20 14:51:12.9713 IST [Synopsys Bridge] INFO: New adapter loaded: Default Blackduck Scan Mode
+2024-03-20 14:51:12.9717 IST [Synopsys Bridge] INFO: Starting Adapter: Default Blackduck Scan Mode
+2024-03-20 14:51:12.9963 IST [Default Blackduck Scan Mode] INFO: Provided value for resource 'blackduck.scan.full'
+2024-03-20 14:51:12.9964 IST [Default Blackduck Scan Mode] INFO: Adapter finished
+2024-03-20 14:51:13.0173 IST [Blackduck Execution] INFO: Running command java -jar /Users/spurohit/.synopsys/bridge/tools/synopsys-detect/9.4.0/synopsys-detect-9.4.0.jar --detect.cleanup=false --detect.bdio.file.name=scan --detect.bdio.output.path=/Users/spurohit/code/synopsys-action/.bridge/Blackduck Execution/detect/bdio/blackduck_artifact --detect.output.path=/Users/spurohit/code/synopsys-action/.bridge/Blackduck Execution/detect --blackduck.offline.mode=false --blackduck.url= --blackduck.api.token= --detect.blackduck.scan.mode=INTELLIGENT
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] ERROR: --- Detect-Self-Updater:  Self-Update of Detect failed due to the following exception. Detect will now continue with existing version.
+2024-03-20 14:51:13.5449 IST [Blackduck Execution] INFO: com.synopsys.integration.exception.IntegrationException: The url (as/api/tools/detect) is not valid: URI is not absolute
+2024-03-20 14:51:13.5449 IST [Blackduck Execution] INFO: 	at com.synopsys.integration.rest.HttpUrl.populateUrl(HttpUrl.java:71)
+2024-03-20 14:51:13.5449 IST [Blackduck Execution] INFO: 	at com.synopsys.integration.rest.HttpUrl.<init>(HttpUrl.java:34)
+2024-03-20 14:51:13.5449 IST [Blackduck Execution] INFO: 	at com.synopsys.integration.detect.ApplicationUpdater.buildDownloadUrl(ApplicationUpdater.java:568)
+2024-03-20 14:51:13.5449 IST [Blackduck Execution] INFO: 	at com.synopsys.integration.detect.ApplicationUpdater.installOrUpdateScanner(ApplicationUpdater.java:207)
+2024-03-20 14:51:13.5449 IST [Blackduck Execution] INFO: 	at com.synopsys.integration.detect.ApplicationUpdater.selfUpdate(ApplicationUpdater.java:165)
+2024-03-20 14:51:13.5450 IST [Blackduck Execution] INFO: 	at com.synopsys.integration.detect.Application.main(Application.java:89)
+2024-03-20 14:51:13.5450 IST [Blackduck Execution] INFO: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+2024-03-20 14:51:13.5450 IST [Blackduck Execution] INFO: 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+2024-03-20 14:51:13.5450 IST [Blackduck Execution] INFO: 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+2024-03-20 14:51:13.5450 IST [Blackduck Execution] INFO: 	at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+2024-03-20 14:51:13.5450 IST [Blackduck Execution] INFO: 	at org.springframework.boot.loader.MainMethodRunner.run(MainMethodRunner.java:49)
+2024-03-20 14:51:13.5450 IST [Blackduck Execution] INFO: 	at org.springframework.boot.loader.Launcher.launch(Launcher.java:108)
+2024-03-20 14:51:13.5451 IST [Blackduck Execution] INFO: 	at org.springframework.boot.loader.Launcher.launch(Launcher.java:58)
+2024-03-20 14:51:13.5451 IST [Blackduck Execution] INFO: 	at org.springframework.boot.loader.JarLauncher.main(JarLauncher.java:65)
+2024-03-20 14:51:13.5451 IST [Blackduck Execution] INFO: Caused by: java.lang.IllegalArgumentException: URI is not absolute
+2024-03-20 14:51:13.5451 IST [Blackduck Execution] INFO: 	at java.base/java.net.URL.fromURI(URL.java:692)
+2024-03-20 14:51:13.5451 IST [Blackduck Execution] INFO: 	at java.base/java.net.URI.toURL(URI.java:1116)
+2024-03-20 14:51:13.5451 IST [Blackduck Execution] INFO: 	at com.synopsys.integration.rest.HttpUrl.populateUrl(HttpUrl.java:69)
+2024-03-20 14:51:13.5451 IST [Blackduck Execution] INFO: 	... 13 common frames omitted
+2024-03-20 14:51:13.7314 IST [Blackduck Execution] INFO: ______     _            _
+2024-03-20 14:51:13.7314 IST [Blackduck Execution] INFO: |  _  \   | |          | |
+2024-03-20 14:51:13.7314 IST [Blackduck Execution] INFO: | | | |___| |_ ___  ___| |_
+2024-03-20 14:51:13.7315 IST [Blackduck Execution] INFO: | | | / _ \ __/ _ \/ __| __|
+2024-03-20 14:51:13.7315 IST [Blackduck Execution] INFO: | |/ /  __/ ||  __/ (__| |_
+2024-03-20 14:51:13.7315 IST [Blackduck Execution] INFO: |___/ \___|\__\___|\___|\__|
+2024-03-20 14:51:13.7315 IST [Blackduck Execution] INFO: 
+2024-03-20 14:51:13.8491 IST [Blackduck Execution] INFO: 
+2024-03-20 14:51:13.8492 IST [Blackduck Execution] INFO: Detect Version: 9.4.0
+2024-03-20 14:51:13.8492 IST [Blackduck Execution] INFO: 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- Current property values:
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- --property = value [notes]
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- ------------------------------------------------------------
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- blackduck.api.token = ** [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- blackduck.offline.mode = false [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- blackduck.url = as [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- detect.bdio.file.name = scan [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- detect.bdio.output.path = /Users/spurohit/code/synopsys-action/.bridge/Blackduck Execution/detect/bdio/blackduck_artifact [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- detect.blackduck.scan.mode = INTELLIGENT [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- detect.cleanup = false [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- detect.excluded.directories = /Users/spurohit/code/synopsys-action/.bridge [env] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- detect.output.path = /Users/spurohit/code/synopsys-action/.bridge/Blackduck Execution/detect [cmd] 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- ------------------------------------------------------------
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- Detect build date: 2024-03-07
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- Source directory: /Users/spurohit/code/synopsys-action
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- Output directory: /Users/spurohit/code/synopsys-action/.bridge/Blackduck Execution/detect
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- Run directory: /Users/spurohit/code/synopsys-action/.bridge/Blackduck Execution/detect/runs/2024-03-20-09-21-13-817
+2024-03-20 14:51:13.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- Creating status file: /Users/spurohit/code/synopsys-action/.bridge/Blackduck Execution/detect/runs/2024-03-20-09-21-13-817/status/status.json
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- Skipping cleanup, it is disabled.
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- ======== Detect Issues ========
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- EXCEPTIONS:
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 	Detect Boot Error
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 		Failed to configure Black Duck server connection: The provided Black Duck url (as) is not a valid URL.
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- ======== Detect Status ========
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] ERROR: --- Overall Status: FAILURE_CONFIGURATION - Detect was unable to start due to issues with it's configuration. Check and fix your configuration.
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- ===============================
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- 
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] INFO: --- Detect duration: 00h 00m 00s 757ms
+2024-03-20 14:51:14.0000 IST [Blackduck Execution] [main] ERROR: --- Exiting with code 7 - FAILURE_CONFIGURATION
+2024-03-20 14:51:14.0912 IST [Blackduck Execution] ERROR: exit status 7
+2024-03-20 14:51:14.0979 IST [Blackduck Execution] INFO: Provided value for resource 'blackduck.completed'
+2024-03-20 14:51:14.0980 IST [Blackduck Execution] INFO: Provided value for resource 'blackduck.results.path'
+2024-03-20 14:51:14.0987 IST [Blackduck Execution] ERROR: Adapter failed: exit status 1
+2024-03-20 14:51:14.1284 IST [Blackduck Results] INFO: Skipping Blackduck issues retrieval as "blackduck.automation.fixpr" is configured to false
+2024-03-20 14:51:14.1358 IST [Blackduck Results] INFO: Adapter finished
+2024-03-20 14:51:14.1673 IST [SCM Checker] INFO: Adapter finished
+2024-03-20 14:51:14.1799 IST [Blackduck Component Locator] INFO: skipping fix pull requests creation as "blackduck.automation.fixpr" or "blackduck.fixpr.enabled" is configured to false
+2024-03-20 14:51:14.1868 IST [Blackduck Component Locator] INFO: Adapter finished

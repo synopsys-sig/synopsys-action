@@ -184,7 +184,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.logBridgeExitCodes = exports.run = void 0;
+exports.getBridgeExitCode = exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
@@ -199,8 +199,7 @@ function run() {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
-        let bridgeError = false;
-        let exitCode = -1;
+        let isBridgeExecuted = false;
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
             // Prepare bridge command
@@ -214,20 +213,18 @@ function run() {
                 yield sb.validateSynopsysBridgePath();
             }
             // Execute bridge command
-            exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            const exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
             if (exitCode === 0) {
                 (0, core_1.info)('Synopsys Action workflow execution completed');
-            }
-            else {
-                bridgeError = true;
             }
             return exitCode;
         }
         catch (error) {
+            isBridgeExecuted = getBridgeExitCode(error);
             throw error;
         }
         finally {
-            if (exitCode === 0 || bridgeError) {
+            if (isBridgeExecuted) {
                 if (inputs.INCLUDE_DIAGNOSTICS) {
                     yield (0, artifacts_1.uploadDiagnostics)();
                 }
@@ -264,6 +261,15 @@ function logBridgeExitCodes(message) {
     return constants.EXIT_CODE_MAP.has(exitCode) ? `Exit Code: ${exitCode} ${constants.EXIT_CODE_MAP.get(exitCode)}` : message;
 }
 exports.logBridgeExitCodes = logBridgeExitCodes;
+function getBridgeExitCode(error) {
+    if (error.message !== undefined) {
+        const lastChar = error.message.trim().slice(-1);
+        const num = parseFloat(lastChar);
+        return !isNaN(num);
+    }
+    return false;
+}
+exports.getBridgeExitCode = getBridgeExitCode;
 run().catch(error => {
     if (error.message != undefined) {
         (0, core_1.setFailed)('Workflow failed! '.concat(logBridgeExitCodes(error.message)));
