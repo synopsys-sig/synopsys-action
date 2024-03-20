@@ -12,6 +12,7 @@ export async function run() {
   info('Synopsys Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
+  let bridgeError = false
   let exitCode = -1
 
   try {
@@ -29,12 +30,14 @@ export async function run() {
     exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
     if (exitCode === 0) {
       info('Synopsys Action workflow execution completed')
+    } else {
+      bridgeError = true
     }
     return exitCode
   } catch (error) {
     throw error
   } finally {
-    if (exitCode >= 0) {
+    if (exitCode === 0 || bridgeError) {
       if (inputs.INCLUDE_DIAGNOSTICS) {
         await uploadDiagnostics()
       }

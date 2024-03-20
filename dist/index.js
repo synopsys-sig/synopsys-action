@@ -199,6 +199,7 @@ function run() {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
+        let bridgeError = false;
         let exitCode = -1;
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
@@ -217,13 +218,16 @@ function run() {
             if (exitCode === 0) {
                 (0, core_1.info)('Synopsys Action workflow execution completed');
             }
+            else {
+                bridgeError = true;
+            }
             return exitCode;
         }
         catch (error) {
             throw error;
         }
         finally {
-            if (exitCode >= 0) {
+            if (exitCode === 0 || bridgeError) {
                 if (inputs.INCLUDE_DIAGNOSTICS) {
                     yield (0, artifacts_1.uploadDiagnostics)();
                 }
