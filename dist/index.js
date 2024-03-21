@@ -184,7 +184,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.logBridgeExitCodes = exports.run = void 0;
+exports.getBridgeExitCode = exports.logBridgeExitCodes = exports.run = void 0;
 const core_1 = __nccwpck_require__(2186);
 const utility_1 = __nccwpck_require__(7643);
 const synopsys_bridge_1 = __nccwpck_require__(2659);
@@ -199,6 +199,7 @@ function run() {
         (0, core_1.info)('Synopsys Action started...');
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
+        let isBridgeExecuted = false;
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
             // Prepare bridge command
@@ -219,31 +220,34 @@ function run() {
             return exitCode;
         }
         catch (error) {
+            isBridgeExecuted = getBridgeExitCode(error);
             throw error;
         }
         finally {
-            if (inputs.INCLUDE_DIAGNOSTICS) {
-                yield (0, artifacts_1.uploadDiagnostics)();
-            }
-            // Upload Black Duck sarif file as GitHub artifact
-            if (!(0, utility_1.isPullRequestEvent)()) {
-                if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-                    yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME);
+            if (isBridgeExecuted) {
+                if (inputs.INCLUDE_DIAGNOSTICS) {
+                    yield (0, artifacts_1.uploadDiagnostics)();
                 }
-                // Upload Polaris sarif file as GitHub artifact
-                if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
-                    yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME);
-                }
-                if (!(0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
-                    // Upload Black Duck SARIF Report to code scanning tab
-                    if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-                        const gitHubClientService = new github_client_service_1.GithubClientService();
-                        yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
+                if (!(0, utility_1.isPullRequestEvent)()) {
+                    // Upload Black Duck sarif file as GitHub artifact
+                    if (inputs.BLACKDUCK_URL && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+                        yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME);
                     }
-                    // Upload Polaris SARIF Report to code scanning tab
-                    if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-                        const gitHubClientService = new github_client_service_1.GithubClientService();
-                        yield gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH);
+                    // Upload Polaris sarif file as GitHub artifact
+                    if (inputs.POLARIS_SERVER_URL && (0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+                        yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME);
+                    }
+                    if (!(0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
+                        // Upload Black Duck SARIF Report to code scanning tab
+                        if (inputs.BLACKDUCK_URL && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+                            const gitHubClientService = new github_client_service_1.GithubClientService();
+                            yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
+                        }
+                        // Upload Polaris SARIF Report to code scanning tab
+                        if (inputs.POLARIS_SERVER_URL && (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+                            const gitHubClientService = new github_client_service_1.GithubClientService();
+                            yield gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH);
+                        }
                     }
                 }
             }
@@ -257,6 +261,15 @@ function logBridgeExitCodes(message) {
     return constants.EXIT_CODE_MAP.has(exitCode) ? `Exit Code: ${exitCode} ${constants.EXIT_CODE_MAP.get(exitCode)}` : message;
 }
 exports.logBridgeExitCodes = logBridgeExitCodes;
+function getBridgeExitCode(error) {
+    if (error.message !== undefined) {
+        const lastChar = error.message.trim().slice(-1);
+        const num = parseFloat(lastChar);
+        return !isNaN(num);
+    }
+    return false;
+}
+exports.getBridgeExitCode = getBridgeExitCode;
 run().catch(error => {
     if (error.message != undefined) {
         (0, core_1.setFailed)('Workflow failed! '.concat(logBridgeExitCodes(error.message)));

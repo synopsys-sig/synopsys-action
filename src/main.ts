@@ -12,6 +12,7 @@ export async function run() {
   info('Synopsys Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
+  let isBridgeExecuted = false
 
   try {
     const sb = new SynopsysBridge()
@@ -31,36 +32,37 @@ export async function run() {
     }
     return exitCode
   } catch (error) {
+    isBridgeExecuted = getBridgeExitCode(error as Error)
     throw error
   } finally {
-    if (inputs.INCLUDE_DIAGNOSTICS) {
-      await uploadDiagnostics()
-    }
-    // Upload Black Duck sarif file as GitHub artifact
-    if (!isPullRequestEvent()) {
-      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-        await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
+    if (isBridgeExecuted) {
+      if (inputs.INCLUDE_DIAGNOSTICS) {
+        await uploadDiagnostics()
       }
-
-      // Upload Polaris sarif file as GitHub artifact
-      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
-        await uploadSarifReportAsArtifact(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME)
-      }
-      if (!isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
-        // Upload Black Duck SARIF Report to code scanning tab
-        if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-          const gitHubClientService = new GithubClientService()
-          await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
+      if (!isPullRequestEvent()) {
+        // Upload Black Duck sarif file as GitHub artifact
+        if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+          await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
         }
 
-        // Upload Polaris SARIF Report to code scanning tab
-        if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-          const gitHubClientService = new GithubClientService()
-          await gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH)
+        // Upload Polaris sarif file as GitHub artifact
+        if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+          await uploadSarifReportAsArtifact(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH, constants.POLARIS_SARIF_ARTIFACT_NAME)
+        }
+        if (!isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+          // Upload Black Duck SARIF Report to code scanning tab
+          if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+            const gitHubClientService = new GithubClientService()
+            await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
+          }
+          // Upload Polaris SARIF Report to code scanning tab
+          if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+            const gitHubClientService = new GithubClientService()
+            await gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH)
+          }
         }
       }
     }
-
     await cleanupTempDir(tempDir)
   }
 }
@@ -68,6 +70,15 @@ export async function run() {
 export function logBridgeExitCodes(message: string): string {
   const exitCode = message.trim().slice(-1)
   return constants.EXIT_CODE_MAP.has(exitCode) ? `Exit Code: ${exitCode} ${constants.EXIT_CODE_MAP.get(exitCode)}` : message
+}
+
+export function getBridgeExitCode(error: Error): boolean {
+  if (error.message !== undefined) {
+    const lastChar = error.message.trim().slice(-1)
+    const num = parseFloat(lastChar)
+    return !isNaN(num)
+  }
+  return false
 }
 
 run().catch(error => {
