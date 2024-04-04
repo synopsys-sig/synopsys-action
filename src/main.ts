@@ -1,4 +1,4 @@
-import {info, setFailed} from '@actions/core'
+import {debug, info, setFailed} from '@actions/core'
 import {cleanupTempDir, createTempDir, isPullRequestEvent, parseToBoolean} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
@@ -28,6 +28,7 @@ export async function run() {
     // Execute bridge command
     const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
     if (exitCode === 0) {
+      isBridgeExecuted = true
       info('Synopsys Action workflow execution completed')
     }
     return exitCode
@@ -35,6 +36,7 @@ export async function run() {
     isBridgeExecuted = getBridgeExitCode(error as Error)
     throw error
   } finally {
+    debug(`Synopsys Bridge execution completed: ${isBridgeExecuted}`)
     if (isBridgeExecuted) {
       if (inputs.INCLUDE_DIAGNOSTICS) {
         await uploadDiagnostics()
