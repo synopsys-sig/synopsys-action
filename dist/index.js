@@ -215,6 +215,7 @@ function run() {
             // Execute bridge command
             const exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
             if (exitCode === 0) {
+                isBridgeExecuted = true;
                 (0, core_1.info)('Synopsys Action workflow execution completed');
             }
             return exitCode;

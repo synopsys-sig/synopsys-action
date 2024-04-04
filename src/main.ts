@@ -28,6 +28,7 @@ export async function run() {
     // Execute bridge command
     const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
     if (exitCode === 0) {
+      isBridgeExecuted = true
       info('Synopsys Action workflow execution completed')
     }
     return exitCode
