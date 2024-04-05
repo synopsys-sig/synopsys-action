@@ -1475,6 +1475,7 @@ class SynopsysToolsParameter {
         this.tempDir = tempDir;
     }
     getFormattedCommandForPolaris(githubRepoName) {
+        const isPrEvent = (0, utility_1.isPullRequestEvent)();
         let command = '';
         const assessmentTypeArray = [];
         if (inputs.POLARIS_ASSESSMENT_TYPES) {
@@ -1523,7 +1524,7 @@ class SynopsysToolsParameter {
                 }
             };
         }
-        if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+        if (isPrEvent && (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
             (0, core_1.info)('Polaris PR comment is enabled');
             if (inputs.POLARIS_PARENT_BRANCH_NAME) {
                 polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME;
@@ -1544,17 +1545,14 @@ class SynopsysToolsParameter {
             };
             polData.data.github = this.getGithubRepoInfo();
         }
-        else {
-            polData.data.polaris.prComment = { enabled: false };
-        }
-        if (!(0, utility_1.isPullRequestEvent)() && (0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+        if (!isPrEvent && (0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
             const sarifReportFilterSeverities = [];
             const sarifReportFilterAssessmentIssuesType = [];
             if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
                 const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',');
-                for (const fixPrSeverity of filterSeverities) {
-                    if (fixPrSeverity != null && fixPrSeverity !== '') {
-                        sarifReportFilterSeverities.push(fixPrSeverity.trim());
+                for (const sarifSeverity of filterSeverities) {
+                    if (sarifSeverity != null && sarifSeverity !== '') {
+                        sarifReportFilterSeverities.push(sarifSeverity.trim());
                     }
                 }
             }
@@ -1636,13 +1634,10 @@ class SynopsysToolsParameter {
         if (inputs.COVERITY_VERSION) {
             covData.data.coverity.version = inputs.COVERITY_VERSION;
         }
-        if ((0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED)) {
+        if ((0, utility_1.isPullRequestEvent)() && (0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED)) {
             (0, core_1.info)('Coverity PR comment is enabled');
             covData.data.github = this.getGithubRepoInfo();
             covData.data.coverity.automation.prcomment = true;
-        }
-        else {
-            covData.data.coverity.automation.prcomment = false;
         }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
@@ -1654,6 +1649,7 @@ class SynopsysToolsParameter {
     }
     getFormattedCommandForBlackduck() {
         const failureSeverities = [];
+        const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
             try {
                 const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES;
@@ -1715,30 +1711,23 @@ class SynopsysToolsParameter {
             }
         }
         // Check and put environment variable for fix pull request
-        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+        if (!isPrEvent && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_FIXPR_ENABLED)) {
             (0, core_1.info)('Black Duck Fix PR is enabled');
             blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs();
             blackduckData.data.github = this.getGithubRepoInfo();
         }
-        else {
-            // Disable fix pull request for adapters
-            blackduckData.data.blackduck.fixpr = { enabled: false };
-        }
-        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
+        if (isPrEvent && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
             (0, core_1.info)('Black Duck PR comment is enabled');
             blackduckData.data.github = this.getGithubRepoInfo();
             blackduckData.data.blackduck.automation.prcomment = true;
         }
-        else {
-            blackduckData.data.blackduck.automation.prcomment = false;
-        }
-        if (!(0, utility_1.isPullRequestEvent)() && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+        if (!isPrEvent && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
             const sarifReportFilterSeverities = [];
             if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
                 const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',');
-                for (const fixPrSeverity of filterSeverities) {
-                    if (fixPrSeverity != null && fixPrSeverity !== '') {
-                        sarifReportFilterSeverities.push(fixPrSeverity.trim());
+                for (const sarifSeverity of filterSeverities) {
+                    if (sarifSeverity != null && sarifSeverity !== '') {
+                        sarifReportFilterSeverities.push(sarifSeverity.trim());
                     }
                 }
             }
@@ -1775,9 +1764,6 @@ class SynopsysToolsParameter {
         const githubRepoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
         if ((0, validators_1.isNullOrEmptyValue)(githubToken)) {
             throw new Error('Missing required github token for fix pull request/pull request comments');
-        }
-        if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED) || (0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED) || (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
-            throw new Error('Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.');
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {

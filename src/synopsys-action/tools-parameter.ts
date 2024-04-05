@@ -31,6 +31,7 @@ export class SynopsysToolsParameter {
   }
 
   getFormattedCommandForPolaris(githubRepoName: string): string {
+    const isPrEvent = isPullRequestEvent()
     let command = ''
     const assessmentTypeArray: string[] = []
     if (inputs.POLARIS_ASSESSMENT_TYPES) {
@@ -82,7 +83,7 @@ export class SynopsysToolsParameter {
         }
       }
     }
-    if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+    if (isPrEvent && parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
       info('Polaris PR comment is enabled')
       if (inputs.POLARIS_PARENT_BRANCH_NAME) {
         polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME
@@ -102,18 +103,17 @@ export class SynopsysToolsParameter {
         severities: prCommentSeverities
       }
       polData.data.github = this.getGithubRepoInfo()
-    } else {
-      polData.data.polaris.prComment = {enabled: false}
     }
-    if (!isPullRequestEvent() && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+
+    if (!isPrEvent && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
       const sarifReportFilterAssessmentIssuesType: string[] = []
 
       if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
         const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',')
-        for (const fixPrSeverity of filterSeverities) {
-          if (fixPrSeverity != null && fixPrSeverity !== '') {
-            sarifReportFilterSeverities.push(fixPrSeverity.trim())
+        for (const sarifSeverity of filterSeverities) {
+          if (sarifSeverity != null && sarifSeverity !== '') {
+            sarifReportFilterSeverities.push(sarifSeverity.trim())
           }
         }
       }
@@ -154,7 +154,6 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForCoverity(githubRepoName: string): string {
     let command = ''
-
     let coverityStreamName = inputs.COVERITY_STREAM_NAME
 
     if (isNullOrEmptyValue(coverityStreamName)) {
@@ -211,12 +210,10 @@ export class SynopsysToolsParameter {
       covData.data.coverity.version = inputs.COVERITY_VERSION
     }
 
-    if (parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
+    if (isPullRequestEvent() && parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
       info('Coverity PR comment is enabled')
       covData.data.github = this.getGithubRepoInfo()
       covData.data.coverity.automation.prcomment = true
-    } else {
-      covData.data.coverity.automation.prcomment = false
     }
 
     const inputJson = JSON.stringify(covData)
@@ -233,6 +230,8 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForBlackduck(): string {
     const failureSeverities: string[] = []
+    const isPrEvent = isPullRequestEvent()
+
     if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
         const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES
@@ -295,29 +294,24 @@ export class SynopsysToolsParameter {
     }
 
     // Check and put environment variable for fix pull request
-    if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+    if (!isPrEvent && parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
       info('Black Duck Fix PR is enabled')
       blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
       blackduckData.data.github = this.getGithubRepoInfo()
-    } else {
-      // Disable fix pull request for adapters
-      blackduckData.data.blackduck.fixpr = {enabled: false}
     }
 
-    if (parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
+    if (isPrEvent && parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
       info('Black Duck PR comment is enabled')
       blackduckData.data.github = this.getGithubRepoInfo()
       blackduckData.data.blackduck.automation.prcomment = true
-    } else {
-      blackduckData.data.blackduck.automation.prcomment = false
     }
-    if (!isPullRequestEvent() && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+    if (!isPrEvent && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
       const sarifReportFilterSeverities: string[] = []
       if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
         const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
-        for (const fixPrSeverity of filterSeverities) {
-          if (fixPrSeverity != null && fixPrSeverity !== '') {
-            sarifReportFilterSeverities.push(fixPrSeverity.trim())
+        for (const sarifSeverity of filterSeverities) {
+          if (sarifSeverity != null && sarifSeverity !== '') {
+            sarifReportFilterSeverities.push(sarifSeverity.trim())
           }
         }
       }
@@ -361,10 +355,6 @@ export class SynopsysToolsParameter {
 
     if (isNullOrEmptyValue(githubToken)) {
       throw new Error('Missing required github token for fix pull request/pull request comments')
-    }
-
-    if ((parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED) || parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED) || parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
-      throw new Error('Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.')
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
