@@ -25,6 +25,19 @@ beforeEach(() => {
   jest.mock('@actions/artifact')
 })
 
+test('uploadSarifReport throws error when no SARIF file found', async () => {
+  const githubClientService = new GithubClientService()
+  jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(false)
+
+  try {
+    await githubClientService.uploadSarifReport('test-dir', '/')
+  } catch (error) {
+    if (error instanceof Error) {
+      expect(error.message).toEqual('No SARIF file found to upload')
+    }
+  }
+})
+
 describe('upload sarif results', () => {
   it('should upload sarif report successfully with default location', async function () {
     const githubClientService = new GithubClientService()
