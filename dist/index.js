@@ -1565,7 +1565,7 @@ class SynopsysToolsParameter {
                 if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
                     const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',');
                     for (const sarifSeverity of filterSeverities) {
-                        if (sarifSeverity != null && sarifSeverity !== '') {
+                        if (sarifSeverity) {
                             sarifReportFilterSeverities.push(sarifSeverity.trim());
                         }
                     }
@@ -1573,7 +1573,7 @@ class SynopsysToolsParameter {
                 if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES) {
                     const filterIssueTypes = inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.split(',');
                     for (const issueType of filterIssueTypes) {
-                        if (issueType != null && issueType !== '') {
+                        if (issueType) {
                             sarifReportFilterAssessmentIssuesType.push(issueType.trim());
                         }
                     }
@@ -1777,7 +1777,7 @@ class SynopsysToolsParameter {
                 if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
                     const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',');
                     for (const sarifSeverity of filterSeverities) {
-                        if (sarifSeverity != null && sarifSeverity !== '') {
+                        if (sarifSeverity) {
                             sarifReportFilterSeverities.push(sarifSeverity.trim());
                         }
                     }

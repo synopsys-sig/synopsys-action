@@ -7,6 +7,7 @@ import {Socket} from 'net'
 import * as utility from '../../../src/synopsys-action/utility'
 import fs from 'fs'
 import * as constants from '../../../src/application-constants'
+import any = jasmine.any
 
 const originalEnv = process.env
 beforeEach(() => {
@@ -31,10 +32,9 @@ test('uploadSarifReport throws error when no SARIF file found', async () => {
 
   try {
     await githubClientService.uploadSarifReport('test-dir', '/')
-  } catch (error) {
-    if (error instanceof Error) {
-      expect(error.message).toEqual('No SARIF file found to upload')
-    }
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toEqual('No SARIF file found to upload')
   }
 })
 
