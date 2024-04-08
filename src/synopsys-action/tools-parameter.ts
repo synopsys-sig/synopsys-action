@@ -154,7 +154,7 @@ export class SynopsysToolsParameter {
         throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
       }
     } else {
-      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
         /** Log warning if SARIF create is enabled in PR context */
         warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
       }

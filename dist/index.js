@@ -1598,7 +1598,7 @@ class SynopsysToolsParameter {
             }
         }
         else {
-            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE) && (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
                 /** Log warning if SARIF create is enabled in PR context */
                 (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
             }
