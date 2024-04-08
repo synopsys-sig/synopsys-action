@@ -112,8 +112,8 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
-      if (!isPrEvent) {
+    if (!isPrEvent) {
+      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
         /** Set Polaris SARIF inputs in case of non PR context */
         const sarifReportFilterSeverities: string[] = []
         const sarifReportFilterAssessmentIssuesType: string[] = []
@@ -148,20 +148,15 @@ export class SynopsysToolsParameter {
             groupSCAIssues: isBoolean(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
-      } else {
+      }
+      if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+        /** Throw error if SARIF upload is enabled but GitHub token is empty */
+        throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
+      }
+    } else {
+      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
         /** Log warning if SARIF create is enabled in PR context */
         warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
-      }
-    }
-
-    if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-      if (isPrEvent) {
-        /** Log warning if SARIF upload is enabled in PR context */
-        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
-      } else {
-        if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
-          throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
-        }
       }
     }
 
@@ -344,8 +339,8 @@ export class SynopsysToolsParameter {
         warning(constants.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS)
       }
     }
-    if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-      if (!isPrEvent) {
+    if (!isPrEvent) {
+      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
         /** Set Black Duck SARIF inputs in case of non PR context */
         const sarifReportFilterSeverities: string[] = []
         if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
@@ -366,21 +361,15 @@ export class SynopsysToolsParameter {
             groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
-      } else {
-        /** Log warning if SARIF create is enabled in PR context */
-        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
       }
-    }
-
-    if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-      if (isPrEvent) {
-        /** Log warning if SARIF upload is enabled in PR context */
+      if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+        /** Throw error if SARIF upload is enabled but GitHub token is empty */
+        throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
+      }
+    } else {
+      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+        /** Log warning if SARIF create/upload is enabled in PR context */
         warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
-      } else {
-        /** Throw error if SARIF upload is enabled but GitHub token is empty in non PR context */
-        if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
-          throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
-        }
       }
     }
 

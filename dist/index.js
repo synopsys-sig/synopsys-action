@@ -1557,8 +1557,8 @@ class SynopsysToolsParameter {
                 (0, core_1.warning)(constants.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS);
             }
         }
-        if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
-            if (!isPrEvent) {
+        if (!isPrEvent) {
+            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
                 /** Set Polaris SARIF inputs in case of non PR context */
                 const sarifReportFilterSeverities = [];
                 const sarifReportFilterAssessmentIssuesType = [];
@@ -1592,20 +1592,15 @@ class SynopsysToolsParameter {
                     }
                 };
             }
-            else {
-                /** Log warning if SARIF create is enabled in PR context */
-                (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
+            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
+                /** Throw error if SARIF upload is enabled but GitHub token is empty */
+                throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
             }
         }
-        if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-            if (isPrEvent) {
-                /** Log warning if SARIF upload is enabled in PR context */
+        else {
+            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE) && (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+                /** Log warning if SARIF create is enabled in PR context */
                 (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
-            }
-            else {
-                if ((0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
-                    throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
-                }
             }
         }
         const inputJson = JSON.stringify(polData);
@@ -1770,8 +1765,8 @@ class SynopsysToolsParameter {
                 (0, core_1.warning)(constants.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS);
             }
         }
-        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-            if (!isPrEvent) {
+        if (!isPrEvent) {
+            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
                 /** Set Black Duck SARIF inputs in case of non PR context */
                 const sarifReportFilterSeverities = [];
                 if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
@@ -1793,21 +1788,15 @@ class SynopsysToolsParameter {
                     }
                 };
             }
-            else {
-                /** Log warning if SARIF create is enabled in PR context */
-                (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
+            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
+                /** Throw error if SARIF upload is enabled but GitHub token is empty */
+                throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
             }
         }
-        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-            if (isPrEvent) {
-                /** Log warning if SARIF upload is enabled in PR context */
+        else {
+            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+                /** Log warning if SARIF create/upload is enabled in PR context */
                 (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
-            }
-            else {
-                /** Throw error if SARIF upload is enabled but GitHub token is empty in non PR context */
-                if ((0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
-                    throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
-                }
             }
         }
         const inputJson = JSON.stringify(blackduckData);
