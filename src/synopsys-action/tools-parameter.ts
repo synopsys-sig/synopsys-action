@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
-import {debug, info} from '@actions/core'
+import {debug, info, warning} from '@actions/core'
 import {isNullOrEmptyValue, validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam} from './validators'
 import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
@@ -9,7 +9,6 @@ import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
 import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
-import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -84,9 +83,10 @@ export class SynopsysToolsParameter {
         }
       }
     }
-    if (isPullRequestEvent()) {
-      /** Set Polaris PR comment inputs in case of PR context */
-      if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+    const isPrEvent = isPullRequestEvent()
+    if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+      if (isPrEvent) {
+        /** Set Polaris PR comment inputs in case of PR context */
         info('Polaris PR comment is enabled')
         if (inputs.POLARIS_PARENT_BRANCH_NAME) {
           polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME
@@ -106,10 +106,15 @@ export class SynopsysToolsParameter {
           severities: prCommentSeverities
         }
         polData.data.github = this.getGithubRepoInfo()
+      } else {
+        /** Log warning if Polaris PR comment is enabled in case of non PR context */
+        warning(constants.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
       }
-    } else {
-      /** Set Polaris SARIF inputs in case of non PR context */
-      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+    }
+
+    if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+      if (!isPrEvent) {
+        /** Set Polaris SARIF inputs in case of non PR context */
         const sarifReportFilterSeverities: string[] = []
         const sarifReportFilterAssessmentIssuesType: string[] = []
 
@@ -143,6 +148,20 @@ export class SynopsysToolsParameter {
             groupSCAIssues: isBoolean(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
+      } else {
+        /** Log warning if SARIF create is enabled in PR context */
+        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+      }
+    }
+
+    if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+      if (isPrEvent) {
+        /** Log warning if SARIF upload is enabled in PR context */
+        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+      } else {
+        if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+          throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
+        }
       }
     }
 
@@ -162,7 +181,7 @@ export class SynopsysToolsParameter {
     const isPrEvent = isPullRequestEvent()
 
     if (isNullOrEmptyValue(coverityStreamName)) {
-      const defaultStreamName = (isPrEvent ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+      const defaultStreamName = (isPrEvent ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
       coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName)
     }
 
@@ -217,11 +236,16 @@ export class SynopsysToolsParameter {
       covData.data.coverity.version = inputs.COVERITY_VERSION
     }
 
-    /** Set Coverity PR comment inputs in case of PR context */
-    if (isPrEvent && parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
-      info('Coverity PR comment is enabled')
-      covData.data.github = this.getGithubRepoInfo()
-      covData.data.coverity.automation.prcomment = true
+    if (parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
+      if (isPrEvent) {
+        /** Set Coverity PR comment inputs in case of PR context */
+        info('Coverity PR comment is enabled')
+        covData.data.github = this.getGithubRepoInfo()
+        covData.data.coverity.automation.prcomment = true
+      } else {
+        /** Log warning if Coverity PR comment is enabled in case of non PR context */
+        warning(constants.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+      }
     }
 
     const inputJson = JSON.stringify(covData)
@@ -299,22 +323,30 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (isPullRequestEvent()) {
-      /** Set Black Duck PR comment inputs in case of PR context */
-      if (parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
+    const isPrEvent = isPullRequestEvent()
+    if (parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
+      if (isPrEvent) {
+        /** Set Black Duck PR comment inputs in case of PR context */
         info('Black Duck PR comment is enabled')
         blackduckData.data.github = this.getGithubRepoInfo()
         blackduckData.data.blackduck.automation.prcomment = true
+      } else {
+        warning(constants.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
       }
-    } else {
-      /** Set Black Duck Fix PR inputs in case of non PR context */
-      if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+    }
+    if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+      if (!isPrEvent) {
+        /** Set Black Duck Fix PR inputs in case of non PR context */
         info('Black Duck Fix PR is enabled')
         blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
         blackduckData.data.github = this.getGithubRepoInfo()
+      } else {
+        warning(constants.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS)
       }
-      /** Set Black Duck SARIF inputs in case of non PR context */
-      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+    }
+    if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+      if (!isPrEvent) {
+        /** Set Black Duck SARIF inputs in case of non PR context */
         const sarifReportFilterSeverities: string[] = []
         if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
           const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
@@ -334,6 +366,21 @@ export class SynopsysToolsParameter {
             groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
+      } else {
+        /** Log warning if SARIF create is enabled in PR context */
+        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+      }
+    }
+
+    if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+      if (isPrEvent) {
+        /** Log warning if SARIF upload is enabled in PR context */
+        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+      } else {
+        /** Throw error if SARIF upload is enabled but GitHub token is empty in non PR context */
+        if (isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+          throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
+        }
       }
     }
 
@@ -350,17 +397,17 @@ export class SynopsysToolsParameter {
 
   private getGithubRepoInfo(): GithubData | undefined {
     const githubToken = inputs.GITHUB_TOKEN
-    const githubRepo = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
+    const githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
-    const githubRef = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
-    const githubServerUrl = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
+    const githubBranchName = (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+    const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
+    const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
 
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
-    const githubRepoOwner = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+    const githubRepoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
 
     if (isNullOrEmptyValue(githubToken)) {
       throw new Error('Missing required github token for fix pull request/pull request comments')
