@@ -1524,7 +1524,7 @@ class SynopsysToolsParameter {
             };
         }
         if ((0, utility_1.isPullRequestEvent)()) {
-            /** Set Polaris PR comment inputs in case of non PR context */
+            /** Set Polaris PR comment inputs in case of PR context */
             if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
                 (0, core_1.info)('Polaris PR comment is enabled');
                 if (inputs.POLARIS_PARENT_BRANCH_NAME) {
@@ -1639,6 +1639,7 @@ class SynopsysToolsParameter {
         if (inputs.COVERITY_VERSION) {
             covData.data.coverity.version = inputs.COVERITY_VERSION;
         }
+        /** Set Coverity PR comment inputs in case of PR context */
         if ((0, utility_1.isPullRequestEvent)() && (0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED)) {
             (0, core_1.info)('Coverity PR comment is enabled');
             covData.data.github = this.getGithubRepoInfo();
@@ -1715,7 +1716,7 @@ class SynopsysToolsParameter {
             }
         }
         if ((0, utility_1.isPullRequestEvent)()) {
-            /** Set Black Duck PR comment inputs in case of non PR context */
+            /** Set Black Duck PR comment inputs in case of PR context */
             if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
                 (0, core_1.info)('Black Duck PR comment is enabled');
                 blackduckData.data.github = this.getGithubRepoInfo();
