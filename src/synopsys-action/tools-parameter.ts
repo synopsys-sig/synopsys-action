@@ -55,6 +55,8 @@ export class SynopsysToolsParameter {
     if (isNullOrEmptyValue(applicationName)) {
       applicationName = githubRepoName
     }
+    debug(`Polaris application name: ${applicationName}`)
+    debug(`Polaris project name: ${projectName}`)
 
     const polData: InputData<Polaris> = {
       data: {
@@ -149,7 +151,6 @@ export class SynopsysToolsParameter {
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
@@ -158,9 +159,10 @@ export class SynopsysToolsParameter {
   getFormattedCommandForCoverity(githubRepoName: string): string {
     let command = ''
     let coverityStreamName = inputs.COVERITY_STREAM_NAME
+    const isPrEvent = isPullRequestEvent()
 
     if (isNullOrEmptyValue(coverityStreamName)) {
-      const defaultStreamName = (process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+      const defaultStreamName = (isPrEvent ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
       coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName)
     }
 
@@ -168,6 +170,8 @@ export class SynopsysToolsParameter {
     if (isNullOrEmptyValue(coverityProjectName)) {
       coverityProjectName = githubRepoName
     }
+    debug(`Coverity project name: ${coverityProjectName}`)
+    debug(`Coverity stream name: ${coverityStreamName}`)
 
     const covData: InputData<Coverity> = {
       data: {
@@ -214,7 +218,7 @@ export class SynopsysToolsParameter {
     }
 
     /** Set Coverity PR comment inputs in case of PR context */
-    if (isPullRequestEvent() && parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
+    if (isPrEvent && parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
       info('Coverity PR comment is enabled')
       covData.data.github = this.getGithubRepoInfo()
       covData.data.coverity.automation.prcomment = true
@@ -226,7 +230,6 @@ export class SynopsysToolsParameter {
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
@@ -340,7 +343,6 @@ export class SynopsysToolsParameter {
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
@@ -393,6 +395,11 @@ export class SynopsysToolsParameter {
     if (githubPrNumber != null) {
       githubData.repository.pull.number = Number(githubPrNumber)
     }
+    debug(`Github repository name: ${githubData.repository.name}`)
+    debug(`Github repository owner name: ${githubData.repository.owner.name}`)
+    debug(`Github branch name: ${githubData.repository.branch.name}`)
+    debug(`Github host url: ${githubData.host?.url}`)
+    debug(`Github pull request number: ${githubData.repository.pull.number}`)
     return githubData
   }
 
