@@ -141,11 +141,11 @@ exports.GITHUB_ENVIRONMENT_VARIABLES = {
     GITHUB_SHA: 'GITHUB_SHA'
 };
 exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security';
-exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = 'SARIF report create/upload is ignored for PR scan';
-exports.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Polaris Pull Request comment is ignored for non PR scan';
-exports.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Coverity Pull Request comment is ignored for non PR scan';
-exports.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Black Duck Pull Request comment is ignored for non PR scan';
-exports.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = 'Black Duck Fix Pull Request is ignored for PR scan';
+exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = 'SARIF report create/upload is ignored for pull request scan';
+exports.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Polaris PR Comment is ignored for non pull request scan';
+exports.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Coverity PR Comment is ignored for non pull request scan';
+exports.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Black Duck PR Comment is ignored for non pull request scan';
+exports.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = 'Black Duck Fix PR is ignored for pull request scan';
 exports.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = 'Missing required github token for fix pull request/pull request comments';
 
 
