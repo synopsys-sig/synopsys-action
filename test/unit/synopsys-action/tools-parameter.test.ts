@@ -1,7 +1,8 @@
-import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utility'
+import {cleanupTempDir, createTempDir, isPullRequestEvent} from '../../../src/synopsys-action/utility'
 import {SynopsysToolsParameter} from '../../../src/synopsys-action/tools-parameter'
 import mock = jest.mock
 import * as inputs from '../../../src/synopsys-action/inputs'
+import * as utility from '../../../src/synopsys-action/utility'
 let tempPath = '/temp'
 let polaris_input_file = '/polaris_input.json'
 let coverity_input_file = '/coverity_input.json'
@@ -721,4 +722,159 @@ test('Test getFormattedCommandForBlackduck with sarif params', () => {
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage blackduck')
+})
+
+process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
+describe('test black duck values passed correctly to bridge for workflow simplification', () => {
+  it('should pass black duck pr comment fields to bridge in pr context', () => {
+    Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+    Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+    Object.defineProperty(inputs, 'BLACKDUCK_GITHUB_TOKEN', {value: 'test-token'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: false})
+    Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: true})
+    Object.defineProperty(inputs, 'BLACKDUCK_PRCOMMENT_ENABLED', {value: true})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(true)
+    const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+    const resp = stp.getFormattedCommandForBlackduck()
+
+    const jsonString = fs.readFileSync(tempPath.concat(blackduck_input_file), 'utf-8')
+    const jsonData = JSON.parse(jsonString)
+    expect(resp).not.toBeNull()
+    expect(resp).toContain('--stage blackduck')
+    expect(jsonData.data.blackduck.automation.prcomment).toBe(true)
+    expect(jsonData.data.github.host.url).toBe('https://custom.com')
+    expect(jsonData.data.blackduck.reports).toBe(undefined)
+    expect(jsonData.data.blackduck.fixpr).toBe(undefined)
+  })
+
+  it('should ignore black duck pr comment and pass fix pr and sarif fields to bridge in non pr context', () => {
+    Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+    Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+    Object.defineProperty(inputs, 'BLACKDUCK_GITHUB_TOKEN', {value: 'test-token'})
+    Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: false})
+    Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_ENABLED', {value: true})
+    Object.defineProperty(inputs, 'BLACKDUCK_PRCOMMENT_ENABLED', {value: true})
+    Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_CREATE_SINGLE_PR', {value: false})
+    Object.defineProperty(inputs, 'BLACKDUCK_FIXPR_MAXCOUNT', {value: 1})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
+    const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+    const resp = stp.getFormattedCommandForBlackduck()
+
+    const jsonString = fs.readFileSync(tempPath.concat(blackduck_input_file), 'utf-8')
+    const jsonData = JSON.parse(jsonString)
+    expect(resp).not.toBeNull()
+    expect(resp).toContain('--stage blackduck')
+    expect(jsonData.data.blackduck.automation.prcomment).toBe(undefined)
+    expect(jsonData.data.blackduck.fixpr.enabled).toBe(true)
+    expect(jsonData.data.blackduck.reports.sarif.create).toBe(true)
+    expect(jsonData.data.blackduck.reports.sarif.file.path).toBe('/')
+    expect(jsonData.data.blackduck.reports.sarif.severities).toContain('CRITICAL')
+    expect(jsonData.data.blackduck.reports.sarif.severities).toContain('HIGH')
+    expect(jsonData.data.blackduck.reports.sarif.groupSCAIssues).toBe(false)
+    expect(jsonData.data.github.host.url).toBe('https://custom.com')
+  })
+})
+
+describe('test polaris values passed correctly to bridge for workflow simplification', () => {
+  it('should pass polaris pr comment fields to bridge in pr context', () => {
+    Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+    Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+    Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+    Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+    Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: true})
+    Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_SEVERITIES', {value: 'CRITICAL,HIGH'})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(true)
+    const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+    const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+
+    const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
+    const jsonData = JSON.parse(jsonString)
+    expect(resp).not.toBeNull()
+    expect(resp).toContain('--stage polaris')
+    expect(jsonData.data.polaris.prComment.enabled).toBe(true)
+    expect(jsonData.data.polaris.prComment.severities).toContain('CRITICAL')
+    expect(jsonData.data.polaris.prComment.severities).toContain('HIGH')
+    expect(jsonData.data.github.host.url).toBe('https://custom.com')
+  })
+
+  it('should ignore polaris pr comment and pass sarif fields to bridge in non pr context', () => {
+    Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+    Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+    Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+    Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+    Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_ENABLED', {value: true})
+    Object.defineProperty(inputs, 'POLARIS_PRCOMMENT_SEVERITIES', {value: 'CRITICAL,HIGH'})
+    Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: 'true'})
+    Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_FILE_PATH', {value: '/'})
+    Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+    Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: false})
+    Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_ISSUE_TYPES', {value: 'SAST,SCA'})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
+    const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+    const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+
+    const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
+    const jsonData = JSON.parse(jsonString)
+    expect(resp).not.toBeNull()
+    expect(resp).toContain('--stage polaris')
+    expect(jsonData.data.polaris.prComment).toBe(undefined)
+    expect(jsonData.data.github).toBe(undefined)
+    expect(jsonData.data.polaris.reports.sarif.create).toBe(true)
+    expect(jsonData.data.polaris.reports.sarif.file.path).toBe('/')
+    expect(jsonData.data.polaris.reports.sarif.severities).toContain('CRITICAL')
+    expect(jsonData.data.polaris.reports.sarif.severities).toContain('HIGH')
+    expect(jsonData.data.polaris.reports.sarif.groupSCAIssues).toBe(false)
+  })
+})
+
+describe('test coverity values passed correctly to bridge for workflow simplification', () => {
+  it('should pass coverity pr comment fields to bridge in pr context', () => {
+    Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+    Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+    Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+    Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+    Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+    Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: 'true'})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(true)
+    const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+    const resp = stp.getFormattedCommandForCoverity('synopsys-action')
+
+    const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
+    const jsonData = JSON.parse(jsonString)
+    expect(resp).not.toBeNull()
+    expect(resp).toContain('--stage connect')
+    expect(jsonData.data.coverity.automation.prcomment).toBe(true)
+    expect(jsonData.data.github.host.url).toBe('https://custom.com')
+  })
+
+  it('should not pass coverity pr comment fields to bridge in non pr context', () => {
+    Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+    Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+    Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+    Object.defineProperty(inputs, 'COVERITY_PROJECT_NAME', {value: 'COVERITY_PROJECT_NAME'})
+    Object.defineProperty(inputs, 'COVERITY_STREAM_NAME', {value: 'COVERITY_STREAM_NAME'})
+    Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: 'true'})
+    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
+    jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
+    const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+    const resp = stp.getFormattedCommandForCoverity('synopsys-action')
+
+    const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
+    const jsonData = JSON.parse(jsonString)
+    expect(resp).not.toBeNull()
+    expect(resp).toContain('--stage connect')
+    expect(jsonData.data.coverity.automation.prcomment).toBe(undefined)
+    expect(jsonData.data.github).toBe(undefined)
+  })
 })

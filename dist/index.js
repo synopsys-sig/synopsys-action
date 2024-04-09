@@ -8,7 +8,7 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.BLACKDUCK_TOKEN_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_UPLOAD_SARIF_REPORT_KEY = exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.POLARIS_REPORTS_SARIF_SEVERITIES_KEY = exports.POLARIS_REPORTS_SARIF_FILE_PATH_KEY = exports.POLARIS_REPORTS_SARIF_CREATE_KEY = exports.POLARIS_TEST_SCA_TYPE_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_SERVERURL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.POLARIS_ACCESSTOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_PRCOMMENT_ENABLED_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = exports.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = exports.BRIDGE_DOWNLOAD_VERSION_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = exports.BRIDGE_DOWNLOAD_URL_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-exports.SARIF_REPORT_ERROR_FOR_PR_SCANS = exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = exports.GITHUB_ENVIRONMENT_VARIABLES = exports.HTTP_STATUS_FORBIDDEN = exports.HTTP_STATUS_ACCEPTED = exports.SECONDARY_RATE_LIMIT = exports.X_RATE_LIMIT_REMAINING = exports.X_RATE_LIMIT_RESET = exports.SARIF_DEFAULT_FILE_NAME = exports.POLARIS_SARIF_ARTIFACT_NAME = exports.POLARIS_SARIF_GENERATOR_DIRECTORY = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = void 0;
+exports.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = exports.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = exports.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = exports.GITHUB_ENVIRONMENT_VARIABLES = exports.HTTP_STATUS_FORBIDDEN = exports.HTTP_STATUS_ACCEPTED = exports.SECONDARY_RATE_LIMIT = exports.X_RATE_LIMIT_REMAINING = exports.X_RATE_LIMIT_RESET = exports.SARIF_DEFAULT_FILE_NAME = exports.POLARIS_SARIF_ARTIFACT_NAME = exports.POLARIS_SARIF_GENERATOR_DIRECTORY = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -141,7 +141,12 @@ exports.GITHUB_ENVIRONMENT_VARIABLES = {
     GITHUB_SHA: 'GITHUB_SHA'
 };
 exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security';
-exports.SARIF_REPORT_ERROR_FOR_PR_SCANS = 'SARIF report create/upload is ignored in case of PR scans, it is only supported for non PR scans';
+exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = 'SARIF report create/upload is ignored for pull request scan';
+exports.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Polaris PR Comment is ignored for non pull request scan';
+exports.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Coverity PR Comment is ignored for non pull request scan';
+exports.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Black Duck PR Comment is ignored for non pull request scan';
+exports.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = 'Black Duck Fix PR is ignored for pull request scan';
+exports.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = 'Missing required github token for fix pull request/pull request comments';
 
 
 /***/ }),
@@ -1469,7 +1474,6 @@ const inputs = __importStar(__nccwpck_require__(7481));
 const blackduck_1 = __nccwpck_require__(6619);
 const constants = __importStar(__nccwpck_require__(9717));
 const utility_1 = __nccwpck_require__(7643);
-const application_constants_1 = __nccwpck_require__(9717);
 class SynopsysToolsParameter {
     constructor(tempDir) {
         this.tempDir = tempDir;
@@ -1498,6 +1502,8 @@ class SynopsysToolsParameter {
         if ((0, validators_1.isNullOrEmptyValue)(applicationName)) {
             applicationName = githubRepoName;
         }
+        (0, core_1.debug)(`Polaris application name: ${applicationName}`);
+        (0, core_1.debug)(`Polaris project name: ${projectName}`);
         const polData = {
             data: {
                 polaris: {
@@ -1523,82 +1529,102 @@ class SynopsysToolsParameter {
                 }
             };
         }
+        const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
-            (0, core_1.info)('Polaris PR comment is enabled');
-            if (inputs.POLARIS_PARENT_BRANCH_NAME) {
-                polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME;
-            }
-            const prCommentSeverities = [];
-            const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES;
-            if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
-                const severityValues = inputPrCommentSeverities.split(',');
-                for (const severity of severityValues) {
-                    if (severity.trim()) {
-                        prCommentSeverities.push(severity.trim());
+            if (isPrEvent) {
+                /** Set Polaris PR comment inputs in case of PR context */
+                (0, core_1.info)('Polaris PR comment is enabled');
+                if (inputs.POLARIS_PARENT_BRANCH_NAME) {
+                    polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME;
+                }
+                const prCommentSeverities = [];
+                const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES;
+                if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
+                    const severityValues = inputPrCommentSeverities.split(',');
+                    for (const severity of severityValues) {
+                        if (severity.trim()) {
+                            prCommentSeverities.push(severity.trim());
+                        }
                     }
                 }
+                polData.data.polaris.prComment = {
+                    enabled: true,
+                    severities: prCommentSeverities
+                };
+                polData.data.github = this.getGithubRepoInfo();
             }
-            polData.data.polaris.prComment = {
-                enabled: true,
-                severities: prCommentSeverities
-            };
-            polData.data.github = this.getGithubRepoInfo();
+            else {
+                /** Log warning if Polaris PR comment is enabled in case of non PR context */
+                (0, core_1.warning)(constants.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS);
+            }
+        }
+        if (!isPrEvent) {
+            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+                /** Set Polaris SARIF inputs in case of non PR context */
+                const sarifReportFilterSeverities = [];
+                const sarifReportFilterAssessmentIssuesType = [];
+                if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
+                    const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',');
+                    for (const sarifSeverity of filterSeverities) {
+                        if (sarifSeverity) {
+                            sarifReportFilterSeverities.push(sarifSeverity.trim());
+                        }
+                    }
+                }
+                if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES) {
+                    const filterIssueTypes = inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.split(',');
+                    for (const issueType of filterIssueTypes) {
+                        if (issueType) {
+                            sarifReportFilterAssessmentIssuesType.push(issueType.trim());
+                        }
+                    }
+                }
+                polData.data.polaris.reports = {
+                    sarif: {
+                        create: true,
+                        severities: sarifReportFilterSeverities,
+                        file: {
+                            path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
+                        },
+                        issue: {
+                            types: sarifReportFilterAssessmentIssuesType
+                        },
+                        groupSCAIssues: (0, utility_1.isBoolean)(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
+                    }
+                };
+            }
+            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
+                /** Throw error if SARIF upload is enabled but GitHub token is empty */
+                throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
+            }
         }
         else {
-            polData.data.polaris.prComment = { enabled: false };
-        }
-        if (!(0, utility_1.isPullRequestEvent)() && (0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
-            const sarifReportFilterSeverities = [];
-            const sarifReportFilterAssessmentIssuesType = [];
-            if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
-                const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',');
-                for (const fixPrSeverity of filterSeverities) {
-                    if (fixPrSeverity != null && fixPrSeverity !== '') {
-                        sarifReportFilterSeverities.push(fixPrSeverity.trim());
-                    }
-                }
+            if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+                /** Log warning if SARIF create is enabled in PR context */
+                (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
             }
-            if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES) {
-                const filterIssueTypes = inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.split(',');
-                for (const issueType of filterIssueTypes) {
-                    if (issueType != null && issueType !== '') {
-                        sarifReportFilterAssessmentIssuesType.push(issueType.trim());
-                    }
-                }
-            }
-            polData.data.polaris.reports = {
-                sarif: {
-                    create: true,
-                    severities: sarifReportFilterSeverities,
-                    file: {
-                        path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
-                    },
-                    issue: {
-                        types: sarifReportFilterAssessmentIssuesType
-                    },
-                    groupSCAIssues: (0, utility_1.isBoolean)(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-                }
-            };
         }
         const inputJson = JSON.stringify(polData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
-        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
     getFormattedCommandForCoverity(githubRepoName) {
         let command = '';
         let coverityStreamName = inputs.COVERITY_STREAM_NAME;
+        const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if ((0, validators_1.isNullOrEmptyValue)(coverityStreamName)) {
-            const defaultStreamName = (process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
+            const defaultStreamName = (isPrEvent ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
             coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName);
         }
         let coverityProjectName = inputs.COVERITY_PROJECT_NAME;
         if ((0, validators_1.isNullOrEmptyValue)(coverityProjectName)) {
             coverityProjectName = githubRepoName;
         }
+        (0, core_1.debug)(`Coverity project name: ${coverityProjectName}`);
+        (0, core_1.debug)(`Coverity stream name: ${coverityStreamName}`);
         const covData = {
             data: {
                 coverity: {
@@ -1637,18 +1663,21 @@ class SynopsysToolsParameter {
             covData.data.coverity.version = inputs.COVERITY_VERSION;
         }
         if ((0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED)) {
-            (0, core_1.info)('Coverity PR comment is enabled');
-            covData.data.github = this.getGithubRepoInfo();
-            covData.data.coverity.automation.prcomment = true;
-        }
-        else {
-            covData.data.coverity.automation.prcomment = false;
+            if (isPrEvent) {
+                /** Set Coverity PR comment inputs in case of PR context */
+                (0, core_1.info)('Coverity PR comment is enabled');
+                covData.data.github = this.getGithubRepoInfo();
+                covData.data.coverity.automation.prcomment = true;
+            }
+            else {
+                /** Log warning if Coverity PR comment is enabled in case of non PR context */
+                (0, core_1.warning)(constants.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS);
+            }
         }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
-        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
@@ -1714,70 +1743,84 @@ class SynopsysToolsParameter {
                 blackduckData.data.blackduck.scan = { failure: { severities: failureSeverityEnums } };
             }
         }
-        // Check and put environment variable for fix pull request
-        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_FIXPR_ENABLED)) {
-            (0, core_1.info)('Black Duck Fix PR is enabled');
-            blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs();
-            blackduckData.data.github = this.getGithubRepoInfo();
-        }
-        else {
-            // Disable fix pull request for adapters
-            blackduckData.data.blackduck.fixpr = { enabled: false };
-        }
+        const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
-            (0, core_1.info)('Black Duck PR comment is enabled');
-            blackduckData.data.github = this.getGithubRepoInfo();
-            blackduckData.data.blackduck.automation.prcomment = true;
+            if (isPrEvent) {
+                /** Set Black Duck PR comment inputs in case of PR context */
+                (0, core_1.info)('Black Duck PR comment is enabled');
+                blackduckData.data.github = this.getGithubRepoInfo();
+                blackduckData.data.blackduck.automation.prcomment = true;
+            }
+            else {
+                (0, core_1.warning)(constants.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS);
+            }
         }
-        else {
-            blackduckData.data.blackduck.automation.prcomment = false;
+        if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+            if (!isPrEvent) {
+                /** Set Black Duck Fix PR inputs in case of non PR context */
+                (0, core_1.info)('Black Duck Fix PR is enabled');
+                blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs();
+                blackduckData.data.github = this.getGithubRepoInfo();
+            }
+            else {
+                (0, core_1.warning)(constants.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS);
+            }
         }
-        if (!(0, utility_1.isPullRequestEvent)() && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-            const sarifReportFilterSeverities = [];
-            if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
-                const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',');
-                for (const fixPrSeverity of filterSeverities) {
-                    if (fixPrSeverity != null && fixPrSeverity !== '') {
-                        sarifReportFilterSeverities.push(fixPrSeverity.trim());
+        if (!isPrEvent) {
+            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+                /** Set Black Duck SARIF inputs in case of non PR context */
+                const sarifReportFilterSeverities = [];
+                if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
+                    const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',');
+                    for (const sarifSeverity of filterSeverities) {
+                        if (sarifSeverity) {
+                            sarifReportFilterSeverities.push(sarifSeverity.trim());
+                        }
                     }
                 }
+                blackduckData.data.blackduck.reports = {
+                    sarif: {
+                        create: true,
+                        severities: sarifReportFilterSeverities,
+                        file: {
+                            path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
+                        },
+                        groupSCAIssues: (0, utility_1.isBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
+                    }
+                };
             }
-            blackduckData.data.blackduck.reports = {
-                sarif: {
-                    create: true,
-                    severities: sarifReportFilterSeverities,
-                    file: {
-                        path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
-                    },
-                    groupSCAIssues: (0, utility_1.isBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-                }
-            };
+            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
+                /** Throw error if SARIF upload is enabled but GitHub token is empty */
+                throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
+            }
+        }
+        else {
+            if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+                /** Log warning if SARIF create/upload is enabled in PR context */
+                (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
+            }
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
         (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
-        (0, core_1.debug)('Generated state json file content is - '.concat(inputJson));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
     getGithubRepoInfo() {
         const githubToken = inputs.GITHUB_TOKEN;
-        const githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
+        const githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
         const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
-        const githubBranchName = ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
-        const githubRef = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF];
-        const githubServerUrl = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
+        const githubBranchName = ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
+        const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF];
+        const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
         const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl;
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
-        const githubRepoOwner = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
+        const githubRepoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
         if ((0, validators_1.isNullOrEmptyValue)(githubToken)) {
-            throw new Error('Missing required github token for fix pull request/pull request comments');
-        }
-        if (((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED) || (0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED) || (0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
-            throw new Error('Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.');
+            throw new Error(constants.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT);
         }
         // This condition is required as per ts-lint as these fields may have undefined as well
         if (githubRepoName != null && githubBranchName != null && githubRepoOwner != null) {
@@ -1786,6 +1829,7 @@ class SynopsysToolsParameter {
         return undefined;
     }
     setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubHostUrl) {
+        var _a;
         const githubData = {
             user: {
                 token: githubToken
@@ -1807,6 +1851,11 @@ class SynopsysToolsParameter {
         if (githubPrNumber != null) {
             githubData.repository.pull.number = Number(githubPrNumber);
         }
+        (0, core_1.debug)(`Github repository name: ${githubData.repository.name}`);
+        (0, core_1.debug)(`Github repository owner name: ${githubData.repository.owner.name}`);
+        (0, core_1.debug)(`Github branch name: ${githubData.repository.branch.name}`);
+        (0, core_1.debug)(`Github host url: ${(_a = githubData.host) === null || _a === void 0 ? void 0 : _a.url}`);
+        (0, core_1.debug)(`Github pull request number: ${githubData.repository.pull.number}`);
         return githubData;
     }
     setBlackDuckFixPrInputs() {
@@ -2016,7 +2065,6 @@ const fs = __importStar(__nccwpck_require__(5747));
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
-const utility_1 = __nccwpck_require__(7643);
 function validateCoverityInstallDirectoryParam(installDir) {
     if (installDir == null || installDir.length === 0) {
         (0, core_1.error)(`[${constants.COVERITY_INSTALL_DIRECTORY_KEY}] parameter for Coverity is missing`);
@@ -2053,13 +2101,6 @@ function validatePolarisInputs() {
         paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
         paramsMap.set(constants.POLARIS_ASSESSMENT_TYPES_KEY, inputs.POLARIS_ASSESSMENT_TYPES);
         errors = validateParameters(paramsMap, constants.POLARIS_KEY);
-        const isPREvent = (0, utility_1.isPullRequestEvent)();
-        if (isPREvent && ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT))) {
-            (0, core_1.warning)(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS);
-        }
-        if (!isPREvent && (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
-            errors.push(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
-        }
     }
     return errors;
 }
@@ -2083,13 +2124,6 @@ function validateBlackDuckInputs() {
         paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
         paramsMap.set(constants.BLACKDUCK_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN);
         errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY);
-        const isPREvent = (0, utility_1.isPullRequestEvent)();
-        if (isPREvent && ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT))) {
-            (0, core_1.warning)(constants.SARIF_REPORT_ERROR_FOR_PR_SCANS);
-        }
-        if (!isPREvent && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
-            errors.push(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
-        }
     }
     return errors;
 }

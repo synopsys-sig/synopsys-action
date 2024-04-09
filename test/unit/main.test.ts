@@ -496,6 +496,7 @@ test('Run Black Duck flow for uploading sarif result as artifact', async () => {
   jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
 
   let response = await run()
   expect(response).not.toBe(null)
@@ -527,6 +528,7 @@ test('Run Black Duck flow for uploading sarif result to advance security and art
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
 
   let response = await run()
   expect(response).not.toBe(null)
@@ -559,11 +561,42 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockRejectedValueOnce(new Error('Adapter failed: exit status 1'))
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
-
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
   try {
     await run()
   } catch (error: any) {
     expect(error.message).toEqual('Error uploading SARIF data to GitHub Advance Security:')
+  }
+})
+
+test('test black duck flow for mandatory github token for uploading sarif result to github advance security', async () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_FILE_PATH', {value: '/'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_SEVERITIES', {value: 'CRITICAL,HIGH'})
+  Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
+  Object.defineProperty(inputs, 'BLACKDUCK_UPLOAD_SARIF_REPORT', {value: 'true'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: 'C://user/temp/download/',
+    fileName: 'C://user/temp/download/bridge-win.zip'
+  }
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockRejectedValueOnce(new Error('Adapter failed: exit status 1'))
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
+  try {
+    await run()
+  } catch (error: any) {
+    expect(error).toContain('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security')
   }
 })
 
@@ -655,11 +688,40 @@ test('Run Polaris flow for uploading sarif result as artifact', async () => {
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
-
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
   let response = await run()
   expect(response).not.toBe(null)
   expect(diagnostics.uploadSarifReportAsArtifact).toBeCalledTimes(1)
   jest.restoreAllMocks()
+})
+
+test('test polaris flow for mandatory github token for uploading sarif result to github  advance security', async () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.7.0'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA,sast'})
+  Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: 'true'})
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  const downloadFileResp: DownloadFileResponse = {
+    filePath: 'C://user/temp/download/',
+    fileName: 'C://user/temp/download/bridge-win.zip'
+  }
+  jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
+  jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
+  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
+  jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
+  jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
+  try {
+    await run()
+  } catch (error: any) {
+    expect(error).toContain('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security')
+  }
 })
 
 test('Run Polaris flow for uploading sarif result to advance security and artifacts', async () => {
@@ -688,6 +750,7 @@ test('Run Polaris flow for uploading sarif result to advance security and artifa
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
 
   let response = await run()
   expect(response).not.toBe(null)
@@ -721,7 +784,7 @@ test('should throw error while uploading Polaris sarif result to advance securit
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockRejectedValueOnce(new Error('Adapter failed: exit status 1'))
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
-
+  jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
   try {
     await run()
   } catch (error: any) {

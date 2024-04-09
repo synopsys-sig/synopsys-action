@@ -7,6 +7,7 @@ import {Socket} from 'net'
 import * as utility from '../../../src/synopsys-action/utility'
 import fs from 'fs'
 import * as constants from '../../../src/application-constants'
+import any = jasmine.any
 
 const originalEnv = process.env
 beforeEach(() => {
@@ -23,6 +24,18 @@ beforeEach(() => {
   Object.defineProperty(constants, 'RETRY_DELAY_IN_MILLISECONDS', {value: 100})
   Object.defineProperty(process, 'platform', {value: 'linux'})
   jest.mock('@actions/artifact')
+})
+
+test('uploadSarifReport throws error when no SARIF file found', async () => {
+  const githubClientService = new GithubClientService()
+  jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(false)
+
+  try {
+    await githubClientService.uploadSarifReport('test-dir', '/')
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toEqual('No SARIF file found to upload')
+  }
 })
 
 describe('upload sarif results', () => {

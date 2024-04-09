@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
-import {debug, info} from '@actions/core'
+import {debug, info, warning} from '@actions/core'
 import {isNullOrEmptyValue, validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam} from './validators'
 import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
@@ -9,7 +9,6 @@ import {Coverity} from './input-data/coverity'
 import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, GithubData, BlackDuckFixPrData} from './input-data/blackduck'
 import * as constants from '../application-constants'
 import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
-import {GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -55,6 +54,8 @@ export class SynopsysToolsParameter {
     if (isNullOrEmptyValue(applicationName)) {
       applicationName = githubRepoName
     }
+    debug(`Polaris application name: ${applicationName}`)
+    debug(`Polaris project name: ${projectName}`)
 
     const polData: InputData<Polaris> = {
       data: {
@@ -82,62 +83,80 @@ export class SynopsysToolsParameter {
         }
       }
     }
+    const isPrEvent = isPullRequestEvent()
     if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
-      info('Polaris PR comment is enabled')
-      if (inputs.POLARIS_PARENT_BRANCH_NAME) {
-        polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME
-      }
-      const prCommentSeverities: string[] = []
-      const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES
-      if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
-        const severityValues = inputPrCommentSeverities.split(',')
-        for (const severity of severityValues) {
-          if (severity.trim()) {
-            prCommentSeverities.push(severity.trim())
+      if (isPrEvent) {
+        /** Set Polaris PR comment inputs in case of PR context */
+        info('Polaris PR comment is enabled')
+        if (inputs.POLARIS_PARENT_BRANCH_NAME) {
+          polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME
+        }
+        const prCommentSeverities: string[] = []
+        const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES
+        if (inputPrCommentSeverities != null && inputPrCommentSeverities.length > 0) {
+          const severityValues = inputPrCommentSeverities.split(',')
+          for (const severity of severityValues) {
+            if (severity.trim()) {
+              prCommentSeverities.push(severity.trim())
+            }
           }
         }
+        polData.data.polaris.prComment = {
+          enabled: true,
+          severities: prCommentSeverities
+        }
+        polData.data.github = this.getGithubRepoInfo()
+      } else {
+        /** Log warning if Polaris PR comment is enabled in case of non PR context */
+        warning(constants.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
       }
-      polData.data.polaris.prComment = {
-        enabled: true,
-        severities: prCommentSeverities
-      }
-      polData.data.github = this.getGithubRepoInfo()
-    } else {
-      polData.data.polaris.prComment = {enabled: false}
     }
-    if (!isPullRequestEvent() && parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
-      const sarifReportFilterSeverities: string[] = []
-      const sarifReportFilterAssessmentIssuesType: string[] = []
 
-      if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
-        const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',')
-        for (const fixPrSeverity of filterSeverities) {
-          if (fixPrSeverity != null && fixPrSeverity !== '') {
-            sarifReportFilterSeverities.push(fixPrSeverity.trim())
+    if (!isPrEvent) {
+      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE)) {
+        /** Set Polaris SARIF inputs in case of non PR context */
+        const sarifReportFilterSeverities: string[] = []
+        const sarifReportFilterAssessmentIssuesType: string[] = []
+
+        if (inputs.POLARIS_REPORTS_SARIF_SEVERITIES) {
+          const filterSeverities = inputs.POLARIS_REPORTS_SARIF_SEVERITIES.split(',')
+          for (const sarifSeverity of filterSeverities) {
+            if (sarifSeverity) {
+              sarifReportFilterSeverities.push(sarifSeverity.trim())
+            }
+          }
+        }
+
+        if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES) {
+          const filterIssueTypes = inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.split(',')
+          for (const issueType of filterIssueTypes) {
+            if (issueType) {
+              sarifReportFilterAssessmentIssuesType.push(issueType.trim())
+            }
+          }
+        }
+        polData.data.polaris.reports = {
+          sarif: {
+            create: true,
+            severities: sarifReportFilterSeverities,
+            file: {
+              path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
+            },
+            issue: {
+              types: sarifReportFilterAssessmentIssuesType
+            },
+            groupSCAIssues: isBoolean(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
       }
-
-      if (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES) {
-        const filterIssueTypes = inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES.split(',')
-        for (const issueType of filterIssueTypes) {
-          if (issueType != null && issueType !== '') {
-            sarifReportFilterAssessmentIssuesType.push(issueType.trim())
-          }
-        }
+      if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+        /** Throw error if SARIF upload is enabled but GitHub token is empty */
+        throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
       }
-      polData.data.polaris.reports = {
-        sarif: {
-          create: true,
-          severities: sarifReportFilterSeverities,
-          file: {
-            path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
-          },
-          issue: {
-            types: sarifReportFilterAssessmentIssuesType
-          },
-          groupSCAIssues: isBoolean(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-        }
+    } else {
+      if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
+        /** Log warning if SARIF create is enabled in PR context */
+        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
       }
     }
 
@@ -146,7 +165,6 @@ export class SynopsysToolsParameter {
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
@@ -154,11 +172,11 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForCoverity(githubRepoName: string): string {
     let command = ''
-
     let coverityStreamName = inputs.COVERITY_STREAM_NAME
+    const isPrEvent = isPullRequestEvent()
 
     if (isNullOrEmptyValue(coverityStreamName)) {
-      const defaultStreamName = (process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] === 'pull_request' ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+      const defaultStreamName = (isPrEvent ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
       coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName)
     }
 
@@ -166,6 +184,8 @@ export class SynopsysToolsParameter {
     if (isNullOrEmptyValue(coverityProjectName)) {
       coverityProjectName = githubRepoName
     }
+    debug(`Coverity project name: ${coverityProjectName}`)
+    debug(`Coverity stream name: ${coverityStreamName}`)
 
     const covData: InputData<Coverity> = {
       data: {
@@ -212,11 +232,15 @@ export class SynopsysToolsParameter {
     }
 
     if (parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
-      info('Coverity PR comment is enabled')
-      covData.data.github = this.getGithubRepoInfo()
-      covData.data.coverity.automation.prcomment = true
-    } else {
-      covData.data.coverity.automation.prcomment = false
+      if (isPrEvent) {
+        /** Set Coverity PR comment inputs in case of PR context */
+        info('Coverity PR comment is enabled')
+        covData.data.github = this.getGithubRepoInfo()
+        covData.data.coverity.automation.prcomment = true
+      } else {
+        /** Log warning if Coverity PR comment is enabled in case of non PR context */
+        warning(constants.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+      }
     }
 
     const inputJson = JSON.stringify(covData)
@@ -225,7 +249,6 @@ export class SynopsysToolsParameter {
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
@@ -233,6 +256,7 @@ export class SynopsysToolsParameter {
 
   getFormattedCommandForBlackduck(): string {
     const failureSeverities: string[] = []
+
     if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
         const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES
@@ -294,42 +318,58 @@ export class SynopsysToolsParameter {
       }
     }
 
-    // Check and put environment variable for fix pull request
-    if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
-      info('Black Duck Fix PR is enabled')
-      blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
-      blackduckData.data.github = this.getGithubRepoInfo()
-    } else {
-      // Disable fix pull request for adapters
-      blackduckData.data.blackduck.fixpr = {enabled: false}
-    }
-
+    const isPrEvent = isPullRequestEvent()
     if (parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
-      info('Black Duck PR comment is enabled')
-      blackduckData.data.github = this.getGithubRepoInfo()
-      blackduckData.data.blackduck.automation.prcomment = true
-    } else {
-      blackduckData.data.blackduck.automation.prcomment = false
+      if (isPrEvent) {
+        /** Set Black Duck PR comment inputs in case of PR context */
+        info('Black Duck PR comment is enabled')
+        blackduckData.data.github = this.getGithubRepoInfo()
+        blackduckData.data.blackduck.automation.prcomment = true
+      } else {
+        warning(constants.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+      }
     }
-    if (!isPullRequestEvent() && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-      const sarifReportFilterSeverities: string[] = []
-      if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
-        const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
-        for (const fixPrSeverity of filterSeverities) {
-          if (fixPrSeverity != null && fixPrSeverity !== '') {
-            sarifReportFilterSeverities.push(fixPrSeverity.trim())
+    if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+      if (!isPrEvent) {
+        /** Set Black Duck Fix PR inputs in case of non PR context */
+        info('Black Duck Fix PR is enabled')
+        blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
+        blackduckData.data.github = this.getGithubRepoInfo()
+      } else {
+        warning(constants.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS)
+      }
+    }
+    if (!isPrEvent) {
+      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+        /** Set Black Duck SARIF inputs in case of non PR context */
+        const sarifReportFilterSeverities: string[] = []
+        if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
+          const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
+          for (const sarifSeverity of filterSeverities) {
+            if (sarifSeverity) {
+              sarifReportFilterSeverities.push(sarifSeverity.trim())
+            }
+          }
+        }
+        blackduckData.data.blackduck.reports = {
+          sarif: {
+            create: true,
+            severities: sarifReportFilterSeverities,
+            file: {
+              path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
+            },
+            groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
       }
-      blackduckData.data.blackduck.reports = {
-        sarif: {
-          create: true,
-          severities: sarifReportFilterSeverities,
-          file: {
-            path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
-          },
-          groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-        }
+      if (parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
+        /** Throw error if SARIF upload is enabled but GitHub token is empty */
+        throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
+      }
+    } else {
+      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+        /** Log warning if SARIF create/upload is enabled in PR context */
+        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
       }
     }
 
@@ -339,7 +379,6 @@ export class SynopsysToolsParameter {
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
-    debug('Generated state json file content is - '.concat(inputJson))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
@@ -347,24 +386,20 @@ export class SynopsysToolsParameter {
 
   private getGithubRepoInfo(): GithubData | undefined {
     const githubToken = inputs.GITHUB_TOKEN
-    const githubRepo = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
+    const githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
-    const githubRef = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
-    const githubServerUrl = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
+    const githubBranchName = (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+    const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
+    const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
 
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
-    const githubRepoOwner = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
+    const githubRepoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
 
     if (isNullOrEmptyValue(githubToken)) {
-      throw new Error('Missing required github token for fix pull request/pull request comments')
-    }
-
-    if ((parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED) || parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED) || parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) && isNaN(Number(githubPrNumber))) {
-      throw new Error('Polaris/Coverity/Black Duck PR comment can only be triggered on a pull request.')
+      throw new Error(constants.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT)
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
@@ -396,6 +431,11 @@ export class SynopsysToolsParameter {
     if (githubPrNumber != null) {
       githubData.repository.pull.number = Number(githubPrNumber)
     }
+    debug(`Github repository name: ${githubData.repository.name}`)
+    debug(`Github repository owner name: ${githubData.repository.owner.name}`)
+    debug(`Github branch name: ${githubData.repository.branch.name}`)
+    debug(`Github host url: ${githubData.host?.url}`)
+    debug(`Github pull request number: ${githubData.repository.pull.number}`)
     return githubData
   }
 
