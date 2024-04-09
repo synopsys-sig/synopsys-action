@@ -141,7 +141,7 @@ exports.GITHUB_ENVIRONMENT_VARIABLES = {
     GITHUB_SHA: 'GITHUB_SHA'
 };
 exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security';
-exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = 'SARIF report create/upload is ignored for PR scans';
+exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = 'SARIF report create/upload is ignored for PR scan';
 exports.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Polaris Pull Request comment is ignored for non PR scan';
 exports.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Coverity Pull Request comment is ignored for non PR scan';
 exports.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Black Duck Pull Request comment is ignored for non PR scan';
