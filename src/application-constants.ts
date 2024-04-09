@@ -141,7 +141,8 @@ export const GITHUB_ENVIRONMENT_VARIABLES = {
 }
 export const GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security'
 export const SARIF_REPORT_WARNING_FOR_PR_SCANS = 'SARIF report create/upload is ignored for PR scans'
-export const POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Polaris PR comment is ignored for non PR scan'
-export const COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Coverity PR comment is ignored for non PR scan'
-export const BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Black Duck PR comment is ignored for non PR scan'
-export const BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = 'Black Duck Fix PR is ignored for PR scan'
+export const POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Polaris Pull Request comment is ignored for non PR scan'
+export const COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Coverity Pull Request comment is ignored for non PR scan'
+export const BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = 'Black Duck Pull Request comment is ignored for non PR scan'
+export const BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = 'Black Duck Fix Pull Request is ignored for PR scan'
+export const MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = 'Missing required github token for fix pull request/pull request comments'

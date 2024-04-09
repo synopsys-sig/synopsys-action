@@ -399,7 +399,7 @@ export class SynopsysToolsParameter {
     const githubRepoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
 
     if (isNullOrEmptyValue(githubToken)) {
-      throw new Error('Missing required github token for fix pull request/pull request comments')
+      throw new Error(constants.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT)
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
