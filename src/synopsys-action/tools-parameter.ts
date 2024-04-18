@@ -177,6 +177,7 @@ export class SynopsysToolsParameter {
 
     if (isNullOrEmptyValue(coverityStreamName)) {
       const defaultStreamName = (isPrEvent ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+      debug(`Github Base Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF]}`)
       coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName)
     }
 
@@ -392,6 +393,12 @@ export class SynopsysToolsParameter {
     const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
     const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
+
+    debug(`Github Repository: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]}`)
+    debug(`Github Ref Name: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]}`)
+    debug(`Github Head Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]}`)
+    debug(`Github Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]}`)
+    debug(`Github Server Url: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL]}`)
 
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name

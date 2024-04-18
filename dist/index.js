@@ -1617,6 +1617,7 @@ class SynopsysToolsParameter {
         const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if ((0, validators_1.isNullOrEmptyValue)(coverityStreamName)) {
             const defaultStreamName = (isPrEvent ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
+            (0, core_1.debug)(`Github Base Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF]}`);
             coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName);
         }
         let coverityProjectName = inputs.COVERITY_PROJECT_NAME;
@@ -1815,6 +1816,11 @@ class SynopsysToolsParameter {
         const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF];
         const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
         const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl;
+        (0, core_1.debug)(`Github Repository: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]}`);
+        (0, core_1.debug)(`Github Ref Name: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]}`);
+        (0, core_1.debug)(`Github Head Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]}`);
+        (0, core_1.debug)(`Github Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]}`);
+        (0, core_1.debug)(`Github Server Url: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL]}`);
         // pr number will be part of "refs/pull/<pr_number>/merge"
         // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
         const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : '';
@@ -1961,6 +1967,7 @@ const application_constants_1 = __nccwpck_require__(9717);
 const io_1 = __nccwpck_require__(7436);
 const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
+const console_1 = __nccwpck_require__(7082);
 function cleanUrl(url) {
     if (url && url.endsWith('/')) {
         return url.slice(0, url.length - 1);
@@ -2024,6 +2031,7 @@ function getDefaultSarifReportPath(sarifReportDirectory, appendFilePath) {
 exports.getDefaultSarifReportPath = getDefaultSarifReportPath;
 function isPullRequestEvent() {
     const eventName = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] || '';
+    (0, console_1.debug)(`Github Event Name: ${process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME]}`);
     return eventName === 'pull_request' || false;
 }
 exports.isPullRequestEvent = isPullRequestEvent;
@@ -21970,6 +21978,14 @@ module.exports = require("assert");
 
 "use strict";
 module.exports = require("child_process");
+
+/***/ }),
+
+/***/ 7082:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("console");
 
 /***/ }),
 
