@@ -1618,6 +1618,7 @@ class SynopsysToolsParameter {
         if ((0, validators_1.isNullOrEmptyValue)(coverityStreamName)) {
             const defaultStreamName = (isPrEvent ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || '';
             (0, core_1.debug)(`Github Base Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF]}`);
+            (0, core_1.debug)(`Github Ref Name: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]}`);
             coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName);
         }
         let coverityProjectName = inputs.COVERITY_PROJECT_NAME;

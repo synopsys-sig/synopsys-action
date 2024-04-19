@@ -178,6 +178,7 @@ export class SynopsysToolsParameter {
     if (isNullOrEmptyValue(coverityStreamName)) {
       const defaultStreamName = (isPrEvent ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
       debug(`Github Base Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_BASE_REF]}`)
+      debug(`Github Ref Name: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]}`)
       coverityStreamName = githubRepoName.concat('-').concat(defaultStreamName)
     }
 
