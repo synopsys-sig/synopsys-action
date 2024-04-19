@@ -277,11 +277,7 @@ export class SynopsysToolsParameter {
       data: {
         blackduck: {
           url: inputs.BLACKDUCK_URL,
-          token: inputs.BLACKDUCK_API_TOKEN,
-          automation: {}
-        },
-        network: {
-          airGap: inputs.ENABLE_NETWORK_AIR_GAP
+          token: inputs.BLACKDUCK_API_TOKEN
         }
       }
     }
@@ -324,7 +320,7 @@ export class SynopsysToolsParameter {
         /** Set Black Duck PR comment inputs in case of PR context */
         info('Black Duck PR comment is enabled')
         blackduckData.data.github = this.getGithubRepoInfo()
-        blackduckData.data.blackduck.automation.prcomment = true
+        blackduckData.data.blackduck.automation = {prcomment: true}
       } else {
         warning(constants.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
       }
@@ -371,6 +367,10 @@ export class SynopsysToolsParameter {
         /** Log warning if SARIF create/upload is enabled in PR context */
         warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
       }
+    }
+
+    if (parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
+      blackduckData.data.network = {airGap: true}
     }
 
     const inputJson = JSON.stringify(blackduckData)

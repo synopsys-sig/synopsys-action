@@ -1704,11 +1704,7 @@ class SynopsysToolsParameter {
             data: {
                 blackduck: {
                     url: inputs.BLACKDUCK_URL,
-                    token: inputs.BLACKDUCK_API_TOKEN,
-                    automation: {}
-                },
-                network: {
-                    airGap: inputs.ENABLE_NETWORK_AIR_GAP
+                    token: inputs.BLACKDUCK_API_TOKEN
                 }
             }
         };
@@ -1749,7 +1745,7 @@ class SynopsysToolsParameter {
                 /** Set Black Duck PR comment inputs in case of PR context */
                 (0, core_1.info)('Black Duck PR comment is enabled');
                 blackduckData.data.github = this.getGithubRepoInfo();
-                blackduckData.data.blackduck.automation.prcomment = true;
+                blackduckData.data.blackduck.automation = { prcomment: true };
             }
             else {
                 (0, core_1.warning)(constants.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS);
@@ -1799,6 +1795,9 @@ class SynopsysToolsParameter {
                 /** Log warning if SARIF create/upload is enabled in PR context */
                 (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
             }
+        }
+        if ((0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
+            blackduckData.data.network = { airGap: true };
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);

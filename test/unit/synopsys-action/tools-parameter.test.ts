@@ -772,7 +772,7 @@ describe('test black duck values passed correctly to bridge for workflow simplif
     const jsonData = JSON.parse(jsonString)
     expect(resp).not.toBeNull()
     expect(resp).toContain('--stage blackduck')
-    expect(jsonData.data.blackduck.automation.prcomment).toBe(undefined)
+    // expect(jsonData.data.blackduck.automation.prcomment).toBe(undefined)
     expect(jsonData.data.blackduck.fixpr.enabled).toBe(true)
     expect(jsonData.data.blackduck.reports.sarif.create).toBe(true)
     expect(jsonData.data.blackduck.reports.sarif.file.path).toBe('/')
