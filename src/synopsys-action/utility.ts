@@ -5,7 +5,7 @@ import {APPLICATION_NAME, GITHUB_ENVIRONMENT_VARIABLES} from '../application-con
 import {rmRF} from '@actions/io'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from '../application-constants'
-import {debug} from 'console'
+import {debug} from '@actions/core'
 
 export function cleanUrl(url: string): string {
   if (url && url.endsWith('/')) {

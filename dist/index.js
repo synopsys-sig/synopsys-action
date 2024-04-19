@@ -1967,7 +1967,7 @@ const application_constants_1 = __nccwpck_require__(9717);
 const io_1 = __nccwpck_require__(7436);
 const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
-const console_1 = __nccwpck_require__(7082);
+const core_1 = __nccwpck_require__(2186);
 function cleanUrl(url) {
     if (url && url.endsWith('/')) {
         return url.slice(0, url.length - 1);
@@ -2031,7 +2031,7 @@ function getDefaultSarifReportPath(sarifReportDirectory, appendFilePath) {
 exports.getDefaultSarifReportPath = getDefaultSarifReportPath;
 function isPullRequestEvent() {
     const eventName = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] || '';
-    (0, console_1.debug)(`Github Event Name: ${process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME]}`);
+    (0, core_1.debug)(`Github Event Name: ${process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME]}`);
     return eventName === 'pull_request' || false;
 }
 exports.isPullRequestEvent = isPullRequestEvent;
@@ -21978,14 +21978,6 @@ module.exports = require("assert");
 
 "use strict";
 module.exports = require("child_process");
-
-/***/ }),
-
-/***/ 7082:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("console");
 
 /***/ }),
 
