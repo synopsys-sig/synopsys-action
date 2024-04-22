@@ -26,7 +26,7 @@ export interface PrComment {
 
 export interface Branch {
   name?: string
-  parent: {name?: string}
+  parent?: {name?: string}
 }
 
 export interface Test {
