@@ -64,8 +64,7 @@ export class SynopsysToolsParameter {
           serverUrl: inputs.POLARIS_SERVER_URL,
           application: {name: applicationName},
           project: {name: projectName},
-          assessment: {types: assessmentTypeArray},
-          branch: {parent: {}}
+          assessment: {types: assessmentTypeArray}
         }
       }
     }
@@ -74,7 +73,7 @@ export class SynopsysToolsParameter {
       polData.data.polaris.triage = inputs.POLARIS_TRIAGE
     }
     if (inputs.POLARIS_BRANCH_NAME) {
-      polData.data.polaris.branch.name = inputs.POLARIS_BRANCH_NAME
+      polData.data.polaris.branch = {name: inputs.POLARIS_BRANCH_NAME}
     }
     if (inputs.POLARIS_TEST_SCA_TYPE) {
       polData.data.polaris.test = {
@@ -89,7 +88,11 @@ export class SynopsysToolsParameter {
         /** Set Polaris PR comment inputs in case of PR context */
         info('Polaris PR comment is enabled')
         if (inputs.POLARIS_PARENT_BRANCH_NAME) {
-          polData.data.polaris.branch.parent = {name: inputs.POLARIS_PARENT_BRANCH_NAME}
+          polData.data.polaris.branch = {
+            parent: {
+              name: inputs.POLARIS_PARENT_BRANCH_NAME
+            }
+          }
         }
         const prCommentSeverities: string[] = []
         const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES

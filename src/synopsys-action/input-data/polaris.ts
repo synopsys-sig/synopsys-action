@@ -12,7 +12,7 @@ export interface PolarisData {
   serverUrl: string
   application: {name: string}
   project: {name: string}
-  branch: Branch
+  branch?: Branch
   assessment: {types: string[]}
   prComment?: PrComment
   test?: Test
