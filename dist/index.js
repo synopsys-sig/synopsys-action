@@ -1550,14 +1550,7 @@ class SynopsysToolsParameter {
                         }
                     }
                 }
-                polData.data.polaris.prComment = {
-                    enabled: true
-                };
-                if (prCommentSeverities.length > 0) {
-                    polData.data.polaris.prComment = {
-                        severities: prCommentSeverities
-                    };
-                }
+                polData.data.polaris.prComment = Object.assign({ enabled: true }, (prCommentSeverities.length > 0 && { severities: prCommentSeverities }));
                 polData.data.github = this.getGithubRepoInfo();
             }
             else {

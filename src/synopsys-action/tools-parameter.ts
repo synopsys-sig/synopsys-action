@@ -105,12 +105,8 @@ export class SynopsysToolsParameter {
           }
         }
         polData.data.polaris.prComment = {
-          enabled: true
-        }
-        if (prCommentSeverities.length > 0) {
-          polData.data.polaris.prComment = {
-            severities: prCommentSeverities
-          }
+          enabled: true,
+          ...(prCommentSeverities.length > 0 && {severities: prCommentSeverities})
         }
         polData.data.github = this.getGithubRepoInfo()
       } else {
