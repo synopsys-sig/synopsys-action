@@ -65,6 +65,6 @@ export function getDefaultSarifReportPath(sarifReportDirectory: string, appendFi
 
 export function isPullRequestEvent(): boolean {
   const eventName = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] || ''
-  debug(`Github Event Name: ${process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME]}`)
+  debug(`Github Event Name: ${eventName}`)
   return eventName === 'pull_request' || false
 }
