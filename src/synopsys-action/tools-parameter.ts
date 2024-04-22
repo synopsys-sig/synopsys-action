@@ -89,6 +89,7 @@ export class SynopsysToolsParameter {
         info('Polaris PR comment is enabled')
         if (inputs.POLARIS_PARENT_BRANCH_NAME) {
           polData.data.polaris.branch = {
+            ...(inputs.POLARIS_BRANCH_NAME && {name: inputs.POLARIS_BRANCH_NAME}),
             parent: {
               name: inputs.POLARIS_PARENT_BRANCH_NAME
             }
