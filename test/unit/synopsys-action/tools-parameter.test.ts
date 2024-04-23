@@ -151,7 +151,6 @@ test('Test getFormattedCommandForPolaris - pr comment for cloud github', () => {
 
   const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
-  // expect(jsonData.data.github.host.url).toBe('')
 })
 
 test('Test getFormattedCommandForPolaris with sarif params', () => {
@@ -375,7 +374,6 @@ test('Test getFormattedCommandForCoverity - pr comment', () => {
 
   const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
-  // expect(jsonData.data.github.host.url).toBe('')
 
   Object.defineProperty(inputs, 'COVERITY_PRCOMMENT_ENABLED', {value: false})
   stp = new SynopsysToolsParameter(tempPath)
@@ -772,7 +770,6 @@ describe('test black duck values passed correctly to bridge for workflow simplif
     const jsonData = JSON.parse(jsonString)
     expect(resp).not.toBeNull()
     expect(resp).toContain('--stage blackduck')
-    // expect(jsonData.data.blackduck.automation.prcomment).toBe(undefined)
     expect(jsonData.data.blackduck.fixpr.enabled).toBe(true)
     expect(jsonData.data.blackduck.reports.sarif.create).toBe(true)
     expect(jsonData.data.blackduck.reports.sarif.file.path).toBe('/')
@@ -800,7 +797,6 @@ describe('test polaris values passed correctly to bridge for workflow simplifica
     const jsonData = JSON.parse(jsonString)
     expect(resp).not.toBeNull()
     expect(resp).toContain('--stage polaris')
-    // expect(jsonData.data.polaris.prComment.enabled).toBe(true)
     expect(jsonData.data.polaris.prComment.severities).toContain('CRITICAL')
     expect(jsonData.data.polaris.prComment.severities).toContain('HIGH')
     expect(jsonData.data.github.host.url).toBe('https://custom.com')
@@ -874,7 +870,6 @@ describe('test coverity values passed correctly to bridge for workflow simplific
     const jsonData = JSON.parse(jsonString)
     expect(resp).not.toBeNull()
     expect(resp).toContain('--stage connect')
-    // expect(jsonData.data.coverity.automation.prcomment).toBe(undefined)
     expect(jsonData.data.github).toBe(undefined)
   })
 })
