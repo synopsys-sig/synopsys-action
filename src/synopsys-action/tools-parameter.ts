@@ -366,10 +366,14 @@ export class SynopsysToolsParameter {
         blackduckData.data.blackduck.reports = {
           sarif: {
             create: true,
-            severities: sarifReportFilterSeverities,
-            file: {
-              path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
-            },
+            ...(inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES && {
+              severities: sarifReportFilterSeverities
+            }),
+            ...(inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH && {
+              file: {
+                path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
+              }
+            }),
             groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }

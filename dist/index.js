@@ -1776,14 +1776,13 @@ class SynopsysToolsParameter {
                     }
                 }
                 blackduckData.data.blackduck.reports = {
-                    sarif: {
-                        create: true,
-                        severities: sarifReportFilterSeverities,
+                    sarif: Object.assign(Object.assign(Object.assign({ create: true }, (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES && {
+                        severities: sarifReportFilterSeverities
+                    })), (inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH && {
                         file: {
                             path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
-                        },
-                        groupSCAIssues: (0, utility_1.isBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-                    }
+                        }
+                    })), { groupSCAIssues: (0, utility_1.isBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true })
                 };
             }
             if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
