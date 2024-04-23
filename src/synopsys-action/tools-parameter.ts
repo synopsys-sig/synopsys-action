@@ -199,13 +199,8 @@ export class SynopsysToolsParameter {
             url: inputs.COVERITY_URL,
             project: {name: coverityProjectName},
             stream: {name: coverityStreamName}
-          },
-          automation: {}
-        },
-        network: {
-          airGap: inputs.ENABLE_NETWORK_AIR_GAP
-        },
-        project: {}
+          }
+        }
       }
     }
 
@@ -223,12 +218,19 @@ export class SynopsysToolsParameter {
       covData.data.coverity.connect.policy = {view: inputs.COVERITY_POLICY_VIEW}
     }
 
-    if (inputs.COVERITY_REPOSITORY_NAME) {
-      covData.data.project.repository = {name: inputs.COVERITY_REPOSITORY_NAME}
-    }
-
-    if (inputs.COVERITY_BRANCH_NAME) {
-      covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
+    if (inputs.COVERITY_REPOSITORY_NAME || inputs.COVERITY_BRANCH_NAME) {
+      covData.data.project = {
+        ...(inputs.COVERITY_REPOSITORY_NAME && {
+          repository: {
+            name: inputs.COVERITY_REPOSITORY_NAME
+          }
+        }),
+        ...(inputs.COVERITY_BRANCH_NAME && {
+          branch: {
+            name: inputs.COVERITY_BRANCH_NAME
+          }
+        })
+      }
     }
 
     if (inputs.COVERITY_VERSION) {
@@ -240,11 +242,15 @@ export class SynopsysToolsParameter {
         /** Set Coverity PR comment inputs in case of PR context */
         info('Coverity PR comment is enabled')
         covData.data.github = this.getGithubRepoInfo()
-        covData.data.coverity.automation.prcomment = true
+        covData.data.coverity.automation = {prcomment: true}
       } else {
         /** Log warning if Coverity PR comment is enabled in case of non PR context */
         warning(constants.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
       }
+    }
+
+    if (parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
+      covData.data.network = {airGap: true}
     }
 
     const inputJson = JSON.stringify(covData)
