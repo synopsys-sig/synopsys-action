@@ -433,13 +433,15 @@ export class SynopsysToolsParameter {
         branch: {
           name: githubBranchName
         }
-      },
-      host: {
-        url: githubHostUrl
       }
     }
     if (githubPrNumber != null) {
       githubData.repository.pull.number = Number(githubPrNumber)
+    }
+    if (githubHostUrl !== '') {
+      githubData.host = {
+        url: githubHostUrl
+      }
     }
     debug(`Github repository name: ${githubData.repository.name}`)
     debug(`Github repository owner name: ${githubData.repository.owner.name}`)
