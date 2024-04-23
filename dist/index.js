@@ -1578,17 +1578,17 @@ class SynopsysToolsParameter {
                     }
                 }
                 polData.data.polaris.reports = {
-                    sarif: {
-                        create: true,
-                        severities: sarifReportFilterSeverities,
+                    sarif: Object.assign(Object.assign(Object.assign(Object.assign({ create: true }, (inputs.POLARIS_REPORTS_SARIF_SEVERITIES && {
+                        severities: sarifReportFilterSeverities
+                    })), (inputs.POLARIS_REPORTS_SARIF_FILE_PATH && {
                         file: {
                             path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
-                        },
+                        }
+                    })), (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES && {
                         issue: {
                             types: sarifReportFilterAssessmentIssuesType
-                        },
-                        groupSCAIssues: (0, utility_1.isBoolean)(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-                    }
+                        }
+                    })), { groupSCAIssues: (0, utility_1.isBoolean)(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true })
                 };
             }
             if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {

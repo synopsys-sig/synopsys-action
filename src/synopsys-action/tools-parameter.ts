@@ -142,13 +142,19 @@ export class SynopsysToolsParameter {
         polData.data.polaris.reports = {
           sarif: {
             create: true,
-            severities: sarifReportFilterSeverities,
-            file: {
-              path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
-            },
-            issue: {
-              types: sarifReportFilterAssessmentIssuesType
-            },
+            ...(inputs.POLARIS_REPORTS_SARIF_SEVERITIES && {
+              severities: sarifReportFilterSeverities
+            }),
+            ...(inputs.POLARIS_REPORTS_SARIF_FILE_PATH && {
+              file: {
+                path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
+              }
+            }),
+            ...(inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES && {
+              issue: {
+                types: sarifReportFilterAssessmentIssuesType
+              }
+            }),
             groupSCAIssues: isBoolean(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
