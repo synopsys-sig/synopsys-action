@@ -1673,7 +1673,7 @@ class SynopsysToolsParameter {
             }
         }
         if ((0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
-            covData.data.network = { airGap: true };
+            covData.data.network = { airGap: inputs.ENABLE_NETWORK_AIR_GAP };
         }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
@@ -1798,7 +1798,7 @@ class SynopsysToolsParameter {
             }
         }
         if ((0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
-            blackduckData.data.network = { airGap: true };
+            blackduckData.data.network = { airGap: inputs.ENABLE_NETWORK_AIR_GAP };
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
