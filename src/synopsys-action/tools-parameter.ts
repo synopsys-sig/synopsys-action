@@ -430,6 +430,7 @@ export class SynopsysToolsParameter {
   }
 
   private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string, githubHostUrl: string): GithubData {
+    const isPrEvent = isPullRequestEvent()
     const githubData: GithubData = {
       user: {
         token: githubToken
@@ -439,14 +440,15 @@ export class SynopsysToolsParameter {
         owner: {
           name: githubRepoOwner
         },
-        pull: {},
         branch: {
           name: githubBranchName
         }
       }
     }
-    if (githubPrNumber != null) {
-      githubData.repository.pull.number = Number(githubPrNumber)
+    if (isPrEvent && githubPrNumber != null) {
+      githubData.repository.pull = {
+        number: Number(githubPrNumber)
+      }
     }
     if (githubHostUrl !== '') {
       githubData.host = {
@@ -457,7 +459,7 @@ export class SynopsysToolsParameter {
     debug(`Github repository owner name: ${githubData.repository.owner.name}`)
     debug(`Github branch name: ${githubData.repository.branch.name}`)
     debug(`Github host url: ${githubData.host?.url}`)
-    debug(`Github pull request number: ${githubData.repository.pull.number}`)
+    debug(`Github pull request number: ${githubData.repository.pull?.number}`)
     return githubData
   }
 

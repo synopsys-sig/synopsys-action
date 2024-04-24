@@ -1828,7 +1828,8 @@ class SynopsysToolsParameter {
         return undefined;
     }
     setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubHostUrl) {
-        var _a;
+        var _a, _b;
+        const isPrEvent = (0, utility_1.isPullRequestEvent)();
         const githubData = {
             user: {
                 token: githubToken
@@ -1838,14 +1839,15 @@ class SynopsysToolsParameter {
                 owner: {
                     name: githubRepoOwner
                 },
-                pull: {},
                 branch: {
                     name: githubBranchName
                 }
             }
         };
-        if (githubPrNumber != null) {
-            githubData.repository.pull.number = Number(githubPrNumber);
+        if (isPrEvent && githubPrNumber != null) {
+            githubData.repository.pull = {
+                number: Number(githubPrNumber)
+            };
         }
         if (githubHostUrl !== '') {
             githubData.host = {
@@ -1856,7 +1858,7 @@ class SynopsysToolsParameter {
         (0, core_1.debug)(`Github repository owner name: ${githubData.repository.owner.name}`);
         (0, core_1.debug)(`Github branch name: ${githubData.repository.branch.name}`);
         (0, core_1.debug)(`Github host url: ${(_a = githubData.host) === null || _a === void 0 ? void 0 : _a.url}`);
-        (0, core_1.debug)(`Github pull request number: ${githubData.repository.pull.number}`);
+        (0, core_1.debug)(`Github pull request number: ${(_b = githubData.repository.pull) === null || _b === void 0 ? void 0 : _b.number}`);
         return githubData;
     }
     setBlackDuckFixPrInputs() {
