@@ -1871,7 +1871,9 @@ class SynopsysToolsParameter {
         }
         const blackDuckFixPrData = {};
         blackDuckFixPrData.enabled = true;
-        blackDuckFixPrData.createSinglePR = createSinglePr === true;
+        if ((0, utility_1.isBoolean)(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)) {
+            blackDuckFixPrData.createSinglePR = (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR);
+        }
         if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
             blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT);
         }

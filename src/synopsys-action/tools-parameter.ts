@@ -473,7 +473,9 @@ export class SynopsysToolsParameter {
     }
     const blackDuckFixPrData: BlackDuckFixPrData = {}
     blackDuckFixPrData.enabled = true
-    blackDuckFixPrData.createSinglePR = createSinglePr === true
+    if (isBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)) {
+      blackDuckFixPrData.createSinglePR = parseToBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)
+    }
     if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
       blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT)
     }
