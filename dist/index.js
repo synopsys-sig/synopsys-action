@@ -699,7 +699,7 @@ exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_NETWORK_AIR_GAP = (((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || ((_c = (0, core_1.getInput)(constants.BRIDGE_NETWORK_AIRGAP_KEY)) === null || _c === void 0 ? void 0 : _c.trim())) === 'true' || false;
+exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || ((_c = (0, core_1.getInput)(constants.BRIDGE_NETWORK_AIRGAP_KEY)) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_d = (0, core_1.getInput)(constants.BRIDGE_DOWNLOAD_URL_KEY)) === null || _d === void 0 ? void 0 : _d.trim()) || ((_e = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_f = (0, core_1.getInput)(constants.BRIDGE_DOWNLOAD_VERSION_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || ((_g = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
