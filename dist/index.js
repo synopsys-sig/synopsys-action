@@ -1869,7 +1869,9 @@ class SynopsysToolsParameter {
         }
         const blackDuckFixPrData = {};
         blackDuckFixPrData.enabled = true;
-        blackDuckFixPrData.createSinglePR = createSinglePr === true;
+        if (createSinglePr === true || createSinglePr === false) {
+            blackDuckFixPrData.createSinglePR = createSinglePr;
+        }
         if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
             blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT);
         }
@@ -1892,7 +1894,9 @@ class SynopsysToolsParameter {
                 }
             }
         }
-        blackDuckFixPrData.filter = Object.assign({}, (fixPRFilterSeverities.length > 0 ? { severities: fixPRFilterSeverities } : {}));
+        if (fixPRFilterSeverities.length > 0) {
+            blackDuckFixPrData.filter = { severities: fixPRFilterSeverities };
+        }
         return blackDuckFixPrData;
     }
 }

@@ -471,7 +471,9 @@ export class SynopsysToolsParameter {
     }
     const blackDuckFixPrData: BlackDuckFixPrData = {}
     blackDuckFixPrData.enabled = true
-    blackDuckFixPrData.createSinglePR = createSinglePr === true
+    if (createSinglePr === true || createSinglePr === false) {
+      blackDuckFixPrData.createSinglePR = createSinglePr
+    }
     if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
       blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT)
     }
@@ -495,8 +497,8 @@ export class SynopsysToolsParameter {
         }
       }
     }
-    blackDuckFixPrData.filter = {
-      ...(fixPRFilterSeverities.length > 0 ? {severities: fixPRFilterSeverities} : {})
+    if (fixPRFilterSeverities.length > 0) {
+      blackDuckFixPrData.filter = {severities: fixPRFilterSeverities}
     }
     return blackDuckFixPrData
   }
