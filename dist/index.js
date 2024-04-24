@@ -1672,8 +1672,8 @@ class SynopsysToolsParameter {
                 (0, core_1.warning)(constants.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS);
             }
         }
-        if ((0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
-            covData.data.network = { airGap: inputs.ENABLE_NETWORK_AIR_GAP };
+        if ((0, utility_1.isBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
+            covData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
@@ -1796,8 +1796,8 @@ class SynopsysToolsParameter {
                 (0, core_1.warning)(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS);
             }
         }
-        if ((0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
-            blackduckData.data.network = { airGap: inputs.ENABLE_NETWORK_AIR_GAP };
+        if ((0, utility_1.isBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
+            blackduckData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);

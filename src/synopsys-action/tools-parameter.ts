@@ -255,8 +255,8 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
-      covData.data.network = {airGap: inputs.ENABLE_NETWORK_AIR_GAP}
+    if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
+      covData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
     }
 
     const inputJson = JSON.stringify(covData)
@@ -389,8 +389,8 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
-      blackduckData.data.network = {airGap: inputs.ENABLE_NETWORK_AIR_GAP}
+    if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
+      blackduckData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
     }
 
     const inputJson = JSON.stringify(blackduckData)
