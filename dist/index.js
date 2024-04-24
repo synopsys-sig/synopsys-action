@@ -1869,9 +1869,7 @@ class SynopsysToolsParameter {
         }
         const blackDuckFixPrData = {};
         blackDuckFixPrData.enabled = true;
-        if (createSinglePr === true || createSinglePr === false) {
-            blackDuckFixPrData.createSinglePR = createSinglePr;
-        }
+        blackDuckFixPrData.createSinglePR = createSinglePr === true;
         if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
             blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT);
         }
