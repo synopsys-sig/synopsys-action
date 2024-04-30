@@ -5,6 +5,7 @@ import {APPLICATION_NAME, GITHUB_ENVIRONMENT_VARIABLES} from '../application-con
 import {rmRF} from '@actions/io'
 import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
 import * as constants from '../application-constants'
+import {debug} from '@actions/core'
 
 export function cleanUrl(url: string): string {
   if (url && url.endsWith('/')) {
@@ -64,5 +65,6 @@ export function getDefaultSarifReportPath(sarifReportDirectory: string, appendFi
 
 export function isPullRequestEvent(): boolean {
   const eventName = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_EVENT_NAME] || ''
+  debug(`Github Event Name: ${eventName}`)
   return eventName === 'pull_request' || false
 }
