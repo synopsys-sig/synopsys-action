@@ -699,7 +699,7 @@ exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
-exports.ENABLE_NETWORK_AIR_GAP = (((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || ((_c = (0, core_1.getInput)(constants.BRIDGE_NETWORK_AIRGAP_KEY)) === null || _c === void 0 ? void 0 : _c.trim())) === 'true' || false;
+exports.ENABLE_NETWORK_AIR_GAP = ((_b = (0, core_1.getInput)(constants.NETWORK_AIRGAP_KEY)) === null || _b === void 0 ? void 0 : _b.trim()) || ((_c = (0, core_1.getInput)(constants.BRIDGE_NETWORK_AIRGAP_KEY)) === null || _c === void 0 ? void 0 : _c.trim()) || '';
 //Bridge download url
 exports.BRIDGE_DOWNLOAD_URL = ((_d = (0, core_1.getInput)(constants.BRIDGE_DOWNLOAD_URL_KEY)) === null || _d === void 0 ? void 0 : _d.trim()) || ((_e = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY)) === null || _e === void 0 ? void 0 : _e.trim()) || '';
 exports.BRIDGE_DOWNLOAD_VERSION = ((_f = (0, core_1.getInput)(constants.BRIDGE_DOWNLOAD_VERSION_KEY)) === null || _f === void 0 ? void 0 : _f.trim()) || ((_g = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY)) === null || _g === void 0 ? void 0 : _g.trim()) || '';
@@ -1511,8 +1511,7 @@ class SynopsysToolsParameter {
                     serverUrl: inputs.POLARIS_SERVER_URL,
                     application: { name: applicationName },
                     project: { name: projectName },
-                    assessment: { types: assessmentTypeArray },
-                    branch: { parent: {} }
+                    assessment: { types: assessmentTypeArray }
                 }
             }
         };
@@ -1520,7 +1519,7 @@ class SynopsysToolsParameter {
             polData.data.polaris.triage = inputs.POLARIS_TRIAGE;
         }
         if (inputs.POLARIS_BRANCH_NAME) {
-            polData.data.polaris.branch.name = inputs.POLARIS_BRANCH_NAME;
+            polData.data.polaris.branch = { name: inputs.POLARIS_BRANCH_NAME };
         }
         if (inputs.POLARIS_TEST_SCA_TYPE) {
             polData.data.polaris.test = {
@@ -1535,7 +1534,9 @@ class SynopsysToolsParameter {
                 /** Set Polaris PR comment inputs in case of PR context */
                 (0, core_1.info)('Polaris PR comment is enabled');
                 if (inputs.POLARIS_PARENT_BRANCH_NAME) {
-                    polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME;
+                    polData.data.polaris.branch = Object.assign(Object.assign({}, (inputs.POLARIS_BRANCH_NAME && { name: inputs.POLARIS_BRANCH_NAME })), { parent: {
+                            name: inputs.POLARIS_PARENT_BRANCH_NAME
+                        } });
                 }
                 const prCommentSeverities = [];
                 const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES;
@@ -1547,10 +1548,7 @@ class SynopsysToolsParameter {
                         }
                     }
                 }
-                polData.data.polaris.prComment = {
-                    enabled: true,
-                    severities: prCommentSeverities
-                };
+                polData.data.polaris.prComment = Object.assign({ enabled: true }, (prCommentSeverities.length > 0 && { severities: prCommentSeverities }));
                 polData.data.github = this.getGithubRepoInfo();
             }
             else {
@@ -1580,17 +1578,17 @@ class SynopsysToolsParameter {
                     }
                 }
                 polData.data.polaris.reports = {
-                    sarif: {
-                        create: true,
-                        severities: sarifReportFilterSeverities,
+                    sarif: Object.assign(Object.assign(Object.assign(Object.assign({ create: true }, (inputs.POLARIS_REPORTS_SARIF_SEVERITIES && {
+                        severities: sarifReportFilterSeverities
+                    })), (inputs.POLARIS_REPORTS_SARIF_FILE_PATH && {
                         file: {
                             path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
-                        },
+                        }
+                    })), (inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES && {
                         issue: {
                             types: sarifReportFilterAssessmentIssuesType
-                        },
-                        groupSCAIssues: (0, utility_1.isBoolean)(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-                    }
+                        }
+                    })), { groupSCAIssues: (0, utility_1.isBoolean)(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true })
                 };
             }
             if ((0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
@@ -1633,13 +1631,8 @@ class SynopsysToolsParameter {
                         url: inputs.COVERITY_URL,
                         project: { name: coverityProjectName },
                         stream: { name: coverityStreamName }
-                    },
-                    automation: {}
-                },
-                network: {
-                    airGap: inputs.ENABLE_NETWORK_AIR_GAP
-                },
-                project: {}
+                    }
+                }
             }
         };
         if (inputs.COVERITY_LOCAL) {
@@ -1653,11 +1646,16 @@ class SynopsysToolsParameter {
         if (inputs.COVERITY_POLICY_VIEW) {
             covData.data.coverity.connect.policy = { view: inputs.COVERITY_POLICY_VIEW };
         }
-        if (inputs.COVERITY_REPOSITORY_NAME) {
-            covData.data.project.repository = { name: inputs.COVERITY_REPOSITORY_NAME };
-        }
-        if (inputs.COVERITY_BRANCH_NAME) {
-            covData.data.project.branch = { name: inputs.COVERITY_BRANCH_NAME };
+        if (inputs.COVERITY_REPOSITORY_NAME || inputs.COVERITY_BRANCH_NAME) {
+            covData.data.project = Object.assign(Object.assign({}, (inputs.COVERITY_REPOSITORY_NAME && {
+                repository: {
+                    name: inputs.COVERITY_REPOSITORY_NAME
+                }
+            })), (inputs.COVERITY_BRANCH_NAME && {
+                branch: {
+                    name: inputs.COVERITY_BRANCH_NAME
+                }
+            }));
         }
         if (inputs.COVERITY_VERSION) {
             covData.data.coverity.version = inputs.COVERITY_VERSION;
@@ -1667,12 +1665,15 @@ class SynopsysToolsParameter {
                 /** Set Coverity PR comment inputs in case of PR context */
                 (0, core_1.info)('Coverity PR comment is enabled');
                 covData.data.github = this.getGithubRepoInfo();
-                covData.data.coverity.automation.prcomment = true;
+                covData.data.coverity.automation = { prcomment: true };
             }
             else {
                 /** Log info if Coverity PR comment is enabled in case of non PR context */
                 (0, core_1.info)(constants.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS);
             }
+        }
+        if ((0, utility_1.isBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
+            covData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
@@ -1704,11 +1705,7 @@ class SynopsysToolsParameter {
             data: {
                 blackduck: {
                     url: inputs.BLACKDUCK_URL,
-                    token: inputs.BLACKDUCK_API_TOKEN,
-                    automation: {}
-                },
-                network: {
-                    airGap: inputs.ENABLE_NETWORK_AIR_GAP
+                    token: inputs.BLACKDUCK_API_TOKEN
                 }
             }
         };
@@ -1749,7 +1746,7 @@ class SynopsysToolsParameter {
                 /** Set Black Duck PR comment inputs in case of PR context */
                 (0, core_1.info)('Black Duck PR comment is enabled');
                 blackduckData.data.github = this.getGithubRepoInfo();
-                blackduckData.data.blackduck.automation.prcomment = true;
+                blackduckData.data.blackduck.automation = { prcomment: true };
             }
             else {
                 (0, core_1.info)(constants.BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS);
@@ -1779,14 +1776,13 @@ class SynopsysToolsParameter {
                     }
                 }
                 blackduckData.data.blackduck.reports = {
-                    sarif: {
-                        create: true,
-                        severities: sarifReportFilterSeverities,
+                    sarif: Object.assign(Object.assign(Object.assign({ create: true }, (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES && {
+                        severities: sarifReportFilterSeverities
+                    })), (inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH && {
                         file: {
                             path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
-                        },
-                        groupSCAIssues: (0, utility_1.isBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
-                    }
+                        }
+                    })), { groupSCAIssues: (0, utility_1.isBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true })
                 };
             }
             if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT) && (0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
@@ -1799,6 +1795,9 @@ class SynopsysToolsParameter {
                 /** Log info if SARIF create/upload is enabled in PR context */
                 (0, core_1.info)(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS);
             }
+        }
+        if ((0, utility_1.isBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
+            blackduckData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
@@ -1834,7 +1833,8 @@ class SynopsysToolsParameter {
         return undefined;
     }
     setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubHostUrl) {
-        var _a;
+        var _a, _b;
+        const isPrEvent = (0, utility_1.isPullRequestEvent)();
         const githubData = {
             user: {
                 token: githubToken
@@ -1844,23 +1844,26 @@ class SynopsysToolsParameter {
                 owner: {
                     name: githubRepoOwner
                 },
-                pull: {},
                 branch: {
                     name: githubBranchName
                 }
-            },
-            host: {
-                url: githubHostUrl
             }
         };
-        if (githubPrNumber != null) {
-            githubData.repository.pull.number = Number(githubPrNumber);
+        if (isPrEvent && githubPrNumber != null) {
+            githubData.repository.pull = {
+                number: Number(githubPrNumber)
+            };
+        }
+        if (githubHostUrl !== '') {
+            githubData.host = {
+                url: githubHostUrl
+            };
         }
         (0, core_1.debug)(`Github repository name: ${githubData.repository.name}`);
         (0, core_1.debug)(`Github repository owner name: ${githubData.repository.owner.name}`);
         (0, core_1.debug)(`Github branch name: ${githubData.repository.branch.name}`);
         (0, core_1.debug)(`Github host url: ${(_a = githubData.host) === null || _a === void 0 ? void 0 : _a.url}`);
-        (0, core_1.debug)(`Github pull request number: ${githubData.repository.pull.number}`);
+        (0, core_1.debug)(`Github pull request number: ${(_b = githubData.repository.pull) === null || _b === void 0 ? void 0 : _b.number}`);
         return githubData;
     }
     setBlackDuckFixPrInputs() {
@@ -1873,7 +1876,9 @@ class SynopsysToolsParameter {
         }
         const blackDuckFixPrData = {};
         blackDuckFixPrData.enabled = true;
-        blackDuckFixPrData.createSinglePR = createSinglePr === true;
+        if ((0, utility_1.isBoolean)(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)) {
+            blackDuckFixPrData.createSinglePR = (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR);
+        }
         if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
             blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT);
         }
@@ -1896,7 +1901,9 @@ class SynopsysToolsParameter {
                 }
             }
         }
-        blackDuckFixPrData.filter = Object.assign({}, (fixPRFilterSeverities.length > 0 ? { severities: fixPRFilterSeverities } : {}));
+        if (fixPRFilterSeverities.length > 0) {
+            blackDuckFixPrData.filter = { severities: fixPRFilterSeverities };
+        }
         return blackDuckFixPrData;
     }
 }

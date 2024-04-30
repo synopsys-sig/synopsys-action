@@ -2,9 +2,9 @@ import {GithubData} from './blackduck'
 
 export interface Coverity {
   coverity: CoverityConnect
-  project: ProjectData
+  project?: ProjectData
   github?: GithubData
-  network: NetworkAirGap
+  network?: NetworkAirGap
 }
 
 export interface ProjectData {
@@ -19,7 +19,7 @@ export interface AutomationData {
 export interface CoverityConnect {
   connect: CoverityData
   install?: {directory: string}
-  automation: AutomationData
+  automation?: AutomationData
   local?: boolean
   version?: string
 }
