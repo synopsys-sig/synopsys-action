@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
-import {debug, info, warning} from '@actions/core'
+import {debug, info} from '@actions/core'
 import {isNullOrEmptyValue, validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam} from './validators'
 import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
@@ -111,8 +111,8 @@ export class SynopsysToolsParameter {
         }
         polData.data.github = this.getGithubRepoInfo()
       } else {
-        /** Log warning if Polaris PR comment is enabled in case of non PR context */
-        warning(constants.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+        /** Log info if Polaris PR comment is enabled in case of non PR context */
+        info(constants.POLARIS_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
       }
     }
 
@@ -165,8 +165,8 @@ export class SynopsysToolsParameter {
       }
     } else {
       if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-        /** Log warning if SARIF create is enabled in PR context */
-        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+        /** Log info if SARIF create is enabled in PR context */
+        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
       }
     }
 
@@ -250,8 +250,8 @@ export class SynopsysToolsParameter {
         covData.data.github = this.getGithubRepoInfo()
         covData.data.coverity.automation = {prcomment: true}
       } else {
-        /** Log warning if Coverity PR comment is enabled in case of non PR context */
-        warning(constants.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+        /** Log info if Coverity PR comment is enabled in case of non PR context */
+        info(constants.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
       }
     }
 
@@ -338,7 +338,7 @@ export class SynopsysToolsParameter {
         blackduckData.data.github = this.getGithubRepoInfo()
         blackduckData.data.blackduck.automation = {prcomment: true}
       } else {
-        warning(constants.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+        info(constants.BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
       }
     }
     if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
@@ -348,7 +348,7 @@ export class SynopsysToolsParameter {
         blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
         blackduckData.data.github = this.getGithubRepoInfo()
       } else {
-        warning(constants.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS)
+        info(constants.BLACKDUCK_FIXPR_LOG_INFO_FOR_PR_SCANS)
       }
     }
     if (!isPrEvent) {
@@ -384,8 +384,8 @@ export class SynopsysToolsParameter {
       }
     } else {
       if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-        /** Log warning if SARIF create/upload is enabled in PR context */
-        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+        /** Log info if SARIF create/upload is enabled in PR context */
+        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
       }
     }
 
@@ -412,6 +412,12 @@ export class SynopsysToolsParameter {
     const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
     const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
+
+    debug(`Github Repository: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]}`)
+    debug(`Github Ref Name: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]}`)
+    debug(`Github Head Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]}`)
+    debug(`Github Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]}`)
+    debug(`Github Server Url: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL]}`)
 
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
