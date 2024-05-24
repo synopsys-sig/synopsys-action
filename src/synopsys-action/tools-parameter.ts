@@ -64,7 +64,12 @@ export class SynopsysToolsParameter {
           serverUrl: inputs.POLARIS_SERVER_URL,
           application: {name: applicationName},
           project: {name: projectName},
-          assessment: {types: assessmentTypeArray},
+          assessment: {
+            types: assessmentTypeArray,
+            ...(inputs.POLARIS_ASSESSMENT_MODE && {
+              mode: inputs.POLARIS_ASSESSMENT_MODE
+            })
+          },
           branch: {parent: {}}
         }
       }
@@ -83,6 +88,38 @@ export class SynopsysToolsParameter {
         }
       }
     }
+
+    if (inputs.PROJECT_DIRECTORY || inputs.PROJECT_SOURCE_ARCHIVE || inputs.PROJECT_SOURCE_EXCLUDES || inputs.PROJECT_SOURCE_PRESERVESYMLINKS) {
+      polData.data.project = {}
+
+      if (inputs.PROJECT_DIRECTORY) {
+        polData.data.project.directory = inputs.PROJECT_DIRECTORY
+      }
+
+      if (inputs.PROJECT_SOURCE_ARCHIVE || inputs.PROJECT_SOURCE_EXCLUDES || inputs.PROJECT_SOURCE_PRESERVESYMLINKS) {
+        polData.data.project.source = {}
+
+        if (inputs.PROJECT_SOURCE_ARCHIVE) {
+          polData.data.project.source.archive = inputs.PROJECT_SOURCE_ARCHIVE
+        }
+
+        if (inputs.PROJECT_SOURCE_PRESERVESYMLINKS) {
+          polData.data.project.source.preserveSymLinks = parseToBoolean(inputs.PROJECT_SOURCE_PRESERVESYMLINKS)
+        }
+
+        if (inputs.PROJECT_SOURCE_EXCLUDES) {
+          const sourceExcludesListFiltered: string[] = []
+          const sourceExcludesList = inputs.PROJECT_SOURCE_EXCLUDES.split(',')
+          for (const sourceExclude of sourceExcludesList) {
+            if (sourceExclude) {
+              sourceExcludesListFiltered.push(sourceExclude.trim())
+            }
+          }
+          polData.data.project.source.excludes = sourceExcludesListFiltered
+        }
+      }
+    }
+
     const isPrEvent = isPullRequestEvent()
     if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
       if (isPrEvent) {
@@ -219,12 +256,22 @@ export class SynopsysToolsParameter {
       covData.data.coverity.connect.policy = {view: inputs.COVERITY_POLICY_VIEW}
     }
 
-    if (inputs.COVERITY_REPOSITORY_NAME) {
-      covData.data.project.repository = {name: inputs.COVERITY_REPOSITORY_NAME}
-    }
-
-    if (inputs.COVERITY_BRANCH_NAME) {
-      covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
+    if (inputs.COVERITY_REPOSITORY_NAME || inputs.COVERITY_BRANCH_NAME || inputs.PROJECT_DIRECTORY) {
+      covData.data.project = {
+        ...(inputs.COVERITY_REPOSITORY_NAME && {
+          repository: {
+            name: inputs.COVERITY_REPOSITORY_NAME
+          }
+        }),
+        ...(inputs.COVERITY_BRANCH_NAME && {
+          branch: {
+            name: inputs.COVERITY_BRANCH_NAME
+          }
+        }),
+        ...(inputs.PROJECT_DIRECTORY && {
+          directory: inputs.PROJECT_DIRECTORY
+        })
+      }
     }
 
     if (inputs.COVERITY_VERSION) {
@@ -315,6 +362,12 @@ export class SynopsysToolsParameter {
         blackduckData.data.blackduck.scan.failure = {severities: failureSeverityEnums}
       } else {
         blackduckData.data.blackduck.scan = {failure: {severities: failureSeverityEnums}}
+      }
+    }
+
+    if (inputs.PROJECT_DIRECTORY) {
+      blackduckData.data.project = {
+        directory: inputs.PROJECT_DIRECTORY
       }
     }
 

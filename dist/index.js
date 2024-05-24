@@ -7,8 +7,9 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.BLACKDUCK_TOKEN_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.POLARIS_UPLOAD_SARIF_REPORT_KEY = exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.POLARIS_REPORTS_SARIF_SEVERITIES_KEY = exports.POLARIS_REPORTS_SARIF_FILE_PATH_KEY = exports.POLARIS_REPORTS_SARIF_CREATE_KEY = exports.POLARIS_TEST_SCA_TYPE_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_SERVERURL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.POLARIS_ACCESSTOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_PRCOMMENT_ENABLED_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = exports.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = exports.BRIDGE_DOWNLOAD_VERSION_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = exports.BRIDGE_DOWNLOAD_URL_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-exports.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = exports.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = exports.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = exports.GITHUB_ENVIRONMENT_VARIABLES = exports.HTTP_STATUS_FORBIDDEN = exports.HTTP_STATUS_ACCEPTED = exports.SECONDARY_RATE_LIMIT = exports.X_RATE_LIMIT_REMAINING = exports.X_RATE_LIMIT_RESET = exports.SARIF_DEFAULT_FILE_NAME = exports.POLARIS_SARIF_ARTIFACT_NAME = exports.POLARIS_SARIF_GENERATOR_DIRECTORY = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = void 0;
+exports.PROJECT_SOURCE_PRESERVESYMLINKS_KEY = exports.PROJECT_SOURCE_ARCHIVE_KEY = exports.POLARIS_ASSESSMENT_MODE_KEY = exports.POLARIS_UPLOAD_SARIF_REPORT_KEY = exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.POLARIS_REPORTS_SARIF_SEVERITIES_KEY = exports.POLARIS_REPORTS_SARIF_FILE_PATH_KEY = exports.POLARIS_REPORTS_SARIF_CREATE_KEY = exports.POLARIS_TEST_SCA_TYPE_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_SERVERURL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.POLARIS_ACCESSTOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_PRCOMMENT_ENABLED_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = exports.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = exports.BRIDGE_DOWNLOAD_VERSION_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = exports.BRIDGE_DOWNLOAD_URL_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
+exports.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS = exports.SARIF_REPORT_WARNING_FOR_PR_SCANS = exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = exports.GITHUB_ENVIRONMENT_VARIABLES = exports.HTTP_STATUS_FORBIDDEN = exports.HTTP_STATUS_ACCEPTED = exports.SECONDARY_RATE_LIMIT = exports.X_RATE_LIMIT_REMAINING = exports.X_RATE_LIMIT_RESET = exports.SARIF_DEFAULT_FILE_NAME = exports.POLARIS_SARIF_ARTIFACT_NAME = exports.POLARIS_SARIF_GENERATOR_DIRECTORY = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_TOKEN_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.PROJECT_DIRECTORY_KEY = exports.PROJECT_SOURCE_EXCLUDES_KEY = void 0;
+exports.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = exports.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -74,6 +75,11 @@ exports.POLARIS_REPORTS_SARIF_SEVERITIES_KEY = 'polaris_reports_sarif_severities
 exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'polaris_reports_sarif_groupSCAIssues';
 exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = 'polaris_reports_sarif_issue_types';
 exports.POLARIS_UPLOAD_SARIF_REPORT_KEY = 'polaris_upload_sarif_report';
+exports.POLARIS_ASSESSMENT_MODE_KEY = 'polaris_assessment_mode';
+exports.PROJECT_SOURCE_ARCHIVE_KEY = 'project_source_archive';
+exports.PROJECT_SOURCE_PRESERVESYMLINKS_KEY = 'project_source_preserveSymLinks';
+exports.PROJECT_SOURCE_EXCLUDES_KEY = 'project_source_excludes';
+exports.PROJECT_DIRECTORY_KEY = 'project_directory';
 // Blackduck
 exports.BLACKDUCK_URL_KEY = 'blackduck_url';
 exports.BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken';
@@ -692,10 +698,10 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37;
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GITHUB_TOKEN = exports.BLACKDUCK_UPLOAD_SARIF_REPORT = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.POLARIS_UPLOAD_SARIF_REPORT = exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES = exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.POLARIS_REPORTS_SARIF_SEVERITIES = exports.POLARIS_REPORTS_SARIF_FILE_PATH = exports.POLARIS_REPORTS_SARIF_CREATE = exports.POLARIS_TEST_SCA_TYPE = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
-exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = void 0;
+exports.BLACKDUCK_REPORTS_SARIF_CREATE = exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = exports.BLACKDUCK_FIXPR_MAXCOUNT = exports.BLACKDUCK_PRCOMMENT_ENABLED = exports.BLACKDUCK_FIXPR_ENABLED = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = exports.BLACKDUCK_SCAN_FULL = exports.BLACKDUCK_INSTALL_DIRECTORY = exports.BLACKDUCK_API_TOKEN = exports.BLACKDUCK_URL = exports.COVERITY_VERSION = exports.COVERITY_LOCAL = exports.COVERITY_PRCOMMENT_ENABLED = exports.COVERITY_BRANCH_NAME = exports.COVERITY_REPOSITORY_NAME = exports.COVERITY_POLICY_VIEW = exports.COVERITY_INSTALL_DIRECTORY = exports.COVERITY_STREAM_NAME = exports.COVERITY_PROJECT_NAME = exports.COVERITY_PASSPHRASE = exports.COVERITY_USER = exports.COVERITY_URL = exports.PROJECT_SOURCE_EXCLUDES = exports.PROJECT_SOURCE_PRESERVESYMLINKS = exports.PROJECT_SOURCE_ARCHIVE = exports.PROJECT_DIRECTORY = exports.POLARIS_ASSESSMENT_MODE = exports.POLARIS_UPLOAD_SARIF_REPORT = exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES = exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.POLARIS_REPORTS_SARIF_SEVERITIES = exports.POLARIS_REPORTS_SARIF_FILE_PATH = exports.POLARIS_REPORTS_SARIF_CREATE = exports.POLARIS_TEST_SCA_TYPE = exports.POLARIS_PARENT_BRANCH_NAME = exports.POLARIS_BRANCH_NAME = exports.POLARIS_PRCOMMENT_SEVERITIES = exports.POLARIS_PRCOMMENT_ENABLED = exports.POLARIS_TRIAGE = exports.POLARIS_SERVER_URL = exports.POLARIS_ASSESSMENT_TYPES = exports.POLARIS_PROJECT_NAME = exports.POLARIS_APPLICATION_NAME = exports.POLARIS_ACCESS_TOKEN = exports.BRIDGE_DOWNLOAD_VERSION = exports.BRIDGE_DOWNLOAD_URL = exports.ENABLE_NETWORK_AIR_GAP = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = void 0;
+exports.DIAGNOSTICS_RETENTION_DAYS = exports.INCLUDE_DIAGNOSTICS = exports.GITHUB_TOKEN = exports.BLACKDUCK_UPLOAD_SARIF_REPORT = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = void 0;
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = ((_a = (0, core_1.getInput)(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)) === null || _a === void 0 ? void 0 : _a.trim()) || '';
@@ -721,39 +727,44 @@ exports.POLARIS_REPORTS_SARIF_SEVERITIES = ((_y = (0, core_1.getInput)(constants
 exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES = ((_z = (0, core_1.getInput)(constants.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)) === null || _z === void 0 ? void 0 : _z.trim()) || '';
 exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES = ((_0 = (0, core_1.getInput)(constants.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY)) === null || _0 === void 0 ? void 0 : _0.trim()) || '';
 exports.POLARIS_UPLOAD_SARIF_REPORT = ((_1 = (0, core_1.getInput)(constants.POLARIS_UPLOAD_SARIF_REPORT_KEY)) === null || _1 === void 0 ? void 0 : _1.trim()) || '';
+exports.POLARIS_ASSESSMENT_MODE = ((_2 = (0, core_1.getInput)(constants.POLARIS_ASSESSMENT_MODE_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
+exports.PROJECT_DIRECTORY = ((_3 = (0, core_1.getInput)(constants.PROJECT_DIRECTORY_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
+exports.PROJECT_SOURCE_ARCHIVE = ((_4 = (0, core_1.getInput)(constants.PROJECT_SOURCE_ARCHIVE_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
+exports.PROJECT_SOURCE_PRESERVESYMLINKS = ((_5 = (0, core_1.getInput)(constants.PROJECT_SOURCE_PRESERVESYMLINKS_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || '';
+exports.PROJECT_SOURCE_EXCLUDES = ((_6 = (0, core_1.getInput)(constants.PROJECT_SOURCE_EXCLUDES_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || '';
 // Coverity related inputs
-exports.COVERITY_URL = ((_2 = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _2 === void 0 ? void 0 : _2.trim()) || '';
-exports.COVERITY_USER = ((_3 = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _3 === void 0 ? void 0 : _3.trim()) || '';
-exports.COVERITY_PASSPHRASE = ((_4 = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _4 === void 0 ? void 0 : _4.trim()) || '';
-exports.COVERITY_PROJECT_NAME = ((_5 = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _5 === void 0 ? void 0 : _5.trim()) || '';
-exports.COVERITY_STREAM_NAME = ((_6 = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _6 === void 0 ? void 0 : _6.trim()) || '';
-exports.COVERITY_INSTALL_DIRECTORY = ((_7 = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _7 === void 0 ? void 0 : _7.trim()) || '';
-exports.COVERITY_POLICY_VIEW = ((_8 = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _8 === void 0 ? void 0 : _8.trim()) || '';
-exports.COVERITY_REPOSITORY_NAME = ((_9 = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _9 === void 0 ? void 0 : _9.trim()) || '';
-exports.COVERITY_BRANCH_NAME = ((_10 = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _10 === void 0 ? void 0 : _10.trim()) || '';
-exports.COVERITY_PRCOMMENT_ENABLED = ((_11 = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _11 === void 0 ? void 0 : _11.trim()) || ((_12 = (0, core_1.getInput)(constants.COVERITY_PRCOMMENT_ENABLED_KEY)) === null || _12 === void 0 ? void 0 : _12.trim()) || '';
-exports.COVERITY_LOCAL = ((_13 = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _13 === void 0 ? void 0 : _13.trim()) === 'true' || false;
-exports.COVERITY_VERSION = ((_14 = (0, core_1.getInput)(constants.COVERITY_VERSION_KEY)) === null || _14 === void 0 ? void 0 : _14.trim()) || ((_15 = (0, core_1.getInput)(constants.BRIDGE_COVERITY_VERSION_KEY)) === null || _15 === void 0 ? void 0 : _15.trim()) || '';
+exports.COVERITY_URL = ((_7 = (0, core_1.getInput)(constants.COVERITY_URL_KEY)) === null || _7 === void 0 ? void 0 : _7.trim()) || '';
+exports.COVERITY_USER = ((_8 = (0, core_1.getInput)(constants.COVERITY_USER_KEY)) === null || _8 === void 0 ? void 0 : _8.trim()) || '';
+exports.COVERITY_PASSPHRASE = ((_9 = (0, core_1.getInput)(constants.COVERITY_PASSPHRASE_KEY)) === null || _9 === void 0 ? void 0 : _9.trim()) || '';
+exports.COVERITY_PROJECT_NAME = ((_10 = (0, core_1.getInput)(constants.COVERITY_PROJECT_NAME_KEY)) === null || _10 === void 0 ? void 0 : _10.trim()) || '';
+exports.COVERITY_STREAM_NAME = ((_11 = (0, core_1.getInput)(constants.COVERITY_STREAM_NAME_KEY)) === null || _11 === void 0 ? void 0 : _11.trim()) || '';
+exports.COVERITY_INSTALL_DIRECTORY = ((_12 = (0, core_1.getInput)(constants.COVERITY_INSTALL_DIRECTORY_KEY)) === null || _12 === void 0 ? void 0 : _12.trim()) || '';
+exports.COVERITY_POLICY_VIEW = ((_13 = (0, core_1.getInput)(constants.COVERITY_POLICY_VIEW_KEY)) === null || _13 === void 0 ? void 0 : _13.trim()) || '';
+exports.COVERITY_REPOSITORY_NAME = ((_14 = (0, core_1.getInput)(constants.COVERITY_REPOSITORY_NAME_KEY)) === null || _14 === void 0 ? void 0 : _14.trim()) || '';
+exports.COVERITY_BRANCH_NAME = ((_15 = (0, core_1.getInput)(constants.COVERITY_BRANCH_NAME_KEY)) === null || _15 === void 0 ? void 0 : _15.trim()) || '';
+exports.COVERITY_PRCOMMENT_ENABLED = ((_16 = (0, core_1.getInput)(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)) === null || _16 === void 0 ? void 0 : _16.trim()) || ((_17 = (0, core_1.getInput)(constants.COVERITY_PRCOMMENT_ENABLED_KEY)) === null || _17 === void 0 ? void 0 : _17.trim()) || '';
+exports.COVERITY_LOCAL = ((_18 = (0, core_1.getInput)(constants.COVERITY_LOCAL_KEY)) === null || _18 === void 0 ? void 0 : _18.trim()) === 'true' || false;
+exports.COVERITY_VERSION = ((_19 = (0, core_1.getInput)(constants.COVERITY_VERSION_KEY)) === null || _19 === void 0 ? void 0 : _19.trim()) || ((_20 = (0, core_1.getInput)(constants.BRIDGE_COVERITY_VERSION_KEY)) === null || _20 === void 0 ? void 0 : _20.trim()) || '';
 // Blackduck related inputs
-exports.BLACKDUCK_URL = ((_16 = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _16 === void 0 ? void 0 : _16.trim()) || '';
-exports.BLACKDUCK_API_TOKEN = ((_17 = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _17 === void 0 ? void 0 : _17.trim()) || ((_18 = (0, core_1.getInput)(constants.BLACKDUCK_TOKEN_KEY)) === null || _18 === void 0 ? void 0 : _18.trim()) || '';
-exports.BLACKDUCK_INSTALL_DIRECTORY = ((_19 = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _19 === void 0 ? void 0 : _19.trim()) || '';
-exports.BLACKDUCK_SCAN_FULL = ((_20 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _20 === void 0 ? void 0 : _20.trim()) || '';
-exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_21 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _21 === void 0 ? void 0 : _21.trim()) || '';
-exports.BLACKDUCK_FIXPR_ENABLED = ((_22 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _22 === void 0 ? void 0 : _22.trim()) || ((_23 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_ENABLED_KEY)) === null || _23 === void 0 ? void 0 : _23.trim()) || '';
-exports.BLACKDUCK_PRCOMMENT_ENABLED = ((_24 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _24 === void 0 ? void 0 : _24.trim()) || ((_25 = (0, core_1.getInput)(constants.BLACKDUCK_PRCOMMENT_ENABLED_KEY)) === null || _25 === void 0 ? void 0 : _25.trim()) || '';
-exports.BLACKDUCK_FIXPR_MAXCOUNT = ((_26 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY)) === null || _26 === void 0 ? void 0 : _26.trim()) || '';
-exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = ((_27 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY)) === null || _27 === void 0 ? void 0 : _27.trim()) || '';
-exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = ((_28 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY)) === null || _28 === void 0 ? void 0 : _28.trim()) || '';
-exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = ((_29 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY)) === null || _29 === void 0 ? void 0 : _29.trim()) || '';
-exports.BLACKDUCK_REPORTS_SARIF_CREATE = ((_30 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_CREATE_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
-exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = ((_31 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY)) === null || _31 === void 0 ? void 0 : _31.trim()) || '';
-exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = ((_32 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)) === null || _32 === void 0 ? void 0 : _32.trim()) || '';
-exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = ((_33 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)) === null || _33 === void 0 ? void 0 : _33.trim()) || '';
-exports.BLACKDUCK_UPLOAD_SARIF_REPORT = ((_34 = (0, core_1.getInput)(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)) === null || _34 === void 0 ? void 0 : _34.trim()) || '';
-exports.GITHUB_TOKEN = ((_35 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _35 === void 0 ? void 0 : _35.trim()) || '';
-exports.INCLUDE_DIAGNOSTICS = ((_36 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _36 === void 0 ? void 0 : _36.trim()) || '';
-exports.DIAGNOSTICS_RETENTION_DAYS = ((_37 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _37 === void 0 ? void 0 : _37.trim()) || '';
+exports.BLACKDUCK_URL = ((_21 = (0, core_1.getInput)(constants.BLACKDUCK_URL_KEY)) === null || _21 === void 0 ? void 0 : _21.trim()) || '';
+exports.BLACKDUCK_API_TOKEN = ((_22 = (0, core_1.getInput)(constants.BLACKDUCK_API_TOKEN_KEY)) === null || _22 === void 0 ? void 0 : _22.trim()) || ((_23 = (0, core_1.getInput)(constants.BLACKDUCK_TOKEN_KEY)) === null || _23 === void 0 ? void 0 : _23.trim()) || '';
+exports.BLACKDUCK_INSTALL_DIRECTORY = ((_24 = (0, core_1.getInput)(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)) === null || _24 === void 0 ? void 0 : _24.trim()) || '';
+exports.BLACKDUCK_SCAN_FULL = ((_25 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FULL_KEY)) === null || _25 === void 0 ? void 0 : _25.trim()) || '';
+exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES = ((_26 = (0, core_1.getInput)(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)) === null || _26 === void 0 ? void 0 : _26.trim()) || '';
+exports.BLACKDUCK_FIXPR_ENABLED = ((_27 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)) === null || _27 === void 0 ? void 0 : _27.trim()) || ((_28 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_ENABLED_KEY)) === null || _28 === void 0 ? void 0 : _28.trim()) || '';
+exports.BLACKDUCK_PRCOMMENT_ENABLED = ((_29 = (0, core_1.getInput)(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)) === null || _29 === void 0 ? void 0 : _29.trim()) || ((_30 = (0, core_1.getInput)(constants.BLACKDUCK_PRCOMMENT_ENABLED_KEY)) === null || _30 === void 0 ? void 0 : _30.trim()) || '';
+exports.BLACKDUCK_FIXPR_MAXCOUNT = ((_31 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY)) === null || _31 === void 0 ? void 0 : _31.trim()) || '';
+exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR = ((_32 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY)) === null || _32 === void 0 ? void 0 : _32.trim()) || '';
+exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES = ((_33 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY)) === null || _33 === void 0 ? void 0 : _33.trim()) || '';
+exports.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = ((_34 = (0, core_1.getInput)(constants.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY)) === null || _34 === void 0 ? void 0 : _34.trim()) || '';
+exports.BLACKDUCK_REPORTS_SARIF_CREATE = ((_35 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_CREATE_KEY)) === null || _35 === void 0 ? void 0 : _35.trim()) || '';
+exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH = ((_36 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY)) === null || _36 === void 0 ? void 0 : _36.trim()) || '';
+exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES = ((_37 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)) === null || _37 === void 0 ? void 0 : _37.trim()) || '';
+exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = ((_38 = (0, core_1.getInput)(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)) === null || _38 === void 0 ? void 0 : _38.trim()) || '';
+exports.BLACKDUCK_UPLOAD_SARIF_REPORT = ((_39 = (0, core_1.getInput)(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)) === null || _39 === void 0 ? void 0 : _39.trim()) || '';
+exports.GITHUB_TOKEN = ((_40 = (0, core_1.getInput)(constants.GITHUB_TOKEN_KEY)) === null || _40 === void 0 ? void 0 : _40.trim()) || '';
+exports.INCLUDE_DIAGNOSTICS = ((_41 = (0, core_1.getInput)(constants.INCLUDE_DIAGNOSTICS_KEY)) === null || _41 === void 0 ? void 0 : _41.trim()) || '';
+exports.DIAGNOSTICS_RETENTION_DAYS = ((_42 = (0, core_1.getInput)(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)) === null || _42 === void 0 ? void 0 : _42.trim()) || '';
 
 
 /***/ }),
@@ -1511,7 +1522,9 @@ class SynopsysToolsParameter {
                     serverUrl: inputs.POLARIS_SERVER_URL,
                     application: { name: applicationName },
                     project: { name: projectName },
-                    assessment: { types: assessmentTypeArray },
+                    assessment: Object.assign({ types: assessmentTypeArray }, (inputs.POLARIS_ASSESSMENT_MODE && {
+                        mode: inputs.POLARIS_ASSESSMENT_MODE
+                    })),
                     branch: { parent: {} }
                 }
             }
@@ -1528,6 +1541,31 @@ class SynopsysToolsParameter {
                     type: inputs.POLARIS_TEST_SCA_TYPE
                 }
             };
+        }
+        if (inputs.PROJECT_DIRECTORY || inputs.PROJECT_SOURCE_ARCHIVE || inputs.PROJECT_SOURCE_EXCLUDES || inputs.PROJECT_SOURCE_PRESERVESYMLINKS) {
+            polData.data.project = {};
+            if (inputs.PROJECT_DIRECTORY) {
+                polData.data.project.directory = inputs.PROJECT_DIRECTORY;
+            }
+            if (inputs.PROJECT_SOURCE_ARCHIVE || inputs.PROJECT_SOURCE_EXCLUDES || inputs.PROJECT_SOURCE_PRESERVESYMLINKS) {
+                polData.data.project.source = {};
+                if (inputs.PROJECT_SOURCE_ARCHIVE) {
+                    polData.data.project.source.archive = inputs.PROJECT_SOURCE_ARCHIVE;
+                }
+                if (inputs.PROJECT_SOURCE_PRESERVESYMLINKS) {
+                    polData.data.project.source.preserveSymLinks = (0, utility_1.parseToBoolean)(inputs.PROJECT_SOURCE_PRESERVESYMLINKS);
+                }
+                if (inputs.PROJECT_SOURCE_EXCLUDES) {
+                    const sourceExcludesListFiltered = [];
+                    const sourceExcludesList = inputs.PROJECT_SOURCE_EXCLUDES.split(',');
+                    for (const sourceExclude of sourceExcludesList) {
+                        if (sourceExclude) {
+                            sourceExcludesListFiltered.push(sourceExclude.trim());
+                        }
+                    }
+                    polData.data.project.source.excludes = sourceExcludesListFiltered;
+                }
+            }
         }
         const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if ((0, utility_1.parseToBoolean)(inputs.POLARIS_PRCOMMENT_ENABLED)) {
@@ -1653,11 +1691,18 @@ class SynopsysToolsParameter {
         if (inputs.COVERITY_POLICY_VIEW) {
             covData.data.coverity.connect.policy = { view: inputs.COVERITY_POLICY_VIEW };
         }
-        if (inputs.COVERITY_REPOSITORY_NAME) {
-            covData.data.project.repository = { name: inputs.COVERITY_REPOSITORY_NAME };
-        }
-        if (inputs.COVERITY_BRANCH_NAME) {
-            covData.data.project.branch = { name: inputs.COVERITY_BRANCH_NAME };
+        if (inputs.COVERITY_REPOSITORY_NAME || inputs.COVERITY_BRANCH_NAME || inputs.PROJECT_DIRECTORY) {
+            covData.data.project = Object.assign(Object.assign(Object.assign({}, (inputs.COVERITY_REPOSITORY_NAME && {
+                repository: {
+                    name: inputs.COVERITY_REPOSITORY_NAME
+                }
+            })), (inputs.COVERITY_BRANCH_NAME && {
+                branch: {
+                    name: inputs.COVERITY_BRANCH_NAME
+                }
+            })), (inputs.PROJECT_DIRECTORY && {
+                directory: inputs.PROJECT_DIRECTORY
+            }));
         }
         if (inputs.COVERITY_VERSION) {
             covData.data.coverity.version = inputs.COVERITY_VERSION;
@@ -1742,6 +1787,11 @@ class SynopsysToolsParameter {
             else {
                 blackduckData.data.blackduck.scan = { failure: { severities: failureSeverityEnums } };
             }
+        }
+        if (inputs.PROJECT_DIRECTORY) {
+            blackduckData.data.project = {
+                directory: inputs.PROJECT_DIRECTORY
+            };
         }
         const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {

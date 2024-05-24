@@ -3,6 +3,7 @@ import {Reports} from './reports'
 
 export interface Polaris {
   polaris: PolarisData
+  project?: ProjectData
   github?: GithubData
 }
 
@@ -17,6 +18,15 @@ export interface PolarisData {
   prComment?: PrComment
   test?: Test
   reports?: Reports
+}
+
+export interface ProjectData {
+  directory?: string
+  source?: {
+    archive?: string
+    preserveSymLinks?: boolean
+    excludes?: string[]
+  }
 }
 
 export interface PrComment {

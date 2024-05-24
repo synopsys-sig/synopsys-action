@@ -26,6 +26,11 @@ export const POLARIS_REPORTS_SARIF_SEVERITIES = getInput(constants.POLARIS_REPOR
 export const POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
 export const POLARIS_REPORTS_SARIF_ISSUE_TYPES = getInput(constants.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY)?.trim() || ''
 export const POLARIS_UPLOAD_SARIF_REPORT = getInput(constants.POLARIS_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
+export const POLARIS_ASSESSMENT_MODE = getInput(constants.POLARIS_ASSESSMENT_MODE_KEY)?.trim() || ''
+export const PROJECT_DIRECTORY = getInput(constants.PROJECT_DIRECTORY_KEY)?.trim() || ''
+export const PROJECT_SOURCE_ARCHIVE = getInput(constants.PROJECT_SOURCE_ARCHIVE_KEY)?.trim() || ''
+export const PROJECT_SOURCE_PRESERVESYMLINKS = getInput(constants.PROJECT_SOURCE_PRESERVESYMLINKS_KEY)?.trim() || ''
+export const PROJECT_SOURCE_EXCLUDES = getInput(constants.PROJECT_SOURCE_EXCLUDES_KEY)?.trim() || ''
 
 // Coverity related inputs
 export const COVERITY_URL = getInput(constants.COVERITY_URL_KEY)?.trim() || ''

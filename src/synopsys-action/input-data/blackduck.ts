@@ -14,6 +14,7 @@ export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
 
 export interface Blackduck {
   blackduck: BlackduckData
+  project?: ProjectData
   github?: GithubData
   network: NetworkAirGap
 }
@@ -26,6 +27,10 @@ export interface BlackduckData {
   automation: AutomationData
   fixpr?: BlackDuckFixPrData
   reports?: Reports
+}
+
+export interface ProjectData {
+  directory?: string
 }
 
 export interface Branch {
