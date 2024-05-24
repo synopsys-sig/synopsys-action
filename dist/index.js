@@ -1676,8 +1676,7 @@ class SynopsysToolsParameter {
                 },
                 network: {
                     airGap: inputs.ENABLE_NETWORK_AIR_GAP
-                },
-                project: {}
+                }
             }
         };
         if (inputs.COVERITY_LOCAL) {
