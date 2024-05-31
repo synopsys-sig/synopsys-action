@@ -724,6 +724,38 @@ test('Test getFormattedCommandForBlackduck with sarif params', () => {
   expect(resp).toContain('--stage blackduck')
 })
 
+it('should pass polaris source upload fields to bridge', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA, SAST'})
+  Object.defineProperty(inputs, 'POLARIS_BRANCH_NAME', {value: 'feature1'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_MODE', {value: 'assessment_mode'})
+  Object.defineProperty(inputs, 'PROJECT_DIRECTORY', {value: 'polaris_project_directory'})
+  Object.defineProperty(inputs, 'PROJECT_SOURCE_ARCHIVE', {value: 'source_archive'})
+  Object.defineProperty(inputs, 'PROJECT_SOURCE_PRESERVESYMLINKS', {value: true})
+  Object.defineProperty(inputs, 'PROJECT_SOURCE_EXCLUDES', {value: 'source_exclude1, source_exclude2'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage polaris')
+  expect(jsonData.data.polaris.serverUrl).toContain('server_url')
+  expect(jsonData.data.polaris.accesstoken).toContain('access_token')
+  expect(jsonData.data.polaris.application.name).toContain('POLARIS_APPLICATION_NAME')
+  expect(jsonData.data.polaris.project.name).toContain('POLARIS_PROJECT_NAME')
+  expect(jsonData.data.polaris.branch.name).toContain('feature1')
+  expect(jsonData.data.polaris.assessment.mode).toContain('assessment_mode')
+  expect(jsonData.data.polaris.assessment.types).toContain('SCA')
+  expect(jsonData.data.project.directory).toContain('polaris_project_directory')
+  expect(jsonData.data.project.source.archive).toContain('source_archive')
+  expect(jsonData.data.project.source.preserveSymLinks).toBe(true)
+  expect(jsonData.data.project.source.excludes).toContain('source_exclude1')
+})
+
 process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
 describe('test black duck values passed correctly to bridge for workflow simplification', () => {
   it('should pass black duck pr comment fields to bridge in pr context', () => {
