@@ -756,6 +756,40 @@ it('should pass polaris source upload fields to bridge', () => {
   expect(jsonData.data.project.source.excludes).toContain('source_exclude1')
 })
 
+it('should pass black duck fields and project directory field to bridge', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'PROJECT_DIRECTORY', {value: 'BLACKDUCK_PROJECT_DIRECTORY'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForBlackduck()
+
+  const jsonString = fs.readFileSync(tempPath.concat(blackduck_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+  expect(jsonData.data.blackduck.url).toBe('BLACKDUCK_URL')
+  expect(jsonData.data.blackduck.token).toBe('BLACKDUCK_API_TOKEN')
+  expect(jsonData.data.project.directory).toBe('BLACKDUCK_PROJECT_DIRECTORY')
+})
+
+it('should pass coverity fields and project directory field to bridge', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+  expect(jsonData.data.coverity.connect.url).toBe('COVERITY_URL')
+  expect(jsonData.data.coverity.connect.user.name).toBe('COVERITY_USER')
+  expect(jsonData.data.coverity.connect.user.password).toBe('COVERITY_PASSPHRASE')
+})
+
 process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
 describe('test black duck values passed correctly to bridge for workflow simplification', () => {
   it('should pass black duck pr comment fields to bridge in pr context', () => {
