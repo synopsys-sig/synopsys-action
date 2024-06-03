@@ -1556,14 +1556,8 @@ class SynopsysToolsParameter {
                     polData.data.project.source.preserveSymLinks = (0, utility_1.parseToBoolean)(inputs.PROJECT_SOURCE_PRESERVESYMLINKS);
                 }
                 if (inputs.PROJECT_SOURCE_EXCLUDES) {
-                    const sourceExcludesListFiltered = [];
-                    const sourceExcludesList = inputs.PROJECT_SOURCE_EXCLUDES.split(',');
-                    for (const sourceExclude of sourceExcludesList) {
-                        if (sourceExclude) {
-                            sourceExcludesListFiltered.push(sourceExclude.trim());
-                        }
-                    }
-                    polData.data.project.source.excludes = sourceExcludesListFiltered;
+                    const sourceExcludesList = inputs.PROJECT_SOURCE_EXCLUDES.split(',').map(sourceExclude => sourceExclude.trim());
+                    polData.data.project.source.excludes = sourceExcludesList;
                 }
             }
         }

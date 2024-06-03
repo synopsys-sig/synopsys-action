@@ -108,14 +108,8 @@ export class SynopsysToolsParameter {
         }
 
         if (inputs.PROJECT_SOURCE_EXCLUDES) {
-          const sourceExcludesListFiltered: string[] = []
-          const sourceExcludesList = inputs.PROJECT_SOURCE_EXCLUDES.split(',')
-          for (const sourceExclude of sourceExcludesList) {
-            if (sourceExclude) {
-              sourceExcludesListFiltered.push(sourceExclude.trim())
-            }
-          }
-          polData.data.project.source.excludes = sourceExcludesListFiltered
+          const sourceExcludesList: string[] = inputs.PROJECT_SOURCE_EXCLUDES.split(',').map(sourceExclude => sourceExclude.trim())
+          polData.data.project.source.excludes = sourceExcludesList
         }
       }
     }
