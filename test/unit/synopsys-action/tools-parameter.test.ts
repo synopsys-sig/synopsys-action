@@ -735,7 +735,7 @@ it('should pass polaris source upload fields to bridge', () => {
   Object.defineProperty(inputs, 'PROJECT_DIRECTORY', {value: 'polaris_project_directory'})
   Object.defineProperty(inputs, 'PROJECT_SOURCE_ARCHIVE', {value: 'source_archive'})
   Object.defineProperty(inputs, 'PROJECT_SOURCE_PRESERVESYMLINKS', {value: true})
-  Object.defineProperty(inputs, 'PROJECT_SOURCE_EXCLUDES', {value: 'source_exclude1, source_exclude2'})
+  Object.defineProperty(inputs, 'PROJECT_SOURCE_EXCLUDES', {value: 'source_exclude1,  source_exclude2'})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   const resp = stp.getFormattedCommandForPolaris('synopsys-action')
 
@@ -749,11 +749,11 @@ it('should pass polaris source upload fields to bridge', () => {
   expect(jsonData.data.polaris.project.name).toContain('POLARIS_PROJECT_NAME')
   expect(jsonData.data.polaris.branch.name).toContain('feature1')
   expect(jsonData.data.polaris.assessment.mode).toContain('assessment_mode')
-  expect(jsonData.data.polaris.assessment.types).toContain('SCA')
+  expect(jsonData.data.polaris.assessment.types).toEqual(['SCA', 'SAST'])
   expect(jsonData.data.project.directory).toContain('polaris_project_directory')
   expect(jsonData.data.project.source.archive).toContain('source_archive')
   expect(jsonData.data.project.source.preserveSymLinks).toBe(true)
-  expect(jsonData.data.project.source.excludes).toContain('source_exclude1')
+  expect(jsonData.data.project.source.excludes).toEqual(['source_exclude1', 'source_exclude2'])
 })
 
 it('should pass black duck fields and project directory field to bridge', () => {
