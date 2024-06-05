@@ -1,6 +1,6 @@
 import * as fs from 'fs'
 import path from 'path'
-import {debug, info, warning} from '@actions/core'
+import {debug, info} from '@actions/core'
 import {isNullOrEmptyValue, validateBlackduckFailureSeverities, validateCoverityInstallDirectoryParam} from './validators'
 import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
@@ -64,8 +64,7 @@ export class SynopsysToolsParameter {
           serverUrl: inputs.POLARIS_SERVER_URL,
           application: {name: applicationName},
           project: {name: projectName},
-          assessment: {types: assessmentTypeArray},
-          branch: {parent: {}}
+          assessment: {types: assessmentTypeArray}
         }
       }
     }
@@ -74,7 +73,7 @@ export class SynopsysToolsParameter {
       polData.data.polaris.triage = inputs.POLARIS_TRIAGE
     }
     if (inputs.POLARIS_BRANCH_NAME) {
-      polData.data.polaris.branch.name = inputs.POLARIS_BRANCH_NAME
+      polData.data.polaris.branch = {name: inputs.POLARIS_BRANCH_NAME}
     }
     if (inputs.POLARIS_TEST_SCA_TYPE) {
       polData.data.polaris.test = {
@@ -89,7 +88,12 @@ export class SynopsysToolsParameter {
         /** Set Polaris PR comment inputs in case of PR context */
         info('Polaris PR comment is enabled')
         if (inputs.POLARIS_PARENT_BRANCH_NAME) {
-          polData.data.polaris.branch.parent.name = inputs.POLARIS_PARENT_BRANCH_NAME
+          polData.data.polaris.branch = {
+            ...(inputs.POLARIS_BRANCH_NAME && {name: inputs.POLARIS_BRANCH_NAME}),
+            parent: {
+              name: inputs.POLARIS_PARENT_BRANCH_NAME
+            }
+          }
         }
         const prCommentSeverities: string[] = []
         const inputPrCommentSeverities = inputs.POLARIS_PRCOMMENT_SEVERITIES
@@ -103,12 +107,12 @@ export class SynopsysToolsParameter {
         }
         polData.data.polaris.prComment = {
           enabled: true,
-          severities: prCommentSeverities
+          ...(prCommentSeverities.length > 0 && {severities: prCommentSeverities})
         }
         polData.data.github = this.getGithubRepoInfo()
       } else {
-        /** Log warning if Polaris PR comment is enabled in case of non PR context */
-        warning(constants.POLARIS_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+        /** Log info if Polaris PR comment is enabled in case of non PR context */
+        info(constants.POLARIS_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
       }
     }
 
@@ -138,13 +142,19 @@ export class SynopsysToolsParameter {
         polData.data.polaris.reports = {
           sarif: {
             create: true,
-            severities: sarifReportFilterSeverities,
-            file: {
-              path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
-            },
-            issue: {
-              types: sarifReportFilterAssessmentIssuesType
-            },
+            ...(inputs.POLARIS_REPORTS_SARIF_SEVERITIES && {
+              severities: sarifReportFilterSeverities
+            }),
+            ...(inputs.POLARIS_REPORTS_SARIF_FILE_PATH && {
+              file: {
+                path: inputs.POLARIS_REPORTS_SARIF_FILE_PATH.trim()
+              }
+            }),
+            ...(inputs.POLARIS_REPORTS_SARIF_ISSUE_TYPES && {
+              issue: {
+                types: sarifReportFilterAssessmentIssuesType
+              }
+            }),
             groupSCAIssues: isBoolean(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
@@ -155,8 +165,8 @@ export class SynopsysToolsParameter {
       }
     } else {
       if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-        /** Log warning if SARIF create is enabled in PR context */
-        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+        /** Log info if SARIF create is enabled in PR context */
+        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
       }
     }
 
@@ -195,13 +205,8 @@ export class SynopsysToolsParameter {
             url: inputs.COVERITY_URL,
             project: {name: coverityProjectName},
             stream: {name: coverityStreamName}
-          },
-          automation: {}
-        },
-        network: {
-          airGap: inputs.ENABLE_NETWORK_AIR_GAP
-        },
-        project: {}
+          }
+        }
       }
     }
 
@@ -219,12 +224,19 @@ export class SynopsysToolsParameter {
       covData.data.coverity.connect.policy = {view: inputs.COVERITY_POLICY_VIEW}
     }
 
-    if (inputs.COVERITY_REPOSITORY_NAME) {
-      covData.data.project.repository = {name: inputs.COVERITY_REPOSITORY_NAME}
-    }
-
-    if (inputs.COVERITY_BRANCH_NAME) {
-      covData.data.project.branch = {name: inputs.COVERITY_BRANCH_NAME}
+    if (inputs.COVERITY_REPOSITORY_NAME || inputs.COVERITY_BRANCH_NAME) {
+      covData.data.project = {
+        ...(inputs.COVERITY_REPOSITORY_NAME && {
+          repository: {
+            name: inputs.COVERITY_REPOSITORY_NAME
+          }
+        }),
+        ...(inputs.COVERITY_BRANCH_NAME && {
+          branch: {
+            name: inputs.COVERITY_BRANCH_NAME
+          }
+        })
+      }
     }
 
     if (inputs.COVERITY_VERSION) {
@@ -236,11 +248,15 @@ export class SynopsysToolsParameter {
         /** Set Coverity PR comment inputs in case of PR context */
         info('Coverity PR comment is enabled')
         covData.data.github = this.getGithubRepoInfo()
-        covData.data.coverity.automation.prcomment = true
+        covData.data.coverity.automation = {prcomment: true}
       } else {
-        /** Log warning if Coverity PR comment is enabled in case of non PR context */
-        warning(constants.COVERITY_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+        /** Log info if Coverity PR comment is enabled in case of non PR context */
+        info(constants.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
       }
+    }
+
+    if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
+      covData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
     }
 
     const inputJson = JSON.stringify(covData)
@@ -277,11 +293,7 @@ export class SynopsysToolsParameter {
       data: {
         blackduck: {
           url: inputs.BLACKDUCK_URL,
-          token: inputs.BLACKDUCK_API_TOKEN,
-          automation: {}
-        },
-        network: {
-          airGap: inputs.ENABLE_NETWORK_AIR_GAP
+          token: inputs.BLACKDUCK_API_TOKEN
         }
       }
     }
@@ -324,9 +336,9 @@ export class SynopsysToolsParameter {
         /** Set Black Duck PR comment inputs in case of PR context */
         info('Black Duck PR comment is enabled')
         blackduckData.data.github = this.getGithubRepoInfo()
-        blackduckData.data.blackduck.automation.prcomment = true
+        blackduckData.data.blackduck.automation = {prcomment: true}
       } else {
-        warning(constants.BLACKDUCK_PR_COMMENT_WARNING_FOR_NON_PR_SCANS)
+        info(constants.BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
       }
     }
     if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
@@ -336,7 +348,7 @@ export class SynopsysToolsParameter {
         blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
         blackduckData.data.github = this.getGithubRepoInfo()
       } else {
-        warning(constants.BLACKDUCK_FIXPR_WARNING_FOR_PR_SCANS)
+        info(constants.BLACKDUCK_FIXPR_LOG_INFO_FOR_PR_SCANS)
       }
     }
     if (!isPrEvent) {
@@ -354,10 +366,14 @@ export class SynopsysToolsParameter {
         blackduckData.data.blackduck.reports = {
           sarif: {
             create: true,
-            severities: sarifReportFilterSeverities,
-            file: {
-              path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
-            },
+            ...(inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES && {
+              severities: sarifReportFilterSeverities
+            }),
+            ...(inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH && {
+              file: {
+                path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
+              }
+            }),
             groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
@@ -368,9 +384,13 @@ export class SynopsysToolsParameter {
       }
     } else {
       if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-        /** Log warning if SARIF create/upload is enabled in PR context */
-        warning(constants.SARIF_REPORT_WARNING_FOR_PR_SCANS)
+        /** Log info if SARIF create/upload is enabled in PR context */
+        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
       }
+    }
+
+    if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
+      blackduckData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
     }
 
     const inputJson = JSON.stringify(blackduckData)
@@ -393,6 +413,12 @@ export class SynopsysToolsParameter {
     const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
 
+    debug(`Github Repository: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]}`)
+    debug(`Github Ref Name: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]}`)
+    debug(`Github Head Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF]}`)
+    debug(`Github Ref: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]}`)
+    debug(`Github Server Url: ${process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL]}`)
+
     // pr number will be part of "refs/pull/<pr_number>/merge"
     // if there is manual run without raising pr then GITHUB_REF will return refs/heads/branch_name
     const githubPrNumber = githubRef !== undefined ? githubRef.split('/')[2].trim() : ''
@@ -410,6 +436,7 @@ export class SynopsysToolsParameter {
   }
 
   private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string, githubHostUrl: string): GithubData {
+    const isPrEvent = isPullRequestEvent()
     const githubData: GithubData = {
       user: {
         token: githubToken
@@ -419,23 +446,26 @@ export class SynopsysToolsParameter {
         owner: {
           name: githubRepoOwner
         },
-        pull: {},
         branch: {
           name: githubBranchName
         }
-      },
-      host: {
-        url: githubHostUrl
       }
     }
-    if (githubPrNumber != null) {
-      githubData.repository.pull.number = Number(githubPrNumber)
+    if (isPrEvent && githubPrNumber != null) {
+      githubData.repository.pull = {
+        number: Number(githubPrNumber)
+      }
+    }
+    if (githubHostUrl !== '') {
+      githubData.host = {
+        url: githubHostUrl
+      }
     }
     debug(`Github repository name: ${githubData.repository.name}`)
     debug(`Github repository owner name: ${githubData.repository.owner.name}`)
     debug(`Github branch name: ${githubData.repository.branch.name}`)
     debug(`Github host url: ${githubData.host?.url}`)
-    debug(`Github pull request number: ${githubData.repository.pull.number}`)
+    debug(`Github pull request number: ${githubData.repository.pull?.number}`)
     return githubData
   }
 
@@ -449,7 +479,9 @@ export class SynopsysToolsParameter {
     }
     const blackDuckFixPrData: BlackDuckFixPrData = {}
     blackDuckFixPrData.enabled = true
-    blackDuckFixPrData.createSinglePR = createSinglePr === true
+    if (isBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)) {
+      blackDuckFixPrData.createSinglePR = parseToBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)
+    }
     if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
       blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT)
     }
@@ -473,8 +505,8 @@ export class SynopsysToolsParameter {
         }
       }
     }
-    blackDuckFixPrData.filter = {
-      ...(fixPRFilterSeverities.length > 0 ? {severities: fixPRFilterSeverities} : {})
+    if (fixPRFilterSeverities.length > 0) {
+      blackDuckFixPrData.filter = {severities: fixPRFilterSeverities}
     }
     return blackDuckFixPrData
   }

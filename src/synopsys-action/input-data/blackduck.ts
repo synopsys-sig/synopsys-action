@@ -15,7 +15,7 @@ export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
 export interface Blackduck {
   blackduck: BlackduckData
   github?: GithubData
-  network: NetworkAirGap
+  network?: NetworkAirGap
 }
 
 export interface BlackduckData {
@@ -23,7 +23,7 @@ export interface BlackduckData {
   token: string
   install?: {directory: string}
   scan?: {full?: boolean; failure?: {severities: BLACKDUCK_SCAN_FAILURE_SEVERITIES[]}}
-  automation: AutomationData
+  automation?: AutomationData
   fixpr?: BlackDuckFixPrData
   reports?: Reports
 }
@@ -44,7 +44,7 @@ export interface Repository {
   name: string
   branch: Branch
   owner: Owner
-  pull: {number?: number}
+  pull?: {number?: number}
 }
 
 export interface AutomationData {
