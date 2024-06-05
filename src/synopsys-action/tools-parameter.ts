@@ -64,7 +64,6 @@ export class SynopsysToolsParameter {
           serverUrl: inputs.POLARIS_SERVER_URL,
           application: {name: applicationName},
           project: {name: projectName},
-          assessment: {types: assessmentTypeArray}
           assessment: {
             types: assessmentTypeArray,
             ...(inputs.POLARIS_ASSESSMENT_MODE && {
