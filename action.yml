@@ -92,6 +92,21 @@ inputs:
   polaris_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Polaris SARIF report to GitHub Advanced Security'
     required: false
+  polaris_assessment_mode:
+    description: 'The test mode type of this scan'
+    required: false
+  project_directory:
+    description: 'The project source directory. Defaults to repository root directory. Set this to specify a custom folder that is other than repository root'
+    required: false
+  project_source_archive:
+    description: 'The zipped source file path. It overrides the project directory setting'
+    required: false
+  project_source_preserveSymLinks:
+    description: 'Flag indicating whether to preserve symlinks in the source zip'
+    required: false
+  project_source_excludes:
+    description: 'A list of git ignore pattern strings that indicate the files need to be excluded from the zip file'
+    required: false
   synopsys_bridge_install_directory:
     description: 'Synopsys Bridge Install Directory'
     required: false

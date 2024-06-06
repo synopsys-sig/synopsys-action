@@ -722,6 +722,72 @@ test('Test getFormattedCommandForBlackduck with sarif params', () => {
   expect(resp).toContain('--stage blackduck')
 })
 
+it('should pass polaris source upload fields to bridge', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA, SAST'})
+  Object.defineProperty(inputs, 'POLARIS_BRANCH_NAME', {value: 'feature1'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_MODE', {value: 'assessment_mode'})
+  Object.defineProperty(inputs, 'PROJECT_DIRECTORY', {value: 'polaris_project_directory'})
+  Object.defineProperty(inputs, 'PROJECT_SOURCE_ARCHIVE', {value: 'source_archive'})
+  Object.defineProperty(inputs, 'PROJECT_SOURCE_PRESERVESYMLINKS', {value: true})
+  Object.defineProperty(inputs, 'PROJECT_SOURCE_EXCLUDES', {value: 'source_exclude1,  source_exclude2'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage polaris')
+  expect(jsonData.data.polaris.serverUrl).toContain('server_url')
+  expect(jsonData.data.polaris.accesstoken).toContain('access_token')
+  expect(jsonData.data.polaris.application.name).toContain('POLARIS_APPLICATION_NAME')
+  expect(jsonData.data.polaris.project.name).toContain('POLARIS_PROJECT_NAME')
+  expect(jsonData.data.polaris.branch.name).toContain('feature1')
+  expect(jsonData.data.polaris.assessment.mode).toContain('assessment_mode')
+  expect(jsonData.data.polaris.assessment.types).toEqual(['SCA', 'SAST'])
+  expect(jsonData.data.project.directory).toContain('polaris_project_directory')
+  expect(jsonData.data.project.source.archive).toContain('source_archive')
+  expect(jsonData.data.project.source.preserveSymLinks).toBe(true)
+  expect(jsonData.data.project.source.excludes).toEqual(['source_exclude1', 'source_exclude2'])
+})
+
+it('should pass black duck fields and project directory field to bridge', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'PROJECT_DIRECTORY', {value: 'BLACKDUCK_PROJECT_DIRECTORY'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForBlackduck()
+
+  const jsonString = fs.readFileSync(tempPath.concat(blackduck_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+  expect(jsonData.data.blackduck.url).toBe('BLACKDUCK_URL')
+  expect(jsonData.data.blackduck.token).toBe('BLACKDUCK_API_TOKEN')
+  expect(jsonData.data.project.directory).toBe('BLACKDUCK_PROJECT_DIRECTORY')
+})
+
+it('should pass coverity fields and project directory field to bridge', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+  expect(jsonData.data.coverity.connect.url).toBe('COVERITY_URL')
+  expect(jsonData.data.coverity.connect.user.name).toBe('COVERITY_USER')
+  expect(jsonData.data.coverity.connect.user.password).toBe('COVERITY_PASSPHRASE')
+})
+
 process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
 describe('test black duck values passed correctly to bridge for workflow simplification', () => {
   it('should pass black duck pr comment fields to bridge in pr context', () => {
