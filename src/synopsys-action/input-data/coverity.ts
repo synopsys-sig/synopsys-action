@@ -23,6 +23,14 @@ export interface CoverityConnect {
   automation?: AutomationData
   local?: boolean
   version?: string
+  build?: Command
+  clean?: Command
+  config?: Config
+  args?: string
+}
+
+export interface Config {
+  path: string
 }
 
 export interface CoverityData {
@@ -35,4 +43,8 @@ export interface CoverityData {
 
 export interface NetworkAirGap {
   airGap: boolean
+}
+
+export interface Command {
+  command: string
 }
