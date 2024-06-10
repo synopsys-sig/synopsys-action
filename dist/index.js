@@ -1627,17 +1627,18 @@ class SynopsysToolsParameter {
                 /** Throw error if SARIF upload is enabled but GitHub token is empty */
                 throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
             }
-        }
-        else {
+        } else {
             if ((0, utility_1.parseToBoolean)(inputs.POLARIS_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
                 /** Log info if SARIF create is enabled in PR context */
                 (0, core_1.info)(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS);
             }
         }
         const inputJson = JSON.stringify(polData);
+        (0, core_1.info)("input json: ".concat(inputJson));
+        (0, core_1.info)(inputJson);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
-        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+        (0, core_1.debug)("Generated state json file at - ".concat(stateFilePath));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
@@ -1700,8 +1701,7 @@ class SynopsysToolsParameter {
                 (0, core_1.info)('Coverity PR comment is enabled');
                 covData.data.github = this.getGithubRepoInfo();
                 covData.data.coverity.automation = { prcomment: true };
-            }
-            else {
+            } else {
                 /** Log info if Coverity PR comment is enabled in case of non PR context */
                 (0, core_1.info)(constants.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS);
             }
@@ -1710,9 +1710,11 @@ class SynopsysToolsParameter {
             covData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
         const inputJson = JSON.stringify(covData);
+        (0, core_1.info)("input json: ".concat(inputJson));
+        (0, core_1.info)(inputJson);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
-        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+        (0, core_1.debug)("Generated state json file at - ".concat(stateFilePath));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
@@ -1828,8 +1830,7 @@ class SynopsysToolsParameter {
                 /** Throw error if SARIF upload is enabled but GitHub token is empty */
                 throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
             }
-        }
-        else {
+        } else {
             if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
                 /** Log info if SARIF create/upload is enabled in PR context */
                 (0, core_1.info)(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS);
@@ -1839,9 +1840,11 @@ class SynopsysToolsParameter {
             blackduckData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
         const inputJson = JSON.stringify(blackduckData);
+        (0, core_1.info)("input json: ".concat(inputJson));
+        (0, core_1.info)(inputJson);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
-        (0, core_1.debug)('Generated state json file at - '.concat(stateFilePath));
+        (0, core_1.debug)("Generated state json file at - ".concat(stateFilePath));
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }

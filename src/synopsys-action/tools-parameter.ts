@@ -192,24 +192,25 @@ export class SynopsysToolsParameter {
       }
       if (parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT) && isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
         /** Throw error if SARIF upload is enabled but GitHub token is empty */
-        throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
+        throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR);
       }
     } else {
       if (parseToBoolean(inputs.POLARIS_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
         /** Log info if SARIF create is enabled in PR context */
-        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
+        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS);
       }
     }
 
-    const inputJson = JSON.stringify(polData)
-    info('input json: '.concat(inputJson))
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
-    fs.writeFileSync(stateFilePath, inputJson)
+    const inputJson = JSON.stringify(polData);
+    info("input json: ".concat(inputJson));
+    info(inputJson);
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
+    fs.writeFileSync(stateFilePath, inputJson);
 
-    debug('Generated state json file at - '.concat(stateFilePath))
+    debug("Generated state json file at - ".concat(stateFilePath));
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
-    return command
+    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+    return command;
   }
 
   getFormattedCommandForCoverity(githubRepoName: string): string {
@@ -286,23 +287,24 @@ export class SynopsysToolsParameter {
         covData.data.coverity.automation = {prcomment: true}
       } else {
         /** Log info if Coverity PR comment is enabled in case of non PR context */
-        info(constants.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
+        info(constants.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS);
       }
     }
 
     if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
-      covData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
+      covData.data.network = { airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP) };
     }
 
-    const inputJson = JSON.stringify(covData)
-    info('"input json: "concat(inputJson));
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME)
-    fs.writeFileSync(stateFilePath, inputJson)
+    const inputJson = JSON.stringify(covData);
+    info("input json: ".concat(inputJson));
+    info(inputJson);
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
+    fs.writeFileSync(stateFilePath, inputJson);
 
-    debug('Generated state json file at - '.concat(stateFilePath))
+    debug("Generated state json file at - ".concat(stateFilePath));
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
-    return command
+    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+    return command;
   }
 
   getFormattedCommandForBlackduck(): string {
@@ -426,23 +428,24 @@ export class SynopsysToolsParameter {
     } else {
       if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
         /** Log info if SARIF create/upload is enabled in PR context */
-        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
+        info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS);
       }
     }
 
     if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
-      blackduckData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
+      blackduckData.data.network = { airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP) };
     }
 
-    const inputJson = JSON.stringify(blackduckData)
+    const inputJson = JSON.stringify(blackduckData);
     info("input json: ".concat(inputJson));
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
-    fs.writeFileSync(stateFilePath, inputJson)
+    info(inputJson);
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
+    fs.writeFileSync(stateFilePath, inputJson);
 
-    debug('Generated state json file at - '.concat(stateFilePath))
+    debug("Generated state json file at - ".concat(stateFilePath));
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
-    return command
+    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
+    return command;
   }
 
   private getGithubRepoInfo(): GithubData | undefined {
