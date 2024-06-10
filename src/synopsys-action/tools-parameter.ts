@@ -202,6 +202,7 @@ export class SynopsysToolsParameter {
     }
 
     const inputJson = JSON.stringify(polData)
+    console.info('input json: ', inputJson)
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
@@ -294,7 +295,7 @@ export class SynopsysToolsParameter {
     }
 
     const inputJson = JSON.stringify(covData)
-
+    console.info('"input json: " inputJson);
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
@@ -434,7 +435,7 @@ export class SynopsysToolsParameter {
     }
 
     const inputJson = JSON.stringify(blackduckData)
-
+    console.info("input json: ", inputJson);
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
