@@ -392,9 +392,9 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (inputs.BLACKDUCK_SEARCH_DEPTH) {
+    if (inputs.BLACKDUCK_SEARCH_DEPTH && Number.isInteger(parseInt(inputs.BLACKDUCK_SEARCH_DEPTH))) {
       blackduckData.data.blackduck.search = {
-        depth: inputs.BLACKDUCK_SEARCH_DEPTH
+        depth: parseInt(inputs.BLACKDUCK_SEARCH_DEPTH)
       }
     }
 

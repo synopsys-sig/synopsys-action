@@ -49,7 +49,7 @@ export interface User {
 }
 
 export interface Search {
-  depth: string
+  depth: number
 }
 
 export interface Config {

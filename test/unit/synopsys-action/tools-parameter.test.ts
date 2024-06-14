@@ -787,7 +787,7 @@ it('should pass blackduck arbitrary fields to bridge', () => {
   expect(resp).toContain('--stage blackduck')
   expect(jsonData.data.blackduck.url).toBe('BLACKDUCK_URL')
   expect(jsonData.data.blackduck.token).toBe('BLACKDUCK_API_TOKEN')
-  expect(jsonData.data.blackduck.search.depth).toBe('2')
+  expect(jsonData.data.blackduck.search.depth).toBe(2)
   expect(jsonData.data.blackduck.config.path).toBe('BLACKDUCK_CONFIG_PATH')
   expect(jsonData.data.blackduck.args).toBe('BLACKDUCK_ARGS')
 })
