@@ -38,6 +38,21 @@ inputs:
   coverity_version:
     description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
     required: false
+  coverity_prComment_enabled:
+    description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
+    required: false
+  coverity_build_command:
+    description: 'Build command for Coverity'
+    required: false
+  coverity_clean_command:
+    description: 'Clean command for Coverity'
+    required: false
+  coverity_config_path:
+    description: 'Coverity config file path location'
+    required: false
+  coverity_args:
+    description: 'Comma separated list of coverity options'
+    required: false
   bridge_coverity_version:
     description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
     required: false  
@@ -164,8 +179,14 @@ inputs:
   blackduck_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
     required: false
-  coverity_prComment_enabled:
-    description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
+  blackduck_search_depth:
+    description: 'Number indicating the search depth in the source directory'
+    required: false
+  blackduck_args:
+    description: 'Comma separated list of black duck options'
+    required: false
+  blackduck_config_path:
+    description: 'Black Duck config file path location'
     required: false
   github_token:
     description: 'Github token to be used for git related rest operation'

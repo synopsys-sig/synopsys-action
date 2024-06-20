@@ -277,6 +277,28 @@ export class SynopsysToolsParameter {
       covData.data.coverity.version = inputs.COVERITY_VERSION
     }
 
+    if (inputs.COVERITY_BUILD_COMMAND) {
+      covData.data.coverity.build = {
+        command: inputs.COVERITY_BUILD_COMMAND
+      }
+    }
+
+    if (inputs.COVERITY_CLEAN_COMMAND) {
+      covData.data.coverity.clean = {
+        command: inputs.COVERITY_CLEAN_COMMAND
+      }
+    }
+
+    if (inputs.COVERITY_CONFIG_PATH) {
+      covData.data.coverity.config = {
+        path: inputs.COVERITY_CONFIG_PATH
+      }
+    }
+
+    if (inputs.COVERITY_ARGS) {
+      covData.data.coverity.args = inputs.COVERITY_ARGS
+    }
+
     if (parseToBoolean(inputs.COVERITY_PRCOMMENT_ENABLED)) {
       if (isPrEvent) {
         /** Set Coverity PR comment inputs in case of PR context */
@@ -368,6 +390,22 @@ export class SynopsysToolsParameter {
       blackduckData.data.project = {
         directory: inputs.PROJECT_DIRECTORY
       }
+    }
+
+    if (inputs.BLACKDUCK_SEARCH_DEPTH && Number.isInteger(parseInt(inputs.BLACKDUCK_SEARCH_DEPTH))) {
+      blackduckData.data.blackduck.search = {
+        depth: parseInt(inputs.BLACKDUCK_SEARCH_DEPTH)
+      }
+    }
+
+    if (inputs.BLACKDUCK_CONFIG_PATH) {
+      blackduckData.data.blackduck.config = {
+        path: inputs.BLACKDUCK_CONFIG_PATH
+      }
+    }
+
+    if (inputs.BLACKDUCK_ARGS) {
+      blackduckData.data.blackduck.args = inputs.BLACKDUCK_ARGS
     }
 
     const isPrEvent = isPullRequestEvent()

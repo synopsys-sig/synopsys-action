@@ -33,6 +33,10 @@ export const COVERITY_INSTALL_DIRECTORY_KEY = 'coverity_install_directory'
 export const COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view'
 export const COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name'
 export const COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name'
+export const COVERITY_BUILD_COMMAND_KEY = 'coverity_build_command'
+export const COVERITY_CLEAN_COMMAND_KEY = 'coverity_clean_command'
+export const COVERITY_CONFIG_PATH_KEY = 'coverity_config_path'
+export const COVERITY_ARGS_KEY = 'coverity_args'
 /**
  * @deprecated Use coverity_prComment_enabled instead. This can be removed in future release.
  */
@@ -97,6 +101,9 @@ export const BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_fi
 export const BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities'
 export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues'
 export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
+export const BLACKDUCK_SEARCH_DEPTH_KEY = 'blackduck_search_depth'
+export const BLACKDUCK_CONFIG_PATH_KEY = 'blackduck_config_path'
+export const BLACKDUCK_ARGS_KEY = 'blackduck_args'
 
 export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'

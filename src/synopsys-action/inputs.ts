@@ -45,6 +45,10 @@ export const COVERITY_BRANCH_NAME = getInput(constants.COVERITY_BRANCH_NAME_KEY)
 export const COVERITY_PRCOMMENT_ENABLED = getInput(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)?.trim() || getInput(constants.COVERITY_PRCOMMENT_ENABLED_KEY)?.trim() || ''
 export const COVERITY_LOCAL = getInput(constants.COVERITY_LOCAL_KEY)?.trim() === 'true' || false
 export const COVERITY_VERSION = getInput(constants.COVERITY_VERSION_KEY)?.trim() || getInput(constants.BRIDGE_COVERITY_VERSION_KEY)?.trim() || ''
+export const COVERITY_BUILD_COMMAND = getInput(constants.COVERITY_BUILD_COMMAND_KEY)?.trim() || ''
+export const COVERITY_CLEAN_COMMAND = getInput(constants.COVERITY_CLEAN_COMMAND_KEY)?.trim() || ''
+export const COVERITY_CONFIG_PATH = getInput(constants.COVERITY_CONFIG_PATH_KEY)?.trim() || ''
+export const COVERITY_ARGS = getInput(constants.COVERITY_ARGS_KEY)?.trim() || ''
 
 // Blackduck related inputs
 export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''
@@ -63,6 +67,9 @@ export const BLACKDUCK_REPORTS_SARIF_FILE_PATH = getInput(constants.BLACKDUCK_RE
 export const BLACKDUCK_REPORTS_SARIF_SEVERITIES = getInput(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)?.trim() || ''
 export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
 export const BLACKDUCK_UPLOAD_SARIF_REPORT = getInput(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
+export const BLACKDUCK_SEARCH_DEPTH = getInput(constants.BLACKDUCK_SEARCH_DEPTH_KEY)?.trim() || ''
+export const BLACKDUCK_CONFIG_PATH = getInput(constants.BLACKDUCK_CONFIG_PATH_KEY)?.trim() || ''
+export const BLACKDUCK_ARGS = getInput(constants.BLACKDUCK_ARGS_KEY)?.trim() || ''
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || ''
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)?.trim() || ''
 export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)?.trim() || ''

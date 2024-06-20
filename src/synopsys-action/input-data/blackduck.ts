@@ -27,6 +27,9 @@ export interface BlackduckData {
   automation?: AutomationData
   fixpr?: BlackDuckFixPrData
   reports?: Reports
+  search?: Search
+  config?: Config
+  args?: string
 }
 
 export interface ProjectData {
@@ -43,6 +46,14 @@ export interface Owner {
 
 export interface User {
   token: string
+}
+
+export interface Search {
+  depth: number
+}
+
+export interface Config {
+  path: string
 }
 
 export interface Repository {
