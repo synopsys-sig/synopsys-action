@@ -131,9 +131,6 @@ inputs:
   blackduck_url:
     description: 'URL for blackduck hub'
     required: false
-  blackduck_apiToken:
-    description: 'Password for blackduck hub'
-    required: false
   blackduck_token:
     description: 'API token to access blackduck'
     required: false
