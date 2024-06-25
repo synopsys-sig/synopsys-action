@@ -203,8 +203,8 @@ const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const artifacts_1 = __nccwpck_require__(1309);
-const github_client_service_1 = __nccwpck_require__(2016);
 const validators_1 = __nccwpck_require__(8401);
+const github_client_service_factory_1 = __nccwpck_require__(4130);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -253,12 +253,12 @@ function run() {
                     if (!(0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
                         // Upload Black Duck SARIF Report to code scanning tab
                         if (inputs.BLACKDUCK_URL && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-                            const gitHubClientService = new github_client_service_1.GithubClientService();
+                            const gitHubClientService = yield github_client_service_factory_1.GitHubClientServiceFactory.getGitHubClientServiceInstance();
                             yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
                         }
                         // Upload Polaris SARIF Report to code scanning tab
                         if (inputs.POLARIS_SERVER_URL && (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-                            const gitHubClientService = new github_client_service_1.GithubClientService();
+                            const gitHubClientService = yield github_client_service_factory_1.GitHubClientServiceFactory.getGitHubClientServiceInstance();
                             yield gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH);
                         }
                     }
@@ -503,34 +503,11 @@ exports.extractZipped = extractZipped;
 
 /***/ }),
 
-/***/ 2016:
+/***/ 4130:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -541,108 +518,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GithubClientService = void 0;
-const HttpClient_1 = __nccwpck_require__(5538);
-const inputs = __importStar(__nccwpck_require__(7481));
-const fs = __importStar(__nccwpck_require__(5747));
-const zlib = __importStar(__nccwpck_require__(8761));
-const utility_1 = __nccwpck_require__(7643);
-const core_1 = __nccwpck_require__(2186);
-const constants = __importStar(__nccwpck_require__(9717));
-class GithubClientService {
-    constructor() {
-        this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs';
-        this.githubToken = inputs.GITHUB_TOKEN;
-        this.githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
-        this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : '';
-        this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
-        this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
-        this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl;
-        this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || '';
-        this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || '';
-    }
-    uploadSarifReport(defaultSarifReportDirectory, userSarifFilePath) {
-        var _a, _b;
+exports.GitHubClientServiceFactory = void 0;
+const github_client_service_v1_1 = __nccwpck_require__(8105);
+const github_client_service_v2_1 = __nccwpck_require__(9989);
+exports.GitHubClientServiceFactory = {
+    SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
+    fetchVersion() {
         return __awaiter(this, void 0, void 0, function* () {
-            (0, core_1.info)('Uploading SARIF results to GitHub');
-            let retryCountLocal = constants.RETRY_COUNT;
-            let retryDelay = constants.RETRY_DELAY_IN_MILLISECONDS;
-            const stringFormat = (url, ...args) => {
-                return url.replace(/{(\d+)}/g, (match, index) => args[index] || '');
-            };
-            const endpoint = stringFormat(this.githubApiURL.concat(this.gitHubCodeScanningUrl), this.repoOwner, this.repoName);
-            const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
-            if ((0, utility_1.checkIfPathExists)(sarifFilePath)) {
-                try {
-                    const sarifContent = fs.readFileSync(sarifFilePath, 'utf8');
-                    const compressedSarif = zlib.gzipSync(sarifContent);
-                    const base64Sarif = compressedSarif.toString('base64');
-                    const data = {
-                        commit_sha: this.commit_sha,
-                        ref: this.githubRef,
-                        sarif: base64Sarif,
-                        validate: true
-                    };
-                    do {
-                        const httpClient = new HttpClient_1.HttpClient('GithubClientService');
-                        const httpResponse = yield httpClient.post(endpoint, JSON.stringify(data), {
-                            Authorization: `Bearer ${this.githubToken}`,
-                            Accept: 'application/vnd.github+json'
-                        });
-                        (0, core_1.debug)(`HTTP Status Code: ${httpResponse.message.statusCode}`);
-                        (0, core_1.debug)(`HTTP Response Headers: ${JSON.stringify(httpResponse.message.headers)}`);
-                        const responseBody = yield httpResponse.readBody();
-                        const rateLimitRemaining = ((_a = httpResponse.message) === null || _a === void 0 ? void 0 : _a.headers[constants.X_RATE_LIMIT_REMAINING]) || '';
-                        if (httpResponse.message.statusCode === constants.HTTP_STATUS_ACCEPTED) {
-                            (0, core_1.info)('SARIF result uploaded successfully to GitHub Advance Security');
-                            retryCountLocal = 0;
-                        }
-                        else if (httpResponse.message.statusCode === constants.HTTP_STATUS_FORBIDDEN && (rateLimitRemaining === '0' || responseBody.includes(constants.SECONDARY_RATE_LIMIT))) {
-                            const rateLimitResetHeader = ((_b = httpResponse.message) === null || _b === void 0 ? void 0 : _b.headers[constants.X_RATE_LIMIT_RESET]) || '';
-                            const rateLimitReset = Array.isArray(rateLimitResetHeader) ? rateLimitResetHeader[0] : rateLimitResetHeader;
-                            const currentTimeInSeconds = Math.floor(Date.now() / 1000);
-                            const resetTimeInSeconds = parseInt(rateLimitReset, 10);
-                            const secondsUntilReset = resetTimeInSeconds - currentTimeInSeconds;
-                            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=105
-                            if (secondsUntilReset <= 105) {
-                                retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
-                            }
-                            else {
-                                const minutesUntilreset = Math.ceil(secondsUntilReset / 60);
-                                throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`);
-                            }
-                            retryCountLocal--;
-                        }
-                        else {
-                            retryCountLocal = 0;
-                            throw new Error(responseBody);
-                        }
-                    } while (retryCountLocal > 0);
-                }
-                catch (error) {
-                    throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
-                }
+            // Logic to fetch version from GitHub API
+            return '3.12';
+        });
+    },
+    getGitHubClientServiceInstance() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const version = yield this.fetchVersion();
+            let service;
+            if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
+                service = new github_client_service_v1_1.GithubClientServiceV1();
+            }
+            else if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
+                service = new github_client_service_v2_1.GithubClientServiceV2();
             }
             else {
-                throw new Error('No SARIF file found to upload');
+                service = new github_client_service_v2_1.GithubClientServiceV2();
             }
+            return service;
         });
     }
-    retrySleepHelper(message, retryCountLocal, retryDelay) {
-        return __awaiter(this, void 0, void 0, function* () {
-            (0, core_1.info)(message
-                .concat(String(retryCountLocal))
-                .concat(', Waiting: ')
-                .concat(String(retryDelay / 1000))
-                .concat(' Seconds'));
-            yield (0, utility_1.sleep)(retryDelay);
-            // Delayed exponentially starting from 15 seconds
-            retryDelay = retryDelay * 2;
-            return retryDelay;
-        });
-    }
-}
-exports.GithubClientService = GithubClientService;
+};
 
 
 /***/ }),
@@ -852,6 +755,184 @@ class RetryHelper {
     }
 }
 exports.RetryHelper = RetryHelper;
+
+
+/***/ }),
+
+/***/ 7941:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubClientService = void 0;
+const HttpClient_1 = __nccwpck_require__(5538);
+const inputs = __importStar(__nccwpck_require__(7481));
+const fs = __importStar(__nccwpck_require__(5747));
+const zlib = __importStar(__nccwpck_require__(8761));
+const utility_1 = __nccwpck_require__(7643);
+const core_1 = __nccwpck_require__(2186);
+const validators_1 = __nccwpck_require__(8401);
+const constants = __importStar(__nccwpck_require__(9717));
+class GithubClientService {
+    constructor() {
+        this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs';
+        this.githubToken = inputs.GITHUB_TOKEN;
+        this.githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
+        this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : 'node-goat-1';
+        this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || 'spurohitsynopsys';
+        this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || 'https://api.github.com';
+        this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl;
+        this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || 'e434b96cc4d26a0396ede1e76c4946afbcaf6ec6';
+        this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || 'ssss';
+    }
+    uploadSarifReport(defaultSarifReportDirectory, userSarifFilePath) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)('Uploading SARIF results to GitHub');
+            if ((0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
+                throw new Error('Missing required GitHub token for uploading SARIF report to GitHub Advanced Security');
+            }
+            let retryCountLocal = constants.RETRY_COUNT;
+            let retryDelay = constants.RETRY_DELAY_IN_MILLISECONDS;
+            const stringFormat = (url, ...args) => {
+                return url.replace(/{(\d+)}/g, (match, index) => args[index] || '');
+            };
+            const endpoint = stringFormat(this.githubApiURL.concat(this.gitHubCodeScanningUrl), this.repoOwner, this.repoName);
+            const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
+            if ((0, utility_1.checkIfPathExists)(sarifFilePath)) {
+                try {
+                    const sarifContent = fs.readFileSync(sarifFilePath, 'utf8');
+                    const compressedSarif = zlib.gzipSync(sarifContent);
+                    const base64Sarif = compressedSarif.toString('base64');
+                    const data = {
+                        commit_sha: this.commit_sha,
+                        ref: this.githubRef,
+                        sarif: base64Sarif,
+                        validate: true
+                    };
+                    do {
+                        const httpClient = new HttpClient_1.HttpClient('GithubClientService');
+                        const httpResponse = yield httpClient.post(endpoint, JSON.stringify(data), {
+                            Authorization: `Bearer ${this.githubToken}`,
+                            Accept: 'application/vnd.github+json'
+                        });
+                        (0, core_1.debug)(`HTTP Status Code: ${httpResponse.message.statusCode}`);
+                        (0, core_1.debug)(`HTTP Response Headers: ${JSON.stringify(httpResponse.message.headers)}`);
+                        const responseBody = yield httpResponse.readBody();
+                        const rateLimitRemaining = ((_a = httpResponse.message) === null || _a === void 0 ? void 0 : _a.headers[constants.X_RATE_LIMIT_REMAINING]) || '';
+                        if (httpResponse.message.statusCode === constants.HTTP_STATUS_ACCEPTED) {
+                            (0, core_1.info)('SARIF result uploaded successfully to GitHub Advance Security');
+                            retryCountLocal = 0;
+                        }
+                        else if (httpResponse.message.statusCode === constants.HTTP_STATUS_FORBIDDEN && (rateLimitRemaining === '0' || responseBody.includes(constants.SECONDARY_RATE_LIMIT))) {
+                            const rateLimitResetHeader = ((_b = httpResponse.message) === null || _b === void 0 ? void 0 : _b.headers[constants.X_RATE_LIMIT_RESET]) || '';
+                            const rateLimitReset = Array.isArray(rateLimitResetHeader) ? rateLimitResetHeader[0] : rateLimitResetHeader;
+                            const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+                            const resetTimeInSeconds = parseInt(rateLimitReset, 10);
+                            const secondsUntilReset = resetTimeInSeconds - currentTimeInSeconds;
+                            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=105
+                            if (secondsUntilReset <= 105) {
+                                retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
+                            }
+                            else {
+                                const minutesUntilreset = Math.ceil(secondsUntilReset / 60);
+                                throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`);
+                            }
+                            retryCountLocal--;
+                        }
+                        else {
+                            retryCountLocal = 0;
+                            throw new Error(responseBody);
+                        }
+                    } while (retryCountLocal > 0);
+                }
+                catch (error) {
+                    throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
+                }
+            }
+            else {
+                throw new Error('No SARIF file found to upload');
+            }
+        });
+    }
+    retrySleepHelper(message, retryCountLocal, retryDelay) {
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)(message
+                .concat(String(retryCountLocal))
+                .concat(', Waiting: ')
+                .concat(String(retryDelay / 1000))
+                .concat(' Seconds'));
+            yield (0, utility_1.sleep)(retryDelay);
+            // Delayed exponentially starting from 15 seconds
+            retryDelay = retryDelay * 2;
+            return retryDelay;
+        });
+    }
+}
+exports.GithubClientService = GithubClientService;
+
+
+/***/ }),
+
+/***/ 8105:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubClientServiceV1 = void 0;
+const github_client_service_1 = __nccwpck_require__(7941);
+class GithubClientServiceV1 extends github_client_service_1.GithubClientService {
+}
+exports.GithubClientServiceV1 = GithubClientServiceV1;
+
+
+/***/ }),
+
+/***/ 9989:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubClientServiceV2 = void 0;
+const github_client_service_1 = __nccwpck_require__(7941);
+class GithubClientServiceV2 extends github_client_service_1.GithubClientService {
+}
+exports.GithubClientServiceV2 = GithubClientServiceV2;
 
 
 /***/ }),
