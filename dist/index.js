@@ -521,6 +521,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitHubClientServiceFactory = void 0;
 const github_client_service_v1_1 = __nccwpck_require__(8105);
 const github_client_service_v2_1 = __nccwpck_require__(9989);
+const core_1 = __nccwpck_require__(2186);
 exports.GitHubClientServiceFactory = {
     SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
     fetchVersion() {
@@ -534,12 +535,15 @@ exports.GitHubClientServiceFactory = {
             const version = yield this.fetchVersion();
             let service;
             if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
+                (0, core_1.info)(`Using GitHub API v1 for version ${version}`);
                 service = new github_client_service_v1_1.GithubClientServiceV1();
             }
             else if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
+                (0, core_1.info)(`Using GitHub API v2 for version ${version}`);
                 service = new github_client_service_v2_1.GithubClientServiceV2();
             }
             else {
+                (0, core_1.info)(`Using GitHub API v2 for version ${version}`);
                 service = new github_client_service_v2_1.GithubClientServiceV2();
             }
             return service;
