@@ -238,6 +238,7 @@ function run() {
         finally {
             (0, core_1.debug)(`Synopsys Bridge execution completed: ${isBridgeExecuted}`);
             if (isBridgeExecuted) {
+                (0, core_1.info)('Synopsys Bridge execution completed');
                 if (inputs.INCLUDE_DIAGNOSTICS) {
                     yield (0, artifacts_1.uploadDiagnostics)();
                 }

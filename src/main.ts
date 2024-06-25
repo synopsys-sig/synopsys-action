@@ -38,6 +38,7 @@ export async function run() {
   } finally {
     debug(`Synopsys Bridge execution completed: ${isBridgeExecuted}`)
     if (isBridgeExecuted) {
+      info('Synopsys Bridge execution completed')
       if (inputs.INCLUDE_DIAGNOSTICS) {
         await uploadDiagnostics()
       }
