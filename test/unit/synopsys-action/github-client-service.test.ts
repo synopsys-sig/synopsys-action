@@ -2,7 +2,7 @@ import * as inputs from '../../../src/synopsys-action/inputs'
 import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import Mocked = jest.Mocked
-import {GithubClientService} from '../../../src/synopsys-action/github-client-service'
+import {GithubClientService} from '../../../src/synopsys-action/service/impl/github-client-service'
 import {Socket} from 'net'
 import * as utility from '../../../src/synopsys-action/utility'
 import fs from 'fs'
