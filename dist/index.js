@@ -253,6 +253,7 @@ function run() {
                     if (!(0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
                         // Upload Black Duck SARIF Report to code scanning tab
                         if (inputs.BLACKDUCK_URL && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+                            (0, core_1.info)('Uploading Black Duck SARIF Report to code scanning tab...');
                             const gitHubClientService = yield github_client_service_factory_1.GitHubClientServiceFactory.getGitHubClientServiceInstance();
                             yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
                         }
@@ -532,6 +533,7 @@ exports.GitHubClientServiceFactory = {
     },
     getGitHubClientServiceInstance() {
         return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)('Fetching GitHub client service instance...');
             const version = yield this.fetchVersion();
             let service;
             if (this.SUPPORTED_VERSIONS_V1.includes(version)) {

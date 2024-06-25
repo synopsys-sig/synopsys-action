@@ -12,6 +12,7 @@ export const GitHubClientServiceFactory = {
   },
 
   async getGitHubClientServiceInstance(): Promise<IGithubClientService> {
+    info('Fetching GitHub client service instance...')
     const version = await this.fetchVersion()
     let service: IGithubClientService
 

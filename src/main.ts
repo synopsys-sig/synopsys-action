@@ -54,6 +54,7 @@ export async function run() {
         if (!isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
           // Upload Black Duck SARIF Report to code scanning tab
           if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+            info('Uploading Black Duck SARIF Report to code scanning tab...')
             const gitHubClientService = await GitHubClientServiceFactory.getGitHubClientServiceInstance()
             await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
           }
