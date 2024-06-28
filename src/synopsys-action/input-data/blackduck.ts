@@ -19,7 +19,7 @@ export interface Blackduck {
   network?: NetworkAirGap
 }
 
-export interface BlackduckData {
+export interface BlackduckData extends BlackDuckArbitrary {
   url: string
   token: string
   install?: {directory: string}
@@ -27,6 +27,9 @@ export interface BlackduckData {
   automation?: AutomationData
   fixpr?: BlackDuckFixPrData
   reports?: Reports
+}
+
+export interface BlackDuckArbitrary {
   search?: Search
   config?: Config
   args?: string
@@ -34,18 +37,6 @@ export interface BlackduckData {
 
 export interface ProjectData {
   directory?: string
-}
-
-export interface Branch {
-  name: string
-}
-
-export interface Owner {
-  name: string
-}
-
-export interface User {
-  token: string
 }
 
 export interface Search {
@@ -56,23 +47,12 @@ export interface Config {
   path: string
 }
 
-export interface Repository {
-  name: string
-  branch: Branch
-  owner: Owner
-  pull?: {number?: number}
-}
-
 export interface AutomationData {
   prcomment?: boolean
   fixpr?: boolean
 }
 
-export interface GithubData {
-  user: User
-  repository: Repository
-  host?: GithubURL
-}
+export interface GithubData {}
 
 export interface BlackDuckFixPrData {
   enabled?: boolean
@@ -84,10 +64,6 @@ export interface BlackDuckFixPrData {
 
 export interface BlackDuckFixPrFilerData {
   severities?: string[]
-}
-
-export interface GithubURL {
-  url: string
 }
 
 export interface NetworkAirGap {

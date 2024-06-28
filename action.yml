@@ -51,7 +51,7 @@ inputs:
     description: 'Coverity config file path location'
     required: false
   coverity_args:
-    description: 'Comma separated list of coverity options'
+    description: 'List of coverity arguments'
     required: false
   bridge_coverity_version:
     description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
@@ -183,7 +183,7 @@ inputs:
     description: 'Number indicating the search depth in the source directory'
     required: false
   blackduck_args:
-    description: 'Comma separated list of black duck options'
+    description: 'List of black duck arguments'
     required: false
   blackduck_config_path:
     description: 'Black Duck config file path location'
