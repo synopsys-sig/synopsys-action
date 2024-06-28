@@ -1,10 +1,14 @@
-import {GithubData} from './blackduck'
+import {BlackDuckArbitrary} from './blackduck'
+import {CoverityArbitrary} from './coverity'
+import {GithubData} from './github'
 import {Reports} from './reports'
 
 export interface Polaris {
   polaris: PolarisData
   project?: ProjectData
   github?: GithubData
+  coverity?: CoverityArbitrary
+  blackduck?: BlackDuckArbitrary
 }
 
 export interface PolarisData {

@@ -1,4 +1,4 @@
-import {GithubData} from './blackduck'
+import {GithubData} from './github'
 
 export interface Coverity {
   coverity: CoverityConnect
@@ -17,12 +17,15 @@ export interface AutomationData {
   prcomment?: boolean
 }
 
-export interface CoverityConnect {
+export interface CoverityConnect extends CoverityArbitrary {
   connect: CoverityData
   install?: {directory: string}
   automation?: AutomationData
   local?: boolean
   version?: string
+}
+
+export interface CoverityArbitrary {
   build?: Command
   clean?: Command
   config?: Config
