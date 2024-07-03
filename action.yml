@@ -48,10 +48,10 @@ inputs:
     description: 'Clean command for Coverity'
     required: false
   coverity_config_path:
-    description: 'Coverity config file path location'
+    description: 'Coverity config file path (.yaml/.yml/.json)'
     required: false
   coverity_args:
-    description: 'List of coverity arguments'
+    description: 'Additional Coverity Arguments separated by space'
     required: false
   bridge_coverity_version:
     description: 'If provided, Synopsys Action will download specific version of coverity thin client to use.'
@@ -183,10 +183,10 @@ inputs:
     description: 'Number indicating the search depth in the source directory'
     required: false
   blackduck_args:
-    description: 'List of black duck arguments'
+    description: 'Additional Black Duck Arguments separated by space'
     required: false
   blackduck_config_path:
-    description: 'Black Duck config file path location'
+    description: 'Black Duck config file path (.properties/.yml)'
     required: false
   github_token:
     description: 'Github token to be used for git related rest operation'
