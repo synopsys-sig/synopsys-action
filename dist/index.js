@@ -1648,6 +1648,9 @@ class SynopsysToolsParameter {
                 (0, core_1.info)(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS);
             }
         }
+        // Set Coverity or Blackduck Arbitrary Arguments
+        polData.data.coverity = this.setCoverityArbitraryArgs();
+        polData.data.blackduck = this.setBlackDuckArbitraryArgs();
         const inputJson = JSON.stringify(polData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
@@ -1708,24 +1711,6 @@ class SynopsysToolsParameter {
         if (inputs.COVERITY_VERSION) {
             covData.data.coverity.version = inputs.COVERITY_VERSION;
         }
-        if (inputs.COVERITY_BUILD_COMMAND) {
-            covData.data.coverity.build = {
-                command: inputs.COVERITY_BUILD_COMMAND
-            };
-        }
-        if (inputs.COVERITY_CLEAN_COMMAND) {
-            covData.data.coverity.clean = {
-                command: inputs.COVERITY_CLEAN_COMMAND
-            };
-        }
-        if (inputs.COVERITY_CONFIG_PATH) {
-            covData.data.coverity.config = {
-                path: inputs.COVERITY_CONFIG_PATH
-            };
-        }
-        if (inputs.COVERITY_ARGS) {
-            covData.data.coverity.args = inputs.COVERITY_ARGS;
-        }
         if ((0, utility_1.parseToBoolean)(inputs.COVERITY_PRCOMMENT_ENABLED)) {
             if (isPrEvent) {
                 /** Set Coverity PR comment inputs in case of PR context */
@@ -1741,6 +1726,7 @@ class SynopsysToolsParameter {
         if ((0, utility_1.isBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
             covData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
+        covData.data.coverity = Object.assign({}, this.setCoverityArbitraryArgs(), covData.data.coverity);
         const inputJson = JSON.stringify(covData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
@@ -1811,19 +1797,6 @@ class SynopsysToolsParameter {
                 directory: inputs.PROJECT_DIRECTORY
             };
         }
-        if (inputs.BLACKDUCK_SEARCH_DEPTH && Number.isInteger(parseInt(inputs.BLACKDUCK_SEARCH_DEPTH))) {
-            blackduckData.data.blackduck.search = {
-                depth: parseInt(inputs.BLACKDUCK_SEARCH_DEPTH)
-            };
-        }
-        if (inputs.BLACKDUCK_CONFIG_PATH) {
-            blackduckData.data.blackduck.config = {
-                path: inputs.BLACKDUCK_CONFIG_PATH
-            };
-        }
-        if (inputs.BLACKDUCK_ARGS) {
-            blackduckData.data.blackduck.args = inputs.BLACKDUCK_ARGS;
-        }
         const isPrEvent = (0, utility_1.isPullRequestEvent)();
         if ((0, utility_1.parseToBoolean)(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
             if (isPrEvent) {
@@ -1883,6 +1856,7 @@ class SynopsysToolsParameter {
         if ((0, utility_1.isBoolean)(inputs.ENABLE_NETWORK_AIR_GAP)) {
             blackduckData.data.network = { airGap: (0, utility_1.parseToBoolean)(inputs.ENABLE_NETWORK_AIR_GAP) };
         }
+        blackduckData.data.blackduck = Object.assign({}, this.setBlackDuckArbitraryArgs(), blackduckData.data.blackduck);
         const inputJson = JSON.stringify(blackduckData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
@@ -1989,6 +1963,45 @@ class SynopsysToolsParameter {
             blackDuckFixPrData.filter = { severities: fixPRFilterSeverities };
         }
         return blackDuckFixPrData;
+    }
+    setCoverityArbitraryArgs() {
+        const covArbitraryData = {};
+        if (inputs.COVERITY_BUILD_COMMAND) {
+            covArbitraryData.build = {
+                command: inputs.COVERITY_BUILD_COMMAND
+            };
+        }
+        if (inputs.COVERITY_CLEAN_COMMAND) {
+            covArbitraryData.clean = {
+                command: inputs.COVERITY_CLEAN_COMMAND
+            };
+        }
+        if (inputs.COVERITY_CONFIG_PATH) {
+            covArbitraryData.config = {
+                path: inputs.COVERITY_CONFIG_PATH
+            };
+        }
+        if (inputs.COVERITY_ARGS) {
+            covArbitraryData.args = inputs.COVERITY_ARGS;
+        }
+        return covArbitraryData;
+    }
+    setBlackDuckArbitraryArgs() {
+        const blackduckData = {};
+        if (inputs.BLACKDUCK_SEARCH_DEPTH && Number.isInteger(parseInt(inputs.BLACKDUCK_SEARCH_DEPTH))) {
+            blackduckData.search = {
+                depth: parseInt(inputs.BLACKDUCK_SEARCH_DEPTH)
+            };
+        }
+        if (inputs.BLACKDUCK_CONFIG_PATH) {
+            blackduckData.config = {
+                path: inputs.BLACKDUCK_CONFIG_PATH
+            };
+        }
+        if (inputs.BLACKDUCK_ARGS) {
+            blackduckData.args = inputs.BLACKDUCK_ARGS;
+        }
+        return blackduckData;
     }
 }
 exports.SynopsysToolsParameter = SynopsysToolsParameter;
