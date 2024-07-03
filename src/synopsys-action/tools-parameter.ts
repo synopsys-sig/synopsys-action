@@ -377,22 +377,6 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (inputs.BLACKDUCK_SEARCH_DEPTH && Number.isInteger(parseInt(inputs.BLACKDUCK_SEARCH_DEPTH))) {
-      blackduckData.data.blackduck.search = {
-        depth: parseInt(inputs.BLACKDUCK_SEARCH_DEPTH)
-      }
-    }
-
-    if (inputs.BLACKDUCK_CONFIG_PATH) {
-      blackduckData.data.blackduck.config = {
-        path: inputs.BLACKDUCK_CONFIG_PATH
-      }
-    }
-
-    if (inputs.BLACKDUCK_ARGS) {
-      blackduckData.data.blackduck.args = inputs.BLACKDUCK_ARGS
-    }
-
     const isPrEvent = isPullRequestEvent()
     if (parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
       if (isPrEvent) {
