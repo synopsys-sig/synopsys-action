@@ -4,7 +4,7 @@ import {getGitHubWorkspaceDir} from '@actions/artifact/lib/internal/shared/confi
 import * as fs from 'fs'
 import * as inputs from './inputs'
 import {getDefaultSarifReportPath} from './utility'
-import {warning} from '@actions/core'
+import {warning, info} from '@actions/core'
 import path from 'path'
 
 export async function uploadDiagnostics(): Promise<UploadArtifactResponse | void> {
@@ -56,5 +56,7 @@ export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: s
   const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(defaultSarifReportDirectory, false)
   const options: UploadArtifactOptions = {}
   // options.continueOnError = false
-  return await artifactClient.uploadArtifact(artifactName, ["/fake/path"], 'rootDir', options)
+  info('uploadSarifReportAsArtifact - artifactName '.concat(artifactName))
+  info('uploadSarifReportAsArtifact - sarifFilePath '.concat(sarifFilePath))
+  return await artifactClient.uploadArtifact(artifactName, ['/fake/path'], rootDir, options)
 }
