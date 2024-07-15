@@ -3,7 +3,7 @@ import * as os from 'os'
 import path from 'path'
 import {APPLICATION_NAME, GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 import {rmRF} from '@actions/io'
-import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
+import {getGitHubWorkspaceDir} from '@actions/artifact/lib/internal/shared/config'
 import * as constants from '../application-constants'
 import {debug} from '@actions/core'
 
@@ -59,7 +59,7 @@ export async function sleep(duration: number): Promise<void> {
 }
 
 export function getDefaultSarifReportPath(sarifReportDirectory: string, appendFilePath: boolean): string {
-  const pwd = getWorkSpaceDirectory()
+  const pwd = getGitHubWorkspaceDir()
   return !appendFilePath ? path.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory) : path.join(pwd, constants.BRIDGE_LOCAL_DIRECTORY, sarifReportDirectory, constants.SARIF_DEFAULT_FILE_NAME)
 }
 

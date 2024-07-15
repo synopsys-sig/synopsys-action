@@ -3,9 +3,9 @@ import * as inputs from '../../src/synopsys-action/inputs'
 import {SynopsysBridge} from '../../src/synopsys-action/synopsys-bridge'
 import {DownloadFileResponse} from '../../src/synopsys-action/download-utility'
 import * as downloadUtility from './../../src/synopsys-action/download-utility'
-import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import * as configVariables from '@actions/artifact/lib/internal/shared/config'
 import * as diagnostics from '../../src/synopsys-action/artifacts'
-import {UploadResponse} from '@actions/artifact'
+import {UploadArtifactResponse} from '@actions/artifact'
 import {GithubClientService} from '../../src/synopsys-action/github-client-service'
 import * as utility from '../../src/synopsys-action/utility'
 
@@ -16,7 +16,7 @@ beforeEach(() => {
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
   process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
   jest.resetModules()
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadDiagnostics').mockResolvedValueOnce(uploadResponse)
 })
 
@@ -72,7 +72,7 @@ test('Run polaris flow - run', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
   const response = await run()
 
@@ -95,7 +95,7 @@ test('Run polaris flow - run: success', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   const response = await run()
 
@@ -116,7 +116,7 @@ test('Enable airgap', async () => {
     return '/home'
   })
 
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
 
   const response = await run()
@@ -140,9 +140,9 @@ test('Run blackduck flow - run', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadDiagnostics').mockResolvedValueOnce(uploadResponse)
   const response = await run()
   expect(response).not.toBe(null)
@@ -163,7 +163,7 @@ test('Run blackduck flow - PR COMMENT - when MR details not found', async () => 
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
 
   try {
@@ -192,7 +192,7 @@ test('Run blackduck flow with Fix pull request - run', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
   const response = await run()
   expect(response).not.toBe(null)
@@ -214,7 +214,7 @@ test('Run blackduck flow with Fix pull request, missing github token - run', asy
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
 
   try {
@@ -235,7 +235,7 @@ test('Run coverity flow - run - without optional fields', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
   const response = await run()
   expect(response).not.toBe(null)
@@ -259,7 +259,7 @@ test('Run coverity flow - run - with optional fields', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
   const response = await run()
   expect(response).not.toBe(null)
@@ -284,7 +284,7 @@ test('Run coverity flow - run - with optional fields - when MR details not found
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
 
   try {
@@ -305,7 +305,7 @@ test('Run blackduck flow with download and configure option - run without option
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
   const response = await run()
   expect(response).not.toBe(null)
@@ -328,7 +328,7 @@ test('Run blackduck flow with download and configure option - run with optional 
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
   const response = await run()
   expect(response).not.toBe(null)
@@ -393,7 +393,7 @@ test('Run polaris flow for bridge command failure - run', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockRejectedValueOnce(new Error('Error in executing command'))
 
   try {
@@ -417,7 +417,7 @@ test('Run polaris flow with provided bridge version - run', async () => {
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
 
   const response = await run()
@@ -461,7 +461,7 @@ test('Run polaris flow - diagnostics', async () => {
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(1)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
 
@@ -485,7 +485,7 @@ test('Run Black Duck flow for uploading sarif result as artifact', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -493,7 +493,7 @@ test('Run Black Duck flow for uploading sarif result as artifact', async () => {
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(false)
@@ -516,7 +516,7 @@ test('Run Black Duck flow for uploading sarif result to advance security and art
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -524,7 +524,7 @@ test('Run Black Duck flow for uploading sarif result to advance security and art
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
@@ -549,7 +549,7 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -557,7 +557,7 @@ test('should throw error while uploading Black Duck sarif result to advance secu
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockRejectedValueOnce(new Error('Adapter failed: exit status 1'))
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
@@ -588,7 +588,7 @@ test('test black duck flow for mandatory github token for uploading sarif result
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockRejectedValueOnce(new Error('Adapter failed: exit status 1'))
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
@@ -621,7 +621,7 @@ test('should not execute black duck sarif create for pr context', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_REPORTS_SARIF_CREATE', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -629,7 +629,7 @@ test('should not execute black duck sarif create for pr context', async () => {
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(true)
@@ -644,14 +644,14 @@ test('should not upload black duck sarif for pr context', async () => {
   Object.defineProperty(inputs, 'BLACKDUCK_UPLOAD_SARIF_REPORT', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
     fileName: 'C://user/temp/download/bridge-win.zip'
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(true)
@@ -676,7 +676,7 @@ test('Run Polaris flow for uploading sarif result as artifact', async () => {
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES', {value: true})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -684,7 +684,7 @@ test('Run Polaris flow for uploading sarif result as artifact', async () => {
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
@@ -712,7 +712,7 @@ test('test polaris flow for mandatory github token for uploading sarif result to
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
@@ -738,7 +738,7 @@ test('Run Polaris flow for uploading sarif result to advance security and artifa
   Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -746,7 +746,7 @@ test('Run Polaris flow for uploading sarif result to advance security and artifa
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockResolvedValueOnce()
@@ -772,7 +772,7 @@ test('should throw error while uploading Polaris sarif result to advance securit
   Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -780,7 +780,7 @@ test('should throw error while uploading Polaris sarif result to advance securit
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockRejectedValueOnce(new Error('Adapter failed: exit status 1'))
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(GithubClientService.prototype, 'uploadSarifReport').mockRejectedValueOnce(new Error('Error uploading SARIF data to GitHub Advance Security:'))
@@ -818,7 +818,7 @@ test('should not execute polaris sarif create for pr context', async () => {
   Object.defineProperty(inputs, 'POLARIS_REPORTS_SARIF_CREATE', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   jest.spyOn(diagnostics, 'uploadSarifReportAsArtifact').mockResolvedValueOnce(uploadResponse)
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
@@ -826,7 +826,7 @@ test('should not execute polaris sarif create for pr context', async () => {
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(true)
@@ -844,14 +844,14 @@ test('should not upload polaris sarif for pr context', async () => {
   Object.defineProperty(inputs, 'POLARIS_UPLOAD_SARIF_REPORT', {value: 'true'})
 
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
-  const uploadResponse: UploadResponse = {artifactItems: [], artifactName: '', failedItems: [], size: 0}
+  const uploadResponse: UploadArtifactResponse = {size: 0, id: 123}
   const downloadFileResp: DownloadFileResponse = {
     filePath: 'C://user/temp/download/',
     fileName: 'C://user/temp/download/bridge-win.zip'
   }
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValueOnce('/home/bridge')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValueOnce('/home/bridge')
   jest.spyOn(SynopsysBridge.prototype, 'executeBridgeCommand').mockResolvedValueOnce(0)
   jest.spyOn(SynopsysBridge.prototype, 'validateBridgeVersion').mockResolvedValueOnce(true)
   jest.spyOn(utility, 'isPullRequestEvent').mockReturnValue(true)
