@@ -56,5 +56,5 @@ export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: s
   const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(defaultSarifReportDirectory, false)
   const options: UploadArtifactOptions = {}
   // options.continueOnError = false
-  return await artifactClient.uploadArtifact(artifactName, ["/fake/path"], rootDir, options)
+  return await artifactClient.uploadArtifact(artifactName, ["/fake/path"], 'rootDir', options)
 }
