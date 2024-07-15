@@ -8,8 +8,8 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = exports.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.POLARIS_REPORTS_SARIF_SEVERITIES_KEY = exports.POLARIS_REPORTS_SARIF_FILE_PATH_KEY = exports.POLARIS_REPORTS_SARIF_CREATE_KEY = exports.POLARIS_TEST_SCA_TYPE_KEY = exports.POLARIS_BRANCH_PARENT_NAME_KEY = exports.POLARIS_BRANCH_NAME_KEY = exports.POLARIS_PRCOMMENT_SEVERITIES_KEY = exports.POLARIS_PRCOMMENT_ENABLED_KEY = exports.POLARIS_TRIAGE_KEY = exports.POLARIS_SERVER_URL_KEY = exports.POLARIS_SERVERURL_KEY = exports.POLARIS_ASSESSMENT_TYPES_KEY = exports.POLARIS_PROJECT_NAME_KEY = exports.POLARIS_APPLICATION_NAME_KEY = exports.POLARIS_ACCESS_TOKEN_KEY = exports.POLARIS_ACCESSTOKEN_KEY = exports.COVERITY_VERSION_KEY = exports.BRIDGE_COVERITY_VERSION_KEY = exports.COVERITY_LOCAL_KEY = exports.COVERITY_PRCOMMENT_ENABLED_KEY = exports.COVERITY_AUTOMATION_PRCOMMENT_KEY = exports.COVERITY_ARGS_KEY = exports.COVERITY_CONFIG_PATH_KEY = exports.COVERITY_CLEAN_COMMAND_KEY = exports.COVERITY_BUILD_COMMAND_KEY = exports.COVERITY_BRANCH_NAME_KEY = exports.COVERITY_REPOSITORY_NAME_KEY = exports.COVERITY_POLICY_VIEW_KEY = exports.COVERITY_INSTALL_DIRECTORY_KEY = exports.COVERITY_STREAM_NAME_KEY = exports.COVERITY_PROJECT_NAME_KEY = exports.COVERITY_PASSPHRASE_KEY = exports.COVERITY_USER_KEY = exports.COVERITY_URL_KEY = exports.BLACKDUCK_KEY = exports.POLARIS_KEY = exports.COVERITY_KEY = exports.MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = exports.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = exports.BRIDGE_DOWNLOAD_VERSION_KEY = exports.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = exports.BRIDGE_DOWNLOAD_URL_KEY = exports.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = exports.APPLICATION_NAME = exports.SYNOPSYS_BRIDGE_ARTIFACTORY_URL = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = void 0;
-exports.HTTP_STATUS_ACCEPTED = exports.SECONDARY_RATE_LIMIT = exports.X_RATE_LIMIT_REMAINING = exports.X_RATE_LIMIT_RESET = exports.SARIF_DEFAULT_FILE_NAME = exports.POLARIS_SARIF_ARTIFACT_NAME = exports.POLARIS_SARIF_GENERATOR_DIRECTORY = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_ARGS_KEY = exports.BLACKDUCK_CONFIG_PATH_KEY = exports.BLACKDUCK_SEARCH_DEPTH_KEY = exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_TOKEN_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.PROJECT_DIRECTORY_KEY = exports.PROJECT_SOURCE_EXCLUDES_KEY = exports.PROJECT_SOURCE_PRESERVESYMLINKS_KEY = exports.PROJECT_SOURCE_ARCHIVE_KEY = exports.POLARIS_ASSESSMENT_MODE_KEY = exports.POLARIS_UPLOAD_SARIF_REPORT_KEY = void 0;
-exports.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = exports.BLACKDUCK_FIXPR_LOG_INFO_FOR_PR_SCANS = exports.BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = exports.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = exports.POLARIS_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = exports.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS = exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = exports.GITHUB_ENVIRONMENT_VARIABLES = exports.HTTP_STATUS_FORBIDDEN = void 0;
+exports.HTTP_STATUS_OK = exports.SECONDARY_RATE_LIMIT = exports.X_RATE_LIMIT_REMAINING = exports.X_RATE_LIMIT_RESET = exports.SARIF_DEFAULT_FILE_NAME = exports.POLARIS_SARIF_ARTIFACT_NAME = exports.POLARIS_SARIF_GENERATOR_DIRECTORY = exports.BLACKDUCK_SARIF_ARTIFACT_NAME = exports.BLACKDUCK_SARIF_GENERATOR_DIRECTORY = exports.BRIDGE_LOCAL_DIRECTORY = exports.GITHUB_CLOUD_API_URL = exports.GITHUB_CLOUD_URL = exports.NON_RETRY_HTTP_CODES = exports.RETRY_COUNT = exports.RETRY_DELAY_IN_MILLISECONDS = exports.EXIT_CODE_MAP = exports.DIAGNOSTICS_RETENTION_DAYS_KEY = exports.NETWORK_AIRGAP_KEY = exports.BRIDGE_NETWORK_AIRGAP_KEY = exports.INCLUDE_DIAGNOSTICS_KEY = exports.GITHUB_TOKEN_KEY = exports.GITHUB_HOST_URL_KEY = exports.BLACKDUCK_ARGS_KEY = exports.BLACKDUCK_CONFIG_PATH_KEY = exports.BLACKDUCK_SEARCH_DEPTH_KEY = exports.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = exports.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = exports.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = exports.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = exports.BLACKDUCK_REPORTS_SARIF_CREATE_KEY = exports.BLACKDUCK_PRCOMMENT_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = exports.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = exports.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = exports.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = exports.BLACKDUCK_FIXPR_MAXCOUNT_KEY = exports.BLACKDUCK_FIXPR_ENABLED_KEY = exports.BLACKDUCK_AUTOMATION_FIXPR_KEY = exports.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = exports.BLACKDUCK_SCAN_FULL_KEY = exports.BLACKDUCK_INSTALL_DIRECTORY_KEY = exports.BLACKDUCK_TOKEN_KEY = exports.BLACKDUCK_API_TOKEN_KEY = exports.BLACKDUCK_URL_KEY = exports.PROJECT_DIRECTORY_KEY = exports.PROJECT_SOURCE_EXCLUDES_KEY = exports.PROJECT_SOURCE_PRESERVESYMLINKS_KEY = exports.PROJECT_SOURCE_ARCHIVE_KEY = exports.POLARIS_ASSESSMENT_MODE_KEY = exports.POLARIS_UPLOAD_SARIF_REPORT_KEY = void 0;
+exports.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = exports.BLACKDUCK_FIXPR_LOG_INFO_FOR_PR_SCANS = exports.BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = exports.COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = exports.POLARIS_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = exports.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS = exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = exports.GITHUB_ENVIRONMENT_VARIABLES = exports.HTTP_STATUS_FORBIDDEN = exports.HTTP_STATUS_ACCEPTED = void 0;
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge'; //Path will be in home
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge';
 exports.SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge';
@@ -139,6 +139,7 @@ exports.SARIF_DEFAULT_FILE_NAME = 'report.sarif.json';
 exports.X_RATE_LIMIT_RESET = 'x-ratelimit-reset';
 exports.X_RATE_LIMIT_REMAINING = 'x-ratelimit-remaining';
 exports.SECONDARY_RATE_LIMIT = 'secondary rate limit';
+exports.HTTP_STATUS_OK = 200;
 exports.HTTP_STATUS_ACCEPTED = 202;
 exports.HTTP_STATUS_FORBIDDEN = 403;
 exports.GITHUB_ENVIRONMENT_VARIABLES = {
@@ -210,8 +211,8 @@ const config_variables_1 = __nccwpck_require__(2222);
 const constants = __importStar(__nccwpck_require__(9717));
 const inputs = __importStar(__nccwpck_require__(7481));
 const artifacts_1 = __nccwpck_require__(1309);
-const github_client_service_1 = __nccwpck_require__(2016);
 const validators_1 = __nccwpck_require__(8401);
+const github_client_service_factory_1 = __nccwpck_require__(4130);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         (0, core_1.info)('Synopsys Action started...');
@@ -260,12 +261,12 @@ function run() {
                     if (!(0, validators_1.isNullOrEmptyValue)(inputs.GITHUB_TOKEN)) {
                         // Upload Black Duck SARIF Report to code scanning tab
                         if (inputs.BLACKDUCK_URL && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-                            const gitHubClientService = new github_client_service_1.GithubClientService();
+                            const gitHubClientService = yield github_client_service_factory_1.GitHubClientServiceFactory.getGitHubClientServiceInstance();
                             yield gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH);
                         }
                         // Upload Polaris SARIF Report to code scanning tab
                         if (inputs.POLARIS_SERVER_URL && (0, utility_1.parseToBoolean)(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-                            const gitHubClientService = new github_client_service_1.GithubClientService();
+                            const gitHubClientService = yield github_client_service_factory_1.GitHubClientServiceFactory.getGitHubClientServiceInstance();
                             yield gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH);
                         }
                     }
@@ -510,7 +511,7 @@ exports.extractZipped = extractZipped;
 
 /***/ }),
 
-/***/ 2016:
+/***/ 4130:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
@@ -548,108 +549,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GithubClientService = void 0;
-const HttpClient_1 = __nccwpck_require__(5538);
-const inputs = __importStar(__nccwpck_require__(7481));
-const fs = __importStar(__nccwpck_require__(5747));
-const zlib = __importStar(__nccwpck_require__(8761));
-const utility_1 = __nccwpck_require__(7643);
+exports.GitHubClientServiceFactory = void 0;
+const github_client_service_cloud_1 = __nccwpck_require__(6190);
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
-class GithubClientService {
-    constructor() {
-        this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs';
-        this.githubToken = inputs.GITHUB_TOKEN;
-        this.githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
-        this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : '';
-        this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
-        this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
-        this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl;
-        this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || '';
-        this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || '';
-    }
-    uploadSarifReport(defaultSarifReportDirectory, userSarifFilePath) {
-        var _a, _b;
+const github_client_service_v1_1 = __nccwpck_require__(8870);
+const github_client_service_v2_1 = __nccwpck_require__(2484);
+const HttpClient_1 = __nccwpck_require__(5538);
+const inputs = __importStar(__nccwpck_require__(7481));
+exports.GitHubClientServiceFactory = {
+    SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
+    SUPPORTED_VERSIONS_V2: ['3.13', '3.14'],
+    DEFAULT_VERSION: '3.12',
+    fetchVersion(githubServerUrl) {
         return __awaiter(this, void 0, void 0, function* () {
-            (0, core_1.info)('Uploading SARIF results to GitHub');
-            let retryCountLocal = constants.RETRY_COUNT;
-            let retryDelay = constants.RETRY_DELAY_IN_MILLISECONDS;
-            const stringFormat = (url, ...args) => {
-                return url.replace(/{(\d+)}/g, (match, index) => args[index] || '');
-            };
-            const endpoint = stringFormat(this.githubApiURL.concat(this.gitHubCodeScanningUrl), this.repoOwner, this.repoName);
-            const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
-            if ((0, utility_1.checkIfPathExists)(sarifFilePath)) {
-                try {
-                    const sarifContent = fs.readFileSync(sarifFilePath, 'utf8');
-                    const compressedSarif = zlib.gzipSync(sarifContent);
-                    const base64Sarif = compressedSarif.toString('base64');
-                    const data = {
-                        commit_sha: this.commit_sha,
-                        ref: this.githubRef,
-                        sarif: base64Sarif,
-                        validate: true
-                    };
-                    do {
-                        const httpClient = new HttpClient_1.HttpClient('GithubClientService');
-                        const httpResponse = yield httpClient.post(endpoint, JSON.stringify(data), {
-                            Authorization: `Bearer ${this.githubToken}`,
-                            Accept: 'application/vnd.github+json'
-                        });
-                        (0, core_1.debug)(`HTTP Status Code: ${httpResponse.message.statusCode}`);
-                        (0, core_1.debug)(`HTTP Response Headers: ${JSON.stringify(httpResponse.message.headers)}`);
-                        const responseBody = yield httpResponse.readBody();
-                        const rateLimitRemaining = ((_a = httpResponse.message) === null || _a === void 0 ? void 0 : _a.headers[constants.X_RATE_LIMIT_REMAINING]) || '';
-                        if (httpResponse.message.statusCode === constants.HTTP_STATUS_ACCEPTED) {
-                            (0, core_1.info)('SARIF result uploaded successfully to GitHub Advance Security');
-                            retryCountLocal = 0;
-                        }
-                        else if (httpResponse.message.statusCode === constants.HTTP_STATUS_FORBIDDEN && (rateLimitRemaining === '0' || responseBody.includes(constants.SECONDARY_RATE_LIMIT))) {
-                            const rateLimitResetHeader = ((_b = httpResponse.message) === null || _b === void 0 ? void 0 : _b.headers[constants.X_RATE_LIMIT_RESET]) || '';
-                            const rateLimitReset = Array.isArray(rateLimitResetHeader) ? rateLimitResetHeader[0] : rateLimitResetHeader;
-                            const currentTimeInSeconds = Math.floor(Date.now() / 1000);
-                            const resetTimeInSeconds = parseInt(rateLimitReset, 10);
-                            const secondsUntilReset = resetTimeInSeconds - currentTimeInSeconds;
-                            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=105
-                            if (secondsUntilReset <= 105) {
-                                retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
-                            }
-                            else {
-                                const minutesUntilreset = Math.ceil(secondsUntilReset / 60);
-                                throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`);
-                            }
-                            retryCountLocal--;
-                        }
-                        else {
-                            retryCountLocal = 0;
-                            throw new Error(responseBody);
-                        }
-                    } while (retryCountLocal > 0);
+            console.info(`Fetching version info for : ${githubServerUrl}`);
+            const githubEnterpriseMetaUrl = '/meta';
+            const githubToken = inputs.GITHUB_TOKEN;
+            const endpoint = githubServerUrl.concat(githubEnterpriseMetaUrl);
+            try {
+                const httpClient = new HttpClient_1.HttpClient('GitHubClientServiceFactory');
+                const httpResponse = yield httpClient.get(endpoint, {
+                    Authorization: `Bearer ${githubToken}`,
+                    Accept: 'application/vnd.github+json'
+                });
+                if (httpResponse.message.statusCode === constants.HTTP_STATUS_OK) {
+                    const metaDataResponse = JSON.parse(yield httpResponse.readBody());
+                    const version = metaDataResponse.installed_version;
+                    console.info(`Installed version: ${version}`);
+                    return version;
                 }
-                catch (error) {
-                    throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
+                else {
+                    throw new Error(`No version info found for endpoint : ${endpoint}`);
                 }
+            }
+            catch (error) {
+                throw new Error(`Fetching version info for enterprise server failed : ${error}`);
+            }
+        });
+    },
+    getGitHubClientServiceInstance() {
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)('Fetching GitHub client service instance...');
+            const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
+            const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl;
+            let service;
+            if (githubHostUrl === constants.GITHUB_CLOUD_URL) {
+                service = new github_client_service_cloud_1.GithubClientServiceCloud();
             }
             else {
-                throw new Error('No SARIF file found to upload');
+                const version = yield this.fetchVersion(githubServerUrl);
+                if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
+                    (0, core_1.info)(`Using GitHub API v1 for version ${version}`);
+                    service = new github_client_service_v1_1.GithubClientServiceV1();
+                }
+                else if (this.SUPPORTED_VERSIONS_V2.includes(version)) {
+                    (0, core_1.info)(`Using GitHub API v2 for version ${version}`);
+                    service = new github_client_service_v2_1.GithubClientServiceV2();
+                }
+                else {
+                    (0, core_1.info)(`Using GitHub API v2 for version ${version}`);
+                    service = new github_client_service_v2_1.GithubClientServiceV2();
+                }
             }
+            return service;
         });
     }
-    retrySleepHelper(message, retryCountLocal, retryDelay) {
-        return __awaiter(this, void 0, void 0, function* () {
-            (0, core_1.info)(message
-                .concat(String(retryCountLocal))
-                .concat(', Waiting: ')
-                .concat(String(retryDelay / 1000))
-                .concat(' Seconds'));
-            yield (0, utility_1.sleep)(retryDelay);
-            // Delayed exponentially starting from 15 seconds
-            retryDelay = retryDelay * 2;
-            return retryDelay;
-        });
-    }
-}
-exports.GithubClientService = GithubClientService;
+};
 
 
 /***/ }),
@@ -866,6 +832,195 @@ class RetryHelper {
     }
 }
 exports.RetryHelper = RetryHelper;
+
+
+/***/ }),
+
+/***/ 6190:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubClientServiceCloud = void 0;
+const github_client_service_base_1 = __nccwpck_require__(802);
+class GithubClientServiceCloud extends github_client_service_base_1.GithubClientServiceBase {
+}
+exports.GithubClientServiceCloud = GithubClientServiceCloud;
+
+
+/***/ }),
+
+/***/ 8870:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubClientServiceV1 = void 0;
+const github_client_service_base_1 = __nccwpck_require__(802);
+class GithubClientServiceV1 extends github_client_service_base_1.GithubClientServiceBase {
+}
+exports.GithubClientServiceV1 = GithubClientServiceV1;
+
+
+/***/ }),
+
+/***/ 2484:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubClientServiceV2 = void 0;
+const github_client_service_base_1 = __nccwpck_require__(802);
+class GithubClientServiceV2 extends github_client_service_base_1.GithubClientServiceBase {
+}
+exports.GithubClientServiceV2 = GithubClientServiceV2;
+
+
+/***/ }),
+
+/***/ 802:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GithubClientServiceBase = void 0;
+const HttpClient_1 = __nccwpck_require__(5538);
+const inputs = __importStar(__nccwpck_require__(7481));
+const fs = __importStar(__nccwpck_require__(5747));
+const zlib = __importStar(__nccwpck_require__(8761));
+const utility_1 = __nccwpck_require__(7643);
+const core_1 = __nccwpck_require__(2186);
+const constants = __importStar(__nccwpck_require__(9717));
+class GithubClientServiceBase {
+    constructor() {
+        this.gitHubCodeScanningUrl = '/repos/{0}/{1}/code-scanning/sarifs';
+        this.githubToken = inputs.GITHUB_TOKEN;
+        this.githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY] || '';
+        this.repoName = this.githubRepo !== '' ? this.githubRepo.substring(this.githubRepo.indexOf('/') + 1, this.githubRepo.length).trim() : '';
+        this.repoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || '';
+        this.githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
+        this.githubApiURL = this.githubServerUrl === constants.GITHUB_CLOUD_URL ? constants.GITHUB_CLOUD_API_URL : this.githubServerUrl;
+        this.commit_sha = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SHA] || '';
+        this.githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF] || '';
+    }
+    uploadSarifReport(defaultSarifReportDirectory, userSarifFilePath) {
+        var _a, _b;
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)('Uploading SARIF results to GitHub');
+            let retryCountLocal = constants.RETRY_COUNT;
+            let retryDelay = constants.RETRY_DELAY_IN_MILLISECONDS;
+            const stringFormat = (url, ...args) => {
+                return url.replace(/{(\d+)}/g, (match, index) => args[index] || '');
+            };
+            const endpoint = stringFormat(this.githubApiURL.concat(this.gitHubCodeScanningUrl), this.repoOwner, this.repoName);
+            const sarifFilePath = userSarifFilePath ? userSarifFilePath : (0, utility_1.getDefaultSarifReportPath)(defaultSarifReportDirectory, true);
+            if ((0, utility_1.checkIfPathExists)(sarifFilePath)) {
+                try {
+                    const sarifContent = fs.readFileSync(sarifFilePath, 'utf8');
+                    const compressedSarif = zlib.gzipSync(sarifContent);
+                    const base64Sarif = compressedSarif.toString('base64');
+                    const data = {
+                        commit_sha: this.commit_sha,
+                        ref: this.githubRef,
+                        sarif: base64Sarif,
+                        validate: true
+                    };
+                    do {
+                        const httpClient = new HttpClient_1.HttpClient('GithubClientServiceBase');
+                        const httpResponse = yield httpClient.post(endpoint, JSON.stringify(data), {
+                            Authorization: `Bearer ${this.githubToken}`,
+                            Accept: 'application/vnd.github+json'
+                        });
+                        (0, core_1.debug)(`HTTP Status Code: ${httpResponse.message.statusCode}`);
+                        (0, core_1.debug)(`HTTP Response Headers: ${JSON.stringify(httpResponse.message.headers)}`);
+                        const responseBody = yield httpResponse.readBody();
+                        const rateLimitRemaining = ((_a = httpResponse.message) === null || _a === void 0 ? void 0 : _a.headers[constants.X_RATE_LIMIT_REMAINING]) || '';
+                        if (httpResponse.message.statusCode === constants.HTTP_STATUS_ACCEPTED) {
+                            (0, core_1.info)('SARIF result uploaded successfully to GitHub Advance Security');
+                            retryCountLocal = 0;
+                        }
+                        else if (httpResponse.message.statusCode === constants.HTTP_STATUS_FORBIDDEN && (rateLimitRemaining === '0' || responseBody.includes(constants.SECONDARY_RATE_LIMIT))) {
+                            const rateLimitResetHeader = ((_b = httpResponse.message) === null || _b === void 0 ? void 0 : _b.headers[constants.X_RATE_LIMIT_RESET]) || '';
+                            const rateLimitReset = Array.isArray(rateLimitResetHeader) ? rateLimitResetHeader[0] : rateLimitResetHeader;
+                            const currentTimeInSeconds = Math.floor(Date.now() / 1000);
+                            const resetTimeInSeconds = parseInt(rateLimitReset, 10);
+                            const secondsUntilReset = resetTimeInSeconds - currentTimeInSeconds;
+                            // Retry only if rate limit reset time is less than or equals to sum of time of 3 retry attempts in seconds: 15+30+60=105
+                            if (secondsUntilReset <= 105) {
+                                retryDelay = yield this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay);
+                            }
+                            else {
+                                const minutesUntilReset = Math.ceil(secondsUntilReset / 60);
+                                throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilReset} minutes.`);
+                            }
+                            retryCountLocal--;
+                        }
+                        else {
+                            retryCountLocal = 0;
+                            throw new Error(responseBody);
+                        }
+                    } while (retryCountLocal > 0);
+                }
+                catch (error) {
+                    throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`);
+                }
+            }
+            else {
+                throw new Error('No SARIF file found to upload');
+            }
+        });
+    }
+    retrySleepHelper(message, retryCountLocal, retryDelay) {
+        return __awaiter(this, void 0, void 0, function* () {
+            (0, core_1.info)(message
+                .concat(String(retryCountLocal))
+                .concat(', Waiting: ')
+                .concat(String(retryDelay / 1000))
+                .concat(' Seconds'));
+            yield (0, utility_1.sleep)(retryDelay);
+            // Delayed exponentially starting from 15 seconds
+            retryDelay = retryDelay * 2;
+            return retryDelay;
+        });
+    }
+}
+exports.GithubClientServiceBase = GithubClientServiceBase;
 
 
 /***/ }),

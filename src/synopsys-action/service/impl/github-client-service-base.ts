@@ -1,12 +1,13 @@
 import {HttpClient} from 'typed-rest-client/HttpClient'
-import * as inputs from './inputs'
+import * as inputs from '../../inputs'
 import * as fs from 'fs'
 import * as zlib from 'zlib'
-import {checkIfPathExists, getDefaultSarifReportPath, sleep} from './utility'
+import {checkIfPathExists, getDefaultSarifReportPath, sleep} from '../../utility'
 import {debug, info} from '@actions/core'
-import * as constants from '../application-constants'
+import * as constants from '../../../application-constants'
+import {GithubClientServiceInterface} from '../github-client-service-interface'
 
-export class GithubClientService {
+export class GithubClientServiceBase implements GithubClientServiceInterface {
   gitHubCodeScanningUrl: string
   githubToken: string
   githubRepo: string
@@ -51,7 +52,7 @@ export class GithubClientService {
           validate: true
         }
         do {
-          const httpClient = new HttpClient('GithubClientService')
+          const httpClient = new HttpClient('GithubClientServiceBase')
           const httpResponse = await httpClient.post(endpoint, JSON.stringify(data), {
             Authorization: `Bearer ${this.githubToken}`,
             Accept: 'application/vnd.github+json'
@@ -73,8 +74,8 @@ export class GithubClientService {
             if (secondsUntilReset <= 105) {
               retryDelay = await this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay)
             } else {
-              const minutesUntilreset = Math.ceil(secondsUntilReset / 60)
-              throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilreset} minutes.`)
+              const minutesUntilReset = Math.ceil(secondsUntilReset / 60)
+              throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilReset} minutes.`)
             }
             retryCountLocal--
           } else {

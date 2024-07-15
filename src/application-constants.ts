@@ -136,6 +136,7 @@ export const SARIF_DEFAULT_FILE_NAME = 'report.sarif.json'
 export const X_RATE_LIMIT_RESET = 'x-ratelimit-reset'
 export const X_RATE_LIMIT_REMAINING = 'x-ratelimit-remaining'
 export const SECONDARY_RATE_LIMIT = 'secondary rate limit'
+export const HTTP_STATUS_OK = 200
 export const HTTP_STATUS_ACCEPTED = 202
 export const HTTP_STATUS_FORBIDDEN = 403
 
