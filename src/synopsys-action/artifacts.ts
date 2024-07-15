@@ -4,7 +4,7 @@ import {getGitHubWorkspaceDir} from '@actions/artifact/lib/internal/shared/confi
 import * as fs from 'fs'
 import * as inputs from './inputs'
 import {getDefaultSarifReportPath} from './utility'
-import {warning, info} from '@actions/core'
+import {warning} from '@actions/core'
 import path from 'path'
 
 export async function uploadDiagnostics(): Promise<UploadArtifactResponse | void> {
@@ -13,7 +13,6 @@ export async function uploadDiagnostics(): Promise<UploadArtifactResponse | void
   let files: string[] = []
   files = getFiles(pwd, files)
   const options: UploadArtifactOptions = {}
-  // options.continueOnError = false
   if (inputs.DIAGNOSTICS_RETENTION_DAYS) {
     if (!Number.isInteger(parseInt(inputs.DIAGNOSTICS_RETENTION_DAYS))) {
       warning('Invalid Diagnostics Retention Days, hence continuing with default 90 days')
@@ -55,8 +54,5 @@ export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: s
   const sarifFilePath = userSarifFilePath ? userSarifFilePath : getDefaultSarifReportPath(defaultSarifReportDirectory, true)
   const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(defaultSarifReportDirectory, false)
   const options: UploadArtifactOptions = {}
-  // options.continueOnError = false
-  info('uploadSarifReportAsArtifact - artifactName '.concat(artifactName))
-  info('uploadSarifReportAsArtifact - sarifFilePath '.concat(sarifFilePath))
-  return await artifactClient.uploadArtifact(artifactName, ['/fake/path'], rootDir, options)
+  return await artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options)
 }
