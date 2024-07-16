@@ -13,7 +13,6 @@ export const GitHubClientServiceFactory = {
   DEFAULT_VERSION: '3.12',
 
   async fetchVersion(githubServerUrl: string): Promise<string> {
-    console.info(`Fetching version info for : ${githubServerUrl}`)
     const githubEnterpriseMetaUrl = '/meta'
     const githubToken = inputs.GITHUB_TOKEN
     const endpoint = githubServerUrl.concat(githubEnterpriseMetaUrl)
@@ -27,9 +26,7 @@ export const GitHubClientServiceFactory = {
 
       if (httpResponse.message.statusCode === constants.HTTP_STATUS_OK) {
         const metaDataResponse = JSON.parse(await httpResponse.readBody())
-        const version: string = metaDataResponse.installed_version
-        console.info(`Installed version: ${version}`)
-        return version
+        return metaDataResponse.installed_version
       } else {
         throw new Error(`No version info found for endpoint : ${endpoint}`)
       }
@@ -41,10 +38,9 @@ export const GitHubClientServiceFactory = {
   async getGitHubClientServiceInstance(): Promise<GithubClientServiceInterface> {
     info('Fetching GitHub client service instance...')
     const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
-    const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
 
     let service: GithubClientServiceInterface
-    if (githubHostUrl === constants.GITHUB_CLOUD_URL) {
+    if (githubServerUrl === constants.GITHUB_CLOUD_URL) {
       service = new GithubClientServiceCloud()
     } else {
       const version = await this.fetchVersion(githubServerUrl)

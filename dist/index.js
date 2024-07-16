@@ -563,7 +563,6 @@ exports.GitHubClientServiceFactory = {
     DEFAULT_VERSION: '3.12',
     fetchVersion(githubServerUrl) {
         return __awaiter(this, void 0, void 0, function* () {
-            console.info(`Fetching version info for : ${githubServerUrl}`);
             const githubEnterpriseMetaUrl = '/meta';
             const githubToken = inputs.GITHUB_TOKEN;
             const endpoint = githubServerUrl.concat(githubEnterpriseMetaUrl);
@@ -575,9 +574,7 @@ exports.GitHubClientServiceFactory = {
                 });
                 if (httpResponse.message.statusCode === constants.HTTP_STATUS_OK) {
                     const metaDataResponse = JSON.parse(yield httpResponse.readBody());
-                    const version = metaDataResponse.installed_version;
-                    console.info(`Installed version: ${version}`);
-                    return version;
+                    return metaDataResponse.installed_version;
                 }
                 else {
                     throw new Error(`No version info found for endpoint : ${endpoint}`);
@@ -592,9 +589,8 @@ exports.GitHubClientServiceFactory = {
         return __awaiter(this, void 0, void 0, function* () {
             (0, core_1.info)('Fetching GitHub client service instance...');
             const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
-            const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl;
             let service;
-            if (githubHostUrl === constants.GITHUB_CLOUD_URL) {
+            if (githubServerUrl === constants.GITHUB_CLOUD_URL) {
                 service = new github_client_service_cloud_1.GithubClientServiceCloud();
             }
             else {
