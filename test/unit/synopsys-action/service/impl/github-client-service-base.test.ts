@@ -1,12 +1,12 @@
-import * as inputs from '../../../src/synopsys-action/inputs'
+import * as inputs from '../../../../../src/synopsys-action/inputs'
 import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import Mocked = jest.Mocked
-import {GithubClientService} from '../../../src/synopsys-action/github-client-service'
+import {GithubClientServiceBase} from '../../../../../src/synopsys-action/service/impl/github-client-service-base'
 import {Socket} from 'net'
-import * as utility from '../../../src/synopsys-action/utility'
+import * as utility from '../../../../../src/synopsys-action/utility'
 import fs from 'fs'
-import * as constants from '../../../src/application-constants'
+import * as constants from '../../../../../src/application-constants'
 import any = jasmine.any
 
 const originalEnv = process.env
@@ -27,7 +27,7 @@ beforeEach(() => {
 })
 
 test('uploadSarifReport throws error when no SARIF file found', async () => {
-  const githubClientService = new GithubClientService()
+  const githubClientService = new GithubClientServiceBase()
   jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(false)
 
   try {
@@ -40,7 +40,7 @@ test('uploadSarifReport throws error when no SARIF file found', async () => {
 
 describe('upload sarif results', () => {
   it('should upload sarif report successfully with default location', async function () {
-    const githubClientService = new GithubClientService()
+    const githubClientService = new GithubClientServiceBase()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
     jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
@@ -59,7 +59,7 @@ describe('upload sarif results', () => {
   })
 
   it('should upload sarif report successfully with REPORTS_SARIF_FILE_PATH', async function () {
-    const githubClientService = new GithubClientService()
+    const githubClientService = new GithubClientServiceBase()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
     Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
@@ -80,7 +80,7 @@ describe('upload sarif results', () => {
   })
 
   it('should throw error while upload sarif report', async function () {
-    const githubClientService = new GithubClientService()
+    const githubClientService = new GithubClientServiceBase()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
     Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
@@ -106,7 +106,7 @@ describe('upload sarif results', () => {
   })
 
   it('should throw error while upload sarif report if file does not exist', async function () {
-    const githubClientService = new GithubClientService()
+    const githubClientService = new GithubClientServiceBase()
 
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
 
@@ -122,7 +122,7 @@ describe('upload sarif results', () => {
 })
 
 it('should return with 401 status code for bad credentials while upload sarif report', async function () {
-  const githubClientService = new GithubClientService()
+  const githubClientService = new GithubClientServiceBase()
 
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
@@ -147,7 +147,7 @@ it('should return with 401 status code for bad credentials while upload sarif re
 })
 
 it('should return rate limit error and no retry while upload sarif report', async function () {
-  const githubClientService = new GithubClientService()
+  const githubClientService = new GithubClientServiceBase()
 
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
@@ -174,7 +174,7 @@ it('should return rate limit error and no retry while upload sarif report', asyn
 })
 
 it('should return rate limit error and retry while upload sarif report', async function () {
-  const githubClientService = new GithubClientService()
+  const githubClientService = new GithubClientServiceBase()
 
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'test-token'})
   Object.defineProperty(inputs, 'REPORTS_SARIF_FILE_PATH', {value: 'test-path'})
