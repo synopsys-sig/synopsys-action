@@ -497,14 +497,14 @@ jobs:
   #         name: test-output
   #         path: test-output         
 
-  post_e2e_executions:
+  # post_e2e_executions:
 
-      needs: [e2e_linux_executions, e2e_mac_executions, e2e_windows_executions]
-      runs-on: [ E2E-test-linux ]
+  #     needs: [e2e_linux_executions, e2e_mac_executions, e2e_windows_executions]
+  #     runs-on: [ E2E-test-linux ]
 
-      steps:
+  #     steps:
 
-      - name: publish
-        run: |
-          echo "publish stage"  
+  #     - name: publish
+  #       run: |
+  #         echo "publish stage"  
 
