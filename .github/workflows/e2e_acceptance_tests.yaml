@@ -66,7 +66,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-coverity-cnc-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-coverity-cnc-build-break-tests.xml
       
       - name: Archive results
         if: always()
@@ -118,7 +118,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-coverity-cnc-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-coverity-cnc-build-break-tests.xml
 
 
       - name: Archive results
@@ -170,7 +170,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-coverity-cnc-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-coverity-cnc-build-break-tests.xml
   
       - name: Archive results
         if: always()
@@ -225,7 +225,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-blackduck-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-blackduck-build-break-tests.xml
       
       - name: Archive results
         if: always()
@@ -277,7 +277,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-blackduck-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-blackduck-build-break-tests.xml
 
 
       - name: Archive results
@@ -329,7 +329,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-blackduck-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-blackduck-build-break-tests.xml
   
       - name: Archive results
         if: always()
@@ -384,7 +384,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-polaris-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-polaris-sarif-reports-tests.xml
       
       - name: Archive results
         if: always()
@@ -436,7 +436,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-polaris-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-polaris-sarif-reports-tests.xml
 
 
       - name: Archive results
@@ -488,7 +488,7 @@ jobs:
           chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
           pwd  && ls -la
           cat /tmp/test.properties
-          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-polaris-acceptance-tests.xml
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/testng-polaris-sarif-reports-tests.xml
   
       - name: Archive results
         if: always()
