@@ -554,12 +554,10 @@ const github_client_service_cloud_1 = __nccwpck_require__(6190);
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
 const github_client_service_v1_1 = __nccwpck_require__(8870);
-const github_client_service_v2_1 = __nccwpck_require__(2484);
 const HttpClient_1 = __nccwpck_require__(5538);
 const inputs = __importStar(__nccwpck_require__(7481));
 exports.GitHubClientServiceFactory = {
     SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
-    SUPPORTED_VERSIONS_V2: ['3.13', '3.14'],
     DEFAULT_VERSION: '3.12',
     fetchVersion(githubServerUrl) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -574,14 +572,18 @@ exports.GitHubClientServiceFactory = {
                 });
                 if (httpResponse.message.statusCode === constants.HTTP_STATUS_OK) {
                     const metaDataResponse = JSON.parse(yield httpResponse.readBody());
-                    return metaDataResponse.installed_version;
+                    const installedVersion = metaDataResponse.installed_version;
+                    (0, core_1.debug)(`Installed version: ${installedVersion}`);
+                    return installedVersion;
                 }
                 else {
-                    throw new Error(`No version info found for endpoint : ${endpoint}`);
+                    (0, core_1.debug)(`No version info found for endpoint : ${endpoint}. Default version: ${this.DEFAULT_VERSION} will be used.`);
+                    return this.DEFAULT_VERSION;
                 }
             }
             catch (error) {
-                throw new Error(`Fetching version info for enterprise server failed : ${error}`);
+                (0, core_1.debug)(`Fetching version info for enterprise server failed : ${error}. Default version: ${this.DEFAULT_VERSION} will be used.`);
+                return this.DEFAULT_VERSION;
             }
         });
     },
@@ -599,13 +601,9 @@ exports.GitHubClientServiceFactory = {
                     (0, core_1.info)(`Using GitHub API v1 for version ${version}`);
                     service = new github_client_service_v1_1.GithubClientServiceV1();
                 }
-                else if (this.SUPPORTED_VERSIONS_V2.includes(version)) {
-                    (0, core_1.info)(`Using GitHub API v2 for version ${version}`);
-                    service = new github_client_service_v2_1.GithubClientServiceV2();
-                }
                 else {
-                    (0, core_1.info)(`Using GitHub API v2 for version ${version}`);
-                    service = new github_client_service_v2_1.GithubClientServiceV2();
+                    (0, core_1.info)(`Using GitHub API v1 for version ${version}`);
+                    service = new github_client_service_v1_1.GithubClientServiceV1();
                 }
             }
             return service;
@@ -858,21 +856,6 @@ const github_client_service_base_1 = __nccwpck_require__(802);
 class GithubClientServiceV1 extends github_client_service_base_1.GithubClientServiceBase {
 }
 exports.GithubClientServiceV1 = GithubClientServiceV1;
-
-
-/***/ }),
-
-/***/ 2484:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GithubClientServiceV2 = void 0;
-const github_client_service_base_1 = __nccwpck_require__(802);
-class GithubClientServiceV2 extends github_client_service_base_1.GithubClientServiceBase {
-}
-exports.GithubClientServiceV2 = GithubClientServiceV2;
 
 
 /***/ }),

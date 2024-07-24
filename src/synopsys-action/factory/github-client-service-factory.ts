@@ -1,15 +1,13 @@
 import {GithubClientServiceInterface} from '../service/github-client-service-interface'
 import {GithubClientServiceCloud} from '../service/impl/cloud/github-client-service-cloud'
-import {info} from '@actions/core'
+import {debug, info} from '@actions/core'
 import * as constants from '../../application-constants'
 import {GithubClientServiceV1} from '../service/impl/enterprise/v1/github-client-service-v1'
-import {GithubClientServiceV2} from '../service/impl/enterprise/v2/github-client-service-v2'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import * as inputs from '../inputs'
 
 export const GitHubClientServiceFactory = {
   SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
-  SUPPORTED_VERSIONS_V2: ['3.13', '3.14'],
   DEFAULT_VERSION: '3.12',
 
   async fetchVersion(githubServerUrl: string): Promise<string> {
@@ -26,12 +24,16 @@ export const GitHubClientServiceFactory = {
 
       if (httpResponse.message.statusCode === constants.HTTP_STATUS_OK) {
         const metaDataResponse = JSON.parse(await httpResponse.readBody())
-        return metaDataResponse.installed_version
+        const installedVersion = metaDataResponse.installed_version
+        debug(`Installed version: ${installedVersion}`)
+        return installedVersion
       } else {
-        throw new Error(`No version info found for endpoint : ${endpoint}`)
+        debug(`No version info found for endpoint : ${endpoint}. Default version: ${this.DEFAULT_VERSION} will be used.`)
+        return this.DEFAULT_VERSION
       }
     } catch (error) {
-      throw new Error(`Fetching version info for enterprise server failed : ${error}`)
+      debug(`Fetching version info for enterprise server failed : ${error}. Default version: ${this.DEFAULT_VERSION} will be used.`)
+      return this.DEFAULT_VERSION
     }
   },
 
@@ -47,12 +49,9 @@ export const GitHubClientServiceFactory = {
       if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
         info(`Using GitHub API v1 for version ${version}`)
         service = new GithubClientServiceV1()
-      } else if (this.SUPPORTED_VERSIONS_V2.includes(version)) {
-        info(`Using GitHub API v2 for version ${version}`)
-        service = new GithubClientServiceV2()
       } else {
-        info(`Using GitHub API v2 for version ${version}`)
-        service = new GithubClientServiceV2()
+        info(`Using GitHub API v1 for version ${version}`)
+        service = new GithubClientServiceV1()
       }
     }
     return service

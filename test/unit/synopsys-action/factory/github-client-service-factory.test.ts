@@ -6,7 +6,6 @@ import {Socket} from 'net'
 import Mocked = jest.Mocked
 import {GithubClientServiceCloud} from '../../../../src/synopsys-action/service/impl/cloud/github-client-service-cloud'
 import {GithubClientServiceV1} from '../../../../src/synopsys-action/service/impl/enterprise/v1/github-client-service-v1'
-import {GithubClientServiceV2} from '../../../../src/synopsys-action/service/impl/enterprise/v2/github-client-service-v2'
 
 describe('fetchVersion()', () => {
   beforeEach(() => {
@@ -17,9 +16,9 @@ describe('fetchVersion()', () => {
     jest.restoreAllMocks()
   })
 
-  it('should fetch version successfully', async () => {
+  it('should fetch version successfully for supported version', async () => {
     const githubServerUrl = 'https://example.com'
-    const expectedVersion = '3.12'
+    const expectedVersion = '3.11'
     const mockMetaDataResponse = JSON.stringify({installed_version: expectedVersion})
 
     const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
@@ -36,7 +35,7 @@ describe('fetchVersion()', () => {
     expect(version).toBe(expectedVersion)
   })
 
-  it('should throw an error if the HTTP status is not OK', async () => {
+  it('should fetch the default version if the HTTP status is not OK', async () => {
     const githubServerUrl = 'https://example.com'
     const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
     const httpResponse: Mocked<HttpClientResponse> = {
@@ -46,16 +45,20 @@ describe('fetchVersion()', () => {
     httpResponse.message.statusCode = 404
     jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-    await expect(GitHubClientServiceFactory.fetchVersion(githubServerUrl)).rejects.toThrow(`No version info found for endpoint : ${githubServerUrl}/meta`)
+    const version = await GitHubClientServiceFactory.fetchVersion(githubServerUrl)
+
+    expect(version).toBe(GitHubClientServiceFactory.DEFAULT_VERSION)
   })
 
-  it('should throw an error if fetching version fails', async () => {
+  it('should fetch the default version if fetching version info fails', async () => {
     const githubServerUrl = 'https://example.com'
     const errorMessage = 'Network error'
 
     jest.spyOn(HttpClient.prototype, 'get').mockRejectedValue(new Error(errorMessage))
 
-    await expect(GitHubClientServiceFactory.fetchVersion(githubServerUrl)).rejects.toThrow(`Fetching version info for enterprise server failed : Error: ${errorMessage}`)
+    const version = await GitHubClientServiceFactory.fetchVersion(githubServerUrl)
+
+    expect(version).toBe(GitHubClientServiceFactory.DEFAULT_VERSION)
   })
 })
 
@@ -70,24 +73,17 @@ describe('getGitHubClientServiceInstance()', () => {
     expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceCloud)
   })
 
-  it('should return GithubClientServiceV1 service for version 3.12', async () => {
+  it('should return GithubClientServiceV1 service for version 3.11', async () => {
     process.env['GITHUB_SERVER_URL'] = 'https://example.com'
-    jest.spyOn(GitHubClientServiceFactory, 'fetchVersion').mockResolvedValueOnce('3.12')
+    jest.spyOn(GitHubClientServiceFactory, 'fetchVersion').mockResolvedValueOnce('3.11')
 
     expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceV1)
   })
 
-  it('should return GithubClientServiceV2 service for version 3.13', async () => {
+  it('should return GithubClientServiceV1 service for unsupported version', async () => {
     process.env['GITHUB_SERVER_URL'] = 'https://example.com'
     jest.spyOn(GitHubClientServiceFactory, 'fetchVersion').mockResolvedValueOnce('3.13')
 
-    expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceV2)
-  })
-
-  it('should return GithubClientServiceV2 service for unknown version', async () => {
-    process.env['GITHUB_SERVER_URL'] = 'https://example.com'
-    jest.spyOn(GitHubClientServiceFactory, 'fetchVersion').mockResolvedValueOnce('3.15')
-
-    expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceV2)
+    expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceV1)
   })
 })
