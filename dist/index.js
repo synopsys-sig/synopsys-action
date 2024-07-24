@@ -838,6 +838,10 @@ exports.RetryHelper = RetryHelper;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GithubClientServiceCloud = void 0;
 const github_client_service_base_1 = __nccwpck_require__(802);
+/*
+ This class extends GithubClientServiceBase and is designed to override its methods.
+ It allows for the incorporation of future API changes and enhancements for GitHub cloud without modifying the base class.
+*/
 class GithubClientServiceCloud extends github_client_service_base_1.GithubClientServiceBase {
 }
 exports.GithubClientServiceCloud = GithubClientServiceCloud;
@@ -853,6 +857,11 @@ exports.GithubClientServiceCloud = GithubClientServiceCloud;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GithubClientServiceV1 = void 0;
 const github_client_service_base_1 = __nccwpck_require__(802);
+/*
+ This class extends GithubClientServiceBase and is designed to override its methods.
+ It allows for the incorporation of future API changes and enhancements for GitHub enterprise server (version 3.11 and 3.12)
+ without modifying the base class.
+*/
 class GithubClientServiceV1 extends github_client_service_base_1.GithubClientServiceBase {
 }
 exports.GithubClientServiceV1 = GithubClientServiceV1;
