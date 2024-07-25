@@ -7,6 +7,7 @@ let tempPath = '/temp'
 let polaris_input_file = '/polaris_input.json'
 let coverity_input_file = '/coverity_input.json'
 let blackduck_input_file = '/bd_input.json'
+let srm_input_file = '/srm_input.json'
 
 beforeAll(() => {
   createTempDir().then(path => (tempPath = path))
@@ -1023,4 +1024,68 @@ describe('test coverity values passed correctly to bridge for workflow simplific
     expect(jsonData.data.coverity.automation).toBe(undefined)
     expect(jsonData.data.github).toBe(undefined)
   })
+})
+
+test('Test getFormattedCommandForSrm', () => {
+  Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
+  Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
+  Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'sca,sast'})
+  Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: 'SRM_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'SRM_BRANCH_NAME', {value: 'feature'})
+  Object.defineProperty(inputs, 'SRM_BRANCH_PARENT', {value: 'main'})
+  Object.defineProperty(inputs, 'COVERITY_EXECUTION_PATH', {value: '/home/coverity_exec_path'})
+  Object.defineProperty(inputs, 'BLACKDUCK_EXECUTION_PATH', {value: '/home/blackduck_exec_path'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForSrm('synopsys-action')
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage srm')
+
+  Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
+})
+
+test('Test getFormattedCommandForSrm with default values', () => {
+  Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
+  Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
+  Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'sca,sast'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  const resp = stp.getFormattedCommandForSrm('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(srm_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(jsonData.data.srm.project.name).toBe('synopsys-action')
+
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage srm')
+})
+
+it('should pass srm fields to bridge', () => {
+  Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
+  Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
+  Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: 'SRM_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'SRM_BRANCH_NAME', {value: 'feature'})
+  Object.defineProperty(inputs, 'SRM_BRANCH_PARENT', {value: 'main'})
+  Object.defineProperty(inputs, 'COVERITY_EXECUTION_PATH', {value: '/home/coverity_exec_path'})
+  Object.defineProperty(inputs, 'BLACKDUCK_EXECUTION_PATH', {value: '/home/blackduck_exec_path'})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForSrm('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(srm_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage srm')
+  expect(jsonData.data.srm.url).toContain('srm_url')
+  expect(jsonData.data.srm.apikey).toContain('api_key')
+  expect(jsonData.data.srm.assessment.types).toEqual(['SCA', 'SAST'])
+  expect(jsonData.data.srm.project.name).toContain('SRM_PROJECT_NAME')
+  expect(jsonData.data.srm.branch.name).toContain('feature')
+  expect(jsonData.data.srm.branch.parent.name).toContain('main')
+  expect(jsonData.data.blackduck.execution.path).toContain('/home/blackduck_exec_path')
+  expect(jsonData.data.coverity.execution.path).toContain('/home/coverity_exec_path')
 })

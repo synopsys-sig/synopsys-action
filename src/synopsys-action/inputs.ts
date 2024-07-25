@@ -8,6 +8,16 @@ export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIRGAP_KEY)?.tr
 export const BRIDGE_DOWNLOAD_URL = getInput(constants.BRIDGE_DOWNLOAD_URL_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY)?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput(constants.BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || ''
 
+// Srm related inputs
+export const SRM_URL = getInput(constants.SRM_URL_KEY)?.trim() || ''
+export const SRM_API_KEY = getInput(constants.SRM_API_KEY_KEY)?.trim() || ''
+export const SRM_ASSESSMENT_TYPES = getInput(constants.SRM_ASSESSMENT_TYPES_KEY)?.trim() || ''
+export const SRM_PROJECT_NAME = getInput(constants.SRM_PROJECT_NAME_KEY)?.trim() || ''
+export const SRM_BRANCH_NAME = getInput(constants.SRM_BRANCH_NAME_KEY)?.trim() || ''
+export const SRM_BRANCH_PARENT = getInput(constants.SRM_BRANCH_PARENT_KEY)?.trim() || ''
+export const COVERITY_EXECUTION_PATH = getInput(constants.COVERITY_EXECUTION_PATH_KEY)?.trim() || ''
+export const BLACKDUCK_EXECUTION_PATH = getInput(constants.BLACKDUCK_EXECUTION_PATH_KEY)?.trim() || ''
+
 // Polaris related inputs
 export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESSTOKEN_KEY)?.trim() || getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''
 export const POLARIS_APPLICATION_NAME = getInput(constants.POLARIS_APPLICATION_NAME_KEY)?.trim() || ''

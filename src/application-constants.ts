@@ -22,6 +22,20 @@ export const MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = '2.1.0'
 export const COVERITY_KEY = 'coverity'
 export const POLARIS_KEY = 'polaris'
 export const BLACKDUCK_KEY = 'blackduck'
+export const SRM_KEY = 'srm'
+
+export const SAST_ASSESSMENT_TYPE_KEY = 'SAST'
+export const SCA_ASSESSMENT_TYPE_KEY = 'SCA'
+
+// Srm
+export const SRM_URL_KEY = 'srm_url'
+export const SRM_API_KEY_KEY = 'srm_apikey'
+export const SRM_ASSESSMENT_TYPES_KEY = 'srm_assessment_types'
+export const SRM_PROJECT_NAME_KEY = 'srm_project_name'
+export const SRM_BRANCH_NAME_KEY = 'srm_branch_name'
+export const SRM_BRANCH_PARENT_KEY = 'srm_branch_parent'
+export const COVERITY_EXECUTION_PATH_KEY = 'coverity_execution_path'
+export const BLACKDUCK_EXECUTION_PATH_KEY = 'blackduck_execution_path'
 
 // Coverity
 export const COVERITY_URL_KEY = 'coverity_url'

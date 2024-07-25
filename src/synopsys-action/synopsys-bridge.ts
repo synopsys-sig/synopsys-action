@@ -9,7 +9,7 @@ import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs, {readFileSync} from 'fs'
 import {rmRF} from '@actions/io'
-import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
+import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateSrmInputs, validateScanTypes} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
@@ -189,6 +189,13 @@ export class SynopsysBridge {
       if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
         const blackDuckCommandFormatter = new SynopsysToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
+      }
+
+      // validating and preparing command for srm
+      const srmErrors: string[] = validateSrmInputs()
+      if (srmErrors.length === 0 && inputs.SRM_URL) {
+        const srmCommandFormatter = new SynopsysToolsParameter(tempDir)
+        formattedCommand = formattedCommand.concat(srmCommandFormatter.getFormattedCommandForSrm(githubRepoName))
       }
 
       let validationErrors: string[] = []

@@ -10,6 +10,7 @@ import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, BlackDuckArbitrary, BlackD
 import {GithubData} from './input-data/github'
 import * as constants from '../application-constants'
 import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
+import {Srm} from './input-data/srm'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -20,6 +21,8 @@ export class SynopsysToolsParameter {
   private static POLARIS_STATE_FILE_NAME = 'polaris_input.json'
   private static COVERITY_STATE_FILE_NAME = 'coverity_input.json'
   private static BD_STATE_FILE_NAME = 'bd_input.json'
+  private static SRM_STATE_FILE_NAME = 'srm_input.json'
+  private static SRM_STAGE = 'srm'
   // Coverity parameters
   private static COVERITY_STAGE = 'connect'
   static SPACE = ' '
@@ -450,6 +453,64 @@ export class SynopsysToolsParameter {
     debug('Generated state json file at - '.concat(stateFilePath))
 
     command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    return command
+  }
+
+  getFormattedCommandForSrm(githubRepoName: string): string {
+    let command = ''
+    let assessmentTypes: string[] = []
+    if (inputs.SRM_ASSESSMENT_TYPES) {
+      assessmentTypes = inputs.SRM_ASSESSMENT_TYPES.split(',')
+    }
+
+    let srmProjectName = inputs.SRM_PROJECT_NAME
+    if (isNullOrEmptyValue(srmProjectName)) {
+      srmProjectName = githubRepoName
+    }
+    debug(`Srm project name: ${srmProjectName}`)
+
+    const srmData: InputData<Srm> = {
+      data: {
+        srm: {
+          url: inputs.SRM_URL,
+          apikey: inputs.SRM_API_KEY,
+          project: {name: srmProjectName},
+          assessment: {types: assessmentTypes}
+        }
+      }
+    }
+
+    if (inputs.SRM_BRANCH_NAME || inputs.SRM_BRANCH_PARENT) {
+      srmData.data.srm.branch = {
+        ...(inputs.SRM_BRANCH_NAME && {name: inputs.SRM_BRANCH_NAME}),
+        ...(inputs.SRM_BRANCH_PARENT && {parent: {name: inputs.SRM_BRANCH_PARENT}})
+      }
+    }
+
+    if (inputs.BLACKDUCK_EXECUTION_PATH && assessmentTypes.includes(constants.SCA_ASSESSMENT_TYPE_KEY)) {
+      srmData.data.blackduck = {
+        execution: {
+          path: inputs.BLACKDUCK_EXECUTION_PATH
+        }
+      }
+    }
+
+    if (inputs.COVERITY_EXECUTION_PATH && assessmentTypes.includes(constants.SAST_ASSESSMENT_TYPE_KEY)) {
+      srmData.data.coverity = {
+        execution: {
+          path: inputs.COVERITY_EXECUTION_PATH
+        }
+      }
+    }
+
+    const inputJson = JSON.stringify(srmData)
+
+    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.SRM_STATE_FILE_NAME)
+    fs.writeFileSync(stateFilePath, inputJson)
+
+    debug('Generated state json file at - '.concat(stateFilePath))
+
+    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.SRM_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
     return command
   }
 

@@ -66,6 +66,18 @@ export function validateBlackDuckInputs(): string[] {
   return errors
 }
 
+export function validateSrmInputs(): string[] {
+  let errors: string[] = []
+  if (inputs.SRM_URL) {
+    const paramsMap = new Map()
+    paramsMap.set(constants.SRM_URL_KEY, inputs.SRM_URL)
+    paramsMap.set(constants.SRM_API_KEY_KEY, inputs.SRM_API_KEY)
+    paramsMap.set(constants.SRM_ASSESSMENT_TYPES_KEY, inputs.SRM_ASSESSMENT_TYPES)
+    errors = validateParameters(paramsMap, constants.SRM_KEY)
+  }
+  return errors
+}
+
 export function validateParameters(params: Map<string, string>, toolName: string): string[] {
   const invalidParams: string[] = isNullOrEmpty(params)
   const errors: string[] = []
