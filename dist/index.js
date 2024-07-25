@@ -1132,6 +1132,7 @@ class SynopsysBridge {
                 validationErrors = validationErrors.concat(polarisErrors);
                 validationErrors = validationErrors.concat(coverityErrors);
                 validationErrors = validationErrors.concat(blackduckErrors);
+                validationErrors = validationErrors.concat(srmErrors);
                 if (formattedCommand.length === 0) {
                     return Promise.reject(new Error(validationErrors.join(',')));
                 }
