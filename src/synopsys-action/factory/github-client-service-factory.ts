@@ -48,8 +48,10 @@ export const GitHubClientServiceFactory = {
       return new GithubClientServiceCloud()
     } else {
       const version = await this.fetchVersion(githubApiUrl)
+      const [major, minor] = version.split('.').slice(0, 2)
+      const majorMinorVersion = major.concat('.').concat(minor)
       // When there is contract change use if-else/switch-case and handle v1/v2 based on supported versions
-      if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
+      if (this.SUPPORTED_VERSIONS_V1.includes(majorMinorVersion)) {
         info(`Using GitHub Enterprise Server API v1 for version ${version}`)
       } else {
         info(`GitHub Enterprise Server version ${version} is not supported, proceeding with default version ${this.DEFAULT_VERSION}`)
