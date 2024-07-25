@@ -1,13 +1,13 @@
-import * as configVariables from '@actions/artifact/lib/internal/shared/config'
+import * as configVariables from 'actions-artifact-v2/lib/internal/shared/config'
 import {tmpdir} from 'os'
 import {uploadDiagnostics, uploadSarifReportAsArtifact} from '../../../src/synopsys-action/artifacts'
 import * as inputs from '../../../src/synopsys-action/inputs'
-import * as artifact from '@actions/artifact/lib/artifact'
+import * as artifact from 'actions-artifact-v2/lib/artifact'
 const fs = require('fs')
 import * as utility from '../../../src/synopsys-action/utility'
 
 // Mock the artifact module
-jest.mock('@actions/artifact', () => ({
+jest.mock('actions-artifact-v2', () => ({
   DefaultArtifactClient: jest.fn().mockImplementation(() => ({
     uploadArtifact: jest.fn(),
     downloadArtifact: jest.fn()

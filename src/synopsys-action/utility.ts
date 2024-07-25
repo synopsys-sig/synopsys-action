@@ -3,7 +3,7 @@ import * as os from 'os'
 import path from 'path'
 import {APPLICATION_NAME, GITHUB_ENVIRONMENT_VARIABLES} from '../application-constants'
 import {rmRF} from '@actions/io'
-import {getGitHubWorkspaceDir} from '@actions/artifact/lib/internal/shared/config'
+import {getGitHubWorkspaceDir} from 'actions-artifact-v2/lib/internal/shared/config'
 import * as constants from '../application-constants'
 import {debug} from '@actions/core'
 

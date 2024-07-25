@@ -1,7 +1,7 @@
 import {run} from '../../src/main'
 import {error} from '@actions/core'
 import * as inputs from '../../src/synopsys-action/inputs'
-import * as configVariables from '@actions/artifact/lib/internal/shared/config'
+import * as configVariables from 'actions-artifact-v2/lib/internal/shared/config'
 import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
 import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
