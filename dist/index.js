@@ -558,8 +558,11 @@ const github_client_service_v1_1 = __nccwpck_require__(8870);
 const HttpClient_1 = __nccwpck_require__(5538);
 const inputs = __importStar(__nccwpck_require__(7481));
 exports.GitHubClientServiceFactory = {
-    SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
     DEFAULT_VERSION: '3.12',
+    // V1 will have all currently supported versions
+    // {V2, V3 ... Vn} will have breaking changes
+    SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
+    // Add new version here
     fetchVersion(githubApiUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             const githubEnterpriseMetaUrl = '/meta';
@@ -579,35 +582,34 @@ exports.GitHubClientServiceFactory = {
                 }
                 else {
                     (0, core_1.debug)(`No version info found for endpoint : ${endpoint}. Default version: ${this.DEFAULT_VERSION} will be used.`);
-                    return this.DEFAULT_VERSION;
                 }
             }
             catch (error) {
                 (0, core_1.debug)(`Fetching version info for enterprise server failed : ${error}. Default version: ${this.DEFAULT_VERSION} will be used.`);
-                return this.DEFAULT_VERSION;
             }
+            return this.DEFAULT_VERSION;
         });
     },
     getGitHubClientServiceInstance() {
         return __awaiter(this, void 0, void 0, function* () {
             (0, core_1.info)('Fetching GitHub client service instance...');
             const githubApiUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL] || '';
-            let service;
             if (githubApiUrl === constants.GITHUB_CLOUD_API_URL) {
-                service = new github_client_service_cloud_1.GithubClientServiceCloud();
+                (0, core_1.debug)(`Using GitHub client service Cloud instance`);
+                return new github_client_service_cloud_1.GithubClientServiceCloud();
             }
             else {
                 const version = yield this.fetchVersion(githubApiUrl);
+                // When there is contract change use if-else/switch-case and handle v1/v2 based on supported versions
                 if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
-                    (0, core_1.info)(`Using GitHub API v1 for version ${version}`);
-                    service = new github_client_service_v1_1.GithubClientServiceV1();
+                    (0, core_1.info)(`Using GitHub Enterprise Server API v1 for version ${version}`);
                 }
                 else {
-                    (0, core_1.info)(`Using GitHub API v1 for version ${version}`);
-                    service = new github_client_service_v1_1.GithubClientServiceV1();
+                    (0, core_1.info)(`GitHub Enterprise Server version ${version} is not supported, proceeding with default version ${this.DEFAULT_VERSION}`);
                 }
+                (0, core_1.debug)(`Using GitHub client service V1 instance`);
+                return new github_client_service_v1_1.GithubClientServiceV1();
             }
-            return service;
         });
     }
 };

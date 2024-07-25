@@ -7,8 +7,11 @@ import {HttpClient} from 'typed-rest-client/HttpClient'
 import * as inputs from '../inputs'
 
 export const GitHubClientServiceFactory = {
-  SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
   DEFAULT_VERSION: '3.12',
+  // V1 will have all currently supported versions
+  // {V2, V3 ... Vn} will have breaking changes
+  SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
+  // Add new version here
 
   async fetchVersion(githubApiUrl: string): Promise<string> {
     const githubEnterpriseMetaUrl = '/meta'
@@ -29,31 +32,30 @@ export const GitHubClientServiceFactory = {
         return installedVersion
       } else {
         debug(`No version info found for endpoint : ${endpoint}. Default version: ${this.DEFAULT_VERSION} will be used.`)
-        return this.DEFAULT_VERSION
       }
     } catch (error) {
       debug(`Fetching version info for enterprise server failed : ${error}. Default version: ${this.DEFAULT_VERSION} will be used.`)
-      return this.DEFAULT_VERSION
     }
+    return this.DEFAULT_VERSION
   },
 
   async getGitHubClientServiceInstance(): Promise<GithubClientServiceInterface> {
     info('Fetching GitHub client service instance...')
     const githubApiUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL] || ''
 
-    let service: GithubClientServiceInterface
     if (githubApiUrl === constants.GITHUB_CLOUD_API_URL) {
-      service = new GithubClientServiceCloud()
+      debug(`Using GitHub client service Cloud instance`)
+      return new GithubClientServiceCloud()
     } else {
       const version = await this.fetchVersion(githubApiUrl)
+      // When there is contract change use if-else/switch-case and handle v1/v2 based on supported versions
       if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
-        info(`Using GitHub API v1 for version ${version}`)
-        service = new GithubClientServiceV1()
+        info(`Using GitHub Enterprise Server API v1 for version ${version}`)
       } else {
-        info(`Using GitHub API v1 for version ${version}`)
-        service = new GithubClientServiceV1()
+        info(`GitHub Enterprise Server version ${version} is not supported, proceeding with default version ${this.DEFAULT_VERSION}`)
       }
+      debug(`Using GitHub client service V1 instance`)
+      return new GithubClientServiceV1()
     }
-    return service
   }
 }
