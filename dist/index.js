@@ -31,7 +31,7 @@ exports.MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = '2.1.0';
 exports.COVERITY_KEY = 'coverity';
 exports.POLARIS_KEY = 'polaris';
 exports.BLACKDUCK_KEY = 'blackduck';
-exports.SRM_KEY = 'srm';
+exports.SRM_KEY = 'SRM';
 exports.SAST_ASSESSMENT_TYPE_KEY = 'SAST';
 exports.SCA_ASSESSMENT_TYPE_KEY = 'SCA';
 // Srm
@@ -1122,11 +1122,11 @@ class SynopsysBridge {
                     const blackDuckCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
                     formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck());
                 }
-                // validating and preparing command for srm
-                const srmErrors = (0, validators_1.validateSrmInputs)();
+                // validating and preparing command for SRM
+                const srmErrors = (0, validators_1.validateSRMInputs)();
                 if (srmErrors.length === 0 && inputs.SRM_URL) {
                     const srmCommandFormatter = new tools_parameter_1.SynopsysToolsParameter(tempDir);
-                    formattedCommand = formattedCommand.concat(srmCommandFormatter.getFormattedCommandForSrm(githubRepoName));
+                    formattedCommand = formattedCommand.concat(srmCommandFormatter.getFormattedCommandForSRM(githubRepoName));
                 }
                 let validationErrors = [];
                 validationErrors = validationErrors.concat(polarisErrors);
@@ -1892,7 +1892,7 @@ class SynopsysToolsParameter {
         command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE);
         return command;
     }
-    getFormattedCommandForSrm(githubRepoName) {
+    getFormattedCommandForSRM(githubRepoName) {
         let command = '';
         let assessmentTypes = [];
         if (inputs.SRM_ASSESSMENT_TYPES) {
@@ -1902,7 +1902,7 @@ class SynopsysToolsParameter {
         if ((0, validators_1.isNullOrEmptyValue)(srmProjectName)) {
             srmProjectName = githubRepoName;
         }
-        (0, core_1.debug)(`Srm project name: ${srmProjectName}`);
+        (0, core_1.debug)(`SRM project name: ${srmProjectName}`);
         const srmData = {
             data: {
                 srm: {
@@ -2246,7 +2246,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateBridgeUrl = exports.isNullOrEmptyValue = exports.isNullOrEmpty = exports.validateParameters = exports.validateSrmInputs = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateScanTypes = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
+exports.validateBridgeUrl = exports.isNullOrEmptyValue = exports.isNullOrEmpty = exports.validateParameters = exports.validateSRMInputs = exports.validateBlackDuckInputs = exports.validateCoverityInputs = exports.validatePolarisInputs = exports.validateScanTypes = exports.validateBlackduckFailureSeverities = exports.validateCoverityInstallDirectoryParam = void 0;
 const fs = __importStar(__nccwpck_require__(5747));
 const core_1 = __nccwpck_require__(2186);
 const constants = __importStar(__nccwpck_require__(9717));
@@ -2315,7 +2315,7 @@ function validateBlackDuckInputs() {
     return errors;
 }
 exports.validateBlackDuckInputs = validateBlackDuckInputs;
-function validateSrmInputs() {
+function validateSRMInputs() {
     let errors = [];
     if (inputs.SRM_URL) {
         const paramsMap = new Map();
@@ -2326,7 +2326,7 @@ function validateSrmInputs() {
     }
     return errors;
 }
-exports.validateSrmInputs = validateSrmInputs;
+exports.validateSRMInputs = validateSRMInputs;
 function validateParameters(params, toolName) {
     const invalidParams = isNullOrEmpty(params);
     const errors = [];

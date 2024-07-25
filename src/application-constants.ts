@@ -22,7 +22,7 @@ export const MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = '2.1.0'
 export const COVERITY_KEY = 'coverity'
 export const POLARIS_KEY = 'polaris'
 export const BLACKDUCK_KEY = 'blackduck'
-export const SRM_KEY = 'srm'
+export const SRM_KEY = 'SRM'
 
 export const SAST_ASSESSMENT_TYPE_KEY = 'SAST'
 export const SCA_ASSESSMENT_TYPE_KEY = 'SCA'

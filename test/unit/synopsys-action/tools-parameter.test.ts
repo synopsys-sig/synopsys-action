@@ -1026,7 +1026,7 @@ describe('test coverity values passed correctly to bridge for workflow simplific
   })
 })
 
-test('Test getFormattedCommandForSrm', () => {
+test('Test getFormattedCommandForSRM', () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
   Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
   Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'sca,sast'})
@@ -1038,7 +1038,7 @@ test('Test getFormattedCommandForSrm', () => {
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForSrm('synopsys-action')
+  const resp = stp.getFormattedCommandForSRM('synopsys-action')
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage srm')
@@ -1046,14 +1046,14 @@ test('Test getFormattedCommandForSrm', () => {
   Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
 })
 
-test('Test getFormattedCommandForSrm with default values', () => {
+test('Test getFormattedCommandForSRM with default values', () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
   Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
   Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'sca,sast'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
 
-  const resp = stp.getFormattedCommandForSrm('synopsys-action')
+  const resp = stp.getFormattedCommandForSRM('synopsys-action')
 
   const jsonString = fs.readFileSync(tempPath.concat(srm_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)
@@ -1063,7 +1063,7 @@ test('Test getFormattedCommandForSrm with default values', () => {
   expect(resp).toContain('--stage srm')
 })
 
-it('should pass srm fields to bridge', () => {
+it('should pass SRM fields to bridge', () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
   Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
   Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
@@ -1074,7 +1074,7 @@ it('should pass srm fields to bridge', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_EXECUTION_PATH', {value: '/home/blackduck_exec_path'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
-  const resp = stp.getFormattedCommandForSrm('synopsys-action')
+  const resp = stp.getFormattedCommandForSRM('synopsys-action')
 
   const jsonString = fs.readFileSync(tempPath.concat(srm_input_file), 'utf-8')
   const jsonData = JSON.parse(jsonString)

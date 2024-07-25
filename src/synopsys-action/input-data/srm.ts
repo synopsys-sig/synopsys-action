@@ -1,10 +1,10 @@
-export interface Srm {
-  srm: SrmData
+export interface SRM {
+  srm: SRMData
   coverity?: ExecutionPath
   blackduck?: ExecutionPath
 }
 
-export interface SrmData {
+export interface SRMData {
   url: string
   apikey: string
   project: {name: string}

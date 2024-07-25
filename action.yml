@@ -189,22 +189,22 @@ inputs:
     description: 'Black Duck config file path (.properties/.yml)'
     required: false
   srm_url:
-    description: 'Srm URL'
+    description: 'SRM Url'
     required: false
   srm_apikey: 
-    description: 'Srm Api Key'
+    description: 'SRM Api Key'
     required: false
   srm_assessment_types: 
-    description: 'Srm Assessment Types'
+    description: 'SRM Assessment Types'
     required: false
   srm_project_name: 
-    description: 'Srm project name'
+    description: 'SRM project name'
     required: false 
   srm_branch_name:
-    description: 'Srm branch name'
+    description: 'SRM branch name'
     required: false
   srm_branch_parent:
-    description: 'Srm branch parent'
+    description: 'SRM branch parent'
     required: false
   coverity_execution_path:
     description: 'Coverity execution path'

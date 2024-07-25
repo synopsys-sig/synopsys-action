@@ -67,7 +67,7 @@ export function validateBlackDuckInputs(): string[] {
   return errors
 }
 
-export function validateSrmInputs(): string[] {
+export function validateSRMInputs(): string[] {
   let errors: string[] = []
   if (inputs.SRM_URL) {
     const paramsMap = new Map()

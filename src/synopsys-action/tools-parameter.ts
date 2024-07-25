@@ -10,7 +10,7 @@ import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, BlackDuckArbitrary, BlackD
 import {GithubData} from './input-data/github'
 import * as constants from '../application-constants'
 import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
-import {Srm} from './input-data/srm'
+import {SRM} from './input-data/srm'
 
 export class SynopsysToolsParameter {
   tempDir: string
@@ -456,7 +456,7 @@ export class SynopsysToolsParameter {
     return command
   }
 
-  getFormattedCommandForSrm(githubRepoName: string): string {
+  getFormattedCommandForSRM(githubRepoName: string): string {
     let command = ''
     let assessmentTypes: string[] = []
     if (inputs.SRM_ASSESSMENT_TYPES) {
@@ -467,9 +467,9 @@ export class SynopsysToolsParameter {
     if (isNullOrEmptyValue(srmProjectName)) {
       srmProjectName = githubRepoName
     }
-    debug(`Srm project name: ${srmProjectName}`)
+    debug(`SRM project name: ${srmProjectName}`)
 
-    const srmData: InputData<Srm> = {
+    const srmData: InputData<SRM> = {
       data: {
         srm: {
           url: inputs.SRM_URL,

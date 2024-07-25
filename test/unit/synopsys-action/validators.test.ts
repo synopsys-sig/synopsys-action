@@ -1,4 +1,4 @@
-import {validateBlackduckFailureSeverities, validateBlackDuckInputs, validateCoverityInputs, validateCoverityInstallDirectoryParam, validateParameters, validatePolarisInputs, validateSrmInputs} from '../../../src/synopsys-action/validators'
+import {validateBlackduckFailureSeverities, validateBlackDuckInputs, validateCoverityInputs, validateCoverityInstallDirectoryParam, validateParameters, validatePolarisInputs, validateSRMInputs} from '../../../src/synopsys-action/validators'
 import * as constants from '../../../src/application-constants'
 import * as inputs from '../../../src/synopsys-action/inputs'
 import * as utility from '../../../src/synopsys-action/utility'
@@ -154,18 +154,18 @@ test('Blackduck - With mandatory fields', async () => {
 })
 
 // SRM
-test('Srm - Without mandatory fields', async () => {
+test('SRM - Without mandatory fields', async () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'SRM_URL'})
   try {
-    validateSrmInputs()
+    validateSRMInputs()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('[srm_apikey, srm_assessment_types] - required parameters for srm is missing')
+    expect(error.message).toContain('[srm_apikey, srm_assessment_types] - required parameters for SRM is missing')
   }
   Object.defineProperty(inputs, 'SRM_URL', {value: null})
 })
 
-test('Srm - With one or more non-mandatory fields', async () => {
+test('SRM - With one or more non-mandatory fields', async () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'SRM_URL'})
   Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'SRM_API_KEY'})
   Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
@@ -173,19 +173,19 @@ test('Srm - With one or more non-mandatory fields', async () => {
   Object.defineProperty(inputs, 'SRM_BRANCH_NAME', {value: 'feature'})
   Object.defineProperty(inputs, 'SRM_BRANCH_PARENT', {value: 'main'})
 
-  let response = validateSrmInputs()
+  let response = validateSRMInputs()
   expect(response.length).toBe(0)
 
   Object.defineProperty(inputs, 'SRM_URL', {value: null})
 })
 
-test('Srm - With mandatory fields', async () => {
+test('SRM - With mandatory fields', async () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'SRM_URL'})
   Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'SRM_API_KEY'})
   Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
   Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: 'SRM_PROJECT_NAME'})
 
-  let response = validateSrmInputs()
+  let response = validateSRMInputs()
   expect(response.length).toBe(0)
 
   Object.defineProperty(inputs, 'SRM_URL', {value: null})
