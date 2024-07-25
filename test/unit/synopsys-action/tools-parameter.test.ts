@@ -1085,7 +1085,7 @@ it('should pass srm fields to bridge', () => {
   expect(jsonData.data.srm.assessment.types).toEqual(['SCA', 'SAST'])
   expect(jsonData.data.srm.project.name).toContain('SRM_PROJECT_NAME')
   expect(jsonData.data.srm.branch.name).toContain('feature')
-  expect(jsonData.data.srm.branch.parent.name).toContain('main')
+  expect(jsonData.data.srm.branch.parent).toContain('main')
   expect(jsonData.data.blackduck.execution.path).toContain('/home/blackduck_exec_path')
   expect(jsonData.data.coverity.execution.path).toContain('/home/coverity_exec_path')
 })

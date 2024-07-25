@@ -483,7 +483,7 @@ export class SynopsysToolsParameter {
     if (inputs.SRM_BRANCH_NAME || inputs.SRM_BRANCH_PARENT) {
       srmData.data.srm.branch = {
         ...(inputs.SRM_BRANCH_NAME && {name: inputs.SRM_BRANCH_NAME}),
-        ...(inputs.SRM_BRANCH_PARENT && {parent: {name: inputs.SRM_BRANCH_PARENT}})
+        ...(inputs.SRM_BRANCH_PARENT && {parent: inputs.SRM_BRANCH_PARENT})
       }
     }
 

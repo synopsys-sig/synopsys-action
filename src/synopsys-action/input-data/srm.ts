@@ -18,5 +18,5 @@ export interface ExecutionPath {
 
 export interface Branch {
   name?: string
-  parent?: {name?: string}
+  parent?: string
 }
