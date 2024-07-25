@@ -163,8 +163,8 @@ export class SynopsysBridge {
     try {
       let formattedCommand = ''
       const invalidParams: string[] = validateScanTypes()
-      if (invalidParams.length === 3) {
-        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
+      if (invalidParams.length === 4) {
+        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(',').concat(constants.SRM_URL_KEY).concat(')')))
       }
 
       const githubRepo = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]

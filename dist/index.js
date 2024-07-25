@@ -1099,8 +1099,8 @@ class SynopsysBridge {
             try {
                 let formattedCommand = '';
                 const invalidParams = (0, validators_1.validateScanTypes)();
-                if (invalidParams.length === 3) {
-                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')));
+                if (invalidParams.length === 4) {
+                    return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(',').concat(constants.SRM_URL_KEY).concat(')')));
                 }
                 const githubRepo = process.env[application_constants_1.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY];
                 const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : '';
@@ -2275,6 +2275,7 @@ function validateScanTypes() {
     paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL);
     paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL);
     paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL);
+    paramsMap.set(constants.SRM_URL_KEY, inputs.SRM_URL);
     return isNullOrEmpty(paramsMap);
 }
 exports.validateScanTypes = validateScanTypes;

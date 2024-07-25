@@ -28,6 +28,7 @@ export function validateScanTypes(): string[] {
   paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
   paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
   paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
+  paramsMap.set(constants.SRM_URL_KEY, inputs.SRM_URL)
   return isNullOrEmpty(paramsMap)
 }
 
