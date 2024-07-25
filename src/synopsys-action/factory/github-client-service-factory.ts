@@ -10,10 +10,10 @@ export const GitHubClientServiceFactory = {
   SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
   DEFAULT_VERSION: '3.12',
 
-  async fetchVersion(githubServerUrl: string): Promise<string> {
+  async fetchVersion(githubApiUrl: string): Promise<string> {
     const githubEnterpriseMetaUrl = '/meta'
     const githubToken = inputs.GITHUB_TOKEN
-    const endpoint = githubServerUrl.concat(githubEnterpriseMetaUrl)
+    const endpoint = githubApiUrl.concat(githubEnterpriseMetaUrl)
 
     try {
       const httpClient = new HttpClient('GitHubClientServiceFactory')
@@ -39,13 +39,13 @@ export const GitHubClientServiceFactory = {
 
   async getGitHubClientServiceInstance(): Promise<GithubClientServiceInterface> {
     info('Fetching GitHub client service instance...')
-    const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
+    const githubApiUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL] || ''
 
     let service: GithubClientServiceInterface
-    if (githubServerUrl === constants.GITHUB_CLOUD_URL) {
+    if (githubApiUrl === constants.GITHUB_CLOUD_API_URL) {
       service = new GithubClientServiceCloud()
     } else {
-      const version = await this.fetchVersion(githubServerUrl)
+      const version = await this.fetchVersion(githubApiUrl)
       if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
         info(`Using GitHub API v1 for version ${version}`)
         service = new GithubClientServiceV1()

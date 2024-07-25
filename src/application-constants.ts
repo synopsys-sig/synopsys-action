@@ -150,7 +150,8 @@ export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_BASE_REF: 'GITHUB_BASE_REF',
   GITHUB_EVENT_NAME: 'GITHUB_EVENT_NAME',
   GITHUB_SERVER_URL: 'GITHUB_SERVER_URL',
-  GITHUB_SHA: 'GITHUB_SHA'
+  GITHUB_SHA: 'GITHUB_SHA',
+  GITHUB_API_URL: 'GITHUB_API_URL'
 }
 export const GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security'
 export const SARIF_REPORT_LOG_INFO_FOR_PR_SCANS = 'SARIF report create/upload is ignored for pull request scan'

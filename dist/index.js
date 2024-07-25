@@ -152,7 +152,8 @@ exports.GITHUB_ENVIRONMENT_VARIABLES = {
     GITHUB_BASE_REF: 'GITHUB_BASE_REF',
     GITHUB_EVENT_NAME: 'GITHUB_EVENT_NAME',
     GITHUB_SERVER_URL: 'GITHUB_SERVER_URL',
-    GITHUB_SHA: 'GITHUB_SHA'
+    GITHUB_SHA: 'GITHUB_SHA',
+    GITHUB_API_URL: 'GITHUB_API_URL'
 };
 exports.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security';
 exports.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS = 'SARIF report create/upload is ignored for pull request scan';
@@ -559,11 +560,11 @@ const inputs = __importStar(__nccwpck_require__(7481));
 exports.GitHubClientServiceFactory = {
     SUPPORTED_VERSIONS_V1: ['3.11', '3.12'],
     DEFAULT_VERSION: '3.12',
-    fetchVersion(githubServerUrl) {
+    fetchVersion(githubApiUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             const githubEnterpriseMetaUrl = '/meta';
             const githubToken = inputs.GITHUB_TOKEN;
-            const endpoint = githubServerUrl.concat(githubEnterpriseMetaUrl);
+            const endpoint = githubApiUrl.concat(githubEnterpriseMetaUrl);
             try {
                 const httpClient = new HttpClient_1.HttpClient('GitHubClientServiceFactory');
                 const httpResponse = yield httpClient.get(endpoint, {
@@ -590,13 +591,13 @@ exports.GitHubClientServiceFactory = {
     getGitHubClientServiceInstance() {
         return __awaiter(this, void 0, void 0, function* () {
             (0, core_1.info)('Fetching GitHub client service instance...');
-            const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || '';
+            const githubApiUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_API_URL] || '';
             let service;
-            if (githubServerUrl === constants.GITHUB_CLOUD_URL) {
+            if (githubApiUrl === constants.GITHUB_CLOUD_API_URL) {
                 service = new github_client_service_cloud_1.GithubClientServiceCloud();
             }
             else {
-                const version = yield this.fetchVersion(githubServerUrl);
+                const version = yield this.fetchVersion(githubApiUrl);
                 if (this.SUPPORTED_VERSIONS_V1.includes(version)) {
                     (0, core_1.info)(`Using GitHub API v1 for version ${version}`);
                     service = new github_client_service_v1_1.GithubClientServiceV1();

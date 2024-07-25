@@ -17,7 +17,7 @@ describe('fetchVersion()', () => {
   })
 
   it('should fetch version successfully for supported version', async () => {
-    const githubServerUrl = 'https://example.com'
+    const githubApiUrl = 'https://api.example.com'
     const expectedVersion = '3.11'
     const mockMetaDataResponse = JSON.stringify({installed_version: expectedVersion})
 
@@ -30,13 +30,13 @@ describe('fetchVersion()', () => {
     httpResponse.message.statusCode = 200
     jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-    const version = await GitHubClientServiceFactory.fetchVersion(githubServerUrl)
+    const version = await GitHubClientServiceFactory.fetchVersion(githubApiUrl)
 
     expect(version).toBe(expectedVersion)
   })
 
   it('should fetch the default version if the HTTP status is not OK', async () => {
-    const githubServerUrl = 'https://example.com'
+    const githubApiUrl = 'https://api.example.com'
     const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
     const httpResponse: Mocked<HttpClientResponse> = {
       message: incomingMessage,
@@ -45,18 +45,18 @@ describe('fetchVersion()', () => {
     httpResponse.message.statusCode = 404
     jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-    const version = await GitHubClientServiceFactory.fetchVersion(githubServerUrl)
+    const version = await GitHubClientServiceFactory.fetchVersion(githubApiUrl)
 
     expect(version).toBe(GitHubClientServiceFactory.DEFAULT_VERSION)
   })
 
   it('should fetch the default version if fetching version info fails', async () => {
-    const githubServerUrl = 'https://example.com'
+    const githubApiUrl = 'https://api.example.com'
     const errorMessage = 'Network error'
 
     jest.spyOn(HttpClient.prototype, 'get').mockRejectedValue(new Error(errorMessage))
 
-    const version = await GitHubClientServiceFactory.fetchVersion(githubServerUrl)
+    const version = await GitHubClientServiceFactory.fetchVersion(githubApiUrl)
 
     expect(version).toBe(GitHubClientServiceFactory.DEFAULT_VERSION)
   })
@@ -68,20 +68,20 @@ describe('getGitHubClientServiceInstance()', () => {
   })
 
   it('should return GithubClientServiceCloud service', async () => {
-    process.env['GITHUB_SERVER_URL'] = 'https://github.com'
+    process.env['GITHUB_API_URL'] = 'https://api.github.com'
 
     expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceCloud)
   })
 
   it('should return GithubClientServiceV1 service for version 3.11', async () => {
-    process.env['GITHUB_SERVER_URL'] = 'https://example.com'
+    process.env['GITHUB_API_URL'] = 'https://api.example.com'
     jest.spyOn(GitHubClientServiceFactory, 'fetchVersion').mockResolvedValueOnce('3.11')
 
     expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceV1)
   })
 
   it('should return GithubClientServiceV1 service for unsupported version', async () => {
-    process.env['GITHUB_SERVER_URL'] = 'https://example.com'
+    process.env['GITHUB_API_URL'] = 'https://api.example.com'
     jest.spyOn(GitHubClientServiceFactory, 'fetchVersion').mockResolvedValueOnce('3.13')
 
     expect(await GitHubClientServiceFactory.getGitHubClientServiceInstance()).toBeInstanceOf(GithubClientServiceV1)
