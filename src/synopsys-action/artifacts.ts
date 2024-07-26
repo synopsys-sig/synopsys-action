@@ -3,7 +3,7 @@ import {getGitHubWorkspaceDir} from 'actions-artifact-v2/lib/internal/shared/con
 import * as fs from 'fs'
 import * as inputs from './inputs'
 import {getDefaultSarifReportPath} from './utility'
-import {warning} from '@actions/core'
+import {warning, info} from '@actions/core'
 import path from 'path'
 import * as constants from '../application-constants'
 import * as artifact from 'actions-artifact-v1'
@@ -16,12 +16,12 @@ export async function uploadDiagnostics(): Promise<UploadArtifactResponse | void
   let options: UploadArtifactOptions | artifact.UploadOptions = {}
 
   if (isGitHubCloud) {
+    artifactClient = new DefaultArtifactClient()
+  } else {
     artifactClient = artifact.create()
     options = {
       continueOnError: true
     } as artifact.UploadOptions
-  } else {
-    artifactClient = new DefaultArtifactClient()
   }
   const pwd = getGitHubWorkspaceDir().concat(getBridgeDiagnosticsFolder())
   let files: string[] = []
@@ -71,14 +71,17 @@ export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: s
   let artifactClient
   let options: artifact.UploadOptions = {}
   if (isGitHubCloud) {
+    info('SALOG - is cloud')
+    artifactClient = new DefaultArtifactClient()
+  } else {
     artifactClient = artifact.create()
     options = {
       continueOnError: true
     } as artifact.UploadOptions
-  } else {
-    artifactClient = new DefaultArtifactClient()
   }
   const sarifFilePath = userSarifFilePath ? userSarifFilePath : getDefaultSarifReportPath(defaultSarifReportDirectory, true)
   const rootDir = userSarifFilePath ? path.dirname(userSarifFilePath) : getDefaultSarifReportPath(defaultSarifReportDirectory, false)
+  info('SALOG sarifFilePath is - '.concat(sarifFilePath))
+  info('SALOG rootDir is - '.concat(rootDir))
   return await artifactClient.uploadArtifact(artifactName, [sarifFilePath], rootDir, options)
 }

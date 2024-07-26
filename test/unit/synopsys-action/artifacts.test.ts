@@ -29,6 +29,7 @@ describe('uploadDiagnostics - success', () => {
     const mockArtifactClient: Partial<artifact.ArtifactClient> = {
       uploadArtifact: mockUploadArtifact as any // Casting to any due to typing issues
     }
+    process.env['GITHUB_SERVER_URL'] = 'https://github.com'
     jest.spyOn(artifact, 'DefaultArtifactClient').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
     jest.spyOn(fs, 'existsSync').mockReturnValue(true)
     jest.spyOn(fs, 'readdirSync').mockReturnValue(['bridge.log'])
@@ -71,6 +72,7 @@ describe('uploadSarifReport', () => {
     const mockArtifactClient: Partial<artifact.ArtifactClient> = {
       uploadArtifact: mockUploadArtifact as any // Casting to any due to typing issues
     }
+    process.env['GITHUB_SERVER_URL'] = 'https://github.com'
     jest.spyOn(artifact, 'DefaultArtifactClient').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
     jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('mocked-sarif-path')
     jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
