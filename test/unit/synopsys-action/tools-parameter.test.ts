@@ -1063,6 +1063,18 @@ test('Test getFormattedCommandForSRM with default values', () => {
   expect(resp).toContain('--stage srm')
 })
 
+test('Test missing data error in getFormattedCommandForSRM', () => {
+  Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  try {
+    stp.getFormattedCommandForSRM('synopsys-action')
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('required parameters for SRM is missing')
+  }
+})
+
 it('should pass SRM fields to bridge', () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
   Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
