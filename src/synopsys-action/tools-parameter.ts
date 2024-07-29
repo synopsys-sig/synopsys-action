@@ -487,7 +487,7 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (inputs.BLACKDUCK_EXECUTION_PATH && assessmentTypes.includes(constants.SCA_ASSESSMENT_TYPE_KEY)) {
+    if (inputs.BLACKDUCK_EXECUTION_PATH) {
       srmData.data.blackduck = {
         execution: {
           path: inputs.BLACKDUCK_EXECUTION_PATH
@@ -495,7 +495,7 @@ export class SynopsysToolsParameter {
       }
     }
 
-    if (inputs.COVERITY_EXECUTION_PATH && assessmentTypes.includes(constants.SAST_ASSESSMENT_TYPE_KEY)) {
+    if (inputs.COVERITY_EXECUTION_PATH) {
       srmData.data.coverity = {
         execution: {
           path: inputs.COVERITY_EXECUTION_PATH

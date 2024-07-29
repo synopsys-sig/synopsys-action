@@ -1061,6 +1061,8 @@ test('Test getFormattedCommandForSRM with default values', () => {
 
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage srm')
+
+  Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
 })
 
 test('Test missing data error in getFormattedCommandForSRM', () => {
@@ -1100,4 +1102,6 @@ it('should pass SRM fields to bridge', () => {
   expect(jsonData.data.srm.branch.parent).toContain('main')
   expect(jsonData.data.blackduck.execution.path).toContain('/home/blackduck_exec_path')
   expect(jsonData.data.coverity.execution.path).toContain('/home/coverity_exec_path')
+
+  Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
 })

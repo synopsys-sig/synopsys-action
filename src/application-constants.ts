@@ -24,9 +24,6 @@ export const POLARIS_KEY = 'polaris'
 export const BLACKDUCK_KEY = 'blackduck'
 export const SRM_KEY = 'SRM'
 
-export const SAST_ASSESSMENT_TYPE_KEY = 'SAST'
-export const SCA_ASSESSMENT_TYPE_KEY = 'SCA'
-
 // Srm
 export const SRM_URL_KEY = 'srm_url'
 export const SRM_API_KEY_KEY = 'srm_apikey'
