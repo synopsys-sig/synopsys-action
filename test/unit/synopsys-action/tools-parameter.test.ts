@@ -1037,11 +1037,20 @@ test('Test getFormattedCommandForSRM', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_EXECUTION_PATH', {value: '/home/blackduck_exec_path'})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
-
   const resp = stp.getFormattedCommandForSRM('synopsys-action')
 
+  const jsonString = fs.readFileSync(tempPath.concat(srm_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
   expect(resp).not.toBeNull()
   expect(resp).toContain('--stage srm')
+  expect(jsonData.data.srm.url).toContain('srm_url')
+  expect(jsonData.data.srm.apikey).toContain('api_key')
+  expect(jsonData.data.srm.assessment.types).toEqual(['sca', 'sast'])
+  expect(jsonData.data.srm.project.name).toContain('SRM_PROJECT_NAME')
+  expect(jsonData.data.srm.branch.name).toContain('feature')
+  expect(jsonData.data.srm.branch.parent).toContain('main')
+  expect(jsonData.data.blackduck.execution.path).toContain('/home/blackduck_exec_path')
+  expect(jsonData.data.coverity.execution.path).toContain('/home/coverity_exec_path')
 
   Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
 })
