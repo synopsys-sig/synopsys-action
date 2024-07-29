@@ -68,3 +68,8 @@ export function isPullRequestEvent(): boolean {
   debug(`Github Event Name: ${eventName}`)
   return eventName === 'pull_request' || false
 }
+
+export function isGitHubCloud(): boolean {
+  const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
+  return githubServerUrl === constants.GITHUB_CLOUD_URL
+}

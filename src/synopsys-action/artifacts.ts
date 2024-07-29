@@ -2,20 +2,17 @@ import {UploadArtifactResponse, UploadArtifactOptions} from 'actions-artifact-v2
 import {getGitHubWorkspaceDir} from 'actions-artifact-v2/lib/internal/shared/config'
 import * as fs from 'fs'
 import * as inputs from './inputs'
-import {getDefaultSarifReportPath} from './utility'
+import {getDefaultSarifReportPath, isGitHubCloud} from './utility'
 import {warning} from '@actions/core'
 import path from 'path'
-import * as constants from '../application-constants'
 import * as artifact from 'actions-artifact-v1'
 import {DefaultArtifactClient} from 'actions-artifact-v2'
 
 export async function uploadDiagnostics(): Promise<UploadArtifactResponse | void> {
-  const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
-  const isGitHubCloud: boolean = githubServerUrl === constants.GITHUB_CLOUD_URL
   let artifactClient
   let options: UploadArtifactOptions | artifact.UploadOptions = {}
 
-  if (isGitHubCloud) {
+  if (isGitHubCloud()) {
     artifactClient = new DefaultArtifactClient()
   } else {
     artifactClient = artifact.create()
@@ -66,11 +63,9 @@ export function getFiles(dir: string, allFiles: string[]): string[] {
 }
 
 export async function uploadSarifReportAsArtifact(defaultSarifReportDirectory: string, userSarifFilePath: string, artifactName: string): Promise<UploadArtifactResponse> {
-  const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
-  const isGitHubCloud: boolean = githubServerUrl === constants.GITHUB_CLOUD_URL
   let artifactClient
   let options: artifact.UploadOptions = {}
-  if (isGitHubCloud) {
+  if (isGitHubCloud()) {
     artifactClient = new DefaultArtifactClient()
   } else {
     artifactClient = artifact.create()
