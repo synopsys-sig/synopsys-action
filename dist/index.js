@@ -234,6 +234,7 @@ function run() {
             }
             // Execute bridge command
             const exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            (0, core_1.info)(`exitCode: ${exitCode}`);
             isExitCodeZero = exitCode === 0;
             if (exitCode === 0) {
                 isBridgeExecuted = true;
@@ -243,6 +244,7 @@ function run() {
         }
         catch (error) {
             const exitCode = getBridgeExitCodeAsNumericValue(error);
+            (0, core_1.info)(`exitCode : ${exitCode}`);
             isExitCodeEight = exitCode === 8;
             isBridgeExecuted = getBridgeExitCode(error);
             throw error;
@@ -255,6 +257,9 @@ function run() {
                 }
                 if (!(0, utility_1.isPullRequestEvent)()) {
                     const uploadSarifReportBasedOnExitCode = isExitCodeZero || isExitCodeEight;
+                    (0, core_1.info)(`uploadSarifReportBasedOnExitCode: ${uploadSarifReportBasedOnExitCode}`);
+                    (0, core_1.info)(`isExitCodeZero: ${isExitCodeZero}`);
+                    (0, core_1.info)(`isExitCodeEight: ${isExitCodeEight}`);
                     // Upload Black Duck sarif file as GitHub artifact
                     if (inputs.BLACKDUCK_URL && (0, utility_1.parseToBoolean)(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) && uploadSarifReportBasedOnExitCode) {
                         yield (0, artifacts_1.uploadSarifReportAsArtifact)(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME);

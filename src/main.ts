@@ -29,6 +29,7 @@ export async function run() {
     }
     // Execute bridge command
     const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    info(`exitCode: ${exitCode}`)
     isExitCodeZero = exitCode === 0
     if (exitCode === 0) {
       isBridgeExecuted = true
@@ -37,6 +38,7 @@ export async function run() {
     return exitCode
   } catch (error) {
     const exitCode = getBridgeExitCodeAsNumericValue(error as Error)
+    info(`exitCode : ${exitCode}`)
     isExitCodeEight = exitCode === 8
     isBridgeExecuted = getBridgeExitCode(error as Error)
     throw error
@@ -48,6 +50,9 @@ export async function run() {
       }
       if (!isPullRequestEvent()) {
         const uploadSarifReportBasedOnExitCode = isExitCodeZero || isExitCodeEight
+        info(`uploadSarifReportBasedOnExitCode: ${uploadSarifReportBasedOnExitCode}`)
+        info(`isExitCodeZero: ${isExitCodeZero}`)
+        info(`isExitCodeEight: ${isExitCodeEight}`)
         // Upload Black Duck sarif file as GitHub artifact
         if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) && uploadSarifReportBasedOnExitCode) {
           await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
