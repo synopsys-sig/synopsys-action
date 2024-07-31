@@ -1939,8 +1939,8 @@ class SynopsysToolsParameter {
             };
         }
         // Set Coverity or Blackduck Arbitrary Arguments
-        // srmData.data.coverity = this.setCoverityArbitraryArgs()
-        // srmData.data.blackduck = this.setBlackDuckArbitraryArgs()
+        srmData.data.coverity = Object.assign(Object.assign({}, srmData.data.coverity), this.setCoverityArbitraryArgs());
+        srmData.data.blackduck = Object.assign(Object.assign({}, srmData.data.blackduck), this.setBlackDuckArbitraryArgs());
         const inputJson = JSON.stringify(srmData);
         const stateFilePath = path_1.default.join(this.tempDir, SynopsysToolsParameter.SRM_STATE_FILE_NAME);
         fs.writeFileSync(stateFilePath, inputJson);
