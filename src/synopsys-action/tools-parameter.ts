@@ -463,18 +463,11 @@ export class SynopsysToolsParameter {
       assessmentTypes = inputs.SRM_ASSESSMENT_TYPES.split(',')
     }
 
-    let srmProjectName = inputs.SRM_PROJECT_NAME
-    if (isNullOrEmptyValue(srmProjectName)) {
-      srmProjectName = githubRepoName
-    }
-    debug(`SRM project name: ${srmProjectName}`)
-
     const srmData: InputData<SRM> = {
       data: {
         srm: {
           url: inputs.SRM_URL,
           apikey: inputs.SRM_API_KEY,
-          project: {name: srmProjectName},
           assessment: {types: assessmentTypes}
         }
       }
@@ -484,6 +477,18 @@ export class SynopsysToolsParameter {
       srmData.data.srm.branch = {
         ...(inputs.SRM_BRANCH_NAME && {name: inputs.SRM_BRANCH_NAME}),
         ...(inputs.SRM_BRANCH_PARENT && {parent: inputs.SRM_BRANCH_PARENT})
+      }
+    }
+
+    if (inputs.SRM_PROJECT_NAME || inputs.SRM_PROJECT_ID) {
+      srmData.data.srm.project = {
+        ...(inputs.SRM_PROJECT_NAME && {name: inputs.SRM_PROJECT_NAME}),
+        ...(inputs.SRM_PROJECT_ID && {id: inputs.SRM_PROJECT_ID})
+      }
+    } else {
+      debug(`SRM project name: ${githubRepoName}`)
+      srmData.data.srm.project = {
+        name: githubRepoName
       }
     }
 
@@ -502,6 +507,16 @@ export class SynopsysToolsParameter {
         }
       }
     }
+
+    if (inputs.PROJECT_DIRECTORY) {
+      srmData.data.project = {
+        directory: inputs.PROJECT_DIRECTORY
+      }
+    }
+
+    // Set Coverity or Blackduck Arbitrary Arguments
+    srmData.data.coverity =  {...srmData.data.coverity, ...this.setCoverityArbitraryArgs()}
+    srmData.data.blackduck = {...srmData.data.blackduck, ...this.setBlackDuckArbitraryArgs()} 
 
     const inputJson = JSON.stringify(srmData)
 
