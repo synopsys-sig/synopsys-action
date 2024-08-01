@@ -28,7 +28,6 @@ export async function run() {
     }
     // Execute bridge command
     exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
-    info(`exitCode: ${exitCode}`)
     if (exitCode === 0) {
       isBridgeExecuted = true
       info('Synopsys Action workflow execution completed')
@@ -36,12 +35,10 @@ export async function run() {
     return exitCode
   } catch (error) {
     exitCode = getBridgeExitCodeAsNumericValue(error as Error)
-    info(`exitCode : ${exitCode}`)
     isBridgeExecuted = getBridgeExitCode(error as Error)
     throw error
   } finally {
     const uploadSarifReportBasedOnExitCode = exitCode === 0 || exitCode === 8
-    info(`uploadSarifReportBasedOnExitCode: ${uploadSarifReportBasedOnExitCode}`)
     debug(`Synopsys Bridge execution completed: ${isBridgeExecuted}`)
     if (isBridgeExecuted) {
       if (inputs.INCLUDE_DIAGNOSTICS) {

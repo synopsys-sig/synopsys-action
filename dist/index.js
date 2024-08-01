@@ -233,7 +233,6 @@ function run() {
             }
             // Execute bridge command
             exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
-            (0, core_1.info)(`exitCode: ${exitCode}`);
             if (exitCode === 0) {
                 isBridgeExecuted = true;
                 (0, core_1.info)('Synopsys Action workflow execution completed');
@@ -242,13 +241,11 @@ function run() {
         }
         catch (error) {
             exitCode = getBridgeExitCodeAsNumericValue(error);
-            (0, core_1.info)(`exitCode : ${exitCode}`);
             isBridgeExecuted = getBridgeExitCode(error);
             throw error;
         }
         finally {
             const uploadSarifReportBasedOnExitCode = exitCode === 0 || exitCode === 8;
-            (0, core_1.info)(`uploadSarifReportBasedOnExitCode: ${uploadSarifReportBasedOnExitCode}`);
             (0, core_1.debug)(`Synopsys Bridge execution completed: ${isBridgeExecuted}`);
             if (isBridgeExecuted) {
                 if (inputs.INCLUDE_DIAGNOSTICS) {
