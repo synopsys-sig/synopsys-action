@@ -1,13 +1,18 @@
-import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import * as configVariables from 'actions-artifact-v2/lib/internal/shared/config'
 import {tmpdir} from 'os'
 import {uploadDiagnostics, uploadSarifReportAsArtifact} from '../../../src/synopsys-action/artifacts'
-import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
-import {UploadOptions} from '@actions/artifact/lib/internal/upload-options'
 import * as inputs from '../../../src/synopsys-action/inputs'
-import {UploadResponse} from '@actions/artifact'
-import * as artifact from '@actions/artifact'
+import * as artifact from 'actions-artifact-v2/lib/artifact'
 const fs = require('fs')
 import * as utility from '../../../src/synopsys-action/utility'
+
+// Mock the artifact module
+jest.mock('actions-artifact-v2', () => ({
+  DefaultArtifactClient: jest.fn().mockImplementation(() => ({
+    uploadArtifact: jest.fn(),
+    downloadArtifact: jest.fn()
+  }))
+}))
 
 let tempPath = '/temp'
 beforeEach(() => {
@@ -15,39 +20,33 @@ beforeEach(() => {
   Object.defineProperty(process, 'platform', {
     value: 'linux'
   })
-  jest.mock('@actions/artifact')
 })
 
 describe('uploadDiagnostics - success', () => {
   it('should call uploadArtifact with the correct arguments', async () => {
+    // Mocking artifact client and its uploadArtifact function
     const mockUploadArtifact = jest.fn()
     const mockArtifactClient: Partial<artifact.ArtifactClient> = {
-      uploadArtifact: mockUploadArtifact
+      uploadArtifact: mockUploadArtifact as any // Casting to any due to typing issues
     }
-    const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
+    process.env['GITHUB_SERVER_URL'] = 'https://github.com'
+    jest.spyOn(artifact, 'DefaultArtifactClient').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
+    jest.spyOn(fs, 'existsSync').mockReturnValue(true)
+    jest.spyOn(fs, 'readdirSync').mockReturnValue(['bridge.log'])
 
-    const mockPwd = './.bridge'
-    const mockFiles = ['./.bridge/bridge.log']
-    const mockOptions: UploadOptions = {continueOnError: false}
-    jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
+    jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValue('.')
 
     await uploadDiagnostics()
 
-    expect(mockUploadArtifact).toHaveBeenCalledWith('bridge_diagnostics', mockFiles, mockPwd, mockOptions)
-    mockCreate.mockRestore()
+    expect(mockUploadArtifact).toHaveBeenCalledTimes(1)
+    expect(mockUploadArtifact).toHaveBeenCalledWith('bridge_diagnostics', ['./.bridge/bridge.log'], './.bridge', {})
   })
 })
 
 test('Test uploadDiagnostics expect API error', () => {
-  const uploadResponse: UploadResponse = {
-    artifactItems: ['bridge.log'],
-    artifactName: 'bridge_diagnostics',
-    failedItems: [],
-    size: 0
-  }
   let files: string[] = ['bridge.log']
   Object.defineProperty(inputs, 'DIAGNOSTICS_RETENTION_DAYS', {value: 10})
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValue('.')
 
   const dir = (fs.readdirSync = jest.fn())
   dir.mockReturnValue(files)
@@ -56,15 +55,9 @@ test('Test uploadDiagnostics expect API error', () => {
 })
 
 test('Test uploadDiagnostics - invalid value for retention days', () => {
-  const uploadResponse: UploadResponse = {
-    artifactItems: ['bridge.log'],
-    artifactName: 'bridge_diagnostics',
-    failedItems: [],
-    size: 0
-  }
   let files: string[] = ['bridge.log']
   Object.defineProperty(inputs, 'DIAGNOSTICS_RETENTION_DAYS', {value: 'invalid'})
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue('.')
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValue('.')
 
   const dir = (fs.readdirSync = jest.fn())
   dir.mockReturnValue(files)
@@ -73,18 +66,24 @@ test('Test uploadDiagnostics - invalid value for retention days', () => {
 })
 
 describe('uploadSarifReport', () => {
-  it('should uploadSarifReport successfully', async () => {
+  it('should upload Sarif report as artifact', async () => {
+    // Mocking artifact client and its uploadArtifact function
     const mockUploadArtifact = jest.fn()
     const mockArtifactClient: Partial<artifact.ArtifactClient> = {
-      uploadArtifact: mockUploadArtifact
+      uploadArtifact: mockUploadArtifact as any // Casting to any due to typing issues
     }
-    const mockCreate = jest.spyOn(artifact, 'create').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
+    process.env['GITHUB_SERVER_URL'] = 'https://github.com'
+    jest.spyOn(artifact, 'DefaultArtifactClient').mockReturnValue(mockArtifactClient as artifact.ArtifactClient)
+    jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('mocked-sarif-path')
     jest.spyOn(utility, 'checkIfPathExists').mockReturnValue(true)
-    jest.spyOn(utility, 'getDefaultSarifReportPath').mockReturnValue('test-path')
-    jest.spyOn(mockArtifactClient, 'uploadArtifact')
-    await uploadSarifReportAsArtifact('test-dir', 'test-path', 'test-artifact')
-    expect(mockUploadArtifact).toHaveBeenCalled()
-    expect(mockUploadArtifact).toHaveBeenCalledWith('test-artifact', ['test-path'], '.', {continueOnError: false})
-    mockCreate.mockRestore()
+
+    const defaultSarifReportDirectory = '.'
+    const userSarifFilePath = 'mocked-sarif-path'
+    const artifactName = 'mocked-artifact-name'
+
+    await uploadSarifReportAsArtifact(defaultSarifReportDirectory, userSarifFilePath, artifactName)
+
+    expect(mockUploadArtifact).toHaveBeenCalledTimes(1)
+    expect(mockUploadArtifact).toHaveBeenCalledWith(artifactName, [userSarifFilePath], '.', {})
   })
 })

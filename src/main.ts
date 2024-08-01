@@ -1,7 +1,7 @@
 import {debug, info, setFailed} from '@actions/core'
 import {cleanupTempDir, createTempDir, isPullRequestEvent, parseToBoolean} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
-import {getWorkSpaceDirectory} from '@actions/artifact/lib/internal/config-variables'
+import {getGitHubWorkspaceDir as getGitHubWorkspaceDirV2} from 'actions-artifact-v2/lib/internal/shared/config'
 import * as constants from './application-constants'
 import * as inputs from './synopsys-action/inputs'
 import {uploadDiagnostics, uploadSarifReportAsArtifact} from './synopsys-action/artifacts'
@@ -27,7 +27,7 @@ export async function run() {
       await sb.validateSynopsysBridgePath()
     }
     // Execute bridge command
-    exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    exitCode = await sb.executeBridgeCommand(formattedCommand, getGitHubWorkspaceDirV2())
     if (exitCode === 0) {
       isBridgeExecuted = true
       info('Synopsys Action workflow execution completed')

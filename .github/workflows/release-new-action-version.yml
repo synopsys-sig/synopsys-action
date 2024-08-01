@@ -31,6 +31,6 @@ jobs:
           echo ${{ env.TAG_NAME }}
           npm ci
           npm version ${{ env.TAG_NAME }}
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           path: dist/*.js*
