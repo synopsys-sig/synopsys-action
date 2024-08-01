@@ -13,8 +13,7 @@ export async function run() {
   const tempDir = await createTempDir()
   let formattedCommand = ''
   let isBridgeExecuted = false
-  let isExitCodeZero
-  let isExitCodeEight
+  let exitCode
 
   try {
     const sb = new SynopsysBridge()
@@ -28,25 +27,21 @@ export async function run() {
       await sb.validateSynopsysBridgePath()
     }
     // Execute bridge command
-    const exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
+    exitCode = await sb.executeBridgeCommand(formattedCommand, getWorkSpaceDirectory())
     info(`exitCode: ${exitCode}`)
-    isExitCodeZero = exitCode === 0
     if (exitCode === 0) {
       isBridgeExecuted = true
       info('Synopsys Action workflow execution completed')
     }
     return exitCode
   } catch (error) {
-    const exitCode = getBridgeExitCodeAsNumericValue(error as Error)
+    exitCode = getBridgeExitCodeAsNumericValue(error as Error)
     info(`exitCode : ${exitCode}`)
-    isExitCodeEight = exitCode === 8
     isBridgeExecuted = getBridgeExitCode(error as Error)
     throw error
   } finally {
-    const uploadSarifReportBasedOnExitCode = isExitCodeZero || isExitCodeEight
+    const uploadSarifReportBasedOnExitCode = exitCode === 0 || exitCode === 8
     info(`uploadSarifReportBasedOnExitCode: ${uploadSarifReportBasedOnExitCode}`)
-    info(`isExitCodeZero: ${isExitCodeZero}`)
-    info(`isExitCodeEight: ${isExitCodeEight}`)
     debug(`Synopsys Bridge execution completed: ${isBridgeExecuted}`)
     if (isBridgeExecuted) {
       if (inputs.INCLUDE_DIAGNOSTICS) {

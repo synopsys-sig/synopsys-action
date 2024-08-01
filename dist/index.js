@@ -218,8 +218,7 @@ function run() {
         const tempDir = yield (0, utility_1.createTempDir)();
         let formattedCommand = '';
         let isBridgeExecuted = false;
-        let isExitCodeZero;
-        let isExitCodeEight;
+        let exitCode;
         try {
             const sb = new synopsys_bridge_1.SynopsysBridge();
             // Prepare bridge command
@@ -233,9 +232,8 @@ function run() {
                 yield sb.validateSynopsysBridgePath();
             }
             // Execute bridge command
-            const exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
+            exitCode = yield sb.executeBridgeCommand(formattedCommand, (0, config_variables_1.getWorkSpaceDirectory)());
             (0, core_1.info)(`exitCode: ${exitCode}`);
-            isExitCodeZero = exitCode === 0;
             if (exitCode === 0) {
                 isBridgeExecuted = true;
                 (0, core_1.info)('Synopsys Action workflow execution completed');
@@ -243,17 +241,14 @@ function run() {
             return exitCode;
         }
         catch (error) {
-            const exitCode = getBridgeExitCodeAsNumericValue(error);
+            exitCode = getBridgeExitCodeAsNumericValue(error);
             (0, core_1.info)(`exitCode : ${exitCode}`);
-            isExitCodeEight = exitCode === 8;
             isBridgeExecuted = getBridgeExitCode(error);
             throw error;
         }
         finally {
-            const uploadSarifReportBasedOnExitCode = isExitCodeZero || isExitCodeEight;
+            const uploadSarifReportBasedOnExitCode = exitCode === 0 || exitCode === 8;
             (0, core_1.info)(`uploadSarifReportBasedOnExitCode: ${uploadSarifReportBasedOnExitCode}`);
-            (0, core_1.info)(`isExitCodeZero: ${isExitCodeZero}`);
-            (0, core_1.info)(`isExitCodeEight: ${isExitCodeEight}`);
             (0, core_1.debug)(`Synopsys Bridge execution completed: ${isBridgeExecuted}`);
             if (isBridgeExecuted) {
                 if (inputs.INCLUDE_DIAGNOSTICS) {
