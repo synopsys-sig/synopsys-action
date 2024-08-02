@@ -203,6 +203,9 @@ inputs:
   srm_branch_name:
     description: 'SRM branch name'
     required: false
+  srm_project_id:
+    description: 'SRM branch Id'
+    required: false
   srm_branch_parent:
     description: 'SRM branch parent'
     required: false
