@@ -13,6 +13,7 @@ export async function run() {
   const tempDir = await createTempDir()
   let formattedCommand = ''
   let isBridgeExecuted = false
+  let exitCode
 
   try {
     const sb = new SynopsysBridge()
@@ -26,22 +27,24 @@ export async function run() {
       await sb.validateSynopsysBridgePath()
     }
     // Execute bridge command
-    const exitCode = await sb.executeBridgeCommand(formattedCommand, getGitHubWorkspaceDirV2())
+    exitCode = await sb.executeBridgeCommand(formattedCommand, getGitHubWorkspaceDirV2())
     if (exitCode === 0) {
       isBridgeExecuted = true
       info('Synopsys Action workflow execution completed')
     }
     return exitCode
   } catch (error) {
+    exitCode = getBridgeExitCodeAsNumericValue(error as Error)
     isBridgeExecuted = getBridgeExitCode(error as Error)
     throw error
   } finally {
+    const uploadSarifReportBasedOnExitCode = exitCode === 0 || exitCode === 8
     debug(`Synopsys Bridge execution completed: ${isBridgeExecuted}`)
     if (isBridgeExecuted) {
       if (inputs.INCLUDE_DIAGNOSTICS) {
         await uploadDiagnostics()
       }
-      if (!isPullRequestEvent()) {
+      if (!isPullRequestEvent() && uploadSarifReportBasedOnExitCode) {
         // Upload Black Duck sarif file as GitHub artifact
         if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
           await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
@@ -72,6 +75,15 @@ export async function run() {
 export function logBridgeExitCodes(message: string): string {
   const exitCode = message.trim().slice(-1)
   return constants.EXIT_CODE_MAP.has(exitCode) ? `Exit Code: ${exitCode} ${constants.EXIT_CODE_MAP.get(exitCode)}` : message
+}
+
+export function getBridgeExitCodeAsNumericValue(error: Error): number {
+  if (error.message !== undefined) {
+    const lastChar = error.message.trim().slice(-1)
+    const exitCode = parseInt(lastChar)
+    return isNaN(exitCode) ? -1 : exitCode
+  }
+  return -1
 }
 
 export function getBridgeExitCode(error: Error): boolean {
