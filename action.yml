@@ -188,6 +188,33 @@ inputs:
   blackduck_config_path:
     description: 'Black Duck config file path (.properties/.yml)'
     required: false
+  srm_url:
+    description: 'SRM Url'
+    required: false
+  srm_apikey: 
+    description: 'SRM Api Key'
+    required: false
+  srm_assessment_types: 
+    description: 'SRM Assessment Types'
+    required: false
+  srm_project_name: 
+    description: 'SRM project name'
+    required: false 
+  srm_branch_name:
+    description: 'SRM branch name'
+    required: false
+  srm_project_id:
+    description: 'SRM branch Id'
+    required: false
+  srm_branch_parent:
+    description: 'SRM branch parent'
+    required: false
+  coverity_execution_path:
+    description: 'Coverity execution path'
+    required: false
+  blackduck_execution_path:
+    description: 'Black Duck execution path'
+    required: false
   github_token:
     description: 'Github token to be used for git related rest operation'
     required: false

@@ -28,6 +28,7 @@ export function validateScanTypes(): string[] {
   paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
   paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
   paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
+  paramsMap.set(constants.SRM_URL_KEY, inputs.SRM_URL)
   return isNullOrEmpty(paramsMap)
 }
 
@@ -62,6 +63,18 @@ export function validateBlackDuckInputs(): string[] {
     paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
     paramsMap.set(constants.BLACKDUCK_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
     errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY)
+  }
+  return errors
+}
+
+export function validateSRMInputs(): string[] {
+  let errors: string[] = []
+  if (inputs.SRM_URL) {
+    const paramsMap = new Map()
+    paramsMap.set(constants.SRM_URL_KEY, inputs.SRM_URL)
+    paramsMap.set(constants.SRM_API_KEY_KEY, inputs.SRM_API_KEY)
+    paramsMap.set(constants.SRM_ASSESSMENT_TYPES_KEY, inputs.SRM_ASSESSMENT_TYPES)
+    errors = validateParameters(paramsMap, constants.SRM_KEY)
   }
   return errors
 }
