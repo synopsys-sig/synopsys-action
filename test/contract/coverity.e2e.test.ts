@@ -1,7 +1,7 @@
 import {run} from '../../src/main'
 import * as inputs from '../../src/synopsys-action/inputs'
 import {error, info} from '@actions/core'
-import * as configVariables from '@actions/artifact/lib/internal/config-variables'
+import * as configVariables from 'actions-artifact-v2/lib/internal/shared/config'
 import * as validator from '../../src/synopsys-action/validators'
 import * as toolCache from '@actions/tool-cache'
 import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
@@ -154,7 +154,7 @@ export function mockCoverityParamsExcept(coverityConstants: string[]) {
 
 export function setAllMocks() {
   let coverity: string[] = []
-  jest.spyOn(configVariables, 'getWorkSpaceDirectory').mockReturnValue(__dirname)
+  jest.spyOn(configVariables, 'getGitHubWorkspaceDir').mockReturnValue(__dirname)
   jest.spyOn(validator, 'validateCoverityInputs').mockReturnValueOnce(coverity)
   jest.spyOn(toolCacheLocal, 'downloadTool').mockResolvedValueOnce(__dirname)
   jest.spyOn(io, 'rmRF').mockResolvedValue()

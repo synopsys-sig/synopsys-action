@@ -23,7 +23,7 @@ beforeEach(() => {
   Object.defineProperty(constants, 'RETRY_COUNT', {value: 3})
   Object.defineProperty(constants, 'RETRY_DELAY_IN_MILLISECONDS', {value: 100})
   Object.defineProperty(process, 'platform', {value: 'linux'})
-  jest.mock('@actions/artifact')
+  jest.mock('actions-artifact-v2')
 })
 
 test('uploadSarifReport throws error when no SARIF file found', async () => {
