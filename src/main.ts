@@ -5,8 +5,8 @@ import {getGitHubWorkspaceDir as getGitHubWorkspaceDirV2} from 'actions-artifact
 import * as constants from './application-constants'
 import * as inputs from './synopsys-action/inputs'
 import {uploadDiagnostics, uploadSarifReportAsArtifact} from './synopsys-action/artifacts'
-import {GithubClientService} from './synopsys-action/github-client-service'
 import {isNullOrEmptyValue} from './synopsys-action/validators'
+import {GitHubClientServiceFactory} from './synopsys-action/factory/github-client-service-factory'
 
 export async function run() {
   info('Synopsys Action started...')
@@ -54,12 +54,12 @@ export async function run() {
         if (!isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
           // Upload Black Duck SARIF Report to code scanning tab
           if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
-            const gitHubClientService = new GithubClientService()
+            const gitHubClientService = await GitHubClientServiceFactory.getGitHubClientServiceInstance()
             await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
           }
           // Upload Polaris SARIF Report to code scanning tab
           if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {
-            const gitHubClientService = new GithubClientService()
+            const gitHubClientService = await GitHubClientServiceFactory.getGitHubClientServiceInstance()
             await gitHubClientService.uploadSarifReport(constants.POLARIS_SARIF_GENERATOR_DIRECTORY, inputs.POLARIS_REPORTS_SARIF_FILE_PATH)
           }
         }
