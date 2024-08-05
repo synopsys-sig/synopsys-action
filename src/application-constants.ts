@@ -26,7 +26,7 @@ export const SRM_KEY = 'SRM'
 
 // Srm
 export const SRM_URL_KEY = 'srm_url'
-export const SRM_API_KEY_KEY = 'srm_apikey'
+export const SRM_API_KEY = 'srm_apikey'
 export const SRM_ASSESSMENT_TYPES_KEY = 'srm_assessment_types'
 export const SRM_PROJECT_NAME_KEY = 'srm_project_name'
 export const SRM_PROJECT_ID_KEY = 'srm_project_id'

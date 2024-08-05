@@ -72,7 +72,7 @@ export function validateSRMInputs(): string[] {
   if (inputs.SRM_URL) {
     const paramsMap = new Map()
     paramsMap.set(constants.SRM_URL_KEY, inputs.SRM_URL)
-    paramsMap.set(constants.SRM_API_KEY_KEY, inputs.SRM_API_KEY)
+    paramsMap.set(constants.SRM_API_KEY, inputs.SRM_API_KEY)
     paramsMap.set(constants.SRM_ASSESSMENT_TYPES_KEY, inputs.SRM_ASSESSMENT_TYPES)
     errors = validateParameters(paramsMap, constants.SRM_KEY)
   }

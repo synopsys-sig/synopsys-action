@@ -10,7 +10,7 @@ export const BRIDGE_DOWNLOAD_VERSION = getInput(constants.BRIDGE_DOWNLOAD_VERSIO
 
 // Srm related inputs
 export const SRM_URL = getInput(constants.SRM_URL_KEY)?.trim() || ''
-export const SRM_API_KEY = getInput(constants.SRM_API_KEY_KEY)?.trim() || ''
+export const SRM_API_KEY = getInput(constants.SRM_API_KEY)?.trim() || ''
 export const SRM_ASSESSMENT_TYPES = getInput(constants.SRM_ASSESSMENT_TYPES_KEY)?.trim() || ''
 export const SRM_PROJECT_NAME = getInput(constants.SRM_PROJECT_NAME_KEY)?.trim() || ''
 export const SRM_PROJECT_ID = getInput(constants.SRM_PROJECT_ID_KEY)?.trim() || ''
