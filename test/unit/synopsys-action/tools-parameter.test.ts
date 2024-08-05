@@ -1055,6 +1055,7 @@ test('Test getFormattedCommandForSRM', () => {
   expect(jsonData.data.coverity.execution.path).toContain('/home/coverity_exec_path')
 
   Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'SRM_PROJECT_ID', {value: null})
 })
 
 test('Test getFormattedCommandForSRM with default values', () => {
@@ -1074,6 +1075,7 @@ test('Test getFormattedCommandForSRM with default values', () => {
   expect(resp).toContain('--stage srm')
 
   Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'SRM_PROJECT_ID', {value: null})
 })
 
 test('Test missing data error in getFormattedCommandForSRM', () => {
@@ -1117,6 +1119,7 @@ it('should pass SRM fields to bridge', () => {
   expect(jsonData.data.coverity.execution.path).toContain('/home/coverity_exec_path')
 
   Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'SRM_PROJECT_ID', {value: null})
 })
 
 it('should pass SRM SCA and SAST arbitrary fields to bridge', () => {
@@ -1152,6 +1155,9 @@ it('should pass SRM SCA and SAST arbitrary fields to bridge', () => {
   expect(jsonData.data.blackduck.search.depth).toBe(5)
   expect(jsonData.data.blackduck.config.path).toBe('BLACKDUCK_CONFIG_PATH')
   expect(jsonData.data.blackduck.args).toBe('BLACKDUCK_ARGS')
+
+  Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'SRM_PROJECT_ID', {value: null})
 })
 
 it('should pass SRM fields and project directory field to bridge', () => {
@@ -1171,4 +1177,7 @@ it('should pass SRM fields and project directory field to bridge', () => {
   expect(jsonData.data.srm.apikey).toContain('api_key')
   expect(jsonData.data.srm.assessment.types).toEqual(['SCA', 'SAST'])
   expect(jsonData.data.project.directory).toBe('SRM_PROJECT_DIRECTORY')
+
+  Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
+  Object.defineProperty(inputs, 'SRM_PROJECT_ID', {value: null})
 })
