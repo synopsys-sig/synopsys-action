@@ -515,8 +515,16 @@ export class SynopsysToolsParameter {
     }
 
     // Set Coverity or Blackduck Arbitrary Arguments
-    srmData.data.coverity = {...srmData.data.coverity, ...this.setCoverityArbitraryArgs()}
-    srmData.data.blackduck = {...srmData.data.blackduck, ...this.setBlackDuckArbitraryArgs()}
+    const coverityArgs = this.setCoverityArbitraryArgs()
+    const blackduckArgs = this.setBlackDuckArbitraryArgs()
+
+    if (Object.keys(coverityArgs).length > 0) {
+      srmData.data.coverity = {...srmData.data.coverity, ...coverityArgs}
+    }
+
+    if (Object.keys(blackduckArgs).length > 0) {
+      srmData.data.blackduck = {...srmData.data.blackduck, ...blackduckArgs}
+    }
 
     const inputJson = JSON.stringify(srmData)
 
