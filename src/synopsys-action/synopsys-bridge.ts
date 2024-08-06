@@ -9,7 +9,7 @@ import * as inputs from './inputs'
 import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-utility'
 import fs, {readFileSync} from 'fs'
 import {rmRF} from '@actions/io'
-import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateScanTypes} from './validators'
+import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateSRMInputs, validateScanTypes} from './validators'
 import {SynopsysToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
@@ -163,8 +163,8 @@ export class SynopsysBridge {
     try {
       let formattedCommand = ''
       const invalidParams: string[] = validateScanTypes()
-      if (invalidParams.length === 3) {
-        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(')')))
+      if (invalidParams.length === 4) {
+        return Promise.reject(new Error('Requires at least one scan type: ('.concat(constants.POLARIS_SERVER_URL_KEY).concat(',').concat(constants.COVERITY_URL_KEY).concat(',').concat(constants.BLACKDUCK_URL_KEY).concat(',').concat(constants.SRM_URL_KEY).concat(')')))
       }
 
       const githubRepo = process.env[GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
@@ -191,10 +191,18 @@ export class SynopsysBridge {
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
+      // validating and preparing command for SRM
+      const srmErrors: string[] = validateSRMInputs()
+      if (srmErrors.length === 0 && inputs.SRM_URL) {
+        const srmCommandFormatter = new SynopsysToolsParameter(tempDir)
+        formattedCommand = formattedCommand.concat(srmCommandFormatter.getFormattedCommandForSRM(githubRepoName))
+      }
+
       let validationErrors: string[] = []
       validationErrors = validationErrors.concat(polarisErrors)
       validationErrors = validationErrors.concat(coverityErrors)
       validationErrors = validationErrors.concat(blackduckErrors)
+      validationErrors = validationErrors.concat(srmErrors)
       if (formattedCommand.length === 0) {
         return Promise.reject(new Error(validationErrors.join(',')))
       }

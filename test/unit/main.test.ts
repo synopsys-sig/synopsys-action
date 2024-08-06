@@ -30,6 +30,7 @@ test('Not supported flow error - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: null})
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: null})
   Object.defineProperty(inputs, 'COVERITY_URL', {value: null})
+  Object.defineProperty(inputs, 'SRM_URL', {value: null})
 
   jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
@@ -40,7 +41,7 @@ test('Not supported flow error - run', async () => {
     await run()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url)')
+    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url,srm_url)')
   }
 })
 
@@ -48,6 +49,7 @@ test('Not supported flow error (empty strings) - run', async () => {
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: ''})
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: ''})
   Object.defineProperty(inputs, 'COVERITY_URL', {value: ''})
+  Object.defineProperty(inputs, 'SRM_URL', {value: ''})
 
   jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   const downloadFileResp: DownloadFileResponse = {filePath: 'C://user/temp/download/', fileName: 'C://user/temp/download/bridge-win.zip'}
@@ -58,7 +60,7 @@ test('Not supported flow error (empty strings) - run', async () => {
     await run()
   } catch (error: any) {
     expect(error).toBeInstanceOf(Error)
-    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url)')
+    expect(error.message).toContain('Requires at least one scan type: (polaris_server_url,coverity_url,blackduck_url,srm_url)')
   }
 })
 
