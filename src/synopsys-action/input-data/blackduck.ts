@@ -27,6 +27,16 @@ export interface BlackduckData extends BlackDuckArbitrary {
   automation?: AutomationData
   fixpr?: BlackDuckFixPrData
   reports?: Reports
+  policy?: Policy
+}
+
+export interface Policy {
+  badges?: Badges
+}
+
+export interface Badges {
+  create?: boolean
+  maxCount?: number
 }
 
 export interface BlackDuckArbitrary {

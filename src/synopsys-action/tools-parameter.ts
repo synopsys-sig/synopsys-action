@@ -439,6 +439,17 @@ export class SynopsysToolsParameter {
       }
     }
 
+    if (inputs.BLACKDUCK_POLICY_BADGES_CREATE) {
+      blackduckData.data.blackduck.policy = {
+        badges: {
+          create: true,
+          ...(Number.isInteger(parseInt(inputs.BLACKDUCK_POLICY_BADGES_MAX_COUNT)) && {
+            maxCount: parseInt(inputs.BLACKDUCK_POLICY_BADGES_MAX_COUNT)
+          })
+        }
+      }
+    }
+
     if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
       blackduckData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
     }
