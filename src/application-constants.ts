@@ -116,6 +116,8 @@ export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
 export const BLACKDUCK_SEARCH_DEPTH_KEY = 'blackduck_search_depth'
 export const BLACKDUCK_CONFIG_PATH_KEY = 'blackduck_config_path'
 export const BLACKDUCK_ARGS_KEY = 'blackduck_args'
+export const BLACKDUCK_POLICY_BADGES_CREATE_KEY = 'blackduck_policy_badges_create'
+export const BLACKDUCK_POLICY_BADGES_MAX_COUNT_KEY = 'blackduck_policy_badges_maxCount'
 
 export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'

@@ -215,6 +215,12 @@ inputs:
   blackduck_execution_path:
     description: 'Black Duck execution path'
     required: false
+  blackduck_policy_badges_create:
+    description: 'To enable creation of badges on the GitHub repository'
+    required: false
+  blackduck_policy_badges_max_count:
+    description: 'To limit number of badges to be displayed on the GitHub repository'
+    required: false
   github_token:
     description: 'Github token to be used for git related rest operation'
     required: false
