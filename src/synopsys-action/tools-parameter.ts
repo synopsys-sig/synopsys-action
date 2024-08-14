@@ -448,6 +448,7 @@ export class SynopsysToolsParameter {
           })
         }
       }
+      blackduckData.data.github = this.getGithubRepoInfo()
     }
 
     if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
