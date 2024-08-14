@@ -554,7 +554,7 @@ export class SynopsysToolsParameter {
     const githubToken = inputs.GITHUB_TOKEN
     const githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+    const githubBranchName = (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) || parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE) ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
     const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
     const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
