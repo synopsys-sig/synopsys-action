@@ -538,6 +538,7 @@ export class SynopsysToolsParameter {
     }
 
     const inputJson = JSON.stringify(srmData)
+    info(inputJson)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.SRM_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
