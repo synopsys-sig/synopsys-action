@@ -457,6 +457,7 @@ export class SynopsysToolsParameter {
     blackduckData.data.blackduck = Object.assign({}, this.setBlackDuckArbitraryArgs(), blackduckData.data.blackduck)
 
     const inputJson = JSON.stringify(blackduckData)
+    info(inputJson)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
@@ -538,7 +539,6 @@ export class SynopsysToolsParameter {
     }
 
     const inputJson = JSON.stringify(srmData)
-    info(inputJson)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.SRM_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
