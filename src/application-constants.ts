@@ -173,4 +173,4 @@ export const POLARIS_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = 'Polaris PR Comment 
 export const COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = 'Coverity PR Comment is ignored for non pull request scan'
 export const BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = 'Black Duck PR Comment is ignored for non pull request scan'
 export const BLACKDUCK_FIXPR_LOG_INFO_FOR_PR_SCANS = 'Black Duck Fix PR is ignored for pull request scan'
-export const MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = 'Missing required github token for fix pull request/pull request comments'
+export const MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = 'Missing required github token for fix pull request/pull request comments/Github Badges'

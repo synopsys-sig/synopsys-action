@@ -26,6 +26,8 @@ beforeEach(() => {
   process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
   Object.defineProperty(inputs, 'SRM_PROJECT_NAME', {value: null})
   Object.defineProperty(inputs, 'SRM_PROJECT_ID', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_POLICY_BADGES_CREATE', {value: null})
+  Object.defineProperty(inputs, 'BLACKDUCK_POLICY_BADGES_MAX_COUNT', {value: null})
 })
 
 afterAll(() => {
@@ -714,6 +716,28 @@ test('Test getFormattedCommandForBlackduck - badges', () => {
   const jsonData = JSON.parse(jsonString)
   expect(jsonData.data.blackduck.policy.badges.create).toBe(true)
   expect(jsonData.data.blackduck.policy.badges.maxCount).toBe(5)
+})
+
+test('Test getFormattedCommandForBlackduck - badges failure (empty github token)', () => {
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: 'BLACKDUCK_INSTALL_DIRECTORY'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FULL', {value: 'TRUE'})
+  Object.defineProperty(inputs, 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', {value: 'BLOCKER, CRITICAL, MAJOR'})
+  Object.defineProperty(inputs, 'BLACKDUCK_POLICY_BADGES_CREATE', {value: true})
+  Object.defineProperty(inputs, 'BLACKDUCK_POLICY_BADGES_MAX_COUNT', {value: 5})
+
+  process.env['GITHUB_SERVER_URL'] = 'https://custom.com'
+  let stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+
+  try {
+    stp.getFormattedCommandForBlackduck()
+  } catch (error: any) {
+    expect(error).toBeInstanceOf(Error)
+    expect(error.message).toContain('Missing required github token for fix pull request/pull request comments/Github Badges')
+  }
+  Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
 })
 
 test('Test missing data error in getFormattedCommandForBlackduck', () => {
