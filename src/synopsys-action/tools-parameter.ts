@@ -585,6 +585,7 @@ export class SynopsysToolsParameter {
 
   private getGithubBranchName(): string {
     let branchName = ''
+    // Additional null check had been added to support avoid duplicate call to getGithubRepoInfo() when fix pr is enabled
     if (parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE) && parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
       branchName = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME] || ''
     } else if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) || parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)) {
