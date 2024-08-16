@@ -448,7 +448,10 @@ export class SynopsysToolsParameter {
           })
         }
       }
-      blackduckData.data.github = this.getGithubRepoInfo()
+      if (blackduckData.data.github != null) {
+        info('entered')
+        blackduckData.data.github = this.getGithubRepoInfo()
+      }
     }
 
     if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
@@ -458,7 +461,6 @@ export class SynopsysToolsParameter {
     blackduckData.data.blackduck = Object.assign({}, this.setBlackDuckArbitraryArgs(), blackduckData.data.blackduck)
 
     const inputJson = JSON.stringify(blackduckData)
-    info(inputJson)
 
     const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
@@ -554,7 +556,7 @@ export class SynopsysToolsParameter {
     const githubToken = inputs.GITHUB_TOKEN
     const githubRepo = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY]
     const githubRepoName = githubRepo !== undefined ? githubRepo.substring(githubRepo.indexOf('/') + 1, githubRepo.length).trim() : ''
-    const githubBranchName = (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) || parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE) ? process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] : process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME]) || ''
+    const githubBranchName = this.getGithubBranchName()
     const githubRef = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF]
     const githubServerUrl = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_SERVER_URL] || ''
     const githubHostUrl = githubServerUrl === constants.GITHUB_CLOUD_URL ? '' : githubServerUrl
@@ -579,6 +581,16 @@ export class SynopsysToolsParameter {
       return this.setGithubData(githubToken, githubRepoName, githubRepoOwner, githubBranchName, githubPrNumber, githubHostUrl)
     }
     return undefined
+  }
+
+  private getGithubBranchName(): string {
+    let branchName = ''
+    if (parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE) && parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+      branchName = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME] || ''
+    } else if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) || parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)) {
+      branchName = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] || ''
+    }
+    return branchName
   }
 
   private setGithubData(githubToken: string, githubRepoName: string, githubRepoOwner: string, githubBranchName: string, githubPrNumber: string, githubHostUrl: string): GithubData {
