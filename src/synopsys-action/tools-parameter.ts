@@ -448,9 +448,8 @@ export class SynopsysToolsParameter {
           })
         }
       }
-      info('entered BLACKDUCK_POLICY_BADGES_CREATE')
-      if (blackduckData.data.github) {
-        info('entered blackduckData.data.github')
+      // Additional null check had been added to support avoid duplicate call to getGithubRepoInfo() when fix pr is enabled
+      if (blackduckData.data.github == null) {
         blackduckData.data.github = this.getGithubRepoInfo()
       }
     }
