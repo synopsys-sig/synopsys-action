@@ -448,8 +448,9 @@ export class SynopsysToolsParameter {
           })
         }
       }
-      if (blackduckData.data.github != null) {
-        info('entered')
+      info('entered BLACKDUCK_POLICY_BADGES_CREATE')
+      if (blackduckData.data.github) {
+        info('entered blackduckData.data.github')
         blackduckData.data.github = this.getGithubRepoInfo()
       }
     }
