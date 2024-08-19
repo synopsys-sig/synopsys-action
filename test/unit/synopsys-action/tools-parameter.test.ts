@@ -725,6 +725,28 @@ test('Test getFormattedCommandForBlackduck with sarif params', () => {
   expect(resp).toContain('--stage blackduck')
 })
 
+it('should pass polaris fields and wait for scan field to bridge', () => {
+  Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
+  Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
+  Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
+  Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA, SAST'})
+  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForPolaris('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(polaris_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage polaris')
+  expect(jsonData.data.polaris.serverUrl).toContain('server_url')
+  expect(jsonData.data.polaris.accesstoken).toContain('access_token')
+  expect(jsonData.data.polaris.application.name).toContain('POLARIS_APPLICATION_NAME')
+  expect(jsonData.data.polaris.project.name).toContain('POLARIS_PROJECT_NAME')
+  expect(jsonData.data.polaris.assessment.types).toEqual(['SCA', 'SAST'])
+  expect(jsonData.data.polaris.waitForScan).toBe(true)
+})
+
 it('should pass polaris source upload fields to bridge', () => {
   Object.defineProperty(inputs, 'POLARIS_SERVER_URL', {value: 'server_url'})
   Object.defineProperty(inputs, 'POLARIS_ACCESS_TOKEN', {value: 'access_token'})
@@ -794,6 +816,23 @@ it('should pass polaris SCA and SAST arbitrary fields to bridge', () => {
   expect(jsonData.data.blackduck.args).toBe('BLACKDUCK_ARGS')
 })
 
+it('should pass black duck fields and wait for scan field to bridge', () => {
+  Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
+  Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
+  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForBlackduck()
+
+  const jsonString = fs.readFileSync(tempPath.concat(blackduck_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage blackduck')
+  expect(jsonData.data.blackduck.url).toBe('BLACKDUCK_URL')
+  expect(jsonData.data.blackduck.token).toBe('BLACKDUCK_API_TOKEN')
+  expect(jsonData.data.blackduck.waitForScan).toBe(true)
+})
+
 it('should pass black duck fields and project directory field to bridge', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
@@ -830,6 +869,25 @@ it('should pass blackduck arbitrary fields to bridge', () => {
   expect(jsonData.data.blackduck.search.depth).toBe(2)
   expect(jsonData.data.blackduck.config.path).toBe('BLACKDUCK_CONFIG_PATH')
   expect(jsonData.data.blackduck.args).toBe('BLACKDUCK_ARGS')
+})
+
+it('should pass coverity fields and wait for scan field to bridge', () => {
+  Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
+  Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
+  Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
+  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForCoverity('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(coverity_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage connect')
+  expect(jsonData.data.coverity.connect.url).toBe('COVERITY_URL')
+  expect(jsonData.data.coverity.connect.user.name).toBe('COVERITY_USER')
+  expect(jsonData.data.coverity.connect.user.password).toBe('COVERITY_PASSPHRASE')
+  expect(jsonData.data.coverity.waitForScan).toBe(true)
 })
 
 it('should pass coverity fields and project directory field to bridge', () => {
@@ -1148,6 +1206,25 @@ it('should pass SRM SCA and SAST arbitrary fields to bridge', () => {
   expect(jsonData.data.blackduck.search.depth).toBe(5)
   expect(jsonData.data.blackduck.config.path).toBe('BLACKDUCK_CONFIG_PATH')
   expect(jsonData.data.blackduck.args).toBe('BLACKDUCK_ARGS')
+})
+
+it('should pass SRM fields and wait for scan field to bridge', () => {
+  Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
+  Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
+  Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
+  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+
+  const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
+  const resp = stp.getFormattedCommandForSRM('synopsys-action')
+
+  const jsonString = fs.readFileSync(tempPath.concat(srm_input_file), 'utf-8')
+  const jsonData = JSON.parse(jsonString)
+  expect(resp).not.toBeNull()
+  expect(resp).toContain('--stage srm')
+  expect(jsonData.data.srm.url).toContain('srm_url')
+  expect(jsonData.data.srm.apikey).toContain('api_key')
+  expect(jsonData.data.srm.assessment.types).toEqual(['SCA', 'SAST'])
+  expect(jsonData.data.srm.waitForScan).toBe(true)
 })
 
 it('should pass SRM fields and project directory field to bridge', () => {

@@ -8,6 +8,10 @@ export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIRGAP_KEY)?.tr
 export const BRIDGE_DOWNLOAD_URL = getInput(constants.BRIDGE_DOWNLOAD_URL_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY)?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput(constants.BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || ''
 
+// Common inputs for all products
+export const PROJECT_DIRECTORY = getInput(constants.PROJECT_DIRECTORY_KEY)?.trim() || ''
+export const WAIT_FOR_SCAN = getInput(constants.WAIT_FOR_SCAN_KEY)?.trim() || ''
+
 // Srm related inputs
 export const SRM_URL = getInput(constants.SRM_URL_KEY)?.trim() || ''
 export const SRM_API_KEY = getInput(constants.SRM_API_KEY)?.trim() || ''
@@ -38,7 +42,6 @@ export const POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.POLARIS
 export const POLARIS_REPORTS_SARIF_ISSUE_TYPES = getInput(constants.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY)?.trim() || ''
 export const POLARIS_UPLOAD_SARIF_REPORT = getInput(constants.POLARIS_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
 export const POLARIS_ASSESSMENT_MODE = getInput(constants.POLARIS_ASSESSMENT_MODE_KEY)?.trim() || ''
-export const PROJECT_DIRECTORY = getInput(constants.PROJECT_DIRECTORY_KEY)?.trim() || ''
 export const PROJECT_SOURCE_ARCHIVE = getInput(constants.PROJECT_SOURCE_ARCHIVE_KEY)?.trim() || ''
 export const PROJECT_SOURCE_PRESERVESYMLINKS = getInput(constants.PROJECT_SOURCE_PRESERVESYMLINKS_KEY)?.trim() || ''
 export const PROJECT_SOURCE_EXCLUDES = getInput(constants.PROJECT_SOURCE_EXCLUDES_KEY)?.trim() || ''

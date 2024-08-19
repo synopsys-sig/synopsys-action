@@ -89,6 +89,7 @@ export const PROJECT_SOURCE_ARCHIVE_KEY = 'project_source_archive'
 export const PROJECT_SOURCE_PRESERVESYMLINKS_KEY = 'project_source_preserveSymLinks'
 export const PROJECT_SOURCE_EXCLUDES_KEY = 'project_source_excludes'
 export const PROJECT_DIRECTORY_KEY = 'project_directory'
+export const WAIT_FOR_SCAN_KEY = 'wait_for_scan'
 
 // Blackduck
 export const BLACKDUCK_URL_KEY = 'blackduck_url'

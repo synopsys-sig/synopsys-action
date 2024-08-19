@@ -110,9 +110,6 @@ inputs:
   polaris_assessment_mode:
     description: 'The test mode type of this scan'
     required: false
-  project_directory:
-    description: 'The project source directory. Defaults to repository root directory. Set this to specify a custom folder that is other than repository root'
-    required: false
   project_source_archive:
     description: 'The zipped source file path. It overrides the project directory setting'
     required: false
@@ -214,6 +211,12 @@ inputs:
     required: false
   blackduck_execution_path:
     description: 'Black Duck execution path'
+    required: false
+  project_directory:
+    description: 'The project source directory. Defaults to repository root directory. Set this to specify a custom folder that is other than repository root'
+    required: false
+  wait_for_scan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
     required: false
   github_token:
     description: 'Github token to be used for git related rest operation'

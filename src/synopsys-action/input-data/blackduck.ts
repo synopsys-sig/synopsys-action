@@ -1,4 +1,5 @@
 import {Reports} from './reports'
+import {AsyncMode} from './async-mode'
 
 export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
   ALL = 'ALL',
@@ -19,7 +20,7 @@ export interface Blackduck {
   network?: NetworkAirGap
 }
 
-export interface BlackduckData extends BlackDuckArbitrary {
+export interface BlackduckData extends BlackDuckArbitrary, AsyncMode {
   url: string
   token: string
   install?: {directory: string}

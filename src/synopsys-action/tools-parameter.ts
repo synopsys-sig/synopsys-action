@@ -92,6 +92,10 @@ export class SynopsysToolsParameter {
       }
     }
 
+    if (isBoolean(inputs.WAIT_FOR_SCAN)) {
+      polData.data.polaris.waitForScan = parseToBoolean(inputs.WAIT_FOR_SCAN)
+    }
+
     if (inputs.PROJECT_DIRECTORY || inputs.PROJECT_SOURCE_ARCHIVE || inputs.PROJECT_SOURCE_EXCLUDES || inputs.PROJECT_SOURCE_PRESERVESYMLINKS) {
       polData.data.project = {}
 
@@ -263,6 +267,10 @@ export class SynopsysToolsParameter {
       covData.data.coverity.connect.policy = {view: inputs.COVERITY_POLICY_VIEW}
     }
 
+    if (isBoolean(inputs.WAIT_FOR_SCAN)) {
+      covData.data.coverity.waitForScan = parseToBoolean(inputs.WAIT_FOR_SCAN)
+    }
+
     if (inputs.COVERITY_REPOSITORY_NAME || inputs.COVERITY_BRANCH_NAME || inputs.PROJECT_DIRECTORY) {
       covData.data.project = {
         ...(inputs.COVERITY_REPOSITORY_NAME && {
@@ -372,6 +380,10 @@ export class SynopsysToolsParameter {
       } else {
         blackduckData.data.blackduck.scan = {failure: {severities: failureSeverityEnums}}
       }
+    }
+
+    if (isBoolean(inputs.WAIT_FOR_SCAN)) {
+      blackduckData.data.blackduck.waitForScan = parseToBoolean(inputs.WAIT_FOR_SCAN)
     }
 
     if (inputs.PROJECT_DIRECTORY) {
@@ -506,6 +518,10 @@ export class SynopsysToolsParameter {
           path: inputs.COVERITY_EXECUTION_PATH
         }
       }
+    }
+
+    if (isBoolean(inputs.WAIT_FOR_SCAN)) {
+      srmData.data.srm.waitForScan = parseToBoolean(inputs.WAIT_FOR_SCAN)
     }
 
     if (inputs.PROJECT_DIRECTORY) {
