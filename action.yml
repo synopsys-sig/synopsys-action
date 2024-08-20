@@ -188,6 +188,12 @@ inputs:
   blackduck_config_path:
     description: 'Black Duck config file path (.properties/.yml)'
     required: false
+  blackduck_policy_badges_create:
+    description: 'To enable creation of badges on the GitHub repository'
+    required: false
+  blackduck_policy_badges_maxCount:
+    description: 'To limit number of badges to be displayed on the GitHub repository'
+    required: false
   srm_url:
     description: 'SRM Url'
     required: false
