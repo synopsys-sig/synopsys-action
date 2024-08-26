@@ -585,11 +585,16 @@ export class SynopsysToolsParameter {
 
   private getGithubBranchName(): string {
     let branchName = ''
-    // Additional null check has been added when fix pr is enabled with badges
-    if (parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE) && parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
-      branchName = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME] || ''
-    } else if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED) || parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)) {
+    if (parseToBoolean(inputs.POLARIS_PRCOMMENT_ENABLED)) {
+      // Only polaris use case
       branchName = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] || ''
+    } else {
+      // For pull requests, non-pull requests and manual trigger events
+      if (process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] !== '') {
+        branchName = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_HEAD_REF] || ''
+      } else {
+        branchName = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REF_NAME] || ''
+      }
     }
     return branchName
   }
