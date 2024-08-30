@@ -731,7 +731,7 @@ it('should pass polaris fields and wait for scan field to bridge', () => {
   Object.defineProperty(inputs, 'POLARIS_APPLICATION_NAME', {value: 'POLARIS_APPLICATION_NAME'})
   Object.defineProperty(inputs, 'POLARIS_PROJECT_NAME', {value: 'POLARIS_PROJECT_NAME'})
   Object.defineProperty(inputs, 'POLARIS_ASSESSMENT_TYPES', {value: 'SCA, SAST'})
-  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+  Object.defineProperty(inputs, 'POLARIS_WAITFORSCAN', {value: true})
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   const resp = stp.getFormattedCommandForPolaris('synopsys-action')
 
@@ -819,7 +819,7 @@ it('should pass polaris SCA and SAST arbitrary fields to bridge', () => {
 it('should pass black duck fields and wait for scan field to bridge', () => {
   Object.defineProperty(inputs, 'BLACKDUCK_URL', {value: 'BLACKDUCK_URL'})
   Object.defineProperty(inputs, 'BLACKDUCK_API_TOKEN', {value: 'BLACKDUCK_API_TOKEN'})
-  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+  Object.defineProperty(inputs, 'BLACKDUCK_WAITFORSCAN', {value: true})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   const resp = stp.getFormattedCommandForBlackduck()
@@ -875,7 +875,7 @@ it('should pass coverity fields and wait for scan field to bridge', () => {
   Object.defineProperty(inputs, 'COVERITY_URL', {value: 'COVERITY_URL'})
   Object.defineProperty(inputs, 'COVERITY_USER', {value: 'COVERITY_USER'})
   Object.defineProperty(inputs, 'COVERITY_PASSPHRASE', {value: 'COVERITY_PASSPHRASE'})
-  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+  Object.defineProperty(inputs, 'COVERITY_WAITFORSCAN', {value: true})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   const resp = stp.getFormattedCommandForCoverity('synopsys-action')
@@ -1212,7 +1212,7 @@ it('should pass SRM fields and wait for scan field to bridge', () => {
   Object.defineProperty(inputs, 'SRM_URL', {value: 'srm_url'})
   Object.defineProperty(inputs, 'SRM_API_KEY', {value: 'api_key'})
   Object.defineProperty(inputs, 'SRM_ASSESSMENT_TYPES', {value: 'SCA,SAST'})
-  Object.defineProperty(inputs, 'WAIT_FOR_SCAN', {value: true})
+  Object.defineProperty(inputs, 'SRM_WAITFORSCAN', {value: true})
 
   const stp: SynopsysToolsParameter = new SynopsysToolsParameter(tempPath)
   const resp = stp.getFormattedCommandForSRM('synopsys-action')

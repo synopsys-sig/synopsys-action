@@ -41,6 +41,9 @@ inputs:
   coverity_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
     required: false
+  coverity_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    required: false
   coverity_build_command:
     description: 'Build command for Coverity'
     required: false
@@ -107,8 +110,14 @@ inputs:
   polaris_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Polaris SARIF report to GitHub Advanced Security'
     required: false
+  polaris_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    required: false
   polaris_assessment_mode:
     description: 'The test mode type of this scan'
+    required: false
+  project_directory:
+    description: 'The project source directory. Defaults to repository root directory. Set this to specify a custom folder that is other than repository root'
     required: false
   project_source_archive:
     description: 'The zipped source file path. It overrides the project directory setting'
@@ -176,6 +185,9 @@ inputs:
   blackduck_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
     required: false
+  blackduck_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    required: false
   blackduck_search_depth:
     description: 'Number indicating the search depth in the source directory'
     required: false
@@ -206,17 +218,14 @@ inputs:
   srm_branch_parent:
     description: 'SRM branch parent'
     required: false
+  srm_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    required: false
   coverity_execution_path:
     description: 'Coverity execution path'
     required: false
   blackduck_execution_path:
     description: 'Black Duck execution path'
-    required: false
-  project_directory:
-    description: 'The project source directory. Defaults to repository root directory. Set this to specify a custom folder that is other than repository root'
-    required: false
-  wait_for_scan: 
-    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
     required: false
   github_token:
     description: 'Github token to be used for git related rest operation'

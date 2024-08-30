@@ -8,10 +8,6 @@ export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIRGAP_KEY)?.tr
 export const BRIDGE_DOWNLOAD_URL = getInput(constants.BRIDGE_DOWNLOAD_URL_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY)?.trim() || ''
 export const BRIDGE_DOWNLOAD_VERSION = getInput(constants.BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || ''
 
-// Common inputs for all products
-export const PROJECT_DIRECTORY = getInput(constants.PROJECT_DIRECTORY_KEY)?.trim() || ''
-export const WAIT_FOR_SCAN = getInput(constants.WAIT_FOR_SCAN_KEY)?.trim() || ''
-
 // Srm related inputs
 export const SRM_URL = getInput(constants.SRM_URL_KEY)?.trim() || ''
 export const SRM_API_KEY = getInput(constants.SRM_API_KEY)?.trim() || ''
@@ -20,6 +16,7 @@ export const SRM_PROJECT_NAME = getInput(constants.SRM_PROJECT_NAME_KEY)?.trim()
 export const SRM_PROJECT_ID = getInput(constants.SRM_PROJECT_ID_KEY)?.trim() || ''
 export const SRM_BRANCH_NAME = getInput(constants.SRM_BRANCH_NAME_KEY)?.trim() || ''
 export const SRM_BRANCH_PARENT = getInput(constants.SRM_BRANCH_PARENT_KEY)?.trim() || ''
+export const SRM_WAITFORSCAN = getInput(constants.SRM_WAITFORSCAN_KEY)?.trim() || ''
 export const COVERITY_EXECUTION_PATH = getInput(constants.COVERITY_EXECUTION_PATH_KEY)?.trim() || ''
 export const BLACKDUCK_EXECUTION_PATH = getInput(constants.BLACKDUCK_EXECUTION_PATH_KEY)?.trim() || ''
 
@@ -41,7 +38,9 @@ export const POLARIS_REPORTS_SARIF_SEVERITIES = getInput(constants.POLARIS_REPOR
 export const POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
 export const POLARIS_REPORTS_SARIF_ISSUE_TYPES = getInput(constants.POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY)?.trim() || ''
 export const POLARIS_UPLOAD_SARIF_REPORT = getInput(constants.POLARIS_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
+export const POLARIS_WAITFORSCAN = getInput(constants.POLARIS_WAITFORSCAN_KEY)?.trim() || ''
 export const POLARIS_ASSESSMENT_MODE = getInput(constants.POLARIS_ASSESSMENT_MODE_KEY)?.trim() || ''
+export const PROJECT_DIRECTORY = getInput(constants.PROJECT_DIRECTORY_KEY)?.trim() || ''
 export const PROJECT_SOURCE_ARCHIVE = getInput(constants.PROJECT_SOURCE_ARCHIVE_KEY)?.trim() || ''
 export const PROJECT_SOURCE_PRESERVESYMLINKS = getInput(constants.PROJECT_SOURCE_PRESERVESYMLINKS_KEY)?.trim() || ''
 export const PROJECT_SOURCE_EXCLUDES = getInput(constants.PROJECT_SOURCE_EXCLUDES_KEY)?.trim() || ''
@@ -59,6 +58,7 @@ export const COVERITY_BRANCH_NAME = getInput(constants.COVERITY_BRANCH_NAME_KEY)
 export const COVERITY_PRCOMMENT_ENABLED = getInput(constants.COVERITY_AUTOMATION_PRCOMMENT_KEY)?.trim() || getInput(constants.COVERITY_PRCOMMENT_ENABLED_KEY)?.trim() || ''
 export const COVERITY_LOCAL = getInput(constants.COVERITY_LOCAL_KEY)?.trim() === 'true' || false
 export const COVERITY_VERSION = getInput(constants.COVERITY_VERSION_KEY)?.trim() || getInput(constants.BRIDGE_COVERITY_VERSION_KEY)?.trim() || ''
+export const COVERITY_WAITFORSCAN = getInput(constants.COVERITY_WAITFORSCAN_KEY)?.trim() || ''
 export const COVERITY_BUILD_COMMAND = getInput(constants.COVERITY_BUILD_COMMAND_KEY)?.trim() || ''
 export const COVERITY_CLEAN_COMMAND = getInput(constants.COVERITY_CLEAN_COMMAND_KEY)?.trim() || ''
 export const COVERITY_CONFIG_PATH = getInput(constants.COVERITY_CONFIG_PATH_KEY)?.trim() || ''
@@ -81,6 +81,7 @@ export const BLACKDUCK_REPORTS_SARIF_FILE_PATH = getInput(constants.BLACKDUCK_RE
 export const BLACKDUCK_REPORTS_SARIF_SEVERITIES = getInput(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)?.trim() || ''
 export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
 export const BLACKDUCK_UPLOAD_SARIF_REPORT = getInput(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
+export const BLACKDUCK_WAITFORSCAN = getInput(constants.BLACKDUCK_WAITFORSCAN_KEY)?.trim() || ''
 export const BLACKDUCK_SEARCH_DEPTH = getInput(constants.BLACKDUCK_SEARCH_DEPTH_KEY)?.trim() || ''
 export const BLACKDUCK_CONFIG_PATH = getInput(constants.BLACKDUCK_CONFIG_PATH_KEY)?.trim() || ''
 export const BLACKDUCK_ARGS = getInput(constants.BLACKDUCK_ARGS_KEY)?.trim() || ''
