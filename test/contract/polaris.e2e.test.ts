@@ -1,13 +1,13 @@
 import {run} from '../../src/main'
 import {error} from '@actions/core'
-import * as inputs from '../../src/synopsys-action/inputs'
+import * as inputs from '../../src/blackduck-security-action/inputs'
 import * as configVariables from 'actions-artifact-v2/lib/internal/shared/config'
-import * as validator from '../../src/synopsys-action/validators'
+import * as validator from '../../src/blackduck-security-action/validators'
 import * as toolCache from '@actions/tool-cache'
-import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
+import * as toolCacheLocal from '../../src/blackduck-security-action/tool-cache-local'
 import * as io from '@actions/io'
-import * as utility from '../../src/synopsys-action/utility'
-import {BRIDGE_DOWNLOAD_URL, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, POLARIS_TRIAGE} from '../../src/synopsys-action/inputs'
+import * as utility from '../../src/blackduck-security-action/utility'
+import {BRIDGE_DOWNLOAD_URL, POLARIS_APPLICATION_NAME, POLARIS_ASSESSMENT_TYPES, POLARIS_PROJECT_NAME, POLARIS_SERVER_URL, POLARIS_TRIAGE} from '../../src/blackduck-security-action/inputs'
 
 const polarisParamsMap: Map<string, string> = new Map<string, string>()
 polarisParamsMap.set('POLARIS_SERVER_URL', 'POLARIS_SERVER_URL')
@@ -28,7 +28,7 @@ describe('Polaris flow contract', () => {
   })
 
   it('With all mandatory fields', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockPolarisParamsExcept('NONE')
 
     setAllMocks()
@@ -38,7 +38,7 @@ describe('Polaris flow contract', () => {
   })
 
   it('With all mandatory fields without Triage', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockPolarisParamsExcept('POLARIS_TRIAGE')
 
     setAllMocks()
@@ -52,7 +52,7 @@ describe('Polaris flow contract', () => {
   })
 
   it('With missing mandatory field polaris.access.token', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockPolarisParamsExcept('POLARIS_ACCESS_TOKEN')
 
     setAllMocks()
@@ -66,7 +66,7 @@ describe('Polaris flow contract', () => {
   })
 
   it('With missing mandatory field polaris.application.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockPolarisParamsExcept('POLARIS_APPLICATION_NAME')
 
     setAllMocks()
@@ -80,7 +80,7 @@ describe('Polaris flow contract', () => {
   })
 
   it('With missing mandatory field polaris.project.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockPolarisParamsExcept('POLARIS_PROJECT_NAME')
 
     setAllMocks()
@@ -94,7 +94,7 @@ describe('Polaris flow contract', () => {
   })
 
   it('With missing mandatory field polaris.assessment.type', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockPolarisParamsExcept('POLARIS_ASSESSMENT_TYPES')
 
     setAllMocks()
@@ -108,7 +108,7 @@ describe('Polaris flow contract', () => {
   })
 
   it('With bridge.break set to true', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockPolarisParamsExcept('NONE')
     process.env['POLARIS_ISSUE_FAILURE'] = 'true'
 
@@ -168,7 +168,7 @@ export function getBridgeDownloadUrl(): string {
   return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest/synopsys-bridge-'.concat(platform).concat('.zip')
 }
 
-export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
+export function mockBridgeDownloadUrlAndBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: __dirname})
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})

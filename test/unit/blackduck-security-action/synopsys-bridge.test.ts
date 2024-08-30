@@ -1,19 +1,19 @@
-import {SynopsysBridge} from '../../../src/synopsys-action/synopsys-bridge'
+import {BridgeCLI} from '../../../src/blackduck-security-action/bridge-cli'
 import mock = jest.mock
 import Mocked = jest.Mocked
 import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import {Socket} from 'net'
-import {validateBridgeUrl} from '../../../src/synopsys-action/validators'
-import * as inputs from '../../../src/synopsys-action/inputs'
+import {validateBridgeUrl} from '../../../src/blackduck-security-action/validators'
+import * as inputs from '../../../src/blackduck-security-action/inputs'
 import * as constants from '../../../src/application-constants'
 import {run} from '../../../src/main'
 import {error} from '@actions/core'
-import * as downloadUtility from '../../../src/synopsys-action/download-utility'
-import {DownloadFileResponse, extractZipped} from '../../../src/synopsys-action/download-utility'
+import * as downloadUtility from '../../../src/blackduck-security-action/download-utility'
+import {DownloadFileResponse, extractZipped} from '../../../src/blackduck-security-action/download-utility'
 import os from 'os'
 
-const util = require('../../../src/synopsys-action/utility')
+const util = require('../../../src/blackduck-security-action/utility')
 
 const ioUtils = require('@actions/io/lib/io-util')
 mock('@actions/io/lib/io-util')
@@ -38,7 +38,7 @@ beforeEach(() => {
 })
 
 test('Test executeBridgeCommand for MAC', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')
@@ -59,7 +59,7 @@ test('Test executeBridgeCommand for MAC', () => {
 })
 
 test('Test executeBridgeCommand for Linux', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/user')
@@ -80,7 +80,7 @@ test('Test executeBridgeCommand for Linux', () => {
 })
 
 test('Test executeBridgeCommand for Windows', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
 
   path.join = jest.fn()
   path.join.mockReturnValueOnce('c:\\')
@@ -101,7 +101,7 @@ test('Test executeBridgeCommand for Windows', () => {
 })
 
 test('Test executeBridgeCommand for bridge failure', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
 
   ioUtils.tryGetExecutablePath = jest.fn()
   ioUtils.tryGetExecutablePath.mockReturnValueOnce('')
@@ -137,18 +137,18 @@ test('Validate bridge URL MAC', () => {
   expect(resp).toBeTruthy()
 })
 
-test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY not empty', () => {
-  let sb = new SynopsysBridge()
+test('Validate getBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY not empty', () => {
+  let sb = new BridgeCLI()
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {
     value: '/users'
   })
 
-  const resp = sb.getSynopsysBridgePath()
+  const resp = sb.getBridgePath()
   expect(resp).resolves.toContain('users')
 })
 
-test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY if empty', () => {
-  let sb = new SynopsysBridge()
+test('Validate getBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY if empty', () => {
+  let sb = new BridgeCLI()
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {
     value: ''
   })
@@ -156,7 +156,7 @@ test('Validate getSynopsysBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY if em
   path.join = jest.fn()
   path.join.mockReturnValueOnce('/Users/user')
 
-  const resp = sb.getSynopsysBridgePath()
+  const resp = sb.getBridgePath()
   expect(resp).resolves.toContain('/Users/user')
 })
 
@@ -176,11 +176,11 @@ test('Test validateBridgeVersion', async () => {
     message: incomingMessage,
     readBody: jest.fn()
   }
-  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/synopsys-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
+  httpResponse.readBody.mockResolvedValueOnce('\n' + '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">\n' + '<html>\n' + '<head><meta name="robots" content="noindex" />\n' + '<title>Index of bds-integrations-release/com/synopsys/integration/blackduck-security-action</title>\n' + '</head>\n' + '<body>\n' + '<h1>Index of bds-integrations-release/com/synopsys/integration/blackduck-security-action</h1>\n' + '<pre>Name    Last modified      Size</pre><hr/>\n' + '<pre><a href="../">../</a>\n' + '<a href="0.1.61/">0.1.61/</a>  04-Oct-2022 23:05    -\n' + '<a href="0.1.67/">0.1.67/</a>  07-Oct-2022 00:35    -\n' + '<a href="0.1.72/">0.1.72/</a>  17-Oct-2022 19:46    -\n' + '</pre>\n' + '<hr/><address style="font-size:small;">Artifactory/7.31.13 Server at sig-repo.synopsys.com Port 80</address></body></html>')
   httpResponse.message.statusCode = 200
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const response = await sb.validateBridgeVersion('0.1.67')
 
   expect(response).toBe(true)
@@ -189,7 +189,7 @@ test('Test validateBridgeVersion', async () => {
 test('Test getVersionUrl - mac - Intel', () => {
   Object.defineProperty(process, 'platform', {value: 'darwin'})
 
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const response = sb.getVersionUrl('0.1.0')
 
   expect(response).toContain('mac')
@@ -208,7 +208,7 @@ test('Test getVersionUrl - mac - ARM with version greater 2.1.0', () => {
     }
   ])
 
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const response = sb.getVersionUrl('2.1.2')
   expect(response).toContain('macos_arm')
   Object.defineProperty(process, 'platform', {value: null})
@@ -218,7 +218,7 @@ test('Test getVersionUrl - mac - ARM with version greater 2.1.0', () => {
 test('Test getVersionUrl win', () => {
   Object.defineProperty(process, 'platform', {value: 'win32'})
 
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const response = sb.getVersionUrl('0.1.0')
 
   expect(response).toContain('win')
@@ -229,7 +229,7 @@ test('Test getVersionUrl win', () => {
 test('Test getVersionUrl linux', () => {
   Object.defineProperty(process, 'platform', {value: 'linux'})
 
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const response = sb.getVersionUrl('0.1.0')
 
   expect(response).toContain('linux')
@@ -241,7 +241,7 @@ test('Latest URL Version success', async () => {
   Object.defineProperty(constants, 'LATEST_GLOBAL_VERSION_URL', {value: 'https://artifact.com/latest/version.txt'})
 
   const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const httpResponse: Mocked<HttpClientResponse> = {
     message: incomingMessage,
     readBody: jest.fn()
@@ -250,13 +250,13 @@ test('Latest URL Version success', async () => {
   httpResponse.message.statusCode = 200
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-  const response = await sb.getSynopsysBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
+  const response = await sb.getBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('0.3.1')
 })
 
 test('Latest URL Version success', async () => {
   const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const httpResponse: Mocked<HttpClientResponse> = {
     message: incomingMessage,
     readBody: jest.fn()
@@ -272,7 +272,7 @@ test('Latest URL Version success', async () => {
 test('Latest URL Version success for MAC ARM arch', async () => {
   Object.defineProperty(process, 'platform', {value: 'darwin'})
   const incomingMessage: IncomingMessage = new IncomingMessage(new Socket())
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   const httpResponse: Mocked<HttpClientResponse> = {
     message: incomingMessage,
     readBody: jest.fn()
@@ -310,9 +310,9 @@ test('Latest url version if not provided', async () => {
   httpResponse.readBody.mockResolvedValue('error')
   jest.spyOn(HttpClient.prototype, 'get').mockRejectedValue(httpResponse)
 
-  const sb = new SynopsysBridge()
-  jest.spyOn(sb, 'getSynopsysBridgeVersionFromLatestURL')
-  const response = await sb.getSynopsysBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
+  const sb = new BridgeCLI()
+  jest.spyOn(sb, 'getBridgeVersionFromLatestURL')
+  const response = await sb.getBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('')
 })
 
@@ -326,13 +326,13 @@ test('Latest URL Version failure', async () => {
   httpResponse.message.statusCode = 400
   jest.spyOn(HttpClient.prototype, 'get').mockResolvedValueOnce(httpResponse)
 
-  const sb = new SynopsysBridge()
-  const response = await sb.getSynopsysBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
+  const sb = new BridgeCLI()
+  const response = await sb.getBridgeVersionFromLatestURL('https://artifact.com/latest/synopsy-bridge.zip')
   expect(response).toContain('')
 })
 
 test('Test fetch version details from BRIDGE_DOWNLOAD_URL', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: ''})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-0.1.1-macosx.zip'})
 
@@ -341,12 +341,12 @@ test('Test fetch version details from BRIDGE_DOWNLOAD_URL', () => {
 })
 
 test('Test without version details from BRIDGE_DOWNLOAD_URL', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: ''})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-macosx.zip'})
   const downloadFileResp: DownloadFileResponse = {filePath: '/user/temp/download/', fileName: 'C:/ser/temp/download/bridge-win.zip'}
 
-  jest.spyOn(SynopsysBridge.prototype, 'getSynopsysBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
+  jest.spyOn(BridgeCLI.prototype, 'getBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
   jest.spyOn(downloadUtility, 'extractZipped').mockResolvedValueOnce(true)
   jest.spyOn(downloadUtility, 'getRemoteFile').mockResolvedValueOnce(downloadFileResp)
   fs.existsSync = jest.fn()
@@ -359,20 +359,20 @@ test('Test without version details from BRIDGE_DOWNLOAD_URL', () => {
   }
 })
 test('Test invalid path for SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test-dir'})
   const response = sb.downloadBridge('/working_directory')
   expect(response).rejects.toThrowError()
 })
 
 test('Test version file not exist failure', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   let response = sb.checkIfVersionExists('0.1.1', '')
   expect(response).resolves.toEqual(false)
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
@@ -405,7 +405,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY empty', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
@@ -430,13 +430,13 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC when SYNO
   util.checkIfPathExists = jest.fn()
   util.checkIfPathExists.mockResolvedValue(true)
 
-  expect(sb.validateSynopsysBridgePath()).resolves.not.toThrow()
+  expect(sb.validateBridgePath()).resolves.not.toThrow()
 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not  empty', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
@@ -460,14 +460,14 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not 
 
   util.checkIfPathExists = jest.fn()
   util.checkIfPathExists.mockResolvedValue(true)
-  expect(sb.validateSynopsysBridgePath()).resolves.not.toThrow()
+  expect(sb.validateBridgePath()).resolves.not.toThrow()
 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY is empty ', async () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
@@ -491,16 +491,16 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY is e
   util.checkIfPathExists = jest.fn()
   util.checkIfPathExists.mockReturnValueOnce(false)
   try {
-    await sb.validateSynopsysBridgePath()
+    await sb.validateBridgePath()
   } catch (error: any) {
-    expect(error.message).toContain('Synopsys Bridge default directory does not exist')
+    expect(error.message).toContain('Bridge default directory does not exist')
   }
 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not empty: failure', async () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
@@ -522,9 +522,9 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not 
   fs.existsSync = jest.fn()
   fs.existsSync.mockReturnValueOnce(false)
   try {
-    await sb.validateSynopsysBridgePath()
+    await sb.validateBridgePath()
   } catch (error: any) {
-    expect(error.message).toContain('Synopsys Bridge Install Directory does not exist')
+    expect(error.message).toContain('Bridge install directory does not exist')
   }
 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
@@ -532,7 +532,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not 
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without url and version', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
 
@@ -567,7 +567,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without u
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Linux', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
@@ -600,7 +600,7 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Linux', () =>
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Windows', () => {
-  const sb = new SynopsysBridge()
+  const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})

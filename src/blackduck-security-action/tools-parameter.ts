@@ -12,7 +12,7 @@ import * as constants from '../application-constants'
 import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
 import {SRM} from './input-data/srm'
 
-export class SynopsysToolsParameter {
+export class ToolsParameter {
   tempDir: string
   private static STAGE_OPTION = '--stage'
   static DIAGNOSTICS_OPTION = '--diagnostics'
@@ -44,7 +44,7 @@ export class SynopsysToolsParameter {
         if (assessmentType.trim() && regEx.test(assessmentType.trim())) {
           assessmentTypeArray.push(assessmentType.trim())
         } else {
-          throw new Error('Invalid value for '.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
+          throw new Error(constants.INVALID_VALUE_ERROR.concat(constants.POLARIS_ASSESSMENT_TYPES_KEY))
         }
       }
     }
@@ -210,12 +210,12 @@ export class SynopsysToolsParameter {
     polData.data.blackduck = this.setBlackDuckArbitraryArgs()
 
     const inputJson = JSON.stringify(polData)
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.POLARIS_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, ToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.POLARIS_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.POLARIS_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
     return command
   }
 
@@ -305,12 +305,12 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(covData)
 
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.COVERITY_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, ToolsParameter.COVERITY_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.COVERITY_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.COVERITY_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
     return command
   }
 
@@ -329,7 +329,7 @@ export class SynopsysToolsParameter {
           }
         }
       } catch (error) {
-        throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
+        throw new Error(constants.INVALID_VALUE_ERROR.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
       }
     }
     let command = ''
@@ -351,7 +351,7 @@ export class SynopsysToolsParameter {
       if (inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true' || inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'false') {
         scanFullValue = inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true'
       } else {
-        throw new Error('Missing boolean value for '.concat(constants.BLACKDUCK_SCAN_FULL_KEY))
+        throw new Error(constants.MISSING_BOOLEAN_VALUE_ERROR.concat(constants.BLACKDUCK_SCAN_FULL_KEY))
       }
       blackduckData.data.blackduck.scan = {full: scanFullValue}
     }
@@ -361,7 +361,7 @@ export class SynopsysToolsParameter {
       const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
         if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
-          throw new Error('Invalid value for '.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
+          throw new Error(constants.INVALID_VALUE_ERROR.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
         } else {
           failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
         }
@@ -462,12 +462,12 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(blackduckData)
 
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.BD_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, ToolsParameter.BD_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.BLACKDUCK_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.BLACKDUCK_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
     return command
   }
 
@@ -543,12 +543,12 @@ export class SynopsysToolsParameter {
 
     const inputJson = JSON.stringify(srmData)
 
-    const stateFilePath = path.join(this.tempDir, SynopsysToolsParameter.SRM_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, ToolsParameter.SRM_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = SynopsysToolsParameter.STAGE_OPTION.concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.SRM_STAGE).concat(SynopsysToolsParameter.SPACE).concat(SynopsysToolsParameter.INPUT_OPTION).concat(SynopsysToolsParameter.SPACE).concat(stateFilePath).concat(SynopsysToolsParameter.SPACE)
+    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.SRM_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
     return command
   }
 
@@ -573,7 +573,7 @@ export class SynopsysToolsParameter {
     const githubRepoOwner = process.env[constants.GITHUB_ENVIRONMENT_VARIABLES.GITHUB_REPOSITORY_OWNER] || ''
 
     if (isNullOrEmptyValue(githubToken)) {
-      throw new Error(constants.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT)
+      throw new Error(constants.MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT_ERROR)
     }
 
     // This condition is required as per ts-lint as these fields may have undefined as well
@@ -635,7 +635,7 @@ export class SynopsysToolsParameter {
 
   private setBlackDuckFixPrInputs(): BlackDuckFixPrData | undefined {
     if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && isNaN(Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT))) {
-      throw new Error('Invalid value for '.concat(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY))
+      throw new Error(constants.INVALID_VALUE_ERROR.concat(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY))
     }
     const createSinglePr = parseToBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)
     if (createSinglePr && inputs.BLACKDUCK_FIXPR_MAXCOUNT) {

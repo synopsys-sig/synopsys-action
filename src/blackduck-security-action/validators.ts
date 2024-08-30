@@ -17,7 +17,7 @@ export function validateCoverityInstallDirectoryParam(installDir: string): boole
 
 export function validateBlackduckFailureSeverities(severities: string[]): boolean {
   if (severities == null || severities.length === 0) {
-    error('Provided value is not valid - BLACKDUCK_SCAN_FAILURE_SEVERITIES')
+    error(constants.PROVIDED_BLACKDUCKSCA_FAILURE_SEVERITIES_ERROR)
     return false
   }
   return true

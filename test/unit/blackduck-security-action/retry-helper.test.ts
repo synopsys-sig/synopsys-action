@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import {RetryHelper} from '../../../src/synopsys-action/retry-helper'
+import {RetryHelper} from '../../../src/blackduck-security-action/retry-helper'
 import * as constants from '../../../src/application-constants'
 
 let info: string[]
@@ -51,7 +51,7 @@ describe('retry-helper tests', () => {
     expect(actual).toBe('some result')
     expect(info).toHaveLength(2)
     expect(info[0]).toBe('some error')
-    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
+    expect(info[1]).toMatch(/Bridge download has been failed, Retries left: .+/)
   })
 
   it('third attempt succeeds', async () => {
@@ -67,9 +67,9 @@ describe('retry-helper tests', () => {
     expect(actual).toBe('some result')
     expect(info).toHaveLength(4)
     expect(info[0]).toBe('some error 1')
-    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
+    expect(info[1]).toMatch(/Bridge download has been failed, Retries left: .+/)
     expect(info[2]).toBe('some error 2')
-    expect(info[3]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
+    expect(info[3]).toMatch(/Bridge download has been failed, Retries left: .+/)
   })
 
   it('all attempts fail', async () => {
@@ -86,9 +86,9 @@ describe('retry-helper tests', () => {
     expect(attempts).toBe(4)
     expect(info).toHaveLength(6)
     expect(info[0]).toBe('some error 1')
-    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
+    expect(info[1]).toMatch(/Bridge download has been failed, Retries left: .+/)
     expect(info[2]).toBe('some error 2')
-    expect(info[3]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
+    expect(info[3]).toMatch(/Bridge download has been failed, Retries left: .+/)
   })
 
   it('checks retryable after first attempt', async () => {
@@ -126,6 +126,6 @@ describe('retry-helper tests', () => {
     expect(attempts).toBe(2)
     expect(info).toHaveLength(2)
     expect(info[0]).toBe('some error 1')
-    expect(info[1]).toMatch(/Synopsys Bridge download has been failed, Retries left: .+/)
+    expect(info[1]).toMatch(/Bridge download has been failed, Retries left: .+/)
   })
 })

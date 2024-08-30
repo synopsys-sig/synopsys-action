@@ -4,6 +4,7 @@ import {extractZip} from '@actions/tool-cache'
 import {downloadTool} from './tool-cache-local'
 import * as fs from 'fs'
 import {validateBridgeUrl} from './validators'
+import * as constants from '../application-constants'
 
 export interface DownloadFileResponse {
   filePath: string
@@ -12,11 +13,11 @@ export interface DownloadFileResponse {
 
 export async function getRemoteFile(destFilePath: string, url: string): Promise<DownloadFileResponse> {
   if (url == null || url.length === 0) {
-    throw new Error('URL cannot be empty')
+    throw new Error(constants.BRIDGE_URL_EMPTY_ERROR)
   }
 
   if (!validateBridgeUrl(url)) {
-    throw new Error('Invalid URL')
+    throw new Error(constants.BRIDGE_URL_NOT_VALID_ERROR)
   }
 
   try {
@@ -39,12 +40,12 @@ export async function getRemoteFile(destFilePath: string, url: string): Promise<
 
 export async function extractZipped(file: string, destinationPath: string): Promise<boolean> {
   if (file == null || file.length === 0) {
-    return Promise.reject(new Error('File does not exist'))
+    return Promise.reject(new Error(constants.BRIDGE_ZIP_NOT_FOUND_FOR_EXTRACT_ERROR))
   }
 
   //Extract file name from file with full path
   if (destinationPath == null || destinationPath.length === 0) {
-    return Promise.reject(new Error('No destination directory found'))
+    return Promise.reject(new Error(constants.BRIDGE_EXTRACT_directory_NOT_FOUND_ERROR))
   }
 
   try {

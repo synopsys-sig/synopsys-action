@@ -1,12 +1,12 @@
 import {run} from '../../src/main'
-import * as inputs from '../../src/synopsys-action/inputs'
+import * as inputs from '../../src/blackduck-security-action/inputs'
 import {error, info} from '@actions/core'
 import * as configVariables from 'actions-artifact-v2/lib/internal/shared/config'
-import * as validator from '../../src/synopsys-action/validators'
+import * as validator from '../../src/blackduck-security-action/validators'
 import * as toolCache from '@actions/tool-cache'
-import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
+import * as toolCacheLocal from '../../src/blackduck-security-action/tool-cache-local'
 import * as io from '@actions/io'
-import * as utility from '../../src/synopsys-action/utility'
+import * as utility from '../../src/blackduck-security-action/utility'
 
 const coverityParamMap: Map<string, string> = new Map<string, string>()
 coverityParamMap.set('COVERITY_URL', 'https://testing.coverity.synopsys.com')
@@ -29,7 +29,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With all mandatory fields', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PRCOMMENT_ENABLED'])
 
     setAllMocks()
@@ -39,7 +39,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With missing mandatory fields coverity.connect.user.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_USER'])
 
     setAllMocks()
@@ -53,7 +53,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With missing mandatory fields coverity.connect.user.password', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PASSPHRASE'])
 
     setAllMocks()
@@ -67,7 +67,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With all mandatory and optional fields', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['NONE'])
 
     setAllMocks()
@@ -81,7 +81,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With coverity.automation.prcomment true and empty github token', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['NONE'])
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
     setAllMocks()
@@ -95,7 +95,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With coverity.automation.prcomment true and empty github repo name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['NONE'])
     process.env['GITHUB_REPOSITORY'] = ''
     setAllMocks()
@@ -109,7 +109,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With coverity.automation.prcomment true and empty github branch name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['NONE'])
     process.env['GITHUB_REF_NAME'] = ''
     setAllMocks()
@@ -123,7 +123,7 @@ describe('Coverity flow contract', () => {
   })
 
   it('With coverity.automation.prcomment true and empty github owner name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockCoverityParamsExcept(['NONE'])
     process.env['GITHUB_REPOSITORY_OWNER'] = ''
     setAllMocks()
@@ -180,18 +180,18 @@ export function getBridgeDownloadUrl(): string {
   return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest/synopsys-bridge-'.concat(platform).concat('.zip')
 }
 
-export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
+export function mockBridgeDownloadUrlAndBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: __dirname})
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   Object.defineProperty(inputs, 'BRIDGE_NETWORK_AIRGAP', {value: true})
-  process.env['GITHUB_REPOSITORY'] = 'synopsys-sig/synopsys-action'
+  process.env['GITHUB_REPOSITORY'] = 'blackduck-inc/blackduck-security-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
-  process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
-  process.env['GITHUB_REF_NAME'] = 'synopsys-action'
+  process.env['GITHUB_REPOSITORY_OWNER'] = 'blackduck-inc'
+  process.env['GITHUB_REF_NAME'] = 'blackduck-security-action'
   process.env['GITHUB_EVENT_NAME'] = 'pull_request'
   process.env['GITHUB_BASE_REF'] = 'current-branch'
   process.env['GITHUB_SERVER_URL'] = 'https://github.com'

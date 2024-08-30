@@ -1,9 +1,9 @@
-name: 'Synopsys Action'
+name: 'Black Duck Security Action'
 branding:
   icon: 'shield'
   color: 'purple'
 description: 'Find and fix software weaknesses and vulnerabilities during development, before you ship or deploy!'
-author: 'Synopsys Inc'
+author: 'Black Duck Software, Inc.'
 inputs:
   coverity_url:
     description: 'Coverity url'

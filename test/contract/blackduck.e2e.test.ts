@@ -1,12 +1,12 @@
 import {run} from '../../src/main'
-import * as inputs from '../../src/synopsys-action/inputs'
+import * as inputs from '../../src/blackduck-security-action/inputs'
 import {error, info} from '@actions/core'
 import * as configVariables from 'actions-artifact-v2/lib/internal/shared/config'
-import * as validator from '../../src/synopsys-action/validators'
+import * as validator from '../../src/blackduck-security-action/validators'
 import * as toolCache from '@actions/tool-cache'
-import * as toolCacheLocal from '../../src/synopsys-action/tool-cache-local'
+import * as toolCacheLocal from '../../src/blackduck-security-action/tool-cache-local'
 import * as io from '@actions/io'
-import * as utility from '../../src/synopsys-action/utility'
+import * as utility from '../../src/blackduck-security-action/utility'
 
 const blackduckParamMap: Map<string, string> = new Map<string, string>()
 blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
@@ -28,7 +28,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With all mandatory fields', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES'])
 
     setAllMocks()
@@ -38,7 +38,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With missing mandatory fields blackduck.api.token', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_API_TOKEN'])
 
     setAllMocks()
@@ -52,7 +52,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With all mandatory and optional fields', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
 
     setAllMocks()
@@ -62,7 +62,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With wrong optional field blackduck.install.directories', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY'])
 
     Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: '/something'})
@@ -78,7 +78,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With failure.severities set to true', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     process.env['BLACKDUCK_ISSUE_FAILURE'] = 'true'
 
@@ -95,7 +95,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With blackduck.automation.fixpr true and empty github token', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
     jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValue(false)
@@ -110,7 +110,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With blackduck.automation.fixpr true and empty github repo name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     process.env['GITHUB_REPOSITORY'] = ''
     setAllMocks()
@@ -124,7 +124,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With blackduck.automation.fixpr true and empty github branch name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     process.env['GITHUB_REF_NAME'] = ''
     setAllMocks()
@@ -138,7 +138,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With blackduck.automation.fixpr true and empty github owner name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'false') //rapid scan
     process.env['GITHUB_REPOSITORY_OWNER'] = ''
@@ -153,7 +153,7 @@ describe('Blackduck flow contract', () => {
   })
 
   it('With blackduck.automation.prcomment true and empty github owner name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
+    mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
     process.env['GITHUB_REPOSITORY_OWNER'] = ''
     setAllMocks()
@@ -210,15 +210,15 @@ export function getBridgeDownloadUrl(): string {
   return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest/synopsys-bridge-'.concat(platform).concat('.zip')
 }
 
-export function mockBridgeDownloadUrlAndSynopsysBridgePath() {
+export function mockBridgeDownloadUrlAndBridgePath() {
   Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
   Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: __dirname})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
-  process.env['GITHUB_REPOSITORY'] = 'synopsys-action'
+  process.env['GITHUB_REPOSITORY'] = 'blackduck-security-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'
   process.env['GITHUB_REF'] = 'refs/pull/1/merge'
-  process.env['GITHUB_REPOSITORY_OWNER'] = 'synopsys-sig'
-  process.env['GITHUB_REF_NAME'] = 'synopsys-sig'
+  process.env['GITHUB_REPOSITORY_OWNER'] = 'blackduck-inc'
+  process.env['GITHUB_REF_NAME'] = 'blackduck-inc'
   Object.defineProperty(inputs, 'include_diagnostics', {value: true})
   Object.defineProperty(inputs, 'diagnostics_retention_days', {value: 10})
 }

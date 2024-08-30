@@ -1,11 +1,11 @@
-import * as inputs from '../../../../src/synopsys-action/inputs'
+import * as inputs from '../../../../src/blackduck-security-action/inputs'
 import {HttpClient, HttpClientResponse} from 'typed-rest-client/HttpClient'
-import {GitHubClientServiceFactory} from '../../../../src/synopsys-action/factory/github-client-service-factory'
+import {GitHubClientServiceFactory} from '../../../../src/blackduck-security-action/factory/github-client-service-factory'
 import {IncomingMessage} from 'http'
 import {Socket} from 'net'
 import Mocked = jest.Mocked
-import {GithubClientServiceCloud} from '../../../../src/synopsys-action/service/impl/cloud/github-client-service-cloud'
-import {GithubClientServiceV1} from '../../../../src/synopsys-action/service/impl/enterprise/v1/github-client-service-v1'
+import {GithubClientServiceCloud} from '../../../../src/blackduck-security-action/service/impl/cloud/github-client-service-cloud'
+import {GithubClientServiceV1} from '../../../../src/blackduck-security-action/service/impl/enterprise/v1/github-client-service-v1'
 
 describe('fetchVersion()', () => {
   beforeEach(() => {

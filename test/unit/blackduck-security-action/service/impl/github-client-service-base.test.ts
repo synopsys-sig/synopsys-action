@@ -1,10 +1,10 @@
-import * as inputs from '../../../../../src/synopsys-action/inputs'
+import * as inputs from '../../../../../src/blackduck-security-action/inputs'
 import {HttpClientResponse, HttpClient} from 'typed-rest-client/HttpClient'
 import {IncomingMessage} from 'http'
 import Mocked = jest.Mocked
-import {GithubClientServiceBase} from '../../../../../src/synopsys-action/service/impl/github-client-service-base'
+import {GithubClientServiceBase} from '../../../../../src/blackduck-security-action/service/impl/github-client-service-base'
 import {Socket} from 'net'
-import * as utility from '../../../../../src/synopsys-action/utility'
+import * as utility from '../../../../../src/blackduck-security-action/utility'
 import fs from 'fs'
 import * as constants from '../../../../../src/application-constants'
 import any = jasmine.any
