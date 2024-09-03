@@ -69,7 +69,7 @@ export class BridgeCLI {
         return true
       }
     } else {
-      debug('Bridge version file could not be found at '.concat(this.bridgePath))
+      debug('Bridge CLI version file could not be found at '.concat(this.bridgePath))
     }
 
     return false
@@ -138,9 +138,9 @@ export class BridgeCLI {
         }
         await extractZipped(downloadResponse.filePath, extractZippedFilePath)
 
-        info('Download and configuration of Bridge completed')
+        info('Download and configuration of Bridge CLI completed')
       } else {
-        info('Bridge already exists, download has been skipped')
+        info('Bridge CLI already exists, download has been skipped')
       }
     } catch (e) {
       const errorObject = (e as Error).message
@@ -339,7 +339,7 @@ export class BridgeCLI {
         })
 
         if (!NON_RETRY_HTTP_CODES.has(Number(httpResponse.message.statusCode))) {
-          retryDelay = await this.retrySleepHelper('Getting latest Bridge versions has been failed, Retries left: ', retryCountLocal, retryDelay)
+          retryDelay = await this.retrySleepHelper('Getting latest Bridge CLI versions has been failed, Retries left: ', retryCountLocal, retryDelay)
           retryCountLocal--
         } else if (httpResponse.message.statusCode === 200) {
           retryCountLocal = 0

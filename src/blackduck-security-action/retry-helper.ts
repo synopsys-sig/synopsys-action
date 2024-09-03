@@ -31,7 +31,7 @@ export class RetryHelper {
       }
 
       core.info(
-        'Bridge download has been failed, Retries left: '
+        'Bridge CLI download has been failed, Retries left: '
           .concat(String(this.maxAttempts - attempt + 1))
           .concat(', Waiting: ')
           .concat(String(this.retryDelay / 1000))

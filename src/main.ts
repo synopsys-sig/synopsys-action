@@ -23,7 +23,7 @@ export async function run() {
     if (!inputs.ENABLE_NETWORK_AIR_GAP) {
       await sb.downloadBridge(tempDir)
     } else {
-      info('Network air gap is enabled, skipping bridge download.')
+      info('Network air gap is enabled, skipping bridge CLI download.')
       await sb.validateBridgePath()
     }
     // Execute bridge command
