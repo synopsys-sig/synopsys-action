@@ -137,9 +137,9 @@ test('Validate bridge URL MAC', () => {
   expect(resp).toBeTruthy()
 })
 
-test('Validate getBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY not empty', () => {
+test('Validate getBridgePath BRIDGE_CLI_INSTALL_DIRECTORY_KEY not empty', () => {
   let sb = new BridgeCLI()
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {
     value: '/users'
   })
 
@@ -147,9 +147,9 @@ test('Validate getBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY not empty', (
   expect(resp).resolves.toContain('users')
 })
 
-test('Validate getBridgePath SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY if empty', () => {
+test('Validate getBridgePath BRIDGE_CLI_INSTALL_DIRECTORY_KEY if empty', () => {
   let sb = new BridgeCLI()
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {
     value: ''
   })
 
@@ -331,19 +331,19 @@ test('Latest URL Version failure', async () => {
   expect(response).toContain('')
 })
 
-test('Test fetch version details from BRIDGE_DOWNLOAD_URL', () => {
+test('Test fetch version details from BRIDGE_CLI_DOWNLOAD_URL', () => {
   const sb = new BridgeCLI()
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: ''})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-0.1.1-macosx.zip'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-0.1.1-macosx.zip'})
 
   const response = sb.downloadBridge('/working_directory')
   expect(response).rejects.toThrowError()
 })
 
-test('Test without version details from BRIDGE_DOWNLOAD_URL', () => {
+test('Test without version details from BRIDGE_CLI_DOWNLOAD_URL', () => {
   const sb = new BridgeCLI()
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: ''})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-macosx.zip'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test-url/synopsys-bridge-macosx.zip'})
   const downloadFileResp: DownloadFileResponse = {filePath: '/user/temp/download/', fileName: 'C:/ser/temp/download/bridge-win.zip'}
 
   jest.spyOn(BridgeCLI.prototype, 'getBridgeVersionFromLatestURL').mockResolvedValueOnce('0.1.0')
@@ -358,9 +358,9 @@ test('Test without version details from BRIDGE_DOWNLOAD_URL', () => {
     expect(error.message).toContain('')
   }
 })
-test('Test invalid path for SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', () => {
+test('Test invalid path for BRIDGE_CLI_INSTALL_DIRECTORY_KEY', () => {
   const sb = new BridgeCLI()
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test-dir'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: '/test-dir'})
   const response = sb.downloadBridge('/working_directory')
   expect(response).rejects.toThrowError()
 })
@@ -374,9 +374,9 @@ test('Test version file not exist failure', () => {
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: '0.0.0'})
 
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
@@ -401,15 +401,15 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC', () => {
 
   expect(response).resolves.toEqual(0)
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY empty', () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: '0.0.0'})
 
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
@@ -438,9 +438,9 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC when SYNO
 test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not  empty', () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: '0.0.0'})
 
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
@@ -463,14 +463,14 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not 
   expect(sb.validateBridgePath()).resolves.not.toThrow()
 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY is empty ', async () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: '0.0.0'})
 
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
@@ -497,14 +497,14 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY is e
   }
 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not empty: failure', async () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: '0.0.0'})
 
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
@@ -528,13 +528,13 @@ test('ENABLE_NETWORK_AIR_GAP enabled when SYNOPSYS_BRIDGE_INSTALL_DIRECTORY not 
   }
 
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without url and version', () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: '/test'})
 
   Object.defineProperty(process, 'platform', {
     value: 'darwin'
@@ -563,15 +563,15 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for MAC without u
 
   expect(response).resolves.toEqual(0)
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Linux', () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: '0.0.0'})
 
   Object.defineProperty(process, 'platform', {
     value: 'linux'
@@ -596,15 +596,15 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Linux', () =>
 
   expect(response).resolves.toEqual(0)
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
 })
 
 test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Windows', () => {
   const sb = new BridgeCLI()
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: true})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: '/test'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: 'https://test.com'})
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_VERSION', {value: '0.0.0'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: '/test'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: 'https://test.com'})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_VERSION', {value: '0.0.0'})
 
   Object.defineProperty(process, 'platform', {
     value: 'win32'
@@ -629,5 +629,5 @@ test('ENABLE_NETWORK_AIR_GAP enabled:Test executeBridgeCommand for Windows', () 
 
   expect(response).resolves.toEqual(0)
   Object.defineProperty(inputs, 'ENABLE_NETWORK_AIR_GAP', {value: false})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: ''})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: ''})
 })

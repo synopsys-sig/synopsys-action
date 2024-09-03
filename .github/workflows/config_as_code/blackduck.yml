@@ -23,8 +23,8 @@ jobs:
     #    runs-on: [self-hosted, Linux, kishor-linux]
 
     env:
-      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-      BRIDGE_blackduck_token: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
+      BRIDGE_blackduck_url: ${{ secrets.BLACKDUCK_SCA_URL }}
+      BRIDGE_blackduck_token: ${{ secrets.BLACKDUCK_SCA_TOKEN }}
       BRIDGE_blackduck_install_directory: "/root"
       MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-macosx.zip"
       LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-action/0.1.72/ci-package-0.1.72-linux64.zip"

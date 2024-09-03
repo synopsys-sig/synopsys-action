@@ -1,11 +1,11 @@
-import {BlackDuckArbitrary} from './blackduck'
-import {CoverityArbitrary} from './coverity'
+import {BlackDuckDetect} from './blackduck'
+import {CoverityDetect} from './coverity'
 
 export interface SRM {
   srm: SRMData
   project?: ProjectData
   coverity?: CoverityData
-  blackduck?: BlackduckData
+  detect?: DetectData
 }
 
 export interface SRMData {
@@ -29,6 +29,6 @@ export interface ExecutionPath {
   execution?: {path?: string}
 }
 
-export interface BlackduckData extends ExecutionPath, BlackDuckArbitrary {}
+export interface DetectData extends ExecutionPath, Omit<BlackDuckDetect, 'install' | 'scan'> {}
 
-export interface CoverityData extends ExecutionPath, CoverityArbitrary {}
+export interface CoverityData extends ExecutionPath, CoverityDetect {}

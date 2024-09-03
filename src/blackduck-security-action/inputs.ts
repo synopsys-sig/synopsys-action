@@ -1,12 +1,10 @@
 import {getInput} from '@actions/core'
 import * as constants from '../application-constants'
 
-export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = getInput(constants.SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY)?.trim() || ''
+export const BRIDGE_CLI_INSTALL_DIRECTORY_KEY = getInput(constants.BRIDGE_CLI_INSTALL_DIRECTORY_KEY)?.trim() || getInput(constants.BRIDGE_INSTALL_DIRECTORY_KEY)?.trim() || ''
 export const ENABLE_NETWORK_AIR_GAP = getInput(constants.NETWORK_AIRGAP_KEY)?.trim() || getInput(constants.BRIDGE_NETWORK_AIRGAP_KEY)?.trim() || ''
-
-//Bridge download url
-export const BRIDGE_DOWNLOAD_URL = getInput(constants.BRIDGE_DOWNLOAD_URL_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY)?.trim() || ''
-export const BRIDGE_DOWNLOAD_VERSION = getInput(constants.BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || getInput(constants.SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY)?.trim() || ''
+export const BRIDGE_CLI_DOWNLOAD_URL = getInput(constants.BRIDGE_CLI_DOWNLOAD_URL_KEY)?.trim() || getInput(constants.BRIDGE_CLI_DOWNLOAD_URL_KEY)?.trim() || ''
+export const BRIDGE_CLI_DOWNLOAD_VERSION = getInput(constants.BRIDGE_CLI_DOWNLOAD_VERSION_KEY)?.trim() || getInput(constants.BRIDGE_CLI_DOWNLOAD_VERSION_KEY)?.trim() || ''
 
 // Srm related inputs
 export const SRM_URL = getInput(constants.SRM_URL_KEY)?.trim() || ''
@@ -17,7 +15,7 @@ export const SRM_PROJECT_ID = getInput(constants.SRM_PROJECT_ID_KEY)?.trim() || 
 export const SRM_BRANCH_NAME = getInput(constants.SRM_BRANCH_NAME_KEY)?.trim() || ''
 export const SRM_BRANCH_PARENT = getInput(constants.SRM_BRANCH_PARENT_KEY)?.trim() || ''
 export const COVERITY_EXECUTION_PATH = getInput(constants.COVERITY_EXECUTION_PATH_KEY)?.trim() || ''
-export const BLACKDUCK_EXECUTION_PATH = getInput(constants.BLACKDUCK_EXECUTION_PATH_KEY)?.trim() || ''
+export const DETECT_EXECUTION_PATH = getInput(constants.DETECT_EXECUTION_PATH_KEY)?.trim() || getInput(constants.BLACKDUCK_EXECUTION_PATH_KEY)?.trim() || ''
 
 // Polaris related inputs
 export const POLARIS_ACCESS_TOKEN = getInput(constants.POLARIS_ACCESSTOKEN_KEY)?.trim() || getInput(constants.POLARIS_ACCESS_TOKEN_KEY)?.trim() || ''
@@ -62,27 +60,27 @@ export const COVERITY_CONFIG_PATH = getInput(constants.COVERITY_CONFIG_PATH_KEY)
 export const COVERITY_ARGS = getInput(constants.COVERITY_ARGS_KEY)?.trim() || ''
 
 // Blackduck related inputs
-export const BLACKDUCK_URL = getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''
-export const BLACKDUCK_API_TOKEN = getInput(constants.BLACKDUCK_API_TOKEN_KEY)?.trim() || getInput(constants.BLACKDUCK_TOKEN_KEY)?.trim() || ''
-export const BLACKDUCK_INSTALL_DIRECTORY = getInput(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)?.trim() || ''
-export const BLACKDUCK_SCAN_FULL = getInput(constants.BLACKDUCK_SCAN_FULL_KEY)?.trim() || ''
-export const BLACKDUCK_SCAN_FAILURE_SEVERITIES = getInput(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)?.trim() || ''
-export const BLACKDUCK_FIXPR_ENABLED = getInput(constants.BLACKDUCK_AUTOMATION_FIXPR_KEY)?.trim() || getInput(constants.BLACKDUCK_FIXPR_ENABLED_KEY)?.trim() || ''
-export const BLACKDUCK_PRCOMMENT_ENABLED = getInput(constants.BLACKDUCK_AUTOMATION_PRCOMMENT_KEY)?.trim() || getInput(constants.BLACKDUCK_PRCOMMENT_ENABLED_KEY)?.trim() || ''
-export const BLACKDUCK_FIXPR_MAXCOUNT = getInput(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY)?.trim() || ''
-export const BLACKDUCK_FIXPR_CREATE_SINGLE_PR = getInput(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY)?.trim() || ''
-export const BLACKDUCK_FIXPR_FILTER_SEVERITIES = getInput(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY)?.trim() || ''
-export const BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE = getInput(constants.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY)?.trim() || ''
-export const BLACKDUCK_REPORTS_SARIF_CREATE = getInput(constants.BLACKDUCK_REPORTS_SARIF_CREATE_KEY)?.trim() || ''
-export const BLACKDUCK_REPORTS_SARIF_FILE_PATH = getInput(constants.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY)?.trim() || ''
-export const BLACKDUCK_REPORTS_SARIF_SEVERITIES = getInput(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)?.trim() || ''
-export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
-export const BLACKDUCK_UPLOAD_SARIF_REPORT = getInput(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
-export const BLACKDUCK_SEARCH_DEPTH = getInput(constants.BLACKDUCK_SEARCH_DEPTH_KEY)?.trim() || ''
-export const BLACKDUCK_CONFIG_PATH = getInput(constants.BLACKDUCK_CONFIG_PATH_KEY)?.trim() || ''
-export const BLACKDUCK_ARGS = getInput(constants.BLACKDUCK_ARGS_KEY)?.trim() || ''
-export const BLACKDUCK_POLICY_BADGES_CREATE = getInput(constants.BLACKDUCK_POLICY_BADGES_CREATE_KEY)?.trim() === 'true' || false
-export const BLACKDUCK_POLICY_BADGES_MAX_COUNT = getInput(constants.BLACKDUCK_POLICY_BADGES_MAX_COUNT_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_URL = getInput(constants.BLACKDUCK_SCA_URL_KEY)?.trim() || getInput(constants.BLACKDUCK_URL_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_TOKEN = getInput(constants.BLACKDUCK_SCA_TOKEN_KEY)?.trim() || getInput(constants.BLACKDUCK_TOKEN_KEY)?.trim() || ''
+export const DETECT_INSTALL_DIRECTORY = getInput(constants.DETECT_INSTALL_DIRECTORY_KEY)?.trim() || getInput(constants.BLACKDUCK_INSTALL_DIRECTORY_KEY)?.trim() || ''
+export const DETECT_SCAN_FULL = getInput(constants.DETECT_SCAN_FULL_KEY)?.trim() || getInput(constants.BLACKDUCK_SCAN_FULL_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES = getInput(constants.BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES_KEY)?.trim() || getInput(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_FIX_PR_ENABLED = getInput(constants.BLACKDUCK_SCA_FIX_PR_ENABLED_KEY)?.trim() || getInput(constants.BLACKDUCK_FIXPR_ENABLED_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_PRCOMMENT_ENABLED = getInput(constants.BLACKDUCK_SCA_PRCOMMENT_ENABLED_KEY)?.trim() || getInput(constants.BLACKDUCK_PRCOMMENT_ENABLED_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_FIX_PR_MAX_COUNT = getInput(constants.BLACKDUCK_SCA_FIX_PR_MAX_COUNT_KEY)?.trim() || getInput(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_FIX_PR_CREATE_SINGLE_PR = getInput(constants.BLACKDUCK_SCA_FIX_PR_CREATE_SINGLE_PR_KEY)?.trim() || getInput(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_FIX_PR_FILTER_SEVERITIES = getInput(constants.BLACKDUCK_SCA_FIX_PR_FILTER_SEVERITIES_KEY)?.trim() || getInput(constants.BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_FIX_PR_UPGRADE_GUIDANCE = getInput(constants.BLACKDUCK_SCA_FIX_PR_UPGRADE_GUIDANCE_KEY)?.trim() || getInput(constants.BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_REPORTS_SARIF_CREATE = getInput(constants.BLACKDUCK_SCA_REPORTS_SARIF_CREATE_KEY)?.trim() || getInput(constants.BLACKDUCK_REPORTS_SARIF_CREATE_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_REPORTS_SARIF_FILE_PATH = getInput(constants.BLACKDUCK_SCA_REPORTS_SARIF_FILE_PATH_KEY)?.trim() || getInput(constants.BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_REPORTS_SARIF_SEVERITIES = getInput(constants.BLACKDUCK_SCA_REPORTS_SARIF_SEVERITIES_KEY)?.trim() || getInput(constants.BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY)?.trim() || ''
+export const BLACKDUCK_SCA_REPORTS_SARIF_GROUP_SCA_ISSUES = getInput(constants.BLACKDUCK_SCA_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || getInput(constants.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY)?.trim() || ''
+export const BLACKDUCK_UPLOAD_SARIF_REPORT = getInput(constants.BLACKDUCK_SCA_UPLOAD_SARIF_REPORT_KEY)?.trim() || getInput(constants.BLACKDUCK_UPLOAD_SARIF_REPORT_KEY)?.trim() || ''
+export const DETECT_SEARCH_DEPTH = getInput(constants.DETECT_SEARCH_DEPTH_KEY)?.trim() || getInput(constants.BLACKDUCK_SEARCH_DEPTH_KEY)?.trim() || ''
+export const DETECT_CONFIG_PATH = getInput(constants.DETECT_CONFIG_PATH_KEY)?.trim() || getInput(constants.BLACKDUCK_CONFIG_PATH_KEY)?.trim() || ''
+export const DETECT_ARGS = getInput(constants.DETECT_ARGS_KEY)?.trim() || getInput(constants.BLACKDUCK_ARGS_KEY)?.trim() || ''
+export const blackducksca_policy_badges_create = getInput(constants.BLACKDUCK_SCA_POLICY_BADGES_CREATE_KEY)?.trim() === 'true' || false
+export const BLACKDUCK_POLICY_BADGES_MAX_COUNT = getInput(constants.BLACKDUCK_SCA_POLICY_BADGES_MAX_COUNT_KEY)?.trim() || ''
 export const GITHUB_TOKEN = getInput(constants.GITHUB_TOKEN_KEY)?.trim() || ''
 export const INCLUDE_DIAGNOSTICS = getInput(constants.INCLUDE_DIAGNOSTICS_KEY)?.trim() || ''
 export const DIAGNOSTICS_RETENTION_DAYS = getInput(constants.DIAGNOSTICS_RETENTION_DAYS_KEY)?.trim() || ''

@@ -1,5 +1,5 @@
 import {exec, ExecOptions} from '@actions/exec'
-import {BRIDGE_DOWNLOAD_URL, ENABLE_NETWORK_AIR_GAP, SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY} from './inputs'
+import {BRIDGE_CLI_DOWNLOAD_URL, ENABLE_NETWORK_AIR_GAP, BRIDGE_CLI_INSTALL_DIRECTORY_KEY} from './inputs'
 import {debug, error, info, warning} from '@actions/core'
 import {GITHUB_ENVIRONMENT_VARIABLES, NON_RETRY_HTTP_CODES, RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
@@ -100,8 +100,8 @@ export class BridgeCLI {
       // Automatically configure bridge if Bridge download url is provided
       let bridgeUrl = ''
       let bridgeVersion = ''
-      if (inputs.BRIDGE_DOWNLOAD_URL) {
-        bridgeUrl = BRIDGE_DOWNLOAD_URL
+      if (inputs.BRIDGE_CLI_DOWNLOAD_URL) {
+        bridgeUrl = BRIDGE_CLI_DOWNLOAD_URL
         const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
@@ -110,10 +110,10 @@ export class BridgeCLI {
             bridgeVersion = await this.getBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'))
           }
         }
-      } else if (inputs.BRIDGE_DOWNLOAD_VERSION) {
-        if (await this.validateBridgeVersion(inputs.BRIDGE_DOWNLOAD_VERSION)) {
-          bridgeUrl = this.getVersionUrl(inputs.BRIDGE_DOWNLOAD_VERSION).trim()
-          bridgeVersion = inputs.BRIDGE_DOWNLOAD_VERSION
+      } else if (inputs.BRIDGE_CLI_DOWNLOAD_VERSION) {
+        if (await this.validateBridgeVersion(inputs.BRIDGE_CLI_DOWNLOAD_VERSION)) {
+          bridgeUrl = this.getVersionUrl(inputs.BRIDGE_CLI_DOWNLOAD_VERSION).trim()
+          bridgeVersion = inputs.BRIDGE_CLI_DOWNLOAD_VERSION
         } else {
           return Promise.reject(new Error(constants.BRIDGE_VERSION_NOT_FOUND_ERROR))
         }
@@ -127,7 +127,7 @@ export class BridgeCLI {
         info('Downloading and configuring Bridge')
         info('Bridge URL is - '.concat(bridgeUrl))
         const downloadResponse: DownloadFileResponse = await getRemoteFile(tempDir, bridgeUrl)
-        const extractZippedFilePath: string = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath()
+        const extractZippedFilePath: string = BRIDGE_CLI_INSTALL_DIRECTORY_KEY || this.getBridgeDefaultPath()
 
         // Clear the existing bridge, if available
         if (fs.existsSync(extractZippedFilePath)) {
@@ -186,7 +186,7 @@ export class BridgeCLI {
 
       // validating and preparing command for blackduck
       const blackduckErrors: string[] = validateBlackDuckInputs()
-      if (blackduckErrors.length === 0 && inputs.BLACKDUCK_URL) {
+      if (blackduckErrors.length === 0 && inputs.BLACKDUCK_SCA_URL) {
         const blackDuckCommandFormatter = new ToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
@@ -318,7 +318,7 @@ export class BridgeCLI {
   }
 
   async getBridgePath(): Promise<string> {
-    let bridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
+    let bridgePath = BRIDGE_CLI_INSTALL_DIRECTORY_KEY
 
     if (!bridgePath) {
       bridgePath = this.getBridgeDefaultPath()
@@ -364,8 +364,8 @@ export class BridgeCLI {
 
   async validateBridgePath(): Promise<void> {
     this.bridgePath = this.getBridgeDefaultPath()
-    if (SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY) {
-      this.bridgePath = SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY
+    if (BRIDGE_CLI_INSTALL_DIRECTORY_KEY) {
+      this.bridgePath = BRIDGE_CLI_INSTALL_DIRECTORY_KEY
       if (!checkIfPathExists(this.bridgePath)) {
         throw new Error(constants.BRIDGE_INSTALL_DIRECTORY_NOT_FOUND_ERROR)
       }

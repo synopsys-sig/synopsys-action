@@ -9,13 +9,13 @@ import * as io from '@actions/io'
 import * as utility from '../../src/blackduck-security-action/utility'
 
 const blackduckParamMap: Map<string, string> = new Map<string, string>()
-blackduckParamMap.set('BLACKDUCK_URL', 'BLACKDUCK_URL')
-blackduckParamMap.set('BLACKDUCK_API_TOKEN', 'BLACKDUCK_API_TOKEN')
-blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'true')
-blackduckParamMap.set('BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'ALL')
-blackduckParamMap.set('BLACKDUCK_INSTALL_DIRECTORY', '/User/home')
-blackduckParamMap.set('BLACKDUCK_PRCOMMENT_ENABLED', 'true')
-blackduckParamMap.set('BLACKDUCK_FIXPR_ENABLED', 'true')
+blackduckParamMap.set('BLACKDUCK_SCA_URL', 'BLACKDUCK_SCA_URL')
+blackduckParamMap.set('BLACKDUCK_SCA_TOKEN', 'BLACKDUCK_SCA_TOKEN')
+blackduckParamMap.set('DETECT_SCAN_FULL', 'true')
+blackduckParamMap.set('BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES', 'ALL')
+blackduckParamMap.set('DETECT_INSTALL_DIRECTORY', '/User/home')
+blackduckParamMap.set('BLACKDUCK_SCA_PRCOMMENT_ENABLED', 'true')
+blackduckParamMap.set('BLACKDUCK_SCA_FIX_PR_ENABLED', 'true')
 
 describe('Blackduck flow contract', () => {
   afterAll(() => {
@@ -29,7 +29,7 @@ describe('Blackduck flow contract', () => {
 
   it('With all mandatory fields', async () => {
     mockBridgeDownloadUrlAndBridgePath()
-    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES'])
+    mockBlackduckParamsExcept(['DETECT_INSTALL_DIRECTORY', 'BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES'])
 
     setAllMocks()
 
@@ -39,7 +39,7 @@ describe('Blackduck flow contract', () => {
 
   it('With missing mandatory fields blackduck.api.token', async () => {
     mockBridgeDownloadUrlAndBridgePath()
-    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY', 'BLACKDUCK_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_API_TOKEN'])
+    mockBlackduckParamsExcept(['DETECT_INSTALL_DIRECTORY', 'BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES', 'BLACKDUCK_SCA_TOKEN'])
 
     setAllMocks()
 
@@ -63,9 +63,9 @@ describe('Blackduck flow contract', () => {
 
   it('With wrong optional field blackduck.install.directories', async () => {
     mockBridgeDownloadUrlAndBridgePath()
-    mockBlackduckParamsExcept(['BLACKDUCK_INSTALL_DIRECTORY'])
+    mockBlackduckParamsExcept(['DETECT_INSTALL_DIRECTORY'])
 
-    Object.defineProperty(inputs, 'BLACKDUCK_INSTALL_DIRECTORY', {value: '/something'})
+    Object.defineProperty(inputs, 'DETECT_INSTALL_DIRECTORY', {value: '/something'})
 
     setAllMocks()
 
@@ -140,7 +140,7 @@ describe('Blackduck flow contract', () => {
   it('With blackduck.automation.fixpr true and empty github owner name', async () => {
     mockBridgeDownloadUrlAndBridgePath()
     mockBlackduckParamsExcept(['NONE'])
-    blackduckParamMap.set('BLACKDUCK_SCAN_FULL', 'false') //rapid scan
+    blackduckParamMap.set('DETECT_SCAN_FULL', 'false') //rapid scan
     process.env['GITHUB_REPOSITORY_OWNER'] = ''
     setAllMocks()
 
@@ -211,8 +211,8 @@ export function getBridgeDownloadUrl(): string {
 }
 
 export function mockBridgeDownloadUrlAndBridgePath() {
-  Object.defineProperty(inputs, 'BRIDGE_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
-  Object.defineProperty(inputs, 'SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY', {value: __dirname})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_DOWNLOAD_URL', {value: getBridgeDownloadUrl()})
+  Object.defineProperty(inputs, 'BRIDGE_CLI_INSTALL_DIRECTORY_KEY', {value: __dirname})
   Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: 'token'})
   process.env['GITHUB_REPOSITORY'] = 'blackduck-security-action'
   process.env['GITHUB_HEAD_REF'] = 'branch-name'

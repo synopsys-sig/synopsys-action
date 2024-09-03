@@ -122,76 +122,76 @@ inputs:
   project_source_excludes:
     description: 'A list of git ignore pattern strings that indicate the files need to be excluded from the zip file'
     required: false
-  synopsys_bridge_install_directory:
-    description: 'Synopsys Bridge Install Directory'
+  bridgecli_install_directory:
+    description: 'Bridge CLI Install Directory'
     required: false
-  synopsys_bridge_download_url:
+  bridgecli_download_url:
     description: 'URL to download bridge from'
     required: false
-  blackduck_url:
+  blackducksca_url:
     description: 'URL for blackduck hub'
     required: false
-  blackduck_token:
+  blackducksca_token:
     description: 'API token to access blackduck'
     required: false
-  blackduck_install_directory:
+  detect_install_directory:
     description: 'Directory to find or install detect'
     required: false
-  blackduck_scan_full:
+  detect_scan_full:
     description: 'Scan Mode. (true for intelligent scan & false for rapid scan)'
     required: false
-  blackduck_scan_failure_severities:
+  blackducksca_scan_failure_severities:
     description: 'If provided, Blackduck will break the build if any issues produced match one of the given severities'
     required: false
-  blackduck_automation_fixpr:
+  blackducksca_fixpr_enabled:
     description: 'If set as true, separate Fix PRs will be created if vulnerability is found after scan'
     required: false
   blackduck_fixpr_enabled:
     description: 'Flag to enable/disable the automatic fix pull request creations for Black Duck'
     required: false
-  blackduck_fixpr_maxCount:
+  blackducksca_fixpr_maxCount:
     description: 'Maximum number of Pull Requests to be created that violate policies'
     required: false
-  blackduck_fixpr_filter_severities:
+  blackducksca_fixpr_filter_severities:
     description: 'If provided, Fix PRs will be created only for given severities'
     required: false
-  blackduck_fixpr_useUpgradeGuidance:
+  blackducksca_fixpr_useUpgradeGuidance:
     description: 'Flag to enable long term upgrade guidance'
     required: false
-  synopsys_bridge_download_version:
+  bridgecli_download_version:
     description: 'If provided, Synopsys-action will configure the version of Bridge'
     required: false
-  blackduck_prComment_enabled:
+  blackducksca_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Black Duck scan'
     required: false
-  blackduck_reports_sarif_create:
+  blackducksca_reports_sarif_create:
     description: 'Flag to enable/disable Black Duck SARIF report generation'
     required: false
-  blackduck_reports_sarif_file_path:
+  blackducksca_reports_sarif_file_path:
     description: 'File path including file name where Black Duck SARIF report should be created'
     required: false
-  blackduck_reports_sarif_severities:
+  blackducksca_reports_sarif_severities:
     description: 'Indicates what SAST/SCA issues severity categories to include in Black Duck SARIF file report'
     required: false
-  blackduck_reports_sarif_groupSCAIssues:
+  blackducksca_reports_sarif_groupSCAIssues:
     description: 'Flag to enable/disable Component-Version grouping for SCA Issues in Black Duck SARIF report rules section'
     required: false
-  blackduck_upload_sarif_report:
+  blackducksca_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
     required: false
-  blackduck_search_depth:
+  detect_search_depth:
     description: 'Number indicating the search depth in the source directory'
     required: false
-  blackduck_args:
+  detect_args:
     description: 'Additional Black Duck Arguments separated by space'
     required: false
-  blackduck_config_path:
+  detect_config_path:
     description: 'Black Duck config file path (.properties/.yml)'
     required: false
-  blackduck_policy_badges_create:
+  blackducksca_policy_badges_create:
     description: 'To enable creation of badges on the GitHub repository'
     required: false
-  blackduck_policy_badges_maxCount:
+  blackducksca_policy_badges_maxCount:
     description: 'To limit number of badges to be displayed on the GitHub repository'
     required: false
   srm_url:

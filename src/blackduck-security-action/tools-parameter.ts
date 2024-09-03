@@ -5,8 +5,8 @@ import {isNullOrEmptyValue, validateBlackduckFailureSeverities, validateCoverity
 import * as inputs from './inputs'
 import {Polaris} from './input-data/polaris'
 import {InputData} from './input-data/input-data'
-import {Coverity, CoverityArbitrary} from './input-data/coverity'
-import {Blackduck, BLACKDUCK_SCAN_FAILURE_SEVERITIES, BlackDuckArbitrary, BlackDuckFixPrData} from './input-data/blackduck'
+import {Coverity, CoverityDetect} from './input-data/coverity'
+import {Blackduck, BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES, BlackDuckDetect, BlackDuckFixPrData} from './input-data/blackduck'
 import {GithubData} from './input-data/github'
 import * as constants from '../application-constants'
 import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
@@ -205,9 +205,17 @@ export class ToolsParameter {
       }
     }
 
-    // Set Coverity or Blackduck Arbitrary Arguments
-    polData.data.coverity = this.setCoverityArbitraryArgs()
-    polData.data.blackduck = this.setBlackDuckArbitraryArgs()
+    // Set Coverity and Blackduck Detect Arguments
+    const coverityArgs = this.setCoverityDetectArgs()
+    const detectArgs = this.setDetectArgs()
+
+    if (Object.keys(coverityArgs).length > 0) {
+      polData.data.coverity = {...polData.data.coverity, ...coverityArgs}
+    }
+
+    if (Object.keys(detectArgs).length > 0) {
+      polData.data.detect = {...polData.data.detect, ...detectArgs}
+    }
 
     const inputJson = JSON.stringify(polData)
     const stateFilePath = path.join(this.tempDir, ToolsParameter.POLARIS_STATE_FILE_NAME)
@@ -301,7 +309,7 @@ export class ToolsParameter {
       covData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
     }
 
-    covData.data.coverity = Object.assign({}, this.setCoverityArbitraryArgs(), covData.data.coverity)
+    covData.data.coverity = Object.assign({}, this.setCoverityDetectArgs(), covData.data.coverity)
 
     const inputJson = JSON.stringify(covData)
 
@@ -317,9 +325,9 @@ export class ToolsParameter {
   getFormattedCommandForBlackduck(): string {
     const failureSeverities: string[] = []
 
-    if (inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES.length > 0) {
+    if (inputs.BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES != null && inputs.BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES.length > 0) {
       try {
-        const failureSeveritiesInput = inputs.BLACKDUCK_SCAN_FAILURE_SEVERITIES
+        const failureSeveritiesInput = inputs.BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES
         if (failureSeveritiesInput != null && failureSeveritiesInput.length > 0) {
           const failureSeveritiesArray = failureSeveritiesInput.toUpperCase().split(',')
           for (const failureSeverity of failureSeveritiesArray) {
@@ -335,42 +343,45 @@ export class ToolsParameter {
     let command = ''
     const blackduckData: InputData<Blackduck> = {
       data: {
-        blackduck: {
-          url: inputs.BLACKDUCK_URL,
-          token: inputs.BLACKDUCK_API_TOKEN
-        }
+        blackducksca: {
+          url: inputs.BLACKDUCK_SCA_URL,
+          token: inputs.BLACKDUCK_SCA_TOKEN
+        },
+        detect: {}
       }
     }
 
-    if (inputs.BLACKDUCK_INSTALL_DIRECTORY) {
-      blackduckData.data.blackduck.install = {directory: inputs.BLACKDUCK_INSTALL_DIRECTORY}
+    if (inputs.DETECT_INSTALL_DIRECTORY) {
+      blackduckData.data.detect = blackduckData.data.detect || {}
+      blackduckData.data.detect.install = {directory: inputs.DETECT_INSTALL_DIRECTORY}
     }
 
-    if (inputs.BLACKDUCK_SCAN_FULL) {
+    if (inputs.DETECT_SCAN_FULL) {
       let scanFullValue = false
-      if (inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true' || inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'false') {
-        scanFullValue = inputs.BLACKDUCK_SCAN_FULL.toLowerCase() === 'true'
+      if (inputs.DETECT_SCAN_FULL.toLowerCase() === 'true' || inputs.DETECT_SCAN_FULL.toLowerCase() === 'false') {
+        scanFullValue = inputs.DETECT_SCAN_FULL.toLowerCase() === 'true'
       } else {
         throw new Error(constants.MISSING_BOOLEAN_VALUE_ERROR.concat(constants.BLACKDUCK_SCAN_FULL_KEY))
       }
-      blackduckData.data.blackduck.scan = {full: scanFullValue}
+      blackduckData.data.detect = blackduckData.data.detect || {}
+      blackduckData.data.detect.scan = {full: scanFullValue}
     }
 
     if (failureSeverities && failureSeverities.length > 0) {
       validateBlackduckFailureSeverities(failureSeverities)
-      const failureSeverityEnums: BLACKDUCK_SCAN_FAILURE_SEVERITIES[] = []
+      const failureSeverityEnums: BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES[] = []
       for (const failureSeverity of failureSeverities) {
-        if (!Object.values(BLACKDUCK_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCAN_FAILURE_SEVERITIES)) {
+        if (!Object.values(BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES).includes(failureSeverity as BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES)) {
           throw new Error(constants.INVALID_VALUE_ERROR.concat(constants.BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY))
         } else {
-          failureSeverityEnums.push(BLACKDUCK_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCAN_FAILURE_SEVERITIES])
+          failureSeverityEnums.push(BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES[failureSeverity as keyof typeof BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES])
         }
       }
 
-      if (blackduckData.data.blackduck.scan) {
-        blackduckData.data.blackduck.scan.failure = {severities: failureSeverityEnums}
+      if (blackduckData.data.blackducksca.scan) {
+        blackduckData.data.blackducksca.scan.failure = {severities: failureSeverityEnums}
       } else {
-        blackduckData.data.blackduck.scan = {failure: {severities: failureSeverityEnums}}
+        blackduckData.data.blackducksca.scan = {failure: {severities: failureSeverityEnums}}
       }
     }
 
@@ -381,50 +392,50 @@ export class ToolsParameter {
     }
 
     const isPrEvent = isPullRequestEvent()
-    if (parseToBoolean(inputs.BLACKDUCK_PRCOMMENT_ENABLED)) {
+    if (parseToBoolean(inputs.BLACKDUCK_SCA_PRCOMMENT_ENABLED)) {
       if (isPrEvent) {
         /** Set Black Duck PR comment inputs in case of PR context */
         info('Black Duck PR comment is enabled')
         blackduckData.data.github = this.getGithubRepoInfo()
-        blackduckData.data.blackduck.automation = {prcomment: true}
+        blackduckData.data.blackducksca.automation = {prcomment: true}
       } else {
         info(constants.BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS)
       }
     }
-    if (parseToBoolean(inputs.BLACKDUCK_FIXPR_ENABLED)) {
+    if (parseToBoolean(inputs.BLACKDUCK_SCA_FIX_PR_ENABLED)) {
       if (!isPrEvent) {
         /** Set Black Duck Fix PR inputs in case of non PR context */
         info('Black Duck Fix PR is enabled')
-        blackduckData.data.blackduck.fixpr = this.setBlackDuckFixPrInputs()
+        blackduckData.data.blackducksca.fixpr = this.setBlackDuckFixPrInputs()
         blackduckData.data.github = this.getGithubRepoInfo()
       } else {
         info(constants.BLACKDUCK_FIXPR_LOG_INFO_FOR_PR_SCANS)
       }
     }
     if (!isPrEvent) {
-      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
+      if (parseToBoolean(inputs.BLACKDUCK_SCA_REPORTS_SARIF_CREATE)) {
         /** Set Black Duck SARIF inputs in case of non PR context */
         const sarifReportFilterSeverities: string[] = []
-        if (inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES) {
-          const filterSeverities = inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES.split(',')
+        if (inputs.BLACKDUCK_SCA_REPORTS_SARIF_SEVERITIES) {
+          const filterSeverities = inputs.BLACKDUCK_SCA_REPORTS_SARIF_SEVERITIES.split(',')
           for (const sarifSeverity of filterSeverities) {
             if (sarifSeverity) {
               sarifReportFilterSeverities.push(sarifSeverity.trim())
             }
           }
         }
-        blackduckData.data.blackduck.reports = {
+        blackduckData.data.blackducksca.reports = {
           sarif: {
             create: true,
-            ...(inputs.BLACKDUCK_REPORTS_SARIF_SEVERITIES && {
+            ...(inputs.BLACKDUCK_SCA_REPORTS_SARIF_SEVERITIES && {
               severities: sarifReportFilterSeverities
             }),
-            ...(inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH && {
+            ...(inputs.BLACKDUCK_SCA_REPORTS_SARIF_FILE_PATH && {
               file: {
-                path: inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH.trim()
+                path: inputs.BLACKDUCK_SCA_REPORTS_SARIF_FILE_PATH.trim()
               }
             }),
-            groupSCAIssues: isBoolean(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
+            groupSCAIssues: isBoolean(inputs.BLACKDUCK_SCA_REPORTS_SARIF_GROUP_SCA_ISSUES) ? JSON.parse(inputs.BLACKDUCK_SCA_REPORTS_SARIF_GROUP_SCA_ISSUES) : true
           }
         }
       }
@@ -433,14 +444,14 @@ export class ToolsParameter {
         throw new Error(constants.GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR)
       }
     } else {
-      if (parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+      if (parseToBoolean(inputs.BLACKDUCK_SCA_REPORTS_SARIF_CREATE) || parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
         /** Log info if SARIF create/upload is enabled in PR context */
         info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
       }
     }
 
-    if (inputs.BLACKDUCK_POLICY_BADGES_CREATE) {
-      blackduckData.data.blackduck.policy = {
+    if (inputs.blackducksca_policy_badges_create) {
+      blackduckData.data.blackducksca.policy = {
         badges: {
           create: true,
           ...(Number.isInteger(parseInt(inputs.BLACKDUCK_POLICY_BADGES_MAX_COUNT)) && {
@@ -458,7 +469,7 @@ export class ToolsParameter {
       blackduckData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
     }
 
-    blackduckData.data.blackduck = Object.assign({}, this.setBlackDuckArbitraryArgs(), blackduckData.data.blackduck)
+    blackduckData.data.detect = Object.assign({}, this.setDetectArgs(), blackduckData.data.detect)
 
     const inputJson = JSON.stringify(blackduckData)
 
@@ -507,10 +518,10 @@ export class ToolsParameter {
       }
     }
 
-    if (inputs.BLACKDUCK_EXECUTION_PATH) {
-      srmData.data.blackduck = {
+    if (inputs.DETECT_EXECUTION_PATH) {
+      srmData.data.detect = {
         execution: {
-          path: inputs.BLACKDUCK_EXECUTION_PATH
+          path: inputs.DETECT_EXECUTION_PATH
         }
       }
     }
@@ -529,16 +540,16 @@ export class ToolsParameter {
       }
     }
 
-    // Set Coverity or Blackduck Arbitrary Arguments
-    const coverityArgs = this.setCoverityArbitraryArgs()
-    const blackduckArgs = this.setBlackDuckArbitraryArgs()
+    // Set Coverity and Blackduck Detect Arguments
+    const coverityArgs = this.setCoverityDetectArgs()
+    const detectArgs = this.setDetectArgs()
 
     if (Object.keys(coverityArgs).length > 0) {
       srmData.data.coverity = {...srmData.data.coverity, ...coverityArgs}
     }
 
-    if (Object.keys(blackduckArgs).length > 0) {
-      srmData.data.blackduck = {...srmData.data.blackduck, ...blackduckArgs}
+    if (Object.keys(detectArgs).length > 0) {
+      srmData.data.detect = {...srmData.data.detect, ...detectArgs}
     }
 
     const inputJson = JSON.stringify(srmData)
@@ -634,25 +645,25 @@ export class ToolsParameter {
   }
 
   private setBlackDuckFixPrInputs(): BlackDuckFixPrData | undefined {
-    if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && isNaN(Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT))) {
+    if (inputs.BLACKDUCK_SCA_FIX_PR_MAX_COUNT && isNaN(Number(inputs.BLACKDUCK_SCA_FIX_PR_MAX_COUNT))) {
       throw new Error(constants.INVALID_VALUE_ERROR.concat(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY))
     }
-    const createSinglePr = parseToBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)
-    if (createSinglePr && inputs.BLACKDUCK_FIXPR_MAXCOUNT) {
+    const createSinglePr = parseToBoolean(inputs.BLACKDUCK_SCA_FIX_PR_CREATE_SINGLE_PR)
+    if (createSinglePr && inputs.BLACKDUCK_SCA_FIX_PR_MAX_COUNT) {
       throw new Error(constants.BLACKDUCK_FIXPR_MAXCOUNT_KEY.concat(' is not applicable with ').concat(constants.BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY))
     }
     const blackDuckFixPrData: BlackDuckFixPrData = {}
     blackDuckFixPrData.enabled = true
-    if (isBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)) {
-      blackDuckFixPrData.createSinglePR = parseToBoolean(inputs.BLACKDUCK_FIXPR_CREATE_SINGLE_PR)
+    if (isBoolean(inputs.BLACKDUCK_SCA_FIX_PR_CREATE_SINGLE_PR)) {
+      blackDuckFixPrData.createSinglePR = parseToBoolean(inputs.BLACKDUCK_SCA_FIX_PR_CREATE_SINGLE_PR)
     }
-    if (inputs.BLACKDUCK_FIXPR_MAXCOUNT && !createSinglePr) {
-      blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_FIXPR_MAXCOUNT)
+    if (inputs.BLACKDUCK_SCA_FIX_PR_MAX_COUNT && !createSinglePr) {
+      blackDuckFixPrData.maxCount = Number(inputs.BLACKDUCK_SCA_FIX_PR_MAX_COUNT)
     }
 
     const useUpgradeGuidance: string[] = []
-    if (inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE != null && inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE.length > 0) {
-      const useUpgradeGuidanceList = inputs.BLACKDUCK_FIXPR_LONG_TERM_GUIDANCE.split(',')
+    if (inputs.BLACKDUCK_SCA_FIX_PR_UPGRADE_GUIDANCE != null && inputs.BLACKDUCK_SCA_FIX_PR_UPGRADE_GUIDANCE.length > 0) {
+      const useUpgradeGuidanceList = inputs.BLACKDUCK_SCA_FIX_PR_UPGRADE_GUIDANCE.split(',')
       for (const upgradeGuidance of useUpgradeGuidanceList) {
         if (upgradeGuidance != null && upgradeGuidance !== '') {
           useUpgradeGuidance.push(upgradeGuidance.trim())
@@ -661,8 +672,8 @@ export class ToolsParameter {
       blackDuckFixPrData.useUpgradeGuidance = useUpgradeGuidance
     }
     const fixPRFilterSeverities: string[] = []
-    if (inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES != null && inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES.length > 0) {
-      const filterSeverities = inputs.BLACKDUCK_FIXPR_FILTER_SEVERITIES.split(',')
+    if (inputs.BLACKDUCK_SCA_FIX_PR_FILTER_SEVERITIES != null && inputs.BLACKDUCK_SCA_FIX_PR_FILTER_SEVERITIES.length > 0) {
+      const filterSeverities = inputs.BLACKDUCK_SCA_FIX_PR_FILTER_SEVERITIES.split(',')
       for (const fixPrSeverity of filterSeverities) {
         if (fixPrSeverity != null && fixPrSeverity !== '') {
           fixPRFilterSeverities.push(fixPrSeverity.trim())
@@ -675,8 +686,8 @@ export class ToolsParameter {
     return blackDuckFixPrData
   }
 
-  private setCoverityArbitraryArgs(): CoverityArbitrary {
-    const covArbitraryData: CoverityArbitrary = {}
+  private setCoverityDetectArgs(): CoverityDetect {
+    const covArbitraryData: CoverityDetect = {}
     if (inputs.COVERITY_BUILD_COMMAND) {
       covArbitraryData.build = {
         command: inputs.COVERITY_BUILD_COMMAND
@@ -701,23 +712,23 @@ export class ToolsParameter {
     return covArbitraryData
   }
 
-  private setBlackDuckArbitraryArgs(): BlackDuckArbitrary {
-    const blackduckData: BlackDuckArbitrary = {}
-    if (inputs.BLACKDUCK_SEARCH_DEPTH && Number.isInteger(parseInt(inputs.BLACKDUCK_SEARCH_DEPTH))) {
-      blackduckData.search = {
-        depth: parseInt(inputs.BLACKDUCK_SEARCH_DEPTH)
+  private setDetectArgs(): BlackDuckDetect {
+    const blackduckDetectData: BlackDuckDetect = {}
+    if (inputs.DETECT_SEARCH_DEPTH && Number.isInteger(parseInt(inputs.DETECT_SEARCH_DEPTH))) {
+      blackduckDetectData.search = {
+        depth: parseInt(inputs.DETECT_SEARCH_DEPTH)
       }
     }
 
-    if (inputs.BLACKDUCK_CONFIG_PATH) {
-      blackduckData.config = {
-        path: inputs.BLACKDUCK_CONFIG_PATH
+    if (inputs.DETECT_CONFIG_PATH) {
+      blackduckDetectData.config = {
+        path: inputs.DETECT_CONFIG_PATH
       }
     }
 
-    if (inputs.BLACKDUCK_ARGS) {
-      blackduckData.args = inputs.BLACKDUCK_ARGS
+    if (inputs.DETECT_ARGS) {
+      blackduckDetectData.args = inputs.DETECT_ARGS
     }
-    return blackduckData
+    return blackduckDetectData
   }
 }

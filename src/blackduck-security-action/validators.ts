@@ -27,7 +27,7 @@ export function validateScanTypes(): string[] {
   const paramsMap = new Map()
   paramsMap.set(constants.POLARIS_SERVER_URL_KEY, inputs.POLARIS_SERVER_URL)
   paramsMap.set(constants.COVERITY_URL_KEY, inputs.COVERITY_URL)
-  paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
+  paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_SCA_URL)
   paramsMap.set(constants.SRM_URL_KEY, inputs.SRM_URL)
   return isNullOrEmpty(paramsMap)
 }
@@ -58,10 +58,10 @@ export function validateCoverityInputs(): string[] {
 
 export function validateBlackDuckInputs(): string[] {
   let errors: string[] = []
-  if (inputs.BLACKDUCK_URL) {
+  if (inputs.BLACKDUCK_SCA_URL) {
     const paramsMap = new Map()
-    paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_URL)
-    paramsMap.set(constants.BLACKDUCK_TOKEN_KEY, inputs.BLACKDUCK_API_TOKEN)
+    paramsMap.set(constants.BLACKDUCK_URL_KEY, inputs.BLACKDUCK_SCA_URL)
+    paramsMap.set(constants.BLACKDUCK_TOKEN_KEY, inputs.BLACKDUCK_SCA_TOKEN)
     errors = validateParameters(paramsMap, constants.BLACKDUCK_KEY)
   }
   return errors
