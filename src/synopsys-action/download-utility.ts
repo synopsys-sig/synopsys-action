@@ -1,7 +1,7 @@
 import {info} from '@actions/core'
 import path from 'path'
-import {extractZip} from '@actions/tool-cache'
-import {downloadTool} from './tool-cache-local'
+import {extractZip, downloadTool} from '@actions/tool-cache'
+// import {downloadTool} from './tool-cache-local'
 import * as fs from 'fs'
 import {validateBridgeUrl} from './validators'
 
