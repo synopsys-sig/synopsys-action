@@ -1,7 +1,7 @@
 import {exec, ExecOptions} from '@actions/exec'
 import {BRIDGE_CLI_DOWNLOAD_URL, ENABLE_NETWORK_AIR_GAP, BRIDGE_CLI_INSTALL_DIRECTORY_KEY} from './inputs'
 import {debug, error, info, warning} from '@actions/core'
-import {GITHUB_ENVIRONMENT_VARIABLES, NON_RETRY_HTTP_CODES, RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS} from '../application-constants'
+import {GITHUB_ENVIRONMENT_VARIABLES, NON_RETRY_HTTP_CODES, RETRY_COUNT, RETRY_DELAY_IN_MILLISECONDS, BRIDGE_CLI_DEFAULT_PATH_LINUX, BRIDGE_CLI_DEFAULT_PATH_MAC, BRIDGE_CLI_DEFAULT_PATH_WINDOWS} from '../application-constants'
 import {tryGetExecutablePath} from '@actions/io/lib/io-util'
 import path from 'path'
 import {checkIfPathExists, cleanupTempDir, sleep} from './utility'
@@ -31,9 +31,9 @@ export class BridgeCLI {
   constructor() {
     this.bridgeExecutablePath = ''
     this.bridgePath = ''
-    this.bridgeArtifactoryURL = constants.SYNOPSYS_BRIDGE_ARTIFACTORY_URL
-    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/synopsys-bridge-$version-$platform.zip')
-    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/synopsys-bridge-$platform.zip')
+    this.bridgeArtifactoryURL = constants.BRIDGE_CLI_ARTIFACTORY_URL
+    this.bridgeUrlPattern = this.bridgeArtifactoryURL.concat('$version/bridge-cli-$version-$platform.zip')
+    this.bridgeUrlLatestPattern = this.bridgeArtifactoryURL.concat('latest/bridge-cli-$platform.zip')
   }
 
   private getBridgeDefaultPath(): string {
@@ -41,11 +41,11 @@ export class BridgeCLI {
     const osName = process.platform
 
     if (osName === 'darwin') {
-      bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC)
+      bridgeDefaultPath = path.join(process.env['HOME'] as string, BRIDGE_CLI_DEFAULT_PATH_MAC)
     } else if (osName === 'linux') {
-      bridgeDefaultPath = path.join(process.env['HOME'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX)
+      bridgeDefaultPath = path.join(process.env['HOME'] as string, BRIDGE_CLI_DEFAULT_PATH_LINUX)
     } else if (osName === 'win32') {
-      bridgeDefaultPath = path.join(process.env['USERPROFILE'] as string, SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS)
+      bridgeDefaultPath = path.join(process.env['USERPROFILE'] as string, BRIDGE_CLI_DEFAULT_PATH_WINDOWS)
     }
 
     return bridgeDefaultPath
@@ -102,11 +102,11 @@ export class BridgeCLI {
       let bridgeVersion = ''
       if (inputs.BRIDGE_CLI_DOWNLOAD_URL) {
         bridgeUrl = BRIDGE_CLI_DOWNLOAD_URL
-        const versionInfo = bridgeUrl.match('.*synopsys-bridge-([0-9.]*).*')
+        const versionInfo = bridgeUrl.match('.*bridge-cli-([0-9.]*).*')
         if (versionInfo != null) {
           bridgeVersion = versionInfo[1]
           if (!bridgeVersion) {
-            const regex = /\w*(synopsys-bridge-(win64|linux64|macosx|macos_arm).zip)/
+            const regex = /\w*(bridge-cli-(win64|linux64|macosx|macos_arm).zip)/
             bridgeVersion = await this.getBridgeVersionFromLatestURL(bridgeUrl.replace(regex, 'versions.txt'))
           }
         }
@@ -281,7 +281,7 @@ export class BridgeCLI {
     bridgeDownloadUrl = bridgeDownloadUrl.replace('$version', version)
     if (osName === 'darwin') {
       const isARM = !os.cpus()[0].model.includes('Intel')
-      const isValidVersionForARM = semver.gte(version, constants.MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION)
+      const isValidVersionForARM = semver.gte(version, constants.MIN_SUPPORTED_BRIDGE_CLI_MAC_ARM_VERSION)
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', isARM && isValidVersionForARM ? this.MAC_ARM_PLATFORM : this.MAC_PLATFORM)
     } else if (osName === 'linux') {
       bridgeDownloadUrl = bridgeDownloadUrl.replace('$platform', this.LINUX_PLATFORM)
@@ -378,9 +378,9 @@ export class BridgeCLI {
 
   private async setBridgeExecutablePath(): Promise<void> {
     if (process.platform === 'win32') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(this.bridgePath.concat('\\synopsys-bridge'), ['.exe'])
+      this.bridgeExecutablePath = await tryGetExecutablePath(this.bridgePath.concat('\\bridge-cli'), ['.exe'])
     } else if (process.platform === 'darwin' || process.platform === 'linux') {
-      this.bridgeExecutablePath = await tryGetExecutablePath(this.bridgePath.concat('/synopsys-bridge'), [])
+      this.bridgeExecutablePath = await tryGetExecutablePath(this.bridgePath.concat('/bridge-cli'), [])
     }
   }
 

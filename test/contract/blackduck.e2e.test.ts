@@ -207,7 +207,7 @@ export function getBridgeDownloadUrl(): string {
   } else if (osName === 'win32') {
     platform = WINDOWS_PLATFORM
   }
-  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/latest/synopsys-bridge-'.concat(platform).concat('.zip')
+  return 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/bridge-cli/latest/bridge-cli-'.concat(platform).concat('.zip')
 }
 
 export function mockBridgeDownloadUrlAndBridgePath() {

@@ -1,7 +1,7 @@
-export const SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge' //Path will be in home
-export const SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge'
-export const SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge'
-export const SYNOPSYS_BRIDGE_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
+export const BRIDGE_CLI_DEFAULT_PATH_MAC = '/bridge-cli' //Path will be in home
+export const BRIDGE_CLI_DEFAULT_PATH_WINDOWS = '\\bridge-cli'
+export const BRIDGE_CLI_DEFAULT_PATH_LINUX = '/bridge-cli'
+export const BRIDGE_CLI_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/bridge-cli/'
 
 export const APPLICATION_NAME = 'blackduck-security-action'
 /**
@@ -19,7 +19,7 @@ export const BRIDGE_CLI_DOWNLOAD_URL_KEY = 'bridgecli_download_url'
  */
 export const BRIDGE_DOWNLOAD_VERSION_KEY = 'synopsys_bridge_download_version'
 export const BRIDGE_CLI_DOWNLOAD_VERSION_KEY = 'bridgecli_download_version'
-export const MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = '2.1.0'
+export const MIN_SUPPORTED_BRIDGE_CLI_MAC_ARM_VERSION = '2.1.0'
 
 // Scan Types
 export const COVERITY_KEY = 'coverity'

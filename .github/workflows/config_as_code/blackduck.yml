@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@v3
 
 
-      - name: Synopsys-action for Windows
+      - name: Blackduck-security-action for Windows
         if: ${{ runner.os == 'Windows' }}
         run: |
           Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
@@ -45,7 +45,7 @@ jobs:
           .\bridge.exe --stage blackduck
         shell: powershell
 
-      - name: Synopsys-action for MAC
+      - name: Blackduck-security-action for MAC
         if: ${{  runner.os == 'macOS'  }}
         run: |
           var="$(which unzip)"
@@ -57,7 +57,7 @@ jobs:
           ./bridge --stage blackduck
         shell: bash
 
-      - name: Synopsys-action for Linux
+      - name: Blackduck-security-action for Linux
         if: ${{  runner.os == 'Linux'  }}
         run: |
           var="$(which unzip)"

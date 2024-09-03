@@ -47,7 +47,7 @@ jobs:
           # Mandatory for windows hosted environment
           # coverity_install_directory: "/root"
           bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
-          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          ### Uncomment below configuration if Bridge CLI diagnostic files needs to be uploaded
           # include_diagnostics: true    
 
       - name: Coverity PR Scan
@@ -64,5 +64,5 @@ jobs:
           ### Below configuration is used to enable feedback from Coverity security testing as pull request comment
           coverity_automation_prcomment: true
           github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when coverity_automation_prcomment is set to 'true'   
-          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          ### Uncomment below configuration if Bridge CLI diagnostic files needs to be uploaded
           # include_diagnostics: true      
