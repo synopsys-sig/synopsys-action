@@ -2,6 +2,7 @@ import {BlackDuckArbitrary} from './blackduck'
 import {CoverityArbitrary} from './coverity'
 import {GithubData} from './github'
 import {Reports} from './reports'
+import {AsyncMode} from './async-mode'
 
 export interface Polaris {
   polaris: PolarisData
@@ -11,7 +12,7 @@ export interface Polaris {
   blackduck?: BlackDuckArbitrary
 }
 
-export interface PolarisData {
+export interface PolarisData extends AsyncMode {
   triage?: string
   accesstoken: string
   serverUrl: string

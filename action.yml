@@ -41,6 +41,9 @@ inputs:
   coverity_prComment_enabled:
     description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
     required: false
+  coverity_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    required: false
   coverity_build_command:
     description: 'Build command for Coverity'
     required: false
@@ -106,6 +109,9 @@ inputs:
     required: false
   polaris_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Polaris SARIF report to GitHub Advanced Security'
+    required: false
+  polaris_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
     required: false
   polaris_assessment_mode:
     description: 'The test mode type of this scan'
@@ -179,6 +185,9 @@ inputs:
   blackduck_upload_sarif_report:
     description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
     required: false
+  blackduck_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    required: false
   blackduck_search_depth:
     description: 'Number indicating the search depth in the source directory'
     required: false
@@ -214,6 +223,9 @@ inputs:
     required: false
   srm_branch_parent:
     description: 'SRM branch parent'
+    required: false
+  srm_waitForScan: 
+    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
     required: false
   coverity_execution_path:
     description: 'Coverity execution path'
