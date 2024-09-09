@@ -10,14 +10,14 @@ import {DownloadFileResponse, extractZipped, getRemoteFile} from './download-uti
 import fs, {readFileSync} from 'fs'
 import {rmRF} from '@actions/io'
 import {validateBlackDuckInputs, validateCoverityInputs, validatePolarisInputs, validateSRMInputs, validateScanTypes} from './validators'
-import {ToolsParameter} from './tools-parameter'
+import {BridgeToolsParameter} from './tools-parameter'
 import * as constants from '../application-constants'
 import {HttpClient} from 'typed-rest-client/HttpClient'
 import DomParser from 'dom-parser'
 import os from 'os'
 import semver from 'semver'
 
-export class BridgeCLI {
+export class Bridge {
   bridgeExecutablePath: string
   bridgePath: string
   bridgeArtifactoryURL: string
@@ -173,28 +173,28 @@ export class BridgeCLI {
       // validating and preparing command for polaris
       const polarisErrors: string[] = validatePolarisInputs()
       if (polarisErrors.length === 0 && inputs.POLARIS_SERVER_URL) {
-        const polarisCommandFormatter = new ToolsParameter(tempDir)
+        const polarisCommandFormatter = new BridgeToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(polarisCommandFormatter.getFormattedCommandForPolaris(githubRepoName))
       }
 
       // validating and preparing command for coverity
       const coverityErrors: string[] = validateCoverityInputs()
       if (coverityErrors.length === 0 && inputs.COVERITY_URL) {
-        const coverityCommandFormatter = new ToolsParameter(tempDir)
+        const coverityCommandFormatter = new BridgeToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(coverityCommandFormatter.getFormattedCommandForCoverity(githubRepoName))
       }
 
       // validating and preparing command for blackduck
       const blackduckErrors: string[] = validateBlackDuckInputs()
       if (blackduckErrors.length === 0 && inputs.BLACKDUCK_SCA_URL) {
-        const blackDuckCommandFormatter = new ToolsParameter(tempDir)
+        const blackDuckCommandFormatter = new BridgeToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(blackDuckCommandFormatter.getFormattedCommandForBlackduck())
       }
 
       // validating and preparing command for SRM
       const srmErrors: string[] = validateSRMInputs()
       if (srmErrors.length === 0 && inputs.SRM_URL) {
-        const srmCommandFormatter = new ToolsParameter(tempDir)
+        const srmCommandFormatter = new BridgeToolsParameter(tempDir)
         formattedCommand = formattedCommand.concat(srmCommandFormatter.getFormattedCommandForSRM(githubRepoName))
       }
 
@@ -211,7 +211,7 @@ export class BridgeCLI {
       }
 
       if (inputs.INCLUDE_DIAGNOSTICS) {
-        formattedCommand = formattedCommand.concat(ToolsParameter.SPACE).concat(ToolsParameter.DIAGNOSTICS_OPTION)
+        formattedCommand = formattedCommand.concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.DIAGNOSTICS_OPTION)
       }
 
       debug('Formatted command is - '.concat(formattedCommand))

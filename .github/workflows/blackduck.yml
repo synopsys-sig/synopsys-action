@@ -28,7 +28,7 @@ jobs:
       - name: Checkout Source
         uses: actions/checkout@v3
 
-      - name: Black Duck Full Scan
+      - name: Black Duck SAC Full Scan
         if: ${{ github.event_name != 'pull_request' }}
         uses: synopsys-sig/synopsys-action@v1.2.0
         # Use below configuration to set detect environment variables for your project
@@ -38,14 +38,14 @@ jobs:
         #   DETECT_CODE_LOCATION_NAME: ${{ github.event.repository.name }}-${{ github.ref_name }}
         #   DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
-          blackduck_url: ${{ secrets.BLACKDUCK_SCA_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_SCA_TOKEN }}
-          blackduck_scan_full: true
-          blackduck_scan_failure_severities: 'ALL'
+          blackducksca_url: ${{ secrets.BLACKDUCK_SCA_URL }}
+          blackducksca_token: ${{ secrets.BLACKDUCK_SCA_TOKEN }}
+          detect_scan_full: true
+          blackducksca_scan_failure_severities: 'ALL'
           ### Uncomment below configuration to enable autoamtic fix pull request creation if vulnerabilities are reported
-          # blackduck_automation_fixpr: true 
-          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackduck_automation_fixpr is set to 'true'
-          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # blackducksca_fixpr_enabled: true 
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when blackducksca_fixpr_enabled is set to 'true'
+          ### Uncomment below configuration if Bridge CLI diagnostic files needs to be uploaded
           # include_diagnostics: true  
 
       - name: Black Duck PR Scan
@@ -59,7 +59,7 @@ jobs:
         #   DETECT_EXCLUDED_DETECTOR_TYPES: 'GIT'
         with:
           blackduck_url: ${{ secrets.BLACKDUCK_SCA_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_SCA_TOKEN }}
+          blackduck_token: ${{ secrets.BLACKDUCK_SCA_TOKEN }}
           blackduck_scan_full: false
           blackduck_scan_failure_severities: 'ALL'
           ### Uncomment below configuration to enable feedback from Black Duck security testing as pull request comment

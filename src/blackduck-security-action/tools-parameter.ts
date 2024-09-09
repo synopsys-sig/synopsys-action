@@ -12,7 +12,7 @@ import * as constants from '../application-constants'
 import {isBoolean, isPullRequestEvent, parseToBoolean} from './utility'
 import {SRM} from './input-data/srm'
 
-export class ToolsParameter {
+export class BridgeToolsParameter {
   tempDir: string
   private static STAGE_OPTION = '--stage'
   static DIAGNOSTICS_OPTION = '--diagnostics'
@@ -218,12 +218,12 @@ export class ToolsParameter {
     }
 
     const inputJson = JSON.stringify(polData)
-    const stateFilePath = path.join(this.tempDir, ToolsParameter.POLARIS_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, BridgeToolsParameter.POLARIS_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.POLARIS_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
+    command = BridgeToolsParameter.STAGE_OPTION.concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.POLARIS_STAGE).concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.INPUT_OPTION).concat(BridgeToolsParameter.SPACE).concat(stateFilePath).concat(BridgeToolsParameter.SPACE)
     return command
   }
 
@@ -313,12 +313,12 @@ export class ToolsParameter {
 
     const inputJson = JSON.stringify(covData)
 
-    const stateFilePath = path.join(this.tempDir, ToolsParameter.COVERITY_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, BridgeToolsParameter.COVERITY_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.COVERITY_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
+    command = BridgeToolsParameter.STAGE_OPTION.concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.COVERITY_STAGE).concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.INPUT_OPTION).concat(BridgeToolsParameter.SPACE).concat(stateFilePath).concat(BridgeToolsParameter.SPACE)
     return command
   }
 
@@ -473,12 +473,12 @@ export class ToolsParameter {
 
     const inputJson = JSON.stringify(blackduckData)
 
-    const stateFilePath = path.join(this.tempDir, ToolsParameter.BD_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, BridgeToolsParameter.BD_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.BLACKDUCK_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
+    command = BridgeToolsParameter.STAGE_OPTION.concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.BLACKDUCK_STAGE).concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.INPUT_OPTION).concat(BridgeToolsParameter.SPACE).concat(stateFilePath).concat(BridgeToolsParameter.SPACE)
     return command
   }
 
@@ -554,12 +554,12 @@ export class ToolsParameter {
 
     const inputJson = JSON.stringify(srmData)
 
-    const stateFilePath = path.join(this.tempDir, ToolsParameter.SRM_STATE_FILE_NAME)
+    const stateFilePath = path.join(this.tempDir, BridgeToolsParameter.SRM_STATE_FILE_NAME)
     fs.writeFileSync(stateFilePath, inputJson)
 
     debug('Generated state json file at - '.concat(stateFilePath))
 
-    command = ToolsParameter.STAGE_OPTION.concat(ToolsParameter.SPACE).concat(ToolsParameter.SRM_STAGE).concat(ToolsParameter.SPACE).concat(ToolsParameter.INPUT_OPTION).concat(ToolsParameter.SPACE).concat(stateFilePath).concat(ToolsParameter.SPACE)
+    command = BridgeToolsParameter.STAGE_OPTION.concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.SRM_STAGE).concat(BridgeToolsParameter.SPACE).concat(BridgeToolsParameter.INPUT_OPTION).concat(BridgeToolsParameter.SPACE).concat(stateFilePath).concat(BridgeToolsParameter.SPACE)
     return command
   }
 
