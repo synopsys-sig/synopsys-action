@@ -35,6 +35,7 @@ export const SRM_PROJECT_NAME_KEY = 'srm_project_name'
 export const SRM_PROJECT_ID_KEY = 'srm_project_id'
 export const SRM_BRANCH_NAME_KEY = 'srm_branch_name'
 export const SRM_BRANCH_PARENT_KEY = 'srm_branch_parent'
+export const SRM_WAITFORSCAN_KEY = 'srm_waitForScan'
 export const COVERITY_EXECUTION_PATH_KEY = 'coverity_execution_path'
 /**
  * @deprecated Use detect_execution_path instead. This can be removed in future release.
@@ -52,6 +53,7 @@ export const COVERITY_INSTALL_DIRECTORY_KEY = 'coverity_install_directory'
 export const COVERITY_POLICY_VIEW_KEY = 'coverity_policy_view'
 export const COVERITY_REPOSITORY_NAME_KEY = 'coverity_repository_name'
 export const COVERITY_BRANCH_NAME_KEY = 'coverity_branch_name'
+export const COVERITY_WAITFORSCAN_KEY = 'coverity_waitForScan'
 export const COVERITY_BUILD_COMMAND_KEY = 'coverity_build_command'
 export const COVERITY_CLEAN_COMMAND_KEY = 'coverity_clean_command'
 export const COVERITY_CONFIG_PATH_KEY = 'coverity_config_path'
@@ -91,6 +93,7 @@ export const POLARIS_REPORTS_SARIF_SEVERITIES_KEY = 'polaris_reports_sarif_sever
 export const POLARIS_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'polaris_reports_sarif_groupSCAIssues'
 export const POLARIS_REPORTS_SARIF_ISSUE_TYPES_KEY = 'polaris_reports_sarif_issue_types'
 export const POLARIS_UPLOAD_SARIF_REPORT_KEY = 'polaris_upload_sarif_report'
+export const POLARIS_WAITFORSCAN_KEY = 'polaris_waitForScan'
 export const POLARIS_ASSESSMENT_MODE_KEY = 'polaris_assessment_mode'
 export const PROJECT_SOURCE_ARCHIVE_KEY = 'project_source_archive'
 export const PROJECT_SOURCE_PRESERVESYMLINKS_KEY = 'project_source_preserveSymLinks'
@@ -178,6 +181,11 @@ export const BLACKDUCK_SCA_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackducksca_re
  */
 export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
 export const BLACKDUCK_SCA_UPLOAD_SARIF_REPORT_KEY = 'blackducksca_upload_sarif_report'
+/**
+ * @deprecated Use blackducksca_waitForScan instead. This can be removed in future release.
+ */
+export const BLACKDUCK_WAITFORSCAN_KEY = 'blackduck_waitForScan'
+export const BLACKDUCK_SCA_WAITFORSCAN_KEY = 'blackducksca_waitForScan'
 /**
  * @deprecated Use detect_search_depth instead. This can be removed in future release.
  */
