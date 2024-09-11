@@ -21,14 +21,14 @@ jobs:
     runs-on: [ubuntu-latest]
 
     env:
-      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-macosx.zip"
-      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-linux64.zip"
-      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/0.1.222/synopsys-bridge-0.1.222-win64.zip"
+      MAC_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/bridge-cli/0.1.222/bridge-cli-0.1.222-macosx.zip"
+      LINUX_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/bridge-cli/0.1.222/bridge-cli-0.1.222-linux64.zip"
+      WINDOWS_BRIDGE_URL: "https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/bridge-cli/0.1.222/bridge-cli-0.1.222-win64.zip"
 
     steps:
       #      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Use synopsys unified-action - running all scans
+      - name: Use Black Duck unified-action - running all scans
         # Use the action defined in this repository
         uses: ./
         with:
@@ -41,13 +41,13 @@ jobs:
           polaris_assessment_types: "SAST"
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-          # Blackduck
-          blackduck_url: ${{ secrets.BLACKDUCK_URL }}
-          blackduck_apiToken: ${{ secrets.BLACKDUCK_API_TOKEN_NEW }}
-          blackduck_scan_full: true
-          #blackduck_install_directory: "/root"
-          blackduck_scan_failure_severities: 'BLOCKER, CRITICAL, TRIVIAL'
-          blackduck_automation_fixpr: false
+          # BlackduckSCA
+          blackducksca_url: ${{ secrets.BLACKDUCK_SCA_URL }}
+          blackducksca_token: ${{ secrets.BLACKDUCK_SCA_TOKEN_NEW }}
+          detect_scan_full: true
+          #detect_install_directory: "/root"
+          blackducksca_scan_failure_severities: 'BLOCKER, CRITICAL, TRIVIAL'
+          blackducksca_fixpr_enabled: false
 
           #Coverity
           coverity_url: ${{ secrets.COVERITY_URL }}

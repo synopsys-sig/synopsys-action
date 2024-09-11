@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {sleep} from './utility'
+import * as constants from '../application-constants'
 
 /**
  * Internal class for retries
@@ -10,7 +11,7 @@ export class RetryHelper {
 
   constructor(maxAttempts: number, retryDelay: number) {
     if (maxAttempts < 1) {
-      throw new Error('max attempts should be greater than or equal to 1')
+      throw new Error(constants.BRIDGE_DOWNLOAD_RETRY_ERROR)
     }
     this.maxAttempts = maxAttempts
     this.retryDelay = retryDelay
@@ -30,7 +31,7 @@ export class RetryHelper {
       }
 
       core.info(
-        'Synopsys Bridge download has been failed, Retries left: '
+        'Bridge CLI download has been failed, Retries left: '
           .concat(String(this.maxAttempts - attempt + 1))
           .concat(', Waiting: ')
           .concat(String(this.retryDelay / 1000))

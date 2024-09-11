@@ -1,36 +1,36 @@
 import {debug, info, setFailed} from '@actions/core'
-import {cleanupTempDir, createTempDir, isPullRequestEvent, parseToBoolean} from './synopsys-action/utility'
-import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
+import {cleanupTempDir, createTempDir, isPullRequestEvent, parseToBoolean} from './blackduck-security-action/utility'
+import {Bridge} from './blackduck-security-action/bridge-cli'
 import {getGitHubWorkspaceDir as getGitHubWorkspaceDirV2} from 'actions-artifact-v2/lib/internal/shared/config'
 import * as constants from './application-constants'
-import * as inputs from './synopsys-action/inputs'
-import {uploadDiagnostics, uploadSarifReportAsArtifact} from './synopsys-action/artifacts'
-import {isNullOrEmptyValue} from './synopsys-action/validators'
-import {GitHubClientServiceFactory} from './synopsys-action/factory/github-client-service-factory'
+import * as inputs from './blackduck-security-action/inputs'
+import {uploadDiagnostics, uploadSarifReportAsArtifact} from './blackduck-security-action/artifacts'
+import {isNullOrEmptyValue} from './blackduck-security-action/validators'
+import {GitHubClientServiceFactory} from './blackduck-security-action/factory/github-client-service-factory'
 
 export async function run() {
-  info('Synopsys Action started...')
+  info('Black Duck Security Action started...')
   const tempDir = await createTempDir()
   let formattedCommand = ''
   let isBridgeExecuted = false
   let exitCode
 
   try {
-    const sb = new SynopsysBridge()
+    const sb = new Bridge()
     // Prepare bridge command
     formattedCommand = await sb.prepareCommand(tempDir)
     // Download bridge
     if (!inputs.ENABLE_NETWORK_AIR_GAP) {
       await sb.downloadBridge(tempDir)
     } else {
-      info('Network air gap is enabled, skipping synopsys-bridge download.')
-      await sb.validateSynopsysBridgePath()
+      info('Network air gap is enabled, skipping bridge CLI download.')
+      await sb.validateBridgePath()
     }
     // Execute bridge command
     exitCode = await sb.executeBridgeCommand(formattedCommand, getGitHubWorkspaceDirV2())
     if (exitCode === 0) {
       isBridgeExecuted = true
-      info('Synopsys Action workflow execution completed')
+      info('Black Duck Security Action workflow execution completed')
     }
     return exitCode
   } catch (error) {
@@ -39,15 +39,15 @@ export async function run() {
     throw error
   } finally {
     const uploadSarifReportBasedOnExitCode = exitCode === 0 || exitCode === 8
-    debug(`Synopsys Bridge execution completed: ${isBridgeExecuted}`)
+    debug(`Bridge CLI execution completed: ${isBridgeExecuted}`)
     if (isBridgeExecuted) {
       if (inputs.INCLUDE_DIAGNOSTICS) {
         await uploadDiagnostics()
       }
       if (!isPullRequestEvent() && uploadSarifReportBasedOnExitCode) {
         // Upload Black Duck sarif file as GitHub artifact
-        if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_REPORTS_SARIF_CREATE)) {
-          await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
+        if (inputs.BLACKDUCK_SCA_URL && parseToBoolean(inputs.BLACKDUCK_SCA_REPORTS_SARIF_CREATE)) {
+          await uploadSarifReportAsArtifact(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_SCA_REPORTS_SARIF_FILE_PATH, constants.BLACKDUCK_SARIF_ARTIFACT_NAME)
         }
 
         // Upload Polaris sarif file as GitHub artifact
@@ -56,9 +56,9 @@ export async function run() {
         }
         if (!isNullOrEmptyValue(inputs.GITHUB_TOKEN)) {
           // Upload Black Duck SARIF Report to code scanning tab
-          if (inputs.BLACKDUCK_URL && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
+          if (inputs.BLACKDUCK_SCA_URL && parseToBoolean(inputs.BLACKDUCK_UPLOAD_SARIF_REPORT)) {
             const gitHubClientService = await GitHubClientServiceFactory.getGitHubClientServiceInstance()
-            await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_REPORTS_SARIF_FILE_PATH)
+            await gitHubClientService.uploadSarifReport(constants.BLACKDUCK_SARIF_GENERATOR_DIRECTORY, inputs.BLACKDUCK_SCA_REPORTS_SARIF_FILE_PATH)
           }
           // Upload Polaris SARIF Report to code scanning tab
           if (inputs.POLARIS_SERVER_URL && parseToBoolean(inputs.POLARIS_UPLOAD_SARIF_REPORT)) {

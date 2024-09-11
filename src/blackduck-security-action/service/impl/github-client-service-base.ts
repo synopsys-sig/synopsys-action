@@ -75,7 +75,7 @@ export class GithubClientServiceBase implements GithubClientServiceInterface {
               retryDelay = await this.retrySleepHelper('Uploading SARIF report to GitHub Advanced Security has been failed due to rate limit, Retries left: ', retryCountLocal, retryDelay)
             } else {
               const minutesUntilReset = Math.ceil(secondsUntilReset / 60)
-              throw new Error(`GitHub API rate limit has been exceeded, retry after ${minutesUntilReset} minutes.`)
+              throw new Error(constants.SARIF_GAS_API_RATE_LIMIT_FOR_ERROR.replace('{0}', String(minutesUntilReset)))
             }
             retryCountLocal--
           } else {
@@ -84,10 +84,10 @@ export class GithubClientServiceBase implements GithubClientServiceInterface {
           }
         } while (retryCountLocal > 0)
       } catch (error) {
-        throw new Error(`Uploading SARIF report to GitHub Advanced Security failed: ${error}`)
+        throw new Error(constants.SARIF_GAS_UPLOAD_FAILED_ERROR + error)
       }
     } else {
-      throw new Error('No SARIF file found to upload')
+      throw new Error(constants.SARIF_FILE_NO_FOUND_FOR_UPLOAD_ERROR)
     }
   }
 

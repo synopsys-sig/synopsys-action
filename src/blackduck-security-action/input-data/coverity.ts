@@ -18,7 +18,7 @@ export interface AutomationData {
   prcomment?: boolean
 }
 
-export interface CoverityConnect extends CoverityArbitrary, AsyncMode {
+export interface CoverityConnect extends CoverityDetect, AsyncMode {
   connect: CoverityData
   install?: {directory: string}
   automation?: AutomationData
@@ -26,7 +26,7 @@ export interface CoverityConnect extends CoverityArbitrary, AsyncMode {
   version?: string
 }
 
-export interface CoverityArbitrary {
+export interface CoverityDetect {
   build?: Command
   clean?: Command
   config?: Config

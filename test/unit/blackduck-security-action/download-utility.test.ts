@@ -1,6 +1,6 @@
 import mock = jest.mock
-import {extractZipped, getRemoteFile} from '../../../src/synopsys-action/download-utility'
-import {cleanupTempDir, createTempDir} from '../../../src/synopsys-action/utility'
+import {extractZipped, getRemoteFile} from '../../../src/blackduck-security-action/download-utility'
+import {cleanupTempDir, createTempDir} from '../../../src/blackduck-security-action/utility'
 import {tmpdir} from 'os'
 
 const path = require('path')
@@ -28,7 +28,7 @@ test('Test getRemoteFile', () => {
   toolCache.downloadTool = jest.fn()
   toolCache.downloadTool.mockReturnValueOnce('/path-to-bridge/bridge')
 
-  getRemoteFile(tempPath, 'http://synopsys.bridge.com/bridge_macOs_1.zip').then(data => {
+  getRemoteFile(tempPath, 'http://blackduck.bridge.com/bridge_macOs_1.zip').then(data => {
     expect(data.fileName).toContain('bridge')
   })
 })
@@ -44,7 +44,7 @@ test('Test getRemoteFile linux', () => {
   toolCache.downloadTool = jest.fn()
   toolCache.downloadTool.mockReturnValueOnce('/path-to-bridge/bridge')
 
-  getRemoteFile(tempPath, 'http://synopsys.bridge.com/bridge_linux_1.zip').then(data => {
+  getRemoteFile(tempPath, 'http://blackduck.bridge.com/bridge_linux_1.zip').then(data => {
     expect(data.fileName).toContain('bridge')
   })
 })
@@ -60,7 +60,7 @@ test('Test getRemoteFile windows', () => {
   toolCache.downloadTool = jest.fn()
   toolCache.downloadTool.mockReturnValueOnce('/path-to-bridge/bridge')
 
-  getRemoteFile(tempPath, 'http://synopsys.bridge.com/bridge_win_1.zip').then(data => {
+  getRemoteFile(tempPath, 'http://blackduck.bridge.com/bridge_win_1.zip').then(data => {
     expect(data.fileName).toContain('bridge')
   })
 })

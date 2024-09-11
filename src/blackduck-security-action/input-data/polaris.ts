@@ -1,5 +1,5 @@
-import {BlackDuckArbitrary} from './blackduck'
-import {CoverityArbitrary} from './coverity'
+import {BlackDuckDetect} from './blackduck'
+import {CoverityDetect} from './coverity'
 import {GithubData} from './github'
 import {Reports} from './reports'
 import {AsyncMode} from './async-mode'
@@ -8,8 +8,8 @@ export interface Polaris {
   polaris: PolarisData
   project?: ProjectData
   github?: GithubData
-  coverity?: CoverityArbitrary
-  blackduck?: BlackDuckArbitrary
+  coverity?: CoverityDetect
+  detect?: Omit<BlackDuckDetect, 'install' | 'scan'>
 }
 
 export interface PolarisData extends AsyncMode {

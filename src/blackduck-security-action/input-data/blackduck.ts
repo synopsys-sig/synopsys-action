@@ -1,7 +1,7 @@
 import {Reports} from './reports'
 import {AsyncMode} from './async-mode'
 
-export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
+export enum BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES {
   ALL = 'ALL',
   NONE = 'NONE',
   BLOCKER = 'BLOCKER',
@@ -14,17 +14,19 @@ export enum BLACKDUCK_SCAN_FAILURE_SEVERITIES {
 }
 
 export interface Blackduck {
-  blackduck: BlackduckData
-  project?: ProjectData
+  blackducksca: BlackduckData
+  detect?: BlackDuckDetect
+  project?: {
+    directory?: string
+  }
   github?: GithubData
   network?: NetworkAirGap
 }
 
-export interface BlackduckData extends BlackDuckArbitrary, AsyncMode {
+export interface BlackduckData extends AsyncMode {
   url: string
   token: string
-  install?: {directory: string}
-  scan?: {full?: boolean; failure?: {severities: BLACKDUCK_SCAN_FAILURE_SEVERITIES[]}}
+  scan?: {failure?: {severities: BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES[]}}
   automation?: AutomationData
   fixpr?: BlackDuckFixPrData
   reports?: Reports
@@ -40,14 +42,12 @@ export interface Badges {
   maxCount?: number
 }
 
-export interface BlackDuckArbitrary {
+export interface BlackDuckDetect {
+  install?: {directory?: string}
+  scan?: {full?: boolean}
   search?: Search
   config?: Config
   args?: string
-}
-
-export interface ProjectData {
-  directory?: string
 }
 
 export interface Search {

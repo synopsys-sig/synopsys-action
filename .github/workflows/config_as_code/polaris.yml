@@ -36,7 +36,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      - name: Synopsys-action for Windows
+      - name: Blackduck-security-action for Windows
         if: ${{ runner.os == 'Windows' }}
         run: |
           Invoke-WebRequest -Uri ${{ env.WINDOWS_BRIDGE_URL }} -OutFile bridge.zip
@@ -44,7 +44,7 @@ jobs:
           .\bridge.exe --stage polaris
         shell: powershell
 
-      - name: Synopsys-action for MAC
+      - name: Blackduck-security-action for MAC
         if: ${{  runner.os == 'macOS'  }}
         run: |
           brew install unzip
@@ -53,7 +53,7 @@ jobs:
           ./bridge --stage polaris
         shell: bash
 
-      - name: Synopsys-action for Linux
+      - name: Blackduck-security-action for Linux
         if: ${{  runner.os == 'Linux'  }}
         run: |
           sudo apt-get install unzip

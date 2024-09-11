@@ -1,22 +1,25 @@
-export const SYNOPSYS_BRIDGE_DEFAULT_PATH_MAC = '/synopsys-bridge' //Path will be in home
-export const SYNOPSYS_BRIDGE_DEFAULT_PATH_WINDOWS = '\\synopsys-bridge'
-export const SYNOPSYS_BRIDGE_DEFAULT_PATH_LINUX = '/synopsys-bridge'
-export const SYNOPSYS_BRIDGE_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/synopsys-bridge/'
+export const BRIDGE_CLI_DEFAULT_PATH_MAC = '/bridge-cli' //Path will be in home
+export const BRIDGE_CLI_DEFAULT_PATH_WINDOWS = '\\bridge-cli'
+export const BRIDGE_CLI_DEFAULT_PATH_LINUX = '/bridge-cli'
+export const BRIDGE_CLI_ARTIFACTORY_URL = 'https://sig-repo.synopsys.com/artifactory/bds-integrations-release/com/synopsys/integration/bridge-cli/'
 
-export const APPLICATION_NAME = 'synopsys-action'
-
-export const SYNOPSYS_BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_install_directory'
+export const APPLICATION_NAME = 'blackduck-security-action'
 /**
- * @deprecated Use synopsys_bridge_download_url instead. This can be removed in future release.
+ * @deprecated Use bridgecli_install_directory instead. This can be removed in future release.
  */
-export const BRIDGE_DOWNLOAD_URL_KEY = 'bridge_download_url'
-export const SYNOPSYS_BRIDGE_DOWNLOAD_URL_KEY = 'synopsys_bridge_download_url'
+export const BRIDGE_INSTALL_DIRECTORY_KEY = 'synopsys_bridge_install_directory'
+export const BRIDGE_CLI_INSTALL_DIRECTORY_KEY = 'bridgecli_install_directory'
 /**
- * @deprecated Use synopsys_bridge_download_version instead. This can be removed in future release.
+ * @deprecated Use bridgecli_download_url instead. This can be removed in future release.
  */
-export const BRIDGE_DOWNLOAD_VERSION_KEY = 'bridge_download_version'
-export const SYNOPSYS_BRIDGE_DOWNLOAD_VERSION_KEY = 'synopsys_bridge_download_version'
-export const MIN_SUPPORTED_SYNOPSYS_BRIDGE_MAC_ARM_VERSION = '2.1.0'
+export const BRIDGE_DOWNLOAD_URL_KEY = 'synopsys_bridge_download_url'
+export const BRIDGE_CLI_DOWNLOAD_URL_KEY = 'bridgecli_download_url'
+/**
+ * @deprecated Use bridgecli_download_version instead. This can be removed in future release.
+ */
+export const BRIDGE_DOWNLOAD_VERSION_KEY = 'synopsys_bridge_download_version'
+export const BRIDGE_CLI_DOWNLOAD_VERSION_KEY = 'bridgecli_download_version'
+export const MIN_SUPPORTED_BRIDGE_CLI_MAC_ARM_VERSION = '2.1.0'
 
 // Scan Types
 export const COVERITY_KEY = 'coverity'
@@ -34,7 +37,11 @@ export const SRM_BRANCH_NAME_KEY = 'srm_branch_name'
 export const SRM_BRANCH_PARENT_KEY = 'srm_branch_parent'
 export const SRM_WAITFORSCAN_KEY = 'srm_waitForScan'
 export const COVERITY_EXECUTION_PATH_KEY = 'coverity_execution_path'
+/**
+ * @deprecated Use detect_execution_path instead. This can be removed in future release.
+ */
 export const BLACKDUCK_EXECUTION_PATH_KEY = 'blackduck_execution_path'
+export const DETECT_EXECUTION_PATH_KEY = 'detect_execution_path'
 
 // Coverity
 export const COVERITY_URL_KEY = 'coverity_url'
@@ -94,38 +101,116 @@ export const PROJECT_SOURCE_EXCLUDES_KEY = 'project_source_excludes'
 export const PROJECT_DIRECTORY_KEY = 'project_directory'
 
 // Blackduck
-export const BLACKDUCK_URL_KEY = 'blackduck_url'
-export const BLACKDUCK_API_TOKEN_KEY = 'blackduck_apiToken'
-export const BLACKDUCK_TOKEN_KEY = 'blackduck_token'
-export const BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory'
-export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
-export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'
-export const BLACKDUCK_AUTOMATION_FIXPR_KEY = 'blackduck_automation_fixpr'
-export const BLACKDUCK_FIXPR_ENABLED_KEY = 'blackduck_fixpr_enabled'
-export const BLACKDUCK_FIXPR_MAXCOUNT_KEY = 'blackduck_fixpr_maxCount'
-export const BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = 'blackduck_fixpr_createSinglePR'
-export const BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = 'blackduck_fixpr_filter_severities'
-export const BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = 'blackduck_fixpr_useUpgradeGuidance'
 /**
- * @deprecated Use blackduck_prComment_enabled instead. This can be removed in future release.
+ * @deprecated Use blackducksca_url instead. This can be removed in future release.
  */
-export const BLACKDUCK_AUTOMATION_PRCOMMENT_KEY = 'blackduck_automation_prcomment'
+export const BLACKDUCK_URL_KEY = 'blackduck_url'
+export const BLACKDUCK_SCA_URL_KEY = 'blackducksca_url'
+/**
+ * @deprecated Use blackducksca_token instead. This can be removed in future release.
+ */
+export const BLACKDUCK_TOKEN_KEY = 'blackduck_token'
+export const BLACKDUCK_SCA_TOKEN_KEY = 'blackducksca_token'
+/**
+ * @deprecated Use detect_install_directory instead. This can be removed in future release.
+ */
+export const BLACKDUCK_INSTALL_DIRECTORY_KEY = 'blackduck_install_directory'
+export const DETECT_INSTALL_DIRECTORY_KEY = 'detect_install_directory'
+/**
+ * @deprecated Use detect_scan_full instead. This can be removed in future release.
+ */
+export const BLACKDUCK_SCAN_FULL_KEY = 'blackduck_scan_full'
+export const DETECT_SCAN_FULL_KEY = 'detect_scan_full'
+/**
+ * @deprecated Use blackducksca_scan_failure_severities instead. This can be removed in future release.
+ */
+export const BLACKDUCK_SCAN_FAILURE_SEVERITIES_KEY = 'blackduck_scan_failure_severities'
+export const BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES_KEY = 'blackducksca_scan_failure_severities'
+/**
+ * @deprecated Use blackducksca_fixpr_enabled instead. This can be removed in future release.
+ */
+export const BLACKDUCK_FIXPR_ENABLED_KEY = 'blackduck_fixpr_enabled'
+export const BLACKDUCK_SCA_FIX_PR_ENABLED_KEY = 'blackducksca_fixpr_enabled'
+/**
+ * @deprecated Use blackducksca_fixpr_maxCount instead. This can be removed in future release.
+ */
+export const BLACKDUCK_FIXPR_MAXCOUNT_KEY = 'blackduck_fixpr_maxCount'
+export const BLACKDUCK_SCA_FIX_PR_MAX_COUNT_KEY = 'blackducksca_fixpr_maxCount'
+/**
+ * @deprecated Use blackducksca_fixpr_createSinglePR instead. This can be removed in future release.
+ */
+export const BLACKDUCK_FIXPR_CREATE_SINGLE_PR_KEY = 'blackduck_fixpr_createSinglePR'
+export const BLACKDUCK_SCA_FIX_PR_CREATE_SINGLE_PR_KEY = 'blackducksca_fixpr_createSinglePR'
+/**
+ * @deprecated Use blackducksca_fixpr_filter_severities instead. This can be removed in future release.
+ */
+export const BLACKDUCK_FIXPR_FILTER_SEVERITIES_KEY = 'blackduck_fixpr_filter_severities'
+export const BLACKDUCK_SCA_FIX_PR_FILTER_SEVERITIES_KEY = 'blackducksca_fixpr_filter_severities'
+/**
+ * @deprecated Use blackducksca_fixpr_useUpgradeGuidance instead. This can be removed in future release.
+ */
+export const BLACKDUCK_FIXPR_USE_UPGRADE_GUIDANCE_KEY = 'blackduck_fixpr_useUpgradeGuidance'
+export const BLACKDUCK_SCA_FIX_PR_UPGRADE_GUIDANCE_KEY = 'blackducksca_fixpr_useUpgradeGuidance'
+/**
+ * @deprecated Use blackduck_automation_prcomment instead. This can be removed in future release.
+ */
 export const BLACKDUCK_PRCOMMENT_ENABLED_KEY = 'blackduck_prComment_enabled'
+export const BLACKDUCK_SCA_PRCOMMENT_ENABLED_KEY = 'blackducksca_prComment_enabled'
+/**
+ * @deprecated Use blackducksca_reports_sarif_create instead. This can be removed in future release.
+ */
 export const BLACKDUCK_REPORTS_SARIF_CREATE_KEY = 'blackduck_reports_sarif_create'
+export const BLACKDUCK_SCA_REPORTS_SARIF_CREATE_KEY = 'blackducksca_reports_sarif_create'
+/**
+ * @deprecated Use blackducksca_reports_sarif_file_path instead. This can be removed in future release.
+ */
 export const BLACKDUCK_REPORTS_SARIF_FILE_PATH_KEY = 'blackduck_reports_sarif_file_path'
+export const BLACKDUCK_SCA_REPORTS_SARIF_FILE_PATH_KEY = 'blackducksca_reports_sarif_file_path'
+/**
+ * @deprecated Use blackducksca_reports_sarif_severities instead. This can be removed in future release.
+ */
 export const BLACKDUCK_REPORTS_SARIF_SEVERITIES_KEY = 'blackduck_reports_sarif_severities'
+export const BLACKDUCK_SCA_REPORTS_SARIF_SEVERITIES_KEY = 'blackducksca_reports_sarif_severities'
+/**
+ * @deprecated Use blackducksca_reports_sarif_groupSCAIssues instead. This can be removed in future release.
+ */
 export const BLACKDUCK_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackduck_reports_sarif_groupSCAIssues'
+export const BLACKDUCK_SCA_REPORTS_SARIF_GROUP_SCA_ISSUES_KEY = 'blackducksca_reports_sarif_groupSCAIssues'
+/**
+ * @deprecated Use blackducksca_upload_sarif_report instead. This can be removed in future release.
+ */
 export const BLACKDUCK_UPLOAD_SARIF_REPORT_KEY = 'blackduck_upload_sarif_report'
+export const BLACKDUCK_SCA_UPLOAD_SARIF_REPORT_KEY = 'blackducksca_upload_sarif_report'
+/**
+ * @deprecated Use blackducksca_waitForScan instead. This can be removed in future release.
+ */
 export const BLACKDUCK_WAITFORSCAN_KEY = 'blackduck_waitForScan'
+export const BLACKDUCK_SCA_WAITFORSCAN_KEY = 'blackducksca_waitForScan'
+/**
+ * @deprecated Use detect_search_depth instead. This can be removed in future release.
+ */
 export const BLACKDUCK_SEARCH_DEPTH_KEY = 'blackduck_search_depth'
+export const DETECT_SEARCH_DEPTH_KEY = 'detect_search_depth'
+/**
+ * @deprecated Use detect_config_path instead. This can be removed in future release.
+ */
 export const BLACKDUCK_CONFIG_PATH_KEY = 'blackduck_config_path'
+export const DETECT_CONFIG_PATH_KEY = 'detect_config_path'
+/**
+ * @deprecated Use detect_args instead. This can be removed in future release.
+ */
 export const BLACKDUCK_ARGS_KEY = 'blackduck_args'
-export const BLACKDUCK_POLICY_BADGES_CREATE_KEY = 'blackduck_policy_badges_create'
-export const BLACKDUCK_POLICY_BADGES_MAX_COUNT_KEY = 'blackduck_policy_badges_maxCount'
+export const DETECT_ARGS_KEY = 'detect_args'
+
+export const BLACKDUCK_SCA_POLICY_BADGES_CREATE_KEY = 'blackducksca_policy_badges_create'
+export const BLACKDUCK_SCA_POLICY_BADGES_MAX_COUNT_KEY = 'blackducksca_policy_badges_maxCount'
 
 export const GITHUB_HOST_URL_KEY = 'github_host_url'
 export const GITHUB_TOKEN_KEY = 'github_token'
 export const INCLUDE_DIAGNOSTICS_KEY = 'include_diagnostics'
+/**
+ * @deprecated Use network_airgap instead. This can be removed in future release.
+ */
 export const BRIDGE_NETWORK_AIRGAP_KEY = 'bridge_network_airgap'
 export const NETWORK_AIRGAP_KEY = 'network_airgap'
 export const DIAGNOSTICS_RETENTION_DAYS_KEY = 'diagnostics_retention_days'
@@ -171,10 +256,28 @@ export const GITHUB_ENVIRONMENT_VARIABLES = {
   GITHUB_SHA: 'GITHUB_SHA',
   GITHUB_API_URL: 'GITHUB_API_URL'
 }
-export const GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security'
 export const SARIF_REPORT_LOG_INFO_FOR_PR_SCANS = 'SARIF report create/upload is ignored for pull request scan'
 export const POLARIS_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = 'Polaris PR Comment is ignored for non pull request scan'
 export const COVERITY_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = 'Coverity PR Comment is ignored for non pull request scan'
 export const BLACKDUCK_PR_COMMENT_LOG_INFO_FOR_NON_PR_SCANS = 'Black Duck PR Comment is ignored for non pull request scan'
 export const BLACKDUCK_FIXPR_LOG_INFO_FOR_PR_SCANS = 'Black Duck Fix PR is ignored for pull request scan'
-export const MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT = 'Missing required github token for fix pull request/pull request comments/Github Badges'
+export const GITHUB_TOKEN_VALIDATION_SARIF_UPLOAD_ERROR = 'Missing required GitHub token for uploading SARIF report to GitHub Advanced Security'
+export const MISSING_GITHUB_TOKEN_FOR_FIX_PR_AND_PR_COMMENT_ERROR = 'Missing required github token for fix pull request/pull request comments/Github Badges'
+export const BRIDGE_VERSION_NOT_FOUND_ERROR = 'Provided Bridge version not found in artifactory'
+export const BRIDGE_URL_NOT_VALID_OS_ERROR = 'Provided Bridge url is not valid for the configured '
+export const BRIDGE_URL_NOT_VALID_ERROR = 'Invalid URL'
+export const PROVIDED_BRIDGE_URL_EMPTY_ERROR = 'Provided Bridge URL cannot be empty '
+export const BRIDGE_URL_EMPTY_ERROR = 'URL cannot be empty'
+export const BRIDGE_EXECUTABLE_NOT_FOUND_ERROR = 'Bridge executable could not be found at '
+export const BRIDGE_INSTALL_DIRECTORY_NOT_FOUND_ERROR = 'Bridge install directory does not exist'
+export const BRIDGE_DEFAULT_DIRECTORY_NOT_FOUND_ERROR = 'Bridge default directory does not exist'
+export const SCAN_TYPE_REQUIRED_ERROR = 'Requires at least one scan type: ({0},{1},{2},{3})'
+export const BRIDGE_ZIP_NOT_FOUND_FOR_EXTRACT_ERROR = 'File does not exist'
+export const BRIDGE_EXTRACT_directory_NOT_FOUND_ERROR = 'No destination directory found'
+export const BRIDGE_DOWNLOAD_RETRY_ERROR = 'max attempts should be greater than or equal to 1'
+export const INVALID_VALUE_ERROR = 'Invalid value for '
+export const MISSING_BOOLEAN_VALUE_ERROR = 'Missing boolean value for '
+export const PROVIDED_BLACKDUCKSCA_FAILURE_SEVERITIES_ERROR = 'Provided value is not valid - BLACKDUCK_SCA_SCAN_FAILURE_SEVERITIES'
+export const SARIF_GAS_API_RATE_LIMIT_FOR_ERROR = 'GitHub API rate limit has been exceeded, retry after {0} minutes.'
+export const SARIF_GAS_UPLOAD_FAILED_ERROR = 'Uploading SARIF report to GitHub Advanced Security failed: '
+export const SARIF_FILE_NO_FOUND_FOR_UPLOAD_ERROR = 'No SARIF file found to upload'
