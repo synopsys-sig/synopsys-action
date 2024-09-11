@@ -42,7 +42,7 @@ inputs:
     description: 'Flag to enable pull request comments for new issues found in the Coverity scan'
     required: false
   coverity_waitForScan: 
-    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    description: 'Specifies if the workflow should wait for the analysis to complete. Default value: true. If set to false, post merge workflows like PR comment, Fix PR, SARIF etc will not be applicable.'
     required: false
   coverity_build_command:
     description: 'Build command for Coverity'
@@ -111,7 +111,7 @@ inputs:
     description: 'Flag to enable/disable uploading of Polaris SARIF report to GitHub Advanced Security'
     required: false
   polaris_waitForScan: 
-    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    description: 'Specifies if the workflow should wait for the analysis to complete. Default value: true. If set to false, post merge workflows like PR comment, Fix PR, SARIF etc will not be applicable.'
     required: false
   polaris_assessment_mode:
     description: 'The test mode type of this scan'
@@ -186,7 +186,7 @@ inputs:
     description: 'Flag to enable/disable uploading of Black Duck SARIF report to GitHub Advanced Security'
     required: false
   blackducksca_waitForScan: 
-    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    description: 'Specifies if the workflow should wait for the analysis to complete. Default value: true. If set to false, post merge workflows like PR comment, Fix PR, SARIF etc will not be applicable.'
     required: false
   detect_search_depth:
     description: 'Number indicating the search depth in the source directory'
@@ -225,7 +225,7 @@ inputs:
     description: 'SRM branch parent'
     required: false
   srm_waitForScan: 
-    description: 'It specifies whether the workflow should wait for the analysis to complete or not'
+    description: 'Specifies if the workflow should wait for the analysis to complete. Default value: true. If set to false, post merge workflows like PR comment, Fix PR, SARIF etc will not be applicable.'
     required: false
   coverity_execution_path:
     description: 'Coverity execution path'
