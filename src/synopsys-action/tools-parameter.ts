@@ -450,13 +450,7 @@ export class SynopsysToolsParameter {
         info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
       }
     }
-    info('inputs.BLACKDUCK_POLICY_BADGES_CREATE')
-    info(inputs.BLACKDUCK_POLICY_BADGES_CREATE)
-    let test1 = inputs.BLACKDUCK_POLICY_BADGES_CREATE !== '' && parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)
-    info(String(test1))
-    test1 = inputs.BLACKDUCK_POLICY_BADGES_CREATE !== ''
-    info(String(test1))
-    info('String(test1)')
+
     if (inputs.BLACKDUCK_POLICY_BADGES_CREATE !== '' && parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)) {
       blackduckData.data.blackduck.policy = {
         badges: {
@@ -481,31 +475,6 @@ export class SynopsysToolsParameter {
         blackduckData.data.github = this.getGithubRepoInfo()
       }
     }
-
-    // if (inputs.BLACKDUCK_POLICY_BADGES_CREATE) {
-    //   blackduckData.data.blackduck.policy = {
-    //     badges: {
-    //       create: true,
-    //       ...(Number.isInteger(parseInt(inputs.BLACKDUCK_POLICY_BADGES_MAX_COUNT)) && {
-    //         maxCount: parseInt(inputs.BLACKDUCK_POLICY_BADGES_MAX_COUNT)
-    //       })
-    //     }
-    //   }
-    //   // Additional null check has been added to support avoid duplicate call to getGithubRepoInfo() when fix pr is enabled
-    //   if (blackduckData.data.github == null) {
-    //     blackduckData.data.github = this.getGithubRepoInfo()
-    //   }
-    // } else {
-    //   blackduckData.data.blackduck.policy = {
-    //     badges: {
-    //       create: false
-    //     }
-    //   }
-    //   // Additional null check has been added to support avoid duplicate call to getGithubRepoInfo() when fix pr is enabled
-    //   if (blackduckData.data.github == null) {
-    //     blackduckData.data.github = this.getGithubRepoInfo()
-    //   }
-    // }
 
     if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
       blackduckData.data.network = {airGap: parseToBoolean(inputs.ENABLE_NETWORK_AIR_GAP)}
