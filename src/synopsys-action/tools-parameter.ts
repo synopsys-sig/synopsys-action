@@ -450,7 +450,9 @@ export class SynopsysToolsParameter {
         info(constants.SARIF_REPORT_LOG_INFO_FOR_PR_SCANS)
       }
     }
-
+    info('inputs.BLACKDUCK_POLICY_BADGES_CREATE')
+    info(inputs.BLACKDUCK_POLICY_BADGES_CREATE)
+    info(String(parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)))
     if (inputs.BLACKDUCK_POLICY_BADGES_CREATE !== '' && parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)) {
       blackduckData.data.blackduck.policy = {
         badges: {
