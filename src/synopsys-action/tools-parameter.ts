@@ -464,6 +464,16 @@ export class SynopsysToolsParameter {
       if (blackduckData.data.github == null) {
         blackduckData.data.github = this.getGithubRepoInfo()
       }
+    } else {
+      blackduckData.data.blackduck.policy = {
+        badges: {
+          create: false
+        }
+      }
+      // Additional null check has been added to support avoid duplicate call to getGithubRepoInfo() when fix pr is enabled
+      if (blackduckData.data.github == null) {
+        blackduckData.data.github = this.getGithubRepoInfo()
+      }
     }
 
     if (isBoolean(inputs.ENABLE_NETWORK_AIR_GAP)) {
