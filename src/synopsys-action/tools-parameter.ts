@@ -452,7 +452,11 @@ export class SynopsysToolsParameter {
     }
     info('inputs.BLACKDUCK_POLICY_BADGES_CREATE')
     info(inputs.BLACKDUCK_POLICY_BADGES_CREATE)
-    info(String(parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)))
+    let test1 = inputs.BLACKDUCK_POLICY_BADGES_CREATE !== '' && parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)
+    info(String(test1))
+    test1 = inputs.BLACKDUCK_POLICY_BADGES_CREATE !== ''
+    info(String(test1))
+    info('String(test1)')
     if (inputs.BLACKDUCK_POLICY_BADGES_CREATE !== '' && parseToBoolean(inputs.BLACKDUCK_POLICY_BADGES_CREATE)) {
       blackduckData.data.blackduck.policy = {
         badges: {
