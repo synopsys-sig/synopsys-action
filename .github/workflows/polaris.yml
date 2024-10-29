@@ -1,40 +1,69 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI-Polaris
-
-# Controls when the workflow will run
+name: CI-Polaris 
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-  #   branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  push:
+    branches: [ main, master, develop, stage, release ]
+  pull_request:
+    branches: [ main, master, develop, stage, release ]  
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    #  runs-on: [ ubuntu-latest ]
+  polaris-scan:
     runs-on: [ self-hosted ]
-    # Use ubuntu-latest to run workflow on github hosted runner
-    #  runs-on: [ ubuntu-latest ]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Source
         uses: actions/checkout@v3
-
-      - name: Polaris Scan
-        # Use the action defined in this repository
-        uses: synopsys-sig/synopsys-action@v1.2.0
+      - name: Polaris Full Scan
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.13.0
         with:
-          polaris_serverUrl: ${{ secrets.POLARIS_SERVERURL }}
-          polaris_accessToken: ${{ secrets.POLARIS_ACCESSTOKEN }}
+          polaris_server_url: ${{ secrets.POLARIS_SERVERURL }}
+          polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
           polaris_application_name: ${{ github.event.repository.name }}
           polaris_project_name: ${{ github.event.repository.name }}
-          polaris_assessment_types: "SAST,SCA"
+          polaris_assessment_types: "SCA,SAST"
+          # polaris_waitForScan: false  # Used to support the async mode
+          # project_directory: ${{ vars.PROJECT_DIRECTORY }}
+          ### Uncomment below configuration for source code upload 
+          # polaris_assessment_mode: "SOURCE_UPLOAD"
+          # project_source_archive: ${{ vars.PROJECT_SOURCE_ARCHIVE }}
+          # project_source_excludes: ${{ vars.PROJECT_SOURCE_EXCLUDES }} # Accepts Multiple Values
+          # project_source_preserveSymLinks: true
+          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
+          # include_diagnostics: true
+          ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
+          # polaris_reports_sarif_create: true  
+          # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
+          # polaris_reports_sarif_severities: "CRITICAL,HIGH"
+          # polaris_reports_sarif_groupSCAIssues: true 
+          # polaris_reports_sarif_issue_types: 'SCA, SAST' 
+          # polaris_upload_sarif_report: true 
+          # github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
+          ### Signature scan
+          #polaris_test_sca_type: "SCA-SIGNATURE"
+          ### Uncomment below to add arbitrary CL parameters
+          blackduck_search_depth: 2
+          blackduck_args: '--detect.diagnostic=true'
+          blackduck_config_path: '/Users/lokesha/IdeaProjects/central-scm-library-example/scm-library-example-main/src/main/resources/application.properties'
+          # coverity_build_command: mvn clean install
+          # coverity_clean_command: mvn clean
+          # coverity_config_path: /Users/Config/coverity.yml
+          # coverity_args: --config-override capture.build.build-command=mvn install
+      - name: Polaris PR Scan
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: synopsys-sig/synopsys-action@v1.13.0
+        with:
+          polaris_server_url: ${{ vars.POLARIS_SERVER_URL }}
+          polaris_access_token: ${{ secrets.POLARIS_ACCESS_TOKEN }}
+          polaris_application_name: ${{ github.event.repository.name }}
+          polaris_project_name: ${{ github.event.repository.name }}
+          polaris_assessment_types: "SCA,SAST"
+          # project_directory: ${{ vars.PROJECT_DIRECTORY }}
+          ### Uncomment below configuration for source code upload 
+          # polaris_assessment_mode: "SOURCE_UPLOAD"
+          # project_source_archive: ${{ vars.PROJECT_SOURCE_ARCHIVE }}
+          # project_source_excludes: ${{ vars.PROJECT_SOURCE_EXCLUDES }} # Accepts Multiple Values
+          # project_source_preserveSymLinks: true
+          ### Below configuration is used to enable feedback from Polaris security testing as pull request comment
+          polaris_prComment_enabled: true 
+          github_token: ${{ secrets.GITHUB_TOKEN }} 
+          # Mandatory when polaris_prComment_enabled is set to 'true'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           # include_diagnostics: true
