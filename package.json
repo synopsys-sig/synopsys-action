@@ -57,7 +57,7 @@
     "dom-parser": "^0.1.6",
     "nock": "^13.3.3",
     "path": "^0.12.7",
-    "typed-rest-client": "^1.8.9",
+    "typed-rest-client": "1.7.3",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2",
     "lodash": "4.17.4"
