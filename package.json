@@ -58,7 +58,8 @@
     "path": "^0.12.7",
     "typed-rest-client": "^1.8.9",
     "unzipper": "^0.10.11",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "lodash": "4.17.4"
   },
   "jest": {
     "coverageThreshold": {
