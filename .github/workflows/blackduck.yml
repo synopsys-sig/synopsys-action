@@ -18,7 +18,7 @@ jobs:
   build:
     # The type of runner that the job will run on
     #  runs-on: [ ubuntu-latest ]
-    runs-on: [ self-hosted ]
+    runs-on: [ self-hosted, macOS, lokesh ]
     # Use ubuntu-latest to run workflow on github hosted runner
     #  runs-on: [ ubuntu-latest ]
 
