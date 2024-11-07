@@ -39,11 +39,11 @@ jobs:
           # polaris_upload_sarif_report: true 
           # github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
           ### Signature scan
-          #polaris_test_sca_type: "SCA-SIGNATURE"
+          polaris_test_sca_type: "SCA-SIGNATURE"
           ### Uncomment below to add arbitrary CL parameters
-          detect_search_depth: 2
-          detect_args: '--detect.diagnostic=true'
-          detect_config_path: '/Users/lokesha/IdeaProjects/central-scm-library-example/scm-library-example-main/src/main/resources/application.properties'
+          #detect_search_depth: 2
+          #detect_args: '--detect.diagnostic=true'
+          #detect_config_path: '/Users/lokesha/IdeaProjects/central-scm-library-example/scm-library-example-main/src/main/resources/application.properties'
           # coverity_build_command: mvn clean install
           # coverity_clean_command: mvn clean
           # coverity_config_path: /Users/Config/coverity.yml
