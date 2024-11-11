@@ -64,7 +64,8 @@ jobs:
           # project_source_excludes: ${{ vars.PROJECT_SOURCE_EXCLUDES }} # Accepts Multiple Values
           # project_source_preserveSymLinks: true
           ### Below configuration is used to enable feedback from Polaris security testing as pull request comment
-          polaris_prComment_enabled: true 
+          polaris_prComment_enabled: true
+          polaris_branch_parent_name: main
           github_token: ${{ secrets.GITHUB_TOKEN }} 
           # Mandatory when polaris_prComment_enabled is set to 'true'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
