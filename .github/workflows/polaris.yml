@@ -68,4 +68,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }} 
           # Mandatory when polaris_prComment_enabled is set to 'true'
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
-          # include_diagnostics: true
+          include_diagnostics: true
