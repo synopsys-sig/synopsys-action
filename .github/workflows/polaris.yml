@@ -50,7 +50,7 @@ jobs:
           #coverity_args: --config-override capture.build.build-command=npm run all
       - name: Polaris PR Scan
         if: ${{ github.event_name == 'pull_request' }}
-        uses: blackduck-inc/black-duck-security-scan@FOLDER_CHANGE
+        uses: blackduck-inc/black-duck-security-scan@main
         with:
           polaris_server_url: ${{ secrets.POLARIS_SERVERURL }}
           polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
