@@ -47,7 +47,7 @@ jobs:
           # coverity_build_command: mvn clean install
           # coverity_clean_command: mvn clean
           # coverity_config_path: /Users/Config/coverity.yml
-          # coverity_args: --config-override capture.build.build-command=mvn install
+          coverity_args: --config-override capture.build.build-command=npm run all
       - name: Polaris PR Scan
         if: ${{ github.event_name == 'pull_request' }}
         uses: blackduck-inc/black-duck-security-scan@FOLDER_CHANGE
