@@ -21,7 +21,7 @@ jobs:
           polaris_project_name: ${{ github.event.repository.name }}
           polaris_assessment_types: "SCA,SAST"
           bridgecli_download_url: https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/bridge/binaries/bridge-cli-bundle/latest/bridge-cli-bundle-macos_arm.zip
-          polaris_waitForScan: false  # Used to support the async mode
+          #polaris_waitForScan: false  # Used to support the async mode
           # project_directory: 
           ### Uncomment below configuration for source code upload 
           # polaris_assessment_mode: "SOURCE_UPLOAD"
@@ -31,20 +31,20 @@ jobs:
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           include_diagnostics: true
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
-          # polaris_reports_sarif_create: true  
+          polaris_reports_sarif_create: true  
           # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
           # polaris_reports_sarif_severities: "CRITICAL,HIGH"
           # polaris_reports_sarif_groupSCAIssues: true 
-          # polaris_reports_sarif_issue_types: 'SCA, SAST' 
-          # polaris_upload_sarif_report: true 
-          # github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
+          polaris_reports_sarif_issue_types: 'SCA, SAST' 
+          polaris_upload_sarif_report: true 
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
           ### Signature scan
           #polaris_test_sca_type: "SCA-SIGNATURE"
           ### Uncomment below to add arbitrary CL parameters
           #detect_search_depth: 2
           #detect_args: '--detect.diagnostic=true'
           #detect_config_path: '/Users/lokesha/IdeaProjects/central-scm-library-example/scm-library-example-main/src/main/resources/application.properties'
-          coverity_build_command: npm run all
+          #coverity_build_command: npm run all
           # coverity_clean_command: mvn clean
           # coverity_config_path: /Users/Config/coverity.yml
           #coverity_args: --config-override capture.build.build-command=npm run all
