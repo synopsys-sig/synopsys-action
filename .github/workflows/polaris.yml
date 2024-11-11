@@ -56,7 +56,7 @@ jobs:
           polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
           polaris_application_name: ${{ github.event.repository.name }}
           polaris_project_name: ${{ github.event.repository.name }}
-          polaris_assessment_types: "SCA"
+          polaris_assessment_types: "SCA,SAST"
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
           ### Uncomment below configuration for source code upload 
           # polaris_assessment_mode: "SOURCE_UPLOAD"
