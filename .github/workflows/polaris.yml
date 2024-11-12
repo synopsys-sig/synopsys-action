@@ -17,8 +17,8 @@ jobs:
         with:
           polaris_server_url: ${{ secrets.POLARIS_SERVERURL }}
           polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
-          polaris_application_name: ${{ github.event.repository.name }}
-          polaris_project_name: ${{ github.event.repository.name }}
+          polaris_application_name: integrations
+          polaris_project_name: synopsys-action
           polaris_assessment_types: "SCA,SAST"
           bridgecli_download_url: https://artifactory.internal.synopsys.com/artifactory/clops-local/clops.sig.synopsys.com/bridge/binaries/bridge-cli-bundle/latest/bridge-cli-bundle-macos_arm.zip
           #polaris_waitForScan: false  # Used to support the async mode
@@ -31,12 +31,12 @@ jobs:
           ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
           include_diagnostics: true
           ### SARIF report generation and upload to GitHub Adavanced Security Tab: Uncomment below to enable
-          polaris_reports_sarif_create: true  
+          #polaris_reports_sarif_create: true  
           # polaris_reports_sarif_file_path: '/Users/tmp/report.sarif.json' # File path (including file name) where SARIF report is created.
           # polaris_reports_sarif_severities: "CRITICAL,HIGH"
           # polaris_reports_sarif_groupSCAIssues: true 
           polaris_reports_sarif_issue_types: 'SCA, SAST' 
-          polaris_upload_sarif_report: true 
+          #polaris_upload_sarif_report: true 
           github_token: ${{ secrets.GITHUB_TOKEN }} # Required when polaris_upload_sarif_report is set as true
           ### Signature scan
           #polaris_test_sca_type: "SCA-SIGNATURE"
@@ -54,9 +54,9 @@ jobs:
         with:
           polaris_server_url: ${{ secrets.POLARIS_SERVERURL }}
           polaris_access_token: ${{ secrets.POLARIS_ACCESSTOKEN }}
-          polaris_application_name: ${{ github.event.repository.name }}
-          polaris_project_name: ${{ github.event.repository.name }}
-          polaris_assessment_types: "SCA"
+          polaris_application_name: integrations
+          polaris_project_name: synopsys-action
+          polaris_assessment_types: "SCA,SAST"
           # project_directory: ${{ vars.PROJECT_DIRECTORY }}
           ### Uncomment below configuration for source code upload 
           # polaris_assessment_mode: "SOURCE_UPLOAD"
