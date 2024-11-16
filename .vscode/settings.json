@@ -1,0 +1,10 @@
+{
+    "gitlens.statusBar.enabled": false,
+    "gitlens.hovers.enabled": false,
+    "gitlens.advanced.blame.delayAfterEdit": 503,
+    "gitlens.advanced.blame.sizeThresholdAfterEdit": 5001,
+    "gitlens.defaultDateLocale": "defaults",
+    "gitlens.defaultDateFormat": "defaults",
+    "gitlens.defaultDateShortFormat": "defaults",
+    "gitlens.defaultTimeFormat": "defaults"
+}
