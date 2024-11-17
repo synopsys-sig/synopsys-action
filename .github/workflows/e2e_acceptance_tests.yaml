@@ -1,0 +1,509 @@
+name: "E2E Acceptance testing workflow"
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  delivery_stages:
+
+     runs-on: [ E2E-test-linux ]
+
+     steps:
+      
+      - name: unit testing
+        run: |
+          echo "unit testing stage"
+      - name: build
+        run: |
+          echo "build stage"
+      - name: pop
+        run: |
+          echo "Pop stage"
+      
+      
+  e2e_cnc_linux_executions:
+    
+      needs: delivery_stages         
+      runs-on: [ E2E-test-linux ]
+
+      steps:
+
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk
+            
+      - name: download e2e artifacts
+        run: |
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+          ls -al
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+          ls -al
+          pwd
+      - name: Extract secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v1
+        with:
+          secret-ids: |
+            QA_GITHUB_TOKEN
+          parse-json-secrets: true
+      
+      - name: e2e_cnc_tests_linux
+        run: |
+          pwd
+          ls -la
+          echo "github.action.version=v1.11.0" >> /tmp/test.properties
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=linux" >> /tmp/test.properties
+          echo "runner.os=x64" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/coverity_cnc/testng-coverity-cnc-acceptance-github-tests.xml
+      
+      - name: Archive results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-output
+          path: test-output
+
+
+  # e2e_cnc_mac_executions:
+
+  #     needs: delivery_stages
+  #     runs-on: [ E2E-test-linux ]
+
+  #     steps:
+
+  #     - name: install
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -qqy awscli jq openjdk-11-jdk  
+      
+  #     - name: download e2e artifacts
+  #       run: |
+  #         aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+  #         ls -al
+  #         aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+  #         ls -al
+  #         pwd
+          
+  #     - name: Extract secrets
+  #       uses: aws-actions/aws-secretsmanager-get-secrets@v1
+  #       with:
+  #         secret-ids: |
+  #           QA_GITHUB_TOKEN
+  #         parse-json-secrets: true    
+
+  #     - name: e2e_cnc_tests_mac
+  #       run: |
+          
+  #         echo "github.action.version=v1.11.0" >> /tmp/test.properties
+  #         echo "product=integrations" >> /tmp/test.properties
+  #         echo "product.name=integrations" >> /tmp/test.properties
+  #         echo "scm=github" >> /tmp/test.properties
+  #         echo "runner=macos" >> /tmp/test.properties
+  #         echo "runner.os=x64" >> /tmp/test.properties
+  #         echo "pipeline=true" >> /tmp/test.properties
+  #         echo "cloud.storage=S3" >> /tmp/test.properties
+  #         echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+  #         chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+  #         pwd  && ls -la
+  #         cat /tmp/test.properties
+  #         java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/coverity_cnc/testng-coverity-cnc-acceptance-tests.xml
+
+
+  #     - name: Archive results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-output
+  #         path: test-output
+              
+  # e2e_cnc_windows_executions:
+    
+  #     needs: delivery_stages
+  #     runs-on: [ E2E-test-linux ]
+
+  #     steps:
+
+  #     - name: install
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -qqy awscli jq openjdk-11-jdk  
+
+  #     - name: download e2e artifacts
+  #       run: |
+  #         aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+  #         ls -al
+  #         aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+  #         ls -al
+  #         pwd 
+
+  #     - name: Extract secrets
+  #       uses: aws-actions/aws-secretsmanager-get-secrets@v1
+  #       with:
+  #         secret-ids: |
+  #           QA_GITHUB_TOKEN
+  #         parse-json-secrets: true    
+        
+  #     - name: e2e_cnc_tests_windows
+  #       run: |
+          
+  #         echo "github.action.version=v1.11.0" >> /tmp/test.properties
+  #         echo "product=integrations" >> /tmp/test.properties
+  #         echo "product.name=integrations" >> /tmp/test.properties
+  #         echo "scm=github" >> /tmp/test.properties
+  #         echo "runner=windows-x64" >> /tmp/test.properties
+  #         echo "runner.os=x64" >> /tmp/test.properties
+  #         echo "pipeline=true" >> /tmp/test.properties
+  #         echo "cloud.storage=S3" >> /tmp/test.properties
+  #         echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+  #         chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+  #         pwd  && ls -la
+  #         cat /tmp/test.properties
+  #         java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/coverity_cnc/testng-coverity-cnc-acceptance-tests.xml
+  
+  #     - name: Archive results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-output
+  #         path: test-output
+
+
+  #   ############## BD Tests ################
+    
+
+  # e2e_bd_linux_executions:
+    
+  #     needs: delivery_stages         
+  #     runs-on: [ E2E-test-linux ]
+
+  #     steps:
+
+  #     - name: install
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -qqy awscli jq openjdk-11-jdk
+            
+  #     - name: download e2e artifacts
+  #       run: |
+  #         aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+  #         ls -al
+  #         aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+  #         ls -al
+  #         pwd
+  #     - name: Extract secrets
+  #       uses: aws-actions/aws-secretsmanager-get-secrets@v1
+  #       with:
+  #         secret-ids: |
+  #           QA_GITHUB_TOKEN
+  #         parse-json-secrets: true
+      
+  #     - name: e2e_bd_tests_linux
+  #       run: |
+  #         pwd
+  #         ls -la
+  #         echo "github.action.version=v1.11.0" >> /tmp/test.properties
+  #         echo "product=integrations" >> /tmp/test.properties
+  #         echo "product.name=integrations" >> /tmp/test.properties
+  #         echo "scm=github" >> /tmp/test.properties
+  #         echo "runner=linux-x64" >> /tmp/test.properties
+  #         echo "runner.os=x64" >> /tmp/test.properties
+  #         echo "pipeline=true" >> /tmp/test.properties
+  #         echo "cloud.storage=S3" >> /tmp/test.properties
+  #         echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+  #         chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+  #         pwd  && ls -la
+  #         cat /tmp/test.properties
+  #         java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/blackduck/testng-blackduck-acceptance-tests.xml
+      
+  #     - name: Archive results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-output
+  #         path: test-output
+
+
+  e2e_bd_mac_executions:
+
+      needs: delivery_stages
+      runs-on: [ E2E-test-linux ]
+
+      steps:
+
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk  
+      
+      - name: download e2e artifacts
+        run: |
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+          ls -al
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+          ls -al
+          pwd
+          
+      - name: Extract secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v1
+        with:
+          secret-ids: |
+            QA_GITHUB_TOKEN
+          parse-json-secrets: true    
+
+      - name: e2e_bd_tests_mac
+        run: |
+          
+          echo "github.action.version=v1.11.0" >> /tmp/test.properties
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=macos" >> /tmp/test.properties
+          echo "runner.os=x64" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/blackduck/testng-blackduck-acceptance-github-tests.xml
+
+
+      - name: Archive results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-output
+          path: test-output
+              
+  # e2e_bd_windows_executions:
+    
+  #     needs: delivery_stages
+  #     runs-on: [ E2E-test-linux ]
+
+  #     steps:
+
+  #     - name: install
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -qqy awscli jq openjdk-11-jdk  
+
+  #     - name: download e2e artifacts
+  #       run: |
+  #         aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+  #         ls -al
+  #         aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+  #         ls -al
+  #         pwd 
+
+  #     - name: Extract secrets
+  #       uses: aws-actions/aws-secretsmanager-get-secrets@v1
+  #       with:
+  #         secret-ids: |
+  #           QA_GITHUB_TOKEN
+  #         parse-json-secrets: true    
+        
+  #     - name: e2e_bd_tests_windows
+  #       run: |
+          
+  #         echo "github.action.version=v1.11.0" >> /tmp/test.properties
+  #         echo "product=integrations" >> /tmp/test.properties
+  #         echo "product.name=integrations" >> /tmp/test.properties
+  #         echo "scm=github" >> /tmp/test.properties
+  #         echo "runner=windows-x64" >> /tmp/test.properties
+  #         echo "runner.os=x64" >> /tmp/test.properties
+  #         echo "pipeline=true" >> /tmp/test.properties
+  #         echo "cloud.storage=S3" >> /tmp/test.properties
+  #         echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+  #         chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+  #         pwd  && ls -la
+  #         cat /tmp/test.properties
+  #         java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/blackduck/testng-blackduck-acceptance-tests.xml
+  
+  #     - name: Archive results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-output
+  #         path: test-output      
+
+
+  # ############## Pol Tests ################
+    
+
+  # e2e_pol_linux_executions:
+    
+  #     needs: delivery_stages         
+  #     runs-on: [ E2E-test-linux ]
+
+  #     steps:
+
+  #     - name: install
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -qqy awscli jq openjdk-11-jdk
+            
+  #     - name: download e2e artifacts
+  #       run: |
+  #         aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+  #         ls -al
+  #         aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+  #         ls -al
+  #         pwd
+  #     - name: Extract secrets
+  #       uses: aws-actions/aws-secretsmanager-get-secrets@v1
+  #       with:
+  #         secret-ids: |
+  #           QA_GITHUB_TOKEN
+  #         parse-json-secrets: true
+      
+  #     - name: e2e_pol_tests_linux
+  #       run: |
+  #         pwd
+  #         ls -la
+  #         echo "github.action.version=v1.11.0" >> /tmp/test.properties
+  #         echo "product=integrations" >> /tmp/test.properties
+  #         echo "product.name=integrations" >> /tmp/test.properties
+  #         echo "scm=github" >> /tmp/test.properties
+  #         echo "runner=linux-x64" >> /tmp/test.properties
+  #         echo "runner.os=x64" >> /tmp/test.properties
+  #         echo "pipeline=true" >> /tmp/test.properties
+  #         echo "cloud.storage=S3" >> /tmp/test.properties
+  #         echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+  #         chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+  #         pwd  && ls -la
+  #         cat /tmp/test.properties
+  #         java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/polaris/testng-polaris-acceptance-tests.xml
+      
+  #     - name: Archive results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-output
+  #         path: test-output
+
+
+  # e2e_pol_mac_executions:
+
+  #     needs: delivery_stages
+  #     runs-on: [ E2E-test-linux ]
+
+  #     steps:
+
+  #     - name: install
+  #       run: |
+  #         sudo apt-get update
+  #         sudo apt-get install -qqy awscli jq openjdk-11-jdk  
+      
+  #     - name: download e2e artifacts
+  #       run: |
+  #         aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+  #         ls -al
+  #         aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+  #         ls -al
+  #         pwd
+          
+  #     - name: Extract secrets
+  #       uses: aws-actions/aws-secretsmanager-get-secrets@v1
+  #       with:
+  #         secret-ids: |
+  #           QA_GITHUB_TOKEN
+  #         parse-json-secrets: true    
+
+  #     - name: e2e_pol_tests_mac
+  #       run: |
+          
+  #         echo "github.action.version=v1.11.0" >> /tmp/test.properties
+  #         echo "product=integrations" >> /tmp/test.properties
+  #         echo "product.name=integrations" >> /tmp/test.properties
+  #         echo "scm=github" >> /tmp/test.properties
+  #         echo "runner=macos-x64" >> /tmp/test.properties
+  #         echo "runner.os=x64" >> /tmp/test.properties
+  #         echo "pipeline=true" >> /tmp/test.properties
+  #         echo "cloud.storage=S3" >> /tmp/test.properties
+  #         echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+  #         chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+  #         pwd  && ls -la
+  #         cat /tmp/test.properties
+  #         java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/polaris/testng-polaris-acceptance-tests.xml
+
+  #     - name: Archive results
+  #       if: always()
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-output
+  #         path: test-output
+              
+  e2e_pol_windows_executions:
+    
+      needs: delivery_stages
+      runs-on: [ E2E-test-linux ]
+
+      steps:
+
+      - name: install
+        run: |
+          sudo apt-get update
+          sudo apt-get install -qqy awscli jq openjdk-11-jdk  
+
+      - name: download e2e artifacts
+        run: |
+          aws s3 cp --recursive s3://e2e-integrations-test/e2e-artifacts/integrations/yml-data integrations/yml-data --no-progress
+          ls -al
+          aws s3 cp s3://e2e-integrations-test/e2e-artifacts/test-integrations-0.0.1-SNAPSHOT.jar test-integrations-0.0.1-SNAPSHOT.jar --no-progress
+          ls -al
+          pwd 
+
+      - name: Extract secrets
+        uses: aws-actions/aws-secretsmanager-get-secrets@v1
+        with:
+          secret-ids: |
+            QA_GITHUB_TOKEN
+          parse-json-secrets: true    
+        
+      - name: e2e_pol_tests_windows
+        run: |
+          
+          echo "github.action.version=v1.11.0" >> /tmp/test.properties
+          echo "product=integrations" >> /tmp/test.properties
+          echo "product.name=integrations" >> /tmp/test.properties
+          echo "scm=github" >> /tmp/test.properties
+          echo "runner=windows" >> /tmp/test.properties
+          echo "runner.os=x64" >> /tmp/test.properties
+          echo "pipeline=true" >> /tmp/test.properties
+          echo "cloud.storage=S3" >> /tmp/test.properties
+          echo "github.token=${{env.QA_GITHUB_TOKEN_QA_GITHUB_TOKEN}}" >> /tmp/test.properties
+          chmod 755 test-integrations-0.0.1-SNAPSHOT.jar
+          pwd  && ls -la
+          cat /tmp/test.properties
+          java -enableassertions -DPropertyManager.file=/tmp/test.properties -jar test-integrations-0.0.1-SNAPSHOT.jar -testjar test-integrations-0.0.1-SNAPSHOT.jar  -xmlpathinjar com/synopsys/test/integrations/cases/suites/acceptance/scm/polaris/testng-polaris-acceptance-github-tests.xml
+  
+      - name: Archive results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-output
+          path: test-output         
+
+  # post_e2e_executions:
+
+  #     needs: [e2e_linux_executions, e2e_mac_executions, e2e_windows_executions]
+  #     runs-on: [ E2E-test-linux ]
+
+  #     steps:
+
+  #     - name: publish
+  #       run: |
+  #         echo "publish stage"  
+
