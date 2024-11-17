@@ -1,4 +1,5 @@
 name: "E2E Deployment testing workflow"
+
 on:
   push:
     branches: [ main ]
