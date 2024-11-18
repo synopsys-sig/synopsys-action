@@ -1,4 +1,5 @@
 # Synopsys Action
+This plugin in no longer supported and has been deprecated. It is recommended that you install or migrate to the newer supported version.
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
 
