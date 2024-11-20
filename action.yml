@@ -2,7 +2,7 @@ name: 'Synopsys Action'
 branding:
   icon: 'shield'
   color: 'purple'
-description: 'Deprecated:Please use Black Duck Security Scan https://github.com/marketplace/actions/black-duck-security-scan'
+description: 'Deprecated:Please use Black Duck Security Scan <a href="https://github.com/marketplace/actions/black-duck-security-scan">Black Duck Security Scan</a>'
 author: 'Synopsys Inc'
 inputs:
   coverity_url:

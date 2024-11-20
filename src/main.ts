@@ -1,4 +1,4 @@
-import {debug, info, setFailed} from '@actions/core'
+import {debug, info, setFailed, warning} from '@actions/core'
 import {cleanupTempDir, createTempDir, isPullRequestEvent, parseToBoolean} from './synopsys-action/utility'
 import {SynopsysBridge} from './synopsys-action/synopsys-bridge'
 import {getGitHubWorkspaceDir as getGitHubWorkspaceDirV2} from 'actions-artifact-v2/lib/internal/shared/config'
@@ -10,6 +10,7 @@ import {GitHubClientServiceFactory} from './synopsys-action/factory/github-clien
 
 export async function run() {
   info('Synopsys Action started...')
+  warning('This plugin has been deprecated and is no longer supported. It is recommended that you move to our new and supported Black Duck Security Scan https://github.com/marketplace/actions/black-duck-security-scan')
   const tempDir = await createTempDir()
   let formattedCommand = ''
   let isBridgeExecuted = false
