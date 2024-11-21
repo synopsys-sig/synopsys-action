@@ -10,7 +10,7 @@ import {GitHubClientServiceFactory} from './synopsys-action/factory/github-clien
 
 export async function run() {
   info('Synopsys Action started...')
-  warning('This plugin has been deprecated and is no longer supported. It is recommended that you move to our new and supported Black Duck Security Scan https://github.com/marketplace/actions/black-duck-security-scan')
+  warning('This action has been deprecated and will not work after February 14, 2025. It is recommended that you migrate to our new Black Duck Security Scan https://github.com/marketplace/actions/black-duck-security-scan. Instructions can be found at http://<community url> here')
   const tempDir = await createTempDir()
   let formattedCommand = ''
   let isBridgeExecuted = false
