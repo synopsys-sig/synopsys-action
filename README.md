@@ -1,6 +1,5 @@
 # DEPRECATED: Synopsys Action
-**NOTE:** This plugin has been deprecated and is no longer supported. It is recommended that you move to our
-new and supported <a href="https://github.com/marketplace/actions/black-duck-security-scan">Black Duck Security Scan</a>.
+**NOTE:** This action has been deprecated and will not work after February 14, 2025. It is recommended that you migrate to our new <a href="https://github.com/marketplace/actions/black-duck-security-scan">Black Duck Security Scan</a>.Instructions can be found <a href=<community url>>here</a>
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
 
