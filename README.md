@@ -1,5 +1,5 @@
 # DEPRECATED: Synopsys Action
-<span style="color:red">**NOTE:**</span> This action has been deprecated and will not work after February 14, 2025. It is recommended that you migrate to our new <a href="https://github.com/marketplace/actions/black-duck-security-scan">Black Duck Security Scan</a>.
+**NOTE:** This action has been deprecated and will not work after February 14, 2025. It is recommended that you migrate to our new <a href="https://github.com/marketplace/actions/black-duck-security-scan">Black Duck Security Scan</a>.
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
 
