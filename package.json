@@ -60,7 +60,7 @@
     "typed-rest-client": "1.7.3",
     "unzipper": "^0.10.11",
     "uuid": "^8.3.2",
-    "underscore": "^1.8.3",
+    "underscore": "^1.13.7",
     "jquery": "2.2.4",
     "lodash": "4.17.4",
     "moment": "2.15.1",
