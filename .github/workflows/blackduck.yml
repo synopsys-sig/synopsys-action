@@ -33,6 +33,7 @@ jobs:
           blackducksca_policy_badges_create: true
           blackducksca_policy_badges_maxCount: 5
           include_diagnostics: true
+          network_airgap: true
 
           ### Uncomment below configuration to enable automatic fix pull request creation if vulnerabilities are reported
           blackducksca_fixpr_enabled: true
