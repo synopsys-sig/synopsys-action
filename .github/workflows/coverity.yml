@@ -1,68 +1,32 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI-Coverity
-
-# Controls when the workflow will run
+name: CI-Coverity-Basic
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  # push:
-  #   branches: [ "main" ]
-  # pull_request:
-  #   branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+  push:
+    branches: [ main, master, develop, stage, release ]
+  pull_request:
+    branches: [ main, master, develop, stage, release ]
+  workflow_dispatch: 
+  
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
-    #  runs-on: [ ubuntu-latest ]
-    runs-on: [ self-hosted ]
-    # Use ubuntu-latest to run workflow on github hosted runner
-    #  runs-on: [ ubuntu-latest ]
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    runs-on: [ self-hosted, macOS, lokesh ]
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout Source
         uses: actions/checkout@v3
-
-      - name: Coverity Full Scan
-        if: ${{ github.event_name != 'pull_request' }}
-        # Use the action defined in this repository
-        uses: synopsys-sig/synopsys-action@v1.2.0
+      - name: Coverity Scan
+        uses: blackduck-inc/black-duck-security-scan@main
         with:
+          ### SCANNING: Required fields
           coverity_url: ${{ secrets.COVERITY_URL }}
           coverity_user: ${{ secrets.COVERITY_USER }}
           coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          coverity_project_name: ${{ secrets.COVERITY_PROJECT_NAME }}
-          coverity_stream_name: ${{ secrets.COVERITY_STREAM_NAME }}
-          coverity_policy_view: ${{ secrets.COVERITY_POLICY_VIEW }}
-          coverity_repository_name: ${{ secrets.COVERITY_REPOSITORY_NAME }}
-          coverity_branch_name: ${{ secrets.COVERITY_BRANCH_NAME }}
-          #coverity_local: true
-
-          # Mandatory for windows hosted environment
-          # coverity_install_directory: "/root"
-          bridge_download_url: ${{ env.LINUX_BRIDGE_URL }}
-          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
-          # include_diagnostics: true    
-
-      - name: Coverity PR Scan
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: synopsys-sig/synopsys-action@v1.2.0
-        with:
-          coverity_url: ${{ secrets.COVERITY_URL }}
-          coverity_user: ${{ secrets.COVERITY_USER }}
-          coverity_passphrase: ${{ secrets.COVERITY_PASSPHRASE }}
-          coverity_project_name: ${{ github.event.repository.name }}
-          coverity_stream_name: ${{ github.event.repository.name }}-${{ github.base_ref }}
-          # Mandatory for windows hosted environment
-          # coverity_install_directory: "/root"
-          ### Below configuration is used to enable feedback from Coverity security testing as pull request comment
-          coverity_automation_prcomment: true
-          github_token: ${{ secrets.GITHUB_TOKEN }} # Mandatory when coverity_automation_prcomment is set to 'true'   
-          ### Uncomment below configuration if Synopsys Bridge diagnostic files needs to be uploaded
-          # include_diagnostics: true      
+          bridgecli_download_version: 3.0.0
+          
+          ### Coverity Connect users - Uncomment below
+          # coverity_local: true
+        
+          ### POLICY ENFORCEMENT: Uncomment to break build on policy
+          # coverity_policy_view: 'Outstanding Issues' 
+        
+          ### PULL REQUEST COMMENTS: Uncomment below to enable
+          coverity_prComment_enabled: true
+          github_token: ${{ secrets.GITHUB_TOKEN }} # Required when PR comments is enabled  
