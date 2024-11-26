@@ -1,4 +1,7 @@
 # Synopsys Action
+<!-- BADGES START -->
+ <img src="https://img.shields.io/badge/Black Duck-Monitored-237B46?labelColor=000"><!-- BADGES END -->
+
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
 
