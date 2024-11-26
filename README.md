@@ -1,6 +1,6 @@
 # Synopsys Action
 <!-- BADGES START -->
- <img src="https://img.shields.io/badge/Black Duck-Monitored-237B46?labelColor=000"><!-- BADGES END -->
+ <img src="https://img.shields.io/badge/Critical__With+Overall__Score__GE+7-4-D2042D?labelColor=000" alt="Critical__With+Overall__Score__GE+7" title="Rapid scan results are not posted to Black Duck SCA, Count represents new violations on pull request"> <img src="https://img.shields.io/badge/Operational__Risk__With__Match__Type-1-FF5F1F?labelColor=000" alt="Operational__Risk__With__Match__Type" title="Rapid scan results are not posted to Black Duck SCA, Count represents new violations on pull request"><!-- BADGES END -->
 
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
