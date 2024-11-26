@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: [ self-hosted, macOS ]
+    runs-on: [ self-hosted, macOS, lokesh ]
     #runs-on: ubuntu-latest
     steps:
       - name: Checkout Source
