@@ -1,7 +1,8 @@
 include:
   - local: '.gitlab-ci-template.yml'
   - project: clops/gitlab-ci-pop-analysis
-    ref: master
+    
+    ref: main.c
     file: pop_analysis.yaml
   - project: releng/common-gitlab-ci
     ref: master
