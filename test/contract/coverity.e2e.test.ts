@@ -20,153 +20,153 @@ coverityParamMap.set('COVERITY_REPOSITORY_NAME', 'repo')
 coverityParamMap.set('COVERITY_BRANCH_NAME', 'branch')
 coverityParamMap.set('COVERITY_AUTOMATION_PRCOMMENT', 'true')
 
-describe('Coverity flow contract', () => {
-  afterAll(() => {
-    jest.clearAllMocks()
-  })
+describe('Coverity flow contract', function () {
+    afterAll(() => {
+      jest.clearAllMocks()
+    })
 
-  beforeEach(() => {
-    jest.resetModules()
-    resetMockCoverityParams()
-  })
+    beforeEach(() => {
+      jest.resetModules()
+      resetMockCoverityParams()
+    })
 
-  it('With all mandatory fields', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_AUTOMATION_PRCOMMENT'])
+    it('With all mandatory fields', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_AUTOMATION_PRCOMMENT'])
 
-    setAllMocks()
+      setAllMocks()
 
-    const resp = await run()
-    expect(resp).toBe(0)
-  })
-
-  it('With missing mandatory fields coverity.connect.user.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_USER'])
-
-    setAllMocks()
-
-    try {
       const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
+      expect(resp).toBe(0)
+    })
+
+    it('With missing mandatory fields coverity.connect.user.name', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_USER'])
+
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 2')
+        error(err)
+      }
+    })
+
+    it('With missing mandatory fields coverity.connect.user.password', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PASSPHRASE'])
+
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 2')
+        error(err)
+      }
+    })
+
+    it('With missing mandatory fields coverity.connect.project.name', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PROJECT_NAME'])
+
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 2')
+        error(err)
+      }
+    })
+
+    it('With missing mandatory fields coverity.connect.stream.name', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_STREAM_NAME'])
+
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 2')
+        error(err)
+      }
+    })
+
+    it('With all mandatory and optional fields', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['NONE'])
+
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 1')
+        error(err)
+      }
+    })
+
+    it('With coverity.automation.prcomment true and empty github token', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['NONE'])
+      Object.defineProperty(inputs, 'GITHUB_TOKEN', { value: '' })
+      jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValueOnce(false)
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 1')
+        error(err)
+      }
+    })
+
+    it('With coverity.automation.prcomment true and empty github repo name', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['NONE'])
+      process.env['GITHUB_REPOSITORY'] = ''
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 1')
+        error(err)
+      }
+    })
+
+    it('With coverity.automation.prcomment true and empty github branch name', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['NONE'])
+      process.env['GITHUB_REF_NAME'] = ''
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 1')
+        error(err)
+      }
+    })
+
+    it('With coverity.automation.prcomment true and empty github owner name', async () => {
+      mockBridgeDownloadUrlAndSynopsysBridgePath()
+      mockCoverityParamsExcept(['NONE'])
+      process.env['GITHUB_REPOSITORY_OWNER'] = ''
+      setAllMocks()
+
+      try {
+        const resp = await run()
+      } catch (err: any) {
+        expect(err.message).toContain('failed with exit code 1')
+        error(err)
+      }
+    })
   })
-
-  it('With missing mandatory fields coverity.connect.user.password', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PASSPHRASE'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
-  it('With missing mandatory fields coverity.connect.project.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_PROJECT_NAME'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
-  it('With missing mandatory fields coverity.connect.stream.name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['COVERITY_INSTALL_DIRECTORY', 'COVERITY_POLICY_VIEW', 'COVERITY_REPOSITORY_NAME', 'COVERITY_BRANCH_NAME', 'COVERITY_STREAM_NAME'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 2')
-      error(err)
-    }
-  })
-
-  it('With all mandatory and optional fields', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['NONE'])
-
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 1')
-      error(err)
-    }
-  })
-
-  it('With coverity.automation.prcomment true and empty github token', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['NONE'])
-    Object.defineProperty(inputs, 'GITHUB_TOKEN', {value: ''})
-    jest.spyOn(validator, 'isNullOrEmptyValue').mockReturnValueOnce(false)
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 1')
-      error(err)
-    }
-  })
-
-  it('With coverity.automation.prcomment true and empty github repo name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['NONE'])
-    process.env['GITHUB_REPOSITORY'] = ''
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 1')
-      error(err)
-    }
-  })
-
-  it('With coverity.automation.prcomment true and empty github branch name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['NONE'])
-    process.env['GITHUB_REF_NAME'] = ''
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 1')
-      error(err)
-    }
-  })
-
-  it('With coverity.automation.prcomment true and empty github owner name', async () => {
-    mockBridgeDownloadUrlAndSynopsysBridgePath()
-    mockCoverityParamsExcept(['NONE'])
-    process.env['GITHUB_REPOSITORY_OWNER'] = ''
-    setAllMocks()
-
-    try {
-      const resp = await run()
-    } catch (err: any) {
-      expect(err.message).toContain('failed with exit code 1')
-      error(err)
-    }
-  })
-})
 
 export function resetMockCoverityParams() {
   coverityParamMap.forEach((value, key) => {

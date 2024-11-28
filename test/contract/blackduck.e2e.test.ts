@@ -1,4 +1,4 @@
-import {run} from '../../src/main'
+import {run} from '../../src/main.c'
 import * as inputs from '../../src/synopsys-action/inputs'
 import {error, info} from '@actions/core'
 import * as configVariables from '@actions/artifact/lib/internal/config-variables'
