@@ -43,7 +43,7 @@
     "prettier": "^2.4.1",
     "ts-jest": "^29.1.0",
     "typescript": "^4.7.4",
-    "lodash": "4.17.4"
+    "lodash": "4.17.21"
   },
   "dependencies": {
     "@actions/core": "^1.9.0",
@@ -62,7 +62,7 @@
     "uuid": "^8.3.2",
     "underscore": "^1.8.3",
     "jquery": "2.2.4",
-    "lodash": "4.17.4",
+    "lodash": "4.17.21",
     "moment": "2.15.1",
     "method-override": "latest"
   },
