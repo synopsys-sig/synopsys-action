@@ -1,5 +1,5 @@
 # DEPRECATED: Synopsys Action
-**NOTE:** This action has been deprecated and will not work after February 14, 2025. It is recommended that you migrate to our new <a href="https://github.com/marketplace/actions/black-duck-security-scan">Black Duck Security Scan</a>. Instructions can be found <a href="https://documentation.blackduck.com/bundle/bridge/page/documentation/c_using-github-action.html">here</a>.
+**NOTE:** This action has been deprecated and will not work after February 14, 2025. It is required that you migrate to our new <a href="https://github.com/marketplace/actions/black-duck-security-scan">Black Duck Security Scan</a>. Migration instructions can be found <a href="https://community.blackduck.com/s/article/integrations-black-duck-migration-instructions">here</a>. Documentation for the new Black Duck Security Scan can be found <a href="https://documentation.blackduck.com/bundle/bridge/page/documentation/c_using-github-action.html">here</a>.
 
 ![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/synopsys-sig/synopsys-action?color=blue&label=Latest%20Version&sort=semver)
 
